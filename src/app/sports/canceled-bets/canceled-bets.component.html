@@ -1,0 +1,18 @@
+<table class="table  table-dark">
+    <thead>
+        <tr>
+
+            <!-- <th>Full ticket id</th> -->
+            <th>Match Name</th>
+            <th>Mraket Name</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let bet of betsList" class="first-level">
+            <td>{{bet.name}}</td>
+            <td>{{bet.market}}</td>
+        </tr>
+    </tbody>
+
+</table>

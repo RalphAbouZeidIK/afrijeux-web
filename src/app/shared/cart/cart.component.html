@@ -1,0 +1,99 @@
+<div class="cart-container" (window:resize)="onResize($event)"
+    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0}">
+    <!-- <div class="overlay" (click)="hideMenus()"></div> -->
+    <div class="cart-header" (click)="OnclickIsMobile()">
+        <span class="mobileOnly rect-bar"></span>
+        <p class="cart-title">Bet Slip </p>
+        <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
+        <a class="clear-btn" *ngIf="showCartButtons" (click)="clearBets()">Clear all</a>
+    </div>
+
+    <div class="cart-body-holder" *ngIf="isSportsBetting && listOfBets && listOfBets.length > 0">
+        <div class="list-of-bets">
+            <ng-container *ngFor="let betItem of listOfBets">
+                <div class="bet-item">
+                    <div class="title-odd">
+                        <a class="close-icon" (click)="removeItemFormSlip(betItem)">
+                            <img src="assets/images/close-icon-grey.svg" />
+                        </a>
+                        <span>{{betItem.MatchName}}</span>
+                        <span class="odd">{{betItem.Odd | number:'1.0-3'}}</span>
+                    </div>
+                    <div class="outcomeName">
+                        <span>{{betItem.OutcomeName}}</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="ticket-infos">
+            <div class="info-item">
+                <span>Total bets:</span>
+                <span>{{totalBets}}</span>
+            </div>
+            <div class="info-item">
+                <span>Total odds:</span>
+                <span>{{totalOdds | number:'1.0-3'}}</span>
+            </div>
+            <div class="info-item">
+                <span>Bonus:</span>
+                <span>{{bonus | number:'1.0-3'}}</span>
+            </div>
+            <div class="info-item">
+                <span>Potential Winnings:</span>
+                <span>{{ winAmount | number:'1.0-3'}}</span>
+            </div>
+            <div class="info-item">
+                <span>Stake:</span>
+                <input type="number" [(ngModel)]="stake" min="0" (ngModelChange)="onAmountChange()">
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && isLoggedIn " [disabled]="stake == 0"
+            (click)="issueTicket()">Place
+            Bets</button>
+    </div>
+
+    <div class="cart-body-holder" *ngIf="isPMU && betItem?.showRace">
+        <div class="type-container">
+            <span class="race-title">
+                <a class="close-icon" (click)="removeItemFormSlip(betItem)">
+                    <img src="assets/images/close-icon-grey.svg" />
+                </a>
+                <span>{{betItem.EventName}}</span>
+            </span>
+            <div class="type-list">
+                <span class="type">
+                    {{betItem.selectedFixedConfig.details}}
+                </span>
+                <span class="list-of-horses">
+                    <ng-container *ngFor="let horse of betItem.listOfHorses;let i = index">
+                        <ng-container *ngIf="i > 0">-</ng-container> {{horse.HorseName}}
+                    </ng-container>
+                </span>
+            </div>
+        </div>
+        <div class="type-list type-multi">
+            <span class="type"> Multiplicateur</span>
+            <span class="choose-quantity">
+                <span (click)="onRemoveQtty(betItem)" class="minus">-</span>
+                <span class="quantity">{{betItem.multiplicator}}</span>
+                <span (click)="onAddQtty(betItem)" class="plus">+</span>
+            </span>
+        </div>
+        <div class="type-list type-multi">
+            <span class="type">Single Price</span>
+            <span class="choose-quantity">
+                <span class="quantity">{{betItem.selectedFixedConfig.SinglePrice}}</span>
+            </span>
+        </div>
+        <div class="type-list type-multi">
+            <span class="type">Pick Price</span>
+            <span class="choose-quantity">
+                <span class="quantity">{{betItem.selectedFixedConfig.SinglePrice * betItem.multiplicator}}</span>
+            </span>
+        </div>
+        <button class="btn btn-primary" type="submit" *ngIf="isLoggedIn"
+            (click)="addBetToTicket(betItem)">Add to ticket</button>
+    </div>
+
+</div>

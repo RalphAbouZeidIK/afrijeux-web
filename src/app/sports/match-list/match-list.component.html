@@ -1,0 +1,29 @@
+<ng-container *ngIf="matchesList.length>0;else templateName">
+    <span class="market-name">Market: {{matchesList[0].OddsOutcomes[0].Market}}</span>
+    <div *ngFor="let matchItem of matchesList" class="match-item">
+        <div class="date-title">
+            <span class="date">
+                {{matchItem.EventDate | date: 'd MMM'}} <br>
+                {{matchItem.EventDate | date: 'HH:mm'}}
+            </span>
+            <h3 (click)="getOutcomes(matchItem)">
+                <span class="tournament-name">{{matchItem.TournamentName}}</span>
+                {{matchItem.MatchName}}
+            </h3>
+        </div>
+
+        <div class="odds-list" [ngClass]="{'three-odds': matchItem.OddsOutcomes.length == 3}">
+
+            <!-- <span class="market-name">Market: {{matchItem.OddsOutcomes[0].Market}}</span> -->
+            <ng-container *ngFor="let oddItem of matchItem.OddsOutcomes">
+                <app-odd-item [oddItem]="oddItem" [isSelected]="oddItem.isSelected"></app-odd-item>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #templateName>
+    <div class="no-matches">
+        <h2>No matches available</h2>
+    </div>
+</ng-template>

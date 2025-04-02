@@ -1,0 +1,46 @@
+<div class="courses-main">
+    <div class="d-flex">
+        <div class="full-page">
+            <div class="reunions-list">
+                <h2>Programme du jour</h2>
+                <ng-container *ngFor="let item of dataArray">
+                    <div *ngIf="item" class="reunion-item">
+                        <div class="reunion-infos">
+                            <span class="greenSquare">
+                                {{item.ReunionCode}}
+                            </span>
+                            <h3>{{item.ReunionName}}</h3>
+                        </div>
+                        <div class="courses-list">
+                            <div *ngFor="let race of item.races" class="course-item">
+                                <div class="course-header" (click)="redirectToRace(race)">
+                                    <div class="date-title-holder">
+                                        <span class="date">
+                                            {{race.EventDate | date: 'dd-MM-YYYY - HH:mm'}}
+                                        </span>
+                                        <span class="title">
+                                            <!-- <img src="/assets/images/pmu.svg" alt="PMU" class="pmuIcon"> -->
+                                            {{race.EventName}}
+                                        </span>
+                                    </div>
+                                    <ul class="list">
+                                        <!-- <li> {{race.type}}</li> -->
+                                        <li>Partants: <strong>{{race.HorseNumber}}</strong></li>
+                                        <li>Distance: <strong>{{race.distance}}</strong></li>
+                                        <li class="hidden-mobile">Montant de prix:
+                                            <strong>{{race.prize}}</strong>
+                                        </li>
+                                        <li class="hidden-mobile">Types de pistes:
+                                            <strong>{{race.typeDePiste}}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+</div>

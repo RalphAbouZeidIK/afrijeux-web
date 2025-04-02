@@ -1,0 +1,14 @@
+{
+    "/oddscomparison-prematch": {
+      "target": "https://api.sportradar.com",
+      "logLevel": "debug",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/oddscomparison-prematch": ""
+      },
+      "headers": {
+        "User-Agent": "PostmanRuntime/7.26.8"
+      }
+    }
+  }

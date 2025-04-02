@@ -1,0 +1,39 @@
+.sports-list {
+    margin-bottom: 25px;
+}
+
+.sport-holder,
+.categories a {
+    cursor: unset;
+    display: flex;
+    justify-content: space-between;
+}
+
+.img-title,
+.arrow {
+    cursor: pointer;
+}
+
+.categories {
+    background: #1e2328;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+
+    a {
+        cursor: unset;
+        font-weight: normal;
+        font-size: 14px;
+
+    }
+
+
+}
+
+.tournaments {
+    margin-top: 10px;
+}
+
+.arrow.active {
+    transform: rotate(90deg);
+}

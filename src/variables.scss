@@ -1,0 +1,15 @@
+$yellow: #F7D955;
+$darkBg: #18191C;
+$lightGrey: #909090;
+$white: #FFF;
+$lightBg: #1E2328;
+$countryBg: #252B31;
+$offWhite : #F5f5f5;
+
+@mixin transition($duration) {
+    -webkit-transition: all $duration;
+    -moz-transition: all $duration;
+    -ms-transition: all $duration;
+    -o-transition: all $duration;
+    transition: all $duration;
+}

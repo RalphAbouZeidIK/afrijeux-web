@@ -1,0 +1,11 @@
+.first-level td {
+    border-top-width: 10px;
+    border-color: #18191C
+}
+
+.link{
+    font-size:14px;
+    &:not(:last-of-type){
+        margin-right:15px;
+    }
+}

@@ -1,0 +1,27 @@
+<section class="login">
+    <div class="form-holder">
+        <div class="form-bg">
+            <h2>Login</h2>
+            <div class="form-content" [formGroup]="loginForm" (keydown)="keyDownFunction($event)">
+                <div class="form-group">
+                    <div class="icon-input-holder">
+
+                        <input type="text" formControlName="UserName" placeholder="Username" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="icon-input-holder">
+                        <input [type]="showPassword?'text':'password'" formControlName="Password" placeholder="Password"
+                            class="form-control">
+                        <a class="passwordVisibilty" [ngClass]="{'hidePassword':showPassword}"
+                            (click)="showPassword = !showPassword"></a>
+                    </div>
+                </div>
+                <div class="form-btns">
+                    <span class=" errorMessage" *ngIf="showErrorMessage">Wrong username or password</span>
+                    <a class="btn btn-primary" (click)="submitLogin()">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

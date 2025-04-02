@@ -1,0 +1,157 @@
+@import '/src/variables.scss';
+.container-fluid {
+    display: flex;
+
+}
+
+.sports-list {
+    margin-bottom: 25px;
+}
+
+.sport-holder,
+.categories a {
+    cursor: unset;
+    display: flex;
+    justify-content: space-between;
+}
+
+.img-title,
+.arrow {
+    cursor: pointer;
+}
+
+.categories {
+    background: #1e2328;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+
+    a {
+        cursor: unset;
+        font-weight: normal;
+        font-size: 14px;
+
+    }
+
+
+}
+
+.tournaments {
+    margin-top: 10px;
+}
+
+.arrow.active {
+    transform: rotate(90deg);
+}
+
+
+// ---------------------------------------
+
+
+.match-item {
+    border-radius: 10px;
+    background: $lightBg;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+h3 {
+    font-size: 16px;
+    margin-bottom: 0;
+    padding-left: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.odds-list {
+    display: flex;
+    flex: 0 0 49%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.odd-item {
+    flex: 0 0 calc(50% - 5px);
+
+}
+
+.three-odds .odd-item {
+    flex: 0 0 calc(33.3333% - 5px);
+
+}
+
+.date-title {
+    display: flex;
+    align-items: center;
+    flex: 0 0 49%;
+}
+
+.date {
+    text-align: center;
+    font-size: 12px;
+}
+
+.tournament-name {
+    display: block;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.market-name {
+    margin-bottom: 10px;
+    font-size: 20px;
+    width: 49%;
+    display: block;
+    margin-left: auto;
+}
+
+@media all and (max-width:767px) {
+    .match-item {
+        display: block;
+    }
+
+    .date-title {
+        margin-bottom: 10px;
+    }
+}
+
+
+// ------------------------------------------------
+
+
+
+.odd-item {
+    text-align: center;
+    padding: 10px;
+    background: $darkBg;
+    border-radius: 5px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    min-height: 100%;
+
+    &.isSelected {
+        background-color: $yellow;
+        color: $darkBg;
+
+        .odd {
+            color: $darkBg
+        }
+    }
+}
+
+.odd {
+    color: $yellow;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+}
+
+
+// -------------------------------------------

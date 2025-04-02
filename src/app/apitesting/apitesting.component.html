@@ -1,0 +1,101 @@
+<!-- <div class="container-fluid">
+    <ul>
+        <li *ngFor="let sportItem of sportsList">
+            <a (click)="getMatches(sportItem)">{{sportItem.name}}</a>
+        </li>
+    </ul>
+    <ul>
+        <li *ngFor="let eventItem of eventsList">
+            <a (click)="getOdds(eventItem)">{{eventItem.competitors[0].name}}</a>
+        </li>
+    </ul>
+</div> -->
+<div class="body-holder">
+    <div class="container-fluid page-holder">
+        <aside>
+            <div class="sports-list">
+                <h2>Sports List</h2>
+                <ul>
+                    <li *ngFor="let sportItem of filtersList.sports">
+                        <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
+                            <div class="img-title" (click)="getMatchesBySport(sportItem)">
+                                <span>{{sportItem.name}}</span>
+                            </div>
+                            <div class="arrow" (click)="getCategories(sportItem)"
+                                [ngClass]="{'active':sportItem.showCategories}">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </div>
+
+                        </a>
+                        <div class="categories">
+                            <ul>
+                                <li *ngFor="let category of sportItem.categories">
+                                    <a [ngClass]="{'active':category.isSelected}">
+                                        <div class="img-title" (click)="redirectTo(category)">
+                                            <!-- <img src="{{category.SportIcon}}" alt="{{category.SportName}}"> -->
+                                            <span>{{category.name}}</span>
+                                        </div>
+
+                                        <div class="arrow" (click)="getTournaments(sportItem)"
+                                            [ngClass]="{'active':category.showTournaments}">
+                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                        </div>
+                                    </a>
+                                    <div class="tournaments">
+                                        <ul>
+                                            <li *ngFor="let tournament of category.tournaments">
+                                                <a [ngClass]="{'active':tournament.isSelected}">
+                                                    <div class="img-title" (click)="getTournamentSchedule(tournament)">
+                                                        <!-- <img src="{{tournament.SportIcon}}" alt="{{tournament.SportName}}"> -->
+                                                        <span>{{tournament.name}}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <main>
+            <ng-container *ngIf="matchesList.length>0;else templateName">
+
+                <div *ngFor="let matchItem of matchesList" class="match-item">
+                    <div class="date-title">
+                        <span class="date">
+                            {{matchItem.scheduled | date: 'd MMM'}} <br>
+                            {{matchItem.scheduled | date: 'HH:mm'}}
+                        </span>
+                        <h3 (click)="getOdds(matchItem)">
+                            <span class="tournament-name">{{matchItem.TournamentName}}</span>
+                            {{matchItem.competitors[0].name}} vs {{matchItem.competitors[1].name}}
+                        </h3>
+                    </div>
+
+                    <div class="odds-list"
+                        [ngClass]="{'three-odds': matchItem.markets[0].books[0].outcomes.length == 3}">
+
+                        <!-- <span class="market-name">Market: {{matchItem.OddsOutcomes[0].Market}}</span> -->
+                        <ng-container *ngFor="let oddItem of matchItem.markets[0].books[0].outcomes">
+                            <div class="odd-item" (click)="addOdd(oddItem)"
+                                [ngClass]="{'isSelected':oddItem.isSelected}">
+                                {{oddItem.type}}
+                                <span class="odd">{{oddItem.odds | number:'1.0-3'}}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #templateName>
+                <div class="no-matches">
+                    <h2>No matches available</h2>
+                </div>
+            </ng-template>
+        </main>
+    </div>
+</div>

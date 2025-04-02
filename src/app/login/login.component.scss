@@ -1,0 +1,66 @@
+@import '/src/variables.scss';
+
+.header-container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+}
+
+.form-holder {
+    background-color: rgba(184, 158, 158, 0.04);
+
+    .title-label {
+        font-size: 12px;
+        color: $lightGrey;
+        padding-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        background-color: $lightBg;
+        border-color: $lightBg;
+        padding: 10px 12px;
+        color: $white;
+
+        &::placeholder {
+            color: #909090;
+        }
+    }
+
+    .form-btns {
+        margin-bottom: 10px;
+        margin-top: 25px;
+
+        .btn {
+            width: 100%;
+            padding: 10px 0;
+        }
+    }
+}
+
+.text {
+    font-size: 12px;
+    padding-top: 10px;
+    color: $white;
+    margin-bottom: 0;
+
+    a {
+        cursor: pointer;
+    }
+}
+
+.errorMsg {
+    color: red;
+    font-size: 12px;
+}
+@media all and (max-width:767px) 
+{
+    .header-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    }
+}

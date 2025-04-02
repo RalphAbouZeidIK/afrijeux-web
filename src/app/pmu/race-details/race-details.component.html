@@ -1,0 +1,40 @@
+<div class="course-details" *ngIf="courseDetails">
+    <div class="course-header">
+        <div class="date-title-holder">
+            <span class="date">
+                {{courseDetails.EventDate | date: 'dd-MM-YYYY - HH:mm'}}
+            </span>
+            <span class="title">
+                <!-- <img src="/assets/images/pmu.svg" alt="PMU" class="pmuIcon"> -->
+                {{courseDetails.EventName}}
+            </span>
+        </div>
+        <ul class="list">
+            <!-- <li> {{courseDetails.type}}</li> -->
+            <li>Partants: <strong>{{courseDetails.HorseNumber}}</strong></li>
+            <li>Distance: <strong>{{courseDetails.distance}}</strong></li>
+            <li class="hidden-mobile">Montant de prix: <strong>{{courseDetails.prize}}</strong></li>
+            <li class="hidden-mobile">Types de pistes: <strong>{{courseDetails.typeDePiste}}</strong></li>
+        </ul>
+    </div>
+    <div class="paris-disponibles">
+        <h3>Les Paris Disponibles: </h3>
+        <ul>
+            <ng-container *ngFor="let paris of courseDetails.FixedConfiguration">
+                <li class="raceType" [ngClass]="[paris.isSelected ? 'isSelected' : '']" (click)="chooseBetType(paris)"
+                    *ngIf="paris.MinimumHorseNumber <= courseDetails.horses.length">
+                    {{paris.details}}
+                </li>
+            </ng-container>
+
+
+        </ul>
+        <h3>Listes des chevals:</h3>
+        <ul class="horses-list">
+            <li *ngFor="let horse of courseDetails.horses" [ngClass]="[horse.isSelected ? 'isSelected' : '']"
+                (click)="addToBet(horse)">
+                {{horse.HorseName}}
+            </li>
+        </ul>
+    </div>
+</div>

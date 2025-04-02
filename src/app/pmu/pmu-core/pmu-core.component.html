@@ -1,0 +1,10 @@
+
+
+<div class="body-holder">
+    <div class="container page-holder">
+        <main class="main" [ngClass]="{'fullWidth': true}">
+            <router-outlet></router-outlet>
+        </main>
+        <app-cart *ngIf="true"></app-cart>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+@import '/src/variables.scss';
+
+header {
+    padding: 20px 0;
+    background-color: $darkBg;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+
+    top: 0;
+    left: 0;
+    border-bottom: 3px solid $yellow;
+
+}
+
+.container-fluid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-holder {
+    min-width: 170px;
+    cursor: pointer;
+}
+
+
+.logged-in-menu {
+    margin-left: auto
+}
+
+@media all and (max-width:1200px) {
+    .logo-holder {
+        position: static;
+    }
+
+    header {
+        padding: 20px 15px 20px 5px
+    }
+}

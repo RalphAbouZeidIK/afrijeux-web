@@ -1,0 +1,47 @@
+<div class="sports-list">
+    <h2>Sports List</h2>
+    <ul>
+        <li *ngFor="let sportItem of filtersList.Sports">
+            <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
+                <div class="img-title" (click)="redirectTo(sportItem)">
+                    <!-- <img src="{{sportItem.SportIcon}}" alt="{{sportItem.SportName}}"> -->
+                    <span>{{sportItem.SportName}}</span>
+                </div>
+                <div class="arrow" (click)="getCategories(sportItem)" [ngClass]="{'active':sportItem.showCategories}">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </div>
+
+            </a>
+            <div class="categories" *ngIf="sportItem.showCategories">
+                <ul>
+                    <li *ngFor="let category of sportItem.Categories">
+                        <a [ngClass]="{'active':category.isSelected}">
+                            <div class="img-title" (click)="redirectTo(category)">
+                                <!-- <img src="{{category.SportIcon}}" alt="{{category.SportName}}"> -->
+                                <span>{{category.CategoryName}}</span>
+                            </div>
+
+                            <div class="arrow" (click)="getTournaments(category)"
+                                [ngClass]="{'active':category.showTournaments}">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </div>
+                        </a>
+                        <div class="tournaments" *ngIf="category.showTournaments">
+                            <ul>
+                                <li *ngFor="let tournament of category.Tournaments">
+                                    <a [ngClass]="{'active':tournament.isSelected}">
+                                        <div class="img-title" (click)="redirectTo(tournament)">
+                                            <!-- <img src="{{tournament.SportIcon}}" alt="{{tournament.SportName}}"> -->
+                                            <span>{{tournament.TournamentName}}</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

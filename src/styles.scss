@@ -1,0 +1,238 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;600;700&display=swap');
+@import 'variables.scss';
+
+body {
+    background-color: $darkBg;
+    color: $white;
+    font-family: "Lato", sans-serif;
+    font-size: 16px;
+    line-height: normal;
+    font-weight: 400;
+    padding-top: 60px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: $white;
+    padding-bottom: 15px;
+    margin-bottom: 5px;
+}
+
+.btn-check:checked+.btn,
+:not(.btn-check)+.btn:active,
+.btn:first-child:active,
+.btn.active,
+.btn.show {
+    background-color: $yellow;
+    color: $darkBg;
+}
+
+.btn {
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 10px 20px 12px;
+    line-height: normal;
+
+    &.btn-primary {
+        background-color: $yellow;
+        color: $darkBg;
+        border: 0;
+    }
+
+    &.btn-default {
+        color: $white;
+        border: 1px solid $yellow;
+        margin-left: 10px;
+    }
+}
+
+.container {
+    max-width: 1450px;
+}
+
+main,
+app-cart,
+aside {
+    max-height: calc(100vh - 85px);
+    overflow: auto;
+    display: block;
+    padding-bottom: 20px;
+    >* {
+        display: block;
+        max-width: calc(100% - 10px);
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 7px $lightGrey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: $yellow;
+    border-radius: 10px;
+}
+
+
+.mobileOnly {
+    display: none;
+}
+
+.form-holder {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    background-color: rgba(245 245 245 / 30%);
+
+    .close-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+    }
+
+    .form-bg {
+        background-color: $darkBg;
+        padding: 25px 25px;
+        width: 400px;
+        max-width: calc(100% - 30px);
+        max-height: calc(100vh - 30px);
+        position: relative;
+        border-radius: 10px;
+        overflow: auto;
+    }
+}
+
+.body-holder {
+    padding-top: 25px;
+}
+
+.page-holder {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+}
+
+aside,
+app-cart {
+    flex: 1 0 270px;
+    max-width: 270px;
+}
+
+main {
+    flex: 1 0 calc(100% - 600px);
+    max-width: calc(100% - 600px);
+}
+
+a {
+    color: #F7D955;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+th {
+    text-transform: capitalize;
+}
+
+aside {
+
+    a {
+        cursor: pointer;
+
+        &.active {
+            color: $yellow
+        }
+    }
+
+    h2 {
+        padding-bottom: 10px;
+    }
+
+    ul {
+        padding-left: 15px;
+
+        li {
+            margin-bottom: 10px;
+
+            >a {
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 16px;
+                color: $white;
+
+                display: flex;
+                align-items: center;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    @media all and (max-width:1200px) {
+        ul {
+            display: flex;
+
+            li {
+                margin-right: 15px;
+            }
+        }
+    }
+}
+
+@media all and (max-width:1200px) {
+    main {
+        max-height: calc(100vh - 173px);
+        padding-bottom: 60px;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 0px $lightGrey;
+    }
+
+    main>*,
+    app-cart>* {
+        max-width: 100%;
+    }
+
+    .page-holder {
+        flex-direction: column;
+    }
+
+    main,
+    aside,
+    app-cart {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+
+}
