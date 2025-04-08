@@ -6,9 +6,10 @@ import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
-  selector: 'app-game-events',
-  templateUrl: './game-events.component.html',
-  styleUrls: ['./game-events.component.scss']
+    selector: 'app-game-events',
+    templateUrl: './game-events.component.html',
+    styleUrls: ['./game-events.component.scss'],
+    standalone: false
 })
 export class GameEventsComponent implements OnInit {
   PersonId = 8746

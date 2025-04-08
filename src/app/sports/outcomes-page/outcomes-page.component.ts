@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-outcomes-page',
-  templateUrl: './outcomes-page.component.html',
-  styleUrls: ['./outcomes-page.component.scss']
+    selector: 'app-outcomes-page',
+    templateUrl: './outcomes-page.component.html',
+    styleUrls: ['./outcomes-page.component.scss'],
+    standalone: false
 })
 export class OutcomesPageComponent implements OnInit {
   outcomesList = []

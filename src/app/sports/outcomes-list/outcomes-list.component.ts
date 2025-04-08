@@ -4,9 +4,10 @@ import { CartService } from 'src/app/services/cart.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
-  selector: 'app-outcomes-list',
-  templateUrl: './outcomes-list.component.html',
-  styleUrls: ['./outcomes-list.component.scss']
+    selector: 'app-outcomes-list',
+    templateUrl: './outcomes-list.component.html',
+    styleUrls: ['./outcomes-list.component.scss'],
+    standalone: false
 })
 export class OutcomesListComponent implements OnChanges {
   @Input() outcomesList: any

@@ -3,9 +3,10 @@ import { ApiService } from '../services/api.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-apitesting',
-  templateUrl: './apitesting.component.html',
-  styleUrls: ['./apitesting.component.scss']
+    selector: 'app-apitesting',
+    templateUrl: './apitesting.component.html',
+    styleUrls: ['./apitesting.component.scss'],
+    standalone: false
 })
 
 export class ApitestingComponent implements OnInit {

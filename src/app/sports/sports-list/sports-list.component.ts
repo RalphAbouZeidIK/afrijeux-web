@@ -4,9 +4,10 @@ import { ApiService } from 'src/app/services/api.service';
 import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
-  selector: 'app-sports-list',
-  templateUrl: './sports-list.component.html',
-  styleUrls: ['./sports-list.component.scss']
+    selector: 'app-sports-list',
+    templateUrl: './sports-list.component.html',
+    styleUrls: ['./sports-list.component.scss'],
+    standalone: false
 })
 export class SportsListComponent implements OnInit, OnChanges {
 

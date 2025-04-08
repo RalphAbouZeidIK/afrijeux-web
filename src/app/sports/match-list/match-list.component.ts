@@ -5,9 +5,10 @@ import { CartService } from 'src/app/services/cart.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
-  selector: 'app-match-list',
-  templateUrl: './match-list.component.html',
-  styleUrls: ['./match-list.component.scss']
+    selector: 'app-match-list',
+    templateUrl: './match-list.component.html',
+    styleUrls: ['./match-list.component.scss'],
+    standalone: false
 })
 export class MatchListComponent implements OnChanges {
   @Output() matchForOutcome = new EventEmitter<any>();

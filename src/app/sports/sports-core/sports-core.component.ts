@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sports-core',
-  templateUrl: './sports-core.component.html',
-  styleUrls: ['./sports-core.component.scss']
+    selector: 'app-sports-core',
+    templateUrl: './sports-core.component.html',
+    styleUrls: ['./sports-core.component.scss'],
+    standalone: false
 })
 export class SportsCoreComponent {
   selectedFilters: any;

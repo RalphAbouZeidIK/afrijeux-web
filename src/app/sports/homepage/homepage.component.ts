@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-homepage',
-  templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.scss']
+    selector: 'app-homepage',
+    templateUrl: './homepage.component.html',
+    styleUrls: ['./homepage.component.scss'],
+    standalone: false
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   matchesList = []

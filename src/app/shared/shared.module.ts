@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { CartComponent } from './cart/cart.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableComponent } from './table/table.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
