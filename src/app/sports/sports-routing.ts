@@ -11,15 +11,20 @@ import { CanceledBetsComponent } from "./canceled-bets/canceled-bets.component";
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '1',  // Redirect to 'courses-libanaises' by default
+    pathMatch: 'full'  // Ensure this redirect happens for the root of the submodule
+  },
+  {
+    path: '',
     component: SportsCoreComponent,
     children: [
-      { path: 'Tickets', component: TicketsComponent },
-      { path: 'Canceled-Bets', component: CanceledBetsComponent },
-      { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId', component: HomepageComponent },
-      { path: ':sportId/Categories/:categoryId', component: HomepageComponent },
-      { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId/Outcomes/:matchId', component: OutcomesPageComponent },
-      { path: ':sportId/Outcomes/:matchId', component: OutcomesPageComponent },
-      { path: ':sportId', component: HomepageComponent },
+      { path: 'Tickets', component: TicketsComponent, data: { showLink: true, title: 'routerLinks.Sports.viewTickets' } },
+      { path: 'Canceled-Bets', component: CanceledBetsComponent, data: { showLink: true, title: 'routerLinks.Sports.canceledBets' } },
+      { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
+      { path: ':sportId/Categories/:categoryId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
+      { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
+      { path: ':sportId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
+      { path: ':sportId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
     ]
   }
 

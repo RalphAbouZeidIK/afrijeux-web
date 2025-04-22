@@ -1,0 +1,128 @@
+<div class="table-row">
+
+    <div class="row-container">
+        <div class="table-item">
+            {{horse.horseName}} 
+            <span class="jockey"><span class="dot"></span> {{'hpb.horse.jockeyName' | translate}} <span class="hidden-mobile">(68 Kg)</span> <b style="color:#f7d955">{{(horse.isNoPartant)? '  (' + ('hpb.horse.noPartant' | translate) + ')' : ''}}</b></span>
+        </div>
+        <div class="table-item hidden-mobile">{{'hpb.horse.horseMusic' | translate}}</div>
+        <div class="table-item first-checkbox">
+            <div class="checkbox"
+                [ngClass]="{'isSelected':(horse.isBase || horse.isParoli || horse.isDouble) && horse.isSelected,'isDisabled':horse.isDisabled || horse.isNoPartant}"
+                (click)="addHorseToBet(horse,'isBase')">
+            </div>
+        </div>
+        <div class="table-item" *ngIf="fieldChoice == 2">
+            <div class="checkbox" [ngClass]="{'isSelected':horse.isAssociated && horse.isSelected}"
+                (click)="addHorseToBet(horse,'isAssociated')"></div>
+        </div>
+        <div class="table-item more-info" (click)="toggleSub(horse)">{{'hpb.horse.moreInfo' | translate}}</div>
+    </div>
+
+    <div class="hidden-infos" *ngIf="horse.isExpanded">
+        <div class="details-holder row">
+            <div class="col-xs-12 mobileOnly light-bgrd">
+                <span class="label-with-bg ">
+                    {{'hpb.horse.music' | translate}}
+                </span>
+                <span class="mobile-right-table-item">{{horse.musique}}</span>
+            </div>
+
+            <div class="col-md-4 col-xs-12 dark-bgrd">
+                <span class="label-with-bg hidden-mobile">
+                    {{'hpb.horse.horse' | translate}}
+                </span>
+                <div class="hidden-mobile">
+                    <span class="list-item">
+                        <span>{{'hpb.horse.age' | translate}}: </span>{{horse.age}}
+                    </span>
+                    <span class="list-item">
+                        <span>{{'hpb.horse.sex' | translate}}: </span> {{horse.sex}}
+                    </span>
+                </div>
+
+                <span class="list-item mobileOnly">
+                    {{'hpb.horse.ageSex' | translate}}
+                    <span class="mobile-right-table-item">{{horse.age}}/{{horse.sex}}</span>
+                </span>
+            </div>
+            <div class="col-md-4 col-xs-12 light-bgrd">
+                <span class="label-with-bg">
+                    {{'hpb.horse.coach' | translate}}
+                </span>
+                <span class="list-item mobile-right-table-item">
+                    {{horse.coach}}
+                </span>
+            </div>
+            <div class="col-md-4 col-xs-12 dark-bgrd">
+                <span class="label-with-bg">
+                    {{'hpb.horse.breeder' | translate}}
+                </span>
+                <span class="list-item mobile-right-table-item">
+                    <span>{{'hpb.horse.owner' | translate}}: &nbsp;</span> {{horse.owner}}
+                </span>
+            </div>
+        </div>
+        <div class="details-holder">
+
+            <span class="label-with-bg hidden-mobile">
+                {{'hpb.horse.genealogy' | translate}}
+            </span>
+            <div class="row">
+                <div class="col-md-4 col-xs-12 light-bgrd">
+                    <span class="list-item">
+                        <span class="label-block">{{'hpb.horse.mother' | translate}}: </span> <span
+                            class="mobile-right-table-item">{{horse.mother}}</span>
+                    </span>
+                </div>
+                <div class="col-md-4 col-xs-12 dark-bgrd">
+                    <span class="list-item">
+                        <span class="label-block">{{'hpb.horse.maternalGrandfather' | translate}}: </span>
+                        <span class="mobile-right-table-item">{{horse.grandFather}}</span>
+                    </span>
+                </div>
+                <div class="col-md-4 col-xs-12 light-bgrd">
+                    <span class="list-item">
+                        <span class="label-block">{{'hpb.horse.father' | translate}}: </span>
+                        <span class="mobile-right-table-item">{{horse.father}}</span>
+                    </span>
+                </div>
+                <div class="col-md-4 col-xs-12 dark-bgrd">
+                    <span class="list-item">
+                        <span class="label-block">{{'hpb.horse.jockeyWeight' | translate}} </span>
+                        <span class="mobile-right-table-item">{{horse.jockeyWeight}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="details-holder last-races hidden-mobile">
+            <span class="label-with-bg">
+                {{'hpb.horse.lastRaces' | translate}}
+            </span>
+            <table class="table-container">
+                <thead>
+                    <tr>
+                        <th>{{'hpb.horse.position' | translate}}</th>
+                        <th>{{'hpb.horse.raceDate' | translate}}</th>
+                        <th>{{'hpb.horse.race' | translate}}</th>
+                        <th>{{'hpb.horse.jockey' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr *ngFor="let raceItem of horse.lastRaces">
+                        <td>{{raceItem.position}}</td>
+                        <td>{{raceItem.date}}</td>
+                        <td>{{raceItem.course}}</td>
+                        <td>{{raceItem.jockey}}</td>
+                    </tr> -->
+                    <tr>
+                        <td>test position</td>
+                        <td>test date</td>
+                        <td>test course</td>
+                        <td>test jockey</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

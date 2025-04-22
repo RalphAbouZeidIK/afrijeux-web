@@ -1,0 +1,236 @@
+{
+    "generic": {
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register"
+    },
+    "routerLinks": {
+        "appTitle": {
+            "hpb": "HPB - PMU",
+            "User": "My profile",
+            "Sports": "Sports"
+        },
+        "HPBTitles": {
+            "mesParies": "My Bets",
+            "libanaises": "Lebanese Races",
+            "francaises": "French Races",
+            "resultats": "Results",
+            "commentParier": "How to Bet",
+            "course": "Race"
+        },
+        "Sports": {
+            "viewTickets": "View Tickets",
+            "canceledBets": "Canceled Bets",
+            "matchList": "Match List"
+        },
+        "UserTitles": {
+            "myProfile": "My Profile",
+            "myBets": "My Bets",
+            "deposit": "Deposit Funds",
+            "withdraw": "Withdraw",
+            "logout": "Logout"
+        }
+    },
+    "alerts": {
+        "complete_previous_bet": "Please complete the previous bet first",
+        "unauthorized": "Unauthorized",
+        "multipleBetsNoAllowed": "Multiple bets on same match currently not allowed",
+        "minimum_horses_required": "Minimum {{count}} horses required"
+    },
+    "shared": {
+        "login": {
+            "loginTitle": "Login",
+            "signUpTitle": "Sign Up",
+            "username": "Username",
+            "password": "Password",
+            "forgotPassword": "Forgot your password?",
+            "firstName": "First Name",
+            "firstNameRequired": "First name is required.",
+            "lastName": "Last Name",
+            "lastNameRequired": "Last name is required.",
+            "email": "Email",
+            "emailRequired": "Email is required.",
+            "emailInvalid": "Invalid email format.",
+            "phone": "Phone",
+            "phoneRequired": "Phone number is required.",
+            "phoneInvalid": "Invalid phone number (must be 10 digits).",
+            "dateOfBirth": "Date of Birth",
+            "dobRequired": "Date of Birth is required.",
+            "dobUnderage": "You must be at least 18 years old.",
+            "usernameRequired": "Username is required.",
+            "usernameMinlength": "Username must be at least 3 characters long.",
+            "passwordRequired": "Password is required.",
+            "passwordMinlength": "Password must be at least 6 characters long.",
+            "confirmPassword": "Confirm Password",
+            "confirmPasswordRequired": "Confirm Password is required.",
+            "passwordMismatch": "Passwords do not match.",
+            "ageTermsAgreement": "I certify that I am at least 18 years old and have read the Terms and Conditions and the regulations, and I accept their application.",
+            "invalidCredentials": "Invalid Credentials",
+            "login": "Login",
+            "register": "Register",
+            "noAccount": "Don't have an account?",
+            "registerHere": "Register here",
+            "alreadyRegistered": "Already registered?",
+            "loginHere": "Login here"
+        }
+    },
+    "user": {
+        "deposit": {
+            "title": "Deposit Funds",
+            "cardNumber": "Credit Card Number",
+            "cardNumberPlaceholder": "1234 5678 1234 5678",
+            "expiryDate": "Expiration Date (MM/YY)",
+            "expiryDatePlaceholder": "MM/YY",
+            "cvv": "CVV",
+            "cvvPlaceholder": "123",
+            "cardholderName": "Cardholder's Name",
+            "cardholderNamePlaceholder": "John Doe",
+            "amount": "Deposit Amount ($)",
+            "submit": "Deposit"
+        },
+        "myBets": {
+            "title": "My Bets",
+            "filter": {
+                "all": "All",
+                "winning": "Winning",
+                "losing": "Lost"
+            },
+            "filterBy": "Filter by:",
+            "lastDays": "last days",
+            "stake": "Stake"
+        },
+        "withdraw": {
+            "title": "Withdraw Funds",
+            "balanceMessage": "Available balance for withdrawal:",
+            "amountLabel": "Amount to withdraw",
+            "amountPlaceholder": "500",
+            "amountError": "The amount must be between 1 and {{max}}",
+            "currencyLabel": "Currency",
+            "selectCurrency": "Select",
+            "submit": "Withdraw"
+        }
+    },
+    "hpb": {
+        "howToPlay": {
+            "cards": [
+                {
+                    "title": "Types of races.",
+                    "description": "The structure of horse races follows a predefined hierarchy to allow horses of different levels to participate in races suited to their abilities.",
+                    "img": "assets/images/panier-img.jpg",
+                    "link": ""
+                },
+                {
+                    "title": "Betting guide.",
+                    "description": "Discover everything you need to know about online turf betting, from the different types of bets and their specifics to how the various horse races work, to help you bet wisely and understand the world of horse racing.",
+                    "img": "assets/images/panier-img-1.jpg",
+                    "link": ""
+                },
+                {
+                    "title": "How to bet?",
+                    "description": "Become an informed bettor thanks to numerous tips that will help you better understand the various horse races.",
+                    "img": "assets/images/panier-img-2.jpg",
+                    "link": ""
+                }
+            ]
+        },
+        "courseDetails": {
+            "starters": "Starters",
+            "prizeAmount": "Prize Amount",
+            "trackTypes": "Track Types",
+            "availableBets": "Available Bets",
+            "betTypes": "Bet Types",
+            "simple": "Single",
+            "reducedField": "Reduced Field",
+            "fullField": "Full Field",
+            "horsesJockeys": "Horses/Jockeys",
+            "form": "Form",
+            "base": "Base",
+            "associated": "Associated"
+        },
+        "courses": {
+            "dailyProgram": "Daily Program",
+            "noRacesAvailable": "No races available for this date"
+        },
+        "horse": {
+            "jockeyName": "Jockey name",
+            "horseMusic": "Horse Music",
+            "moreInfo": "More Info",
+            "music": "Music",
+            "horse": "Horse",
+            "age": "Age",
+            "sex": "Sex",
+            "ageSex": "Age/Sex",
+            "coach": "Coach",
+            "breeder": "Breeder/s",
+            "owner": "Owner/s",
+            "genealogy": "Genealogy",
+            "mother": "Mother",
+            "maternalGrandfather": "Maternal Grandfather",
+            "father": "Father",
+            "jockeyWeight": "Jockey Weight",
+            "lastRaces": "Last Races",
+            "position": "Pos.",
+            "raceDate": "Race Date",
+            "race": "Race",
+            "jockey": "Jockey"
+        },
+        "results": {
+            "title": "Results",
+            "noRacesAvailable": "No results for this date"
+        },
+        "cart": {
+            "cartTitle": "Cart",
+            "clearAll": "Clear all",
+            "ticketType": "Ticket Type",
+            "allOrders": "All Orders",
+            "baseHorses": "Base Horses",
+            "associatedHorses": "Associated Horses",
+            "singlePrice": "Single Price",
+            "pickPrice": "Pick Price",
+            "addToTicket": "Add to ticket",
+            "ticketPrice": "Ticket Price",
+            "price": "Price",
+            "placeBet": "Place Bet"
+        }
+    },
+    "sb": {
+        "canceledBets": {
+            "matchName": "Match Name",
+            "marketName": "Market Name"
+        },
+        "leftmenu": {
+            "viewTickets": "View Tickets",
+            "canceledBets": "Canceled Bets"
+        },
+        "matchDetails": {
+            "eventDate": "Event Date"
+        },
+        "matchList": {
+            "market": "Market",
+            "noMatchesAvailable": "No matches available"
+        },
+        "sportsList": {
+            "title": "Sports List"
+        },
+        "tickets": {
+            "ticketCode": "Ticket Code",
+            "stake": "Stake",
+            "payout": "Payout",
+            "dateIssued": "Date Issued",
+            "cancelStatus": "Cancel Status",
+            "canceled": "Canceled",
+            "uncanceled": "Uncanceled",
+            "view": "View",
+            "hide": "Hide",
+            "picks": "picks",
+            "cancelTicket": "Cancel Ticket",
+            "eventCode": "Event Code",
+            "sport": "Sport",
+            "status": "Status",
+            "odd": "Odd",
+            "eventName": "Event Name",
+            "marketName": "Market Name",
+            "outcomeName": "Outcome Name"
+        }
+    }
+}

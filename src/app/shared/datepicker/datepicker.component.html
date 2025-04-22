@@ -1,0 +1,6 @@
+<mat-form-field [class]="parentClass">
+  <mat-label>Date: </mat-label>
+  <input matInput [matDatepicker]="picker" [(ngModel)]="dateChosen" (ngModelChange)="dateChange($event)" [min]="minDate">
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

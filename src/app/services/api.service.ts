@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
 import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Buffer } from 'buffer';
+import { TranslateService } from '@ngx-translate/core';
+(window as any).Buffer = Buffer;
 declare var require: any;
-import { XMLParser } from 'fast-xml-parser';
 
 /**
  * Main API service
@@ -22,7 +24,12 @@ export class ApiService {
 
   encryptionPass = 'dAQ1Rj/cbIQ='
 
-  constructor(private http: HttpClient, private router: Router, private userSrv: UserService) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userSrv: UserService,
+    private translate: TranslateService,
+  ) { }
 
   /**
    * Handle API errors
@@ -35,7 +42,9 @@ export class ApiService {
     this.errorHandled = true;
 
     if (error.status === 401 || error.status === 403) {
-      alert('Unauthorized');
+      this.translate.get('alerts.unauthorized').subscribe((translatedMsg: string) => {
+        alert(translatedMsg);
+      });
       if (this.router.url !== '/') {
         this.userSrv.signOut();
         this.router.navigate(['']);
@@ -50,18 +59,18 @@ export class ApiService {
 
   /**
    * Main API call function
-   * @param subRoute Sub route URL
+   * @param controllerName Sub route URL
    * @param apiRoute Main API route
    * @param method API method (GET, POST, etc.)
    * @param params API parameters
-   * @param noTimeout Disable timeout
+   * @param isNormalApi for normal API calls
    */
   async makeApi(
     subRoute: string,
     apiRoute: string,
     method: string,
     params: any,
-    isNormalApi: boolean = false
+    isNormalApi: boolean = true,
   ): Promise<any> {
     if (this.userSrv.sessionExpired()) {
       this.userSrv.signOut();
@@ -71,12 +80,11 @@ export class ApiService {
 
     if (!isNormalApi) {
       params = this.encryptedRequest(params)
+      console.log(params)
     }
 
-
-    const subRouteUrl = this.getSubRouteUrl(subRoute);
-    const apiEndPoint = `${environment.BaseUrl}${environment.gcSrv}${subRouteUrl}${apiRoute}`;
-
+    const apiEndPoint = `${environment.BaseUrl}${environment.gcSrv}${subRoute}/${apiRoute}`;
+    console.log(apiEndPoint)
 
     let headers = new HttpHeaders();
 
@@ -118,45 +126,6 @@ export class ApiService {
     }
   }
 
-  /**
-   * Helper to get sub-route URL
-   * @param subRoute Sub-route key
-   */
-  private getSubRouteUrl(subRoute: string): string {
-    switch (subRoute) {
-      case 'auth':
-        return environment.subUrls.auth;
-      case 'master':
-        return environment.subUrls.master;
-      case 'AfrijeuxPariMutuelUrbain':
-        return environment.subUrls.pmu;
-      default:
-        return `${subRoute}/`;
-    }
-  }
-
-  /**
-   * GET API with blob response type
-   * @param url API endpoint
-   * @param paramsObject Query parameters
-   * @param responseType Response type
-   * @param observe Observe type
-   */
-  async get(url: string, paramsObject = {}, responseType: any = 'blob', observe: any = 'body'): Promise<any> {
-    let headers = new HttpHeaders();
-    if (this.userSrv.getUserToken()) {
-      headers = headers.append('Authorization', `Bearer ${this.userSrv.getUserToken()}`);
-    }
-
-    const response = this.http.get(url, { headers, params: paramsObject, responseType, observe });
-
-    try {
-      return await firstValueFrom(response);
-    } catch (error) {
-      this.handleError(error);
-      throw error;
-    }
-  }
 
   encryptedRequest(objectToEncrypt: any) {
     objectToEncrypt = JSON.stringify(objectToEncrypt)
@@ -204,127 +173,21 @@ export class ApiService {
   }
 
   /**
-   * Fetches data from the API and converts XML response to JSON
+   * Helper to get sub-route URL
+   * @param subRoute Sub-route key
    */
-  async betradarapi(route: string, method: string, params: ApiParams = {}) {
-    if (this.userSrv.sessionExpired()) {
-      this.userSrv.signOut();
-      this.router.navigate(['/admin']);
-      return;
-    }
-
-    const apiEndPoint = route;
-    const paramsBody = params.body || {}; // For POST, PUT, PATCH
-    let headers = new HttpHeaders();
-    headers = headers.append('x-access-token', `t7Iu5mWuLFbYjP5uPg`);
-
-    const httpOptions = { headers };
-
-    let response: Observable<any>;
-
-    // Switch case for different HTTP methods
-    switch (method) {
-      case 'POST':
-        response = this.http
-          .post(apiEndPoint, paramsBody, { ...httpOptions, responseType: 'text' }) // Request as 'text' to receive XML as text
-          .pipe(timeout(30000));
-        break;
-      case 'PUT':
-        response = this.http
-          .put(apiEndPoint, paramsBody, { ...httpOptions, responseType: 'text' }) // Request as 'text' to receive XML as text
-          .pipe(timeout(30000));
-        break;
-      case 'PATCH':
-        response = this.http
-          .patch(apiEndPoint, paramsBody, { ...httpOptions, responseType: 'text' }) // Request as 'text' to receive XML as text
-          .pipe(timeout(30000));
-        break;
-      case 'DELETE':
-        response = this.http
-          .delete(apiEndPoint, { ...httpOptions, responseType: 'text' }) // Request as 'text' to receive XML as text
-          .pipe(timeout(30000));
-        break;
-      case 'GET':
+  private getSubRouteUrl(subRoute: string): string {
+    switch (subRoute) {
+      case 'auth':
+        return environment.subUrls.auth;
+      case 'master':
+        return environment.subUrls.master;
+      case 'AfrijeuxPariMutuelUrbain':
+        return environment.subUrls.pmu;
       default:
-        response = this.http
-          .get(apiEndPoint, { ...httpOptions, responseType: 'text' }) // Request as 'text' to receive XML as text
-          .pipe(timeout(30000));
-        break;
+        return `${subRoute}/`;
     }
-
-    // Return the response as a Promise after converting XML to JSON
-    const xmlResponse = await response.toPromise();
-    return this.convertXmlToJson(xmlResponse); // Convert XML to JSON
   }
-
-  /**
-   * Converts XML string to JSON using xml2js
-   */
-  private convertXmlToJson(xmlString: string): Promise<any> {
-    const parser = new XMLParser({
-      ignoreAttributes: false,   // Don't ignore attributes
-      trimValues: true,          // Trim values to avoid unnecessary spaces
-      attributeNamePrefix: "",   // Remove the default '@' for attributes
-      alwaysCreateTextNode: true, // Ensure text nodes are always created
-      // Optional: If you're dealing with CDATA
-    });
-    return parser.parse(xmlString);
-
-  }
-
-  async oddsapi(route: string, method: string, params: ApiParams = {}) {
-    if (this.userSrv.sessionExpired()) {
-      this.userSrv.signOut();
-      this.router.navigate(['/admin']);
-      return;
-    }
-
-    // Assuming the route passed is relative to /oddscomparison-prematch
-    const apiEndPoint = `https://try.readme.io/https://api.sportradar.com/${route}`;
-    const paramsBody = params.body || {}; // For POST, PUT, PATCH
-    let headers = new HttpHeaders();
-    headers = headers.append('x-access-token', `t7Iu5mWuLFbYjP5uPg`);
-
-    const httpOptions = { headers };
-
-    console.log('API endpoint:', apiEndPoint);  // Debugging line to check the full URL being requested
-
-    let response: Observable<any>;
-
-    // Switch case for different HTTP methods
-    switch (method) {
-      case 'POST':
-        response = this.http
-          .post(apiEndPoint, paramsBody, httpOptions)  // For POST requests, pass body data
-          .pipe(timeout(30000));
-        break;
-      case 'PUT':
-        response = this.http
-          .put(apiEndPoint, paramsBody, httpOptions)
-          .pipe(timeout(30000));
-        break;
-      case 'PATCH':
-        response = this.http
-          .patch(apiEndPoint, paramsBody, httpOptions)
-          .pipe(timeout(30000));
-        break;
-      case 'DELETE':
-        response = this.http
-          .delete(apiEndPoint, httpOptions)
-          .pipe(timeout(30000));
-        break;
-      case 'GET':
-      default:
-        response = this.http
-          .get(apiEndPoint, httpOptions)
-          .pipe(timeout(30000));
-        break;
-    }
-
-    // Return the response as a Promise after converting XML to JSON
-    return await response.toPromise();
-  }
-
 
 }
 

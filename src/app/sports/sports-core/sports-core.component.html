@@ -1,12 +1,15 @@
-<div class="body-holder">
-    <div class="container page-holder">
+<app-nav [navList]="navList"></app-nav>
+<div class="body-holder sports-betting">
+    <div class="container-fluid page-holder">
         <aside>
             <app-sports-list [selectedFilters]="selectedFilters"></app-sports-list>
-            <app-left-menu></app-left-menu>
         </aside>
         <main>
             <router-outlet></router-outlet>
         </main>
-        <app-cart></app-cart>
+        <aside class="cart">
+            <app-sbcart></app-sbcart>
+        </aside>
+    
     </div>
 </div>

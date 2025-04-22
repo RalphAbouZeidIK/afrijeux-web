@@ -1,0 +1,420 @@
+@use '/src/variables' as *;
+
+.cart-container {
+    overflow: hidden;
+    padding-left: 20px;
+    .btn {
+        width: 100%;
+        border-radius: 0;
+
+    }
+
+    .cart-header {
+        background: #1E2328;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid $darkBg;
+    }
+
+    .clear-btn {
+        color: $yellow;
+        font-size: 12px;
+        font-weight: 300;
+        text-decoration-line: underline;
+        cursor: pointer;
+    }
+
+    .cart-title {
+        margin: 0;
+    }
+
+    .race-title {
+        color: $lightGrey;
+        font-size: 12px;
+        display: block;
+        padding: 0 20px;
+    }
+
+    .close-icon {
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .type-container {
+        // background-color: $darkBg;
+        padding-top: 15px;
+
+    }
+
+    .type-list {
+        font-weight: 700;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 20px;
+        flex-wrap: wrap;
+
+        &.ticket-type {
+            margin-bottom: 20px;
+            justify-content: unset;
+            padding: 0 20px;
+        }
+
+        &.price-holder {
+            padding-top: 15px;
+        }
+
+        &.type-multi {
+            padding-top: 10px;
+            padding-bottom: 15px;
+
+            .type {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .choose-quantity {
+        border-radius: 5px;
+        background-color: $countryBg;
+        padding: 0;
+        width: 80px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >span {
+            font-size: 14px;
+            width: 33%;
+            text-align: center;
+            color: $white;
+        }
+
+        .minus,
+        .plus {
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+}
+
+.bet-item {
+    background: $darkBg;
+    border-bottom: 1px solid $yellow;
+    padding-bottom: 15px;
+
+}
+
+.total-holder {
+
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    padding-top: 10px;
+    background-color: #1e2328;
+    /* color: #18191C; */
+
+    font-weight: bold;
+}
+
+input {
+    max-width: 100%;
+    border: none;
+    background: transparent;
+    color: $white;
+    text-align: center;
+    padding: 4px 5px 7px;
+    font-weight: bold;
+}
+
+/* Hide arrows in number input in Webkit browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.list-of-horses span:first-of-type .dash {
+    display: none;
+}
+
+
+.cart-body-holder.ticket-body {
+    border: 1px solid #F7D955;
+    margin-bottom: 0px;
+}
+
+.cart-body-holder {
+    margin-bottom: 20px;
+    border: 1px solid #F7D955;
+}
+
+/* From Uiverse.io by guilhermeyohan */
+.checkbox-apple {
+    position: relative;
+    width: 25px;
+    height: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-right: 7px;
+}
+
+.checkbox-apple label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 13px;
+    border-radius: 50px;
+    background: linear-gradient(to bottom, #b3b3b3, #e6e6e6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkbox-apple label:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.checkbox-apple input[type="checkbox"]:checked+label {
+    background: $yellow
+}
+
+.checkbox-apple input[type="checkbox"]:checked+label:after {
+    transform: translateX(12px);
+}
+
+.checkbox-apple label:hover {
+    background: linear-gradient(to bottom, #b3b3b3, #e6e6e6);
+}
+
+.checkbox-apple label:hover:after {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.yep {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 12px;
+}
+
+
+.bet-options {
+    display: flex;
+    align-items: center;
+}
+
+.title-order {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $lightGrey;
+    font-size: 12px;
+    padding: 0 20px;
+
+    .race-title {
+        padding: 0;
+    }
+}
+
+@media all and (max-width:1400px) {
+
+    .cart-container .cart-header,
+    .cart-container .type-list {
+        padding: 15px 10px;
+    }
+
+    .cart-container .race-title {
+        padding: 0 10px;
+    }
+
+    .total-holder {
+        padding: 10px;
+    }
+}
+
+@media all and (max-width:1200px) {
+    .cart-body-holder {
+        max-height: 0;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+    }
+
+    .show-cart {
+        .cart-body-holder {
+            max-height: 100vh;
+        }
+
+        .clear-btn {
+            width: 58px;
+
+        }
+
+        .yellow-circle {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+    }
+
+    .clear-btn {
+        overflow: hidden;
+        width: 0;
+        -webkit-transition: width 0.5s ease-in-out;
+        -moz-transition: width 0.5s ease-in-out;
+        -ms-transition: width 0.5s ease-in-out;
+        -o-transition: width 0.5s ease-in-out;
+        transition: width 0.5s ease-in-out;
+        white-space: nowrap;
+    }
+
+    .showOnClickMobile {
+        display: none;
+    }
+
+    .list-of-bets {
+        overflow: auto;
+        max-height: 200px;
+    }
+
+    .cart-container {
+        background-color: $white;
+        border-radius: 10px 10px 0 0;
+
+        .cart-header {
+            cursor: pointer;
+            padding: 23px 20px 21px 20px;
+            border-color: #f5f5f5;
+
+            .rect-bar {
+                height: 4px;
+                border-radius: 4px;
+                width: 43px;
+                background-color: #929393;
+                position: absolute;
+                top: 10px;
+                left: 46%;
+            }
+
+            .yellow-circle {
+                background-color: $yellow;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                color: $darkBg;
+                text-align: center;
+                font-size: 14px;
+                font-weight: 600;
+                padding-top: 3px;
+                margin-left: auto;
+
+                &.mobileOnly {
+                    display: block !important;
+                }
+            }
+        }
+
+        .type-container {
+            background-color: $offWhite;
+        }
+
+        .type-list.type-multi {
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            .type {
+                font-size: 16px;
+            }
+        }
+
+        .choose-quantity {
+            width: 100px;
+            height: 40px;
+            background-color: $offWhite;
+
+            >span {
+                color: $darkBg;
+            }
+        }
+
+        .total-holder {
+            padding: 15px 20px;
+        }
+
+        .btn {
+            padding: 15px 20px;
+        }
+
+        .clear-btn {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .race-title {
+            padding: 0 20px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+
+        .close-icon {
+            margin-right: 0;
+            width: 12px;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .type-list {
+            padding: 10px 20px 15px;
+            color: $darkBg;
+        }
+    }
+
+    .cart-title {
+        color: $darkBg;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+@media all and (max-width:767px) {
+    .overlay {
+        content: '';
+        height: calc(100vh - 330px);
+        width: 100%;
+        top: 60px;
+        left: 0;
+        position: fixed;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .show-cart .overlay {
+        visibility: visible;
+        opacity: 1;
+    }
+}

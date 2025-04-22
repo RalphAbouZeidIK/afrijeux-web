@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { LocalStorageService } from './local-storage.service';
+import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from './generic.service';
 import { ApiService } from './api.service';
 
@@ -10,28 +11,41 @@ import { ApiService } from './api.service';
 })
 export class CartService {
 
+
+
+  constructor(
+    private storageSrv: LocalStorageService,
+    private translate: TranslateService,
+    private gnrcSrv: GenericService,
+    private apiSrv: ApiService
+  ) { }
+  listOfBets: any = this.storageSrv.getItem('sbCartData') || []
+
   gameid = 5
 
   PersonId = 8746
 
   bonusRules: any = []
 
-  listOfBets: any = this.storageSrv.getItem('cartData') || []
-
-  pmuBets: any = this.storageSrv.getItem('pmuCartData') || []
-
-  constructor(
-    private storageSrv: LocalStorageService,
-    private gnrcSrv: GenericService,
-    private apiSrv: ApiService
-  ) { }
-
   /**
  * cart subscriber
  */
   private addCartData$ = new Subject();
 
+  /**
+ * cart subscriber
+ */
+  private addSBCartData$ = new Subject();
+
+  /**
+ * cart subscriber
+ */
+  private eventFromCart$ = new Subject();
+
   private removeCartData$ = new Subject();
+
+  private resetOtherEvents$ = new Subject();
+
 
   /**
    * Function to get the cart data
@@ -42,40 +56,28 @@ export class CartService {
   }
 
   /**
-   * Set Cart Data
-   * @param cartData 
+   * Function to get the cart data
+   * @returns 
    */
-  async setCartDataListener(cartData: any) {
-    let minimumOddRequired: any = 0
-    if (this.bonusRules.length == 0) {
-      this.bonusRules = await this.getBonusRules(this.PersonId, this.gameid)
-    }
-
-    minimumOddRequired = this.bonusRules[0].MinOddRequiered
-    //minimumOddRequired = 2
-    console.log(minimumOddRequired)
-    let multipliedOdds = 1
-    let totalBets = 0
-    cartData.forEach((element: any) => {
-      if (element.Odd >= minimumOddRequired) {
-        element.hasMinimumOdd = true
-      }
-      totalBets++
-      multipliedOdds *= element.Odd
-    });
-    multipliedOdds = Math.round(multipliedOdds * 100) / 100
-
-    this.storageSrv.setItem('TotaldOdds', multipliedOdds.toString())
-    this.storageSrv.setItem('totalBets', totalBets.toString())
-    this.addCartData$.next(cartData);
+  getSBCartData(): Observable<any> {
+    return this.addSBCartData$;
   }
+
+  /**
+   * Function to get the cart data
+   * @returns 
+   */
+  getEventFromCart(): Observable<any> {
+    return this.eventFromCart$;
+  }
+
 
   /**
    * Set Cart Data
    * @param cartData 
    */
-  removeCartData(matchId: any) {
-    this.removeCartData$.next(matchId);
+  removeCartData(raceId: any) {
+    this.removeCartData$.next(raceId);
   }
 
   /**
@@ -86,13 +88,60 @@ export class CartService {
     return this.removeCartData$;
   }
 
-  setListOfBets(betItem: any) {
+  //////////////////////////////HPB BETTING METHODS START//////////////////////////////////////////////////
+
+  setPmuBets(race: any, eventFromCart?: true) {
+    //console.log(race)
+    if (eventFromCart) {
+      this.eventFromCart$.next(race);
+      return
+    }
+    this.addCartData$.next(race);
+  }
+
+  getResetOtherEvents() {
+    return this.resetOtherEvents$;
+  }
+
+  setResetOtherEvents(data: any) {
+    this.resetOtherEvents$.next(data)
+  }
+
+  /**
+     * Set Cart Data
+     * @param cartData 
+     */
+  setCartDataListener(cartData: any) {
+    let totalBets = 0
+    let totalMultiplicator = 0
+    console.log(cartData)
+    cartData.forEach((element: any) => {
+      console.log(element.multiplicator)
+      if (element.showRace) {
+        totalBets++
+        totalMultiplicator += element.multiplicator
+      }
+    });
+    this.storageSrv.setItem('totalBets', totalBets.toString())
+    this.storageSrv.setItem('totalMultiplicator', totalMultiplicator.toString())
+    this.addCartData$.next(cartData);
+  }
+
+  //////////////////////////////HPB BETTING METHODS END//////////////////////////////////////////////////
+
+
+
+  //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
+
+  setSBBets(betItem: any) {
     console.log(betItem)
     let existingMatch = this.listOfBets.find((match: any) => match.MatchId === betItem.MatchId);
 
     if (existingMatch) {
       if (existingMatch.MarketId != betItem.MarketId) {
-        alert('Multiple bets on same match currently not allowed')
+        this.translate.get('alerts.multipleBetsNoAllowed').subscribe((translatedMsg: string) => {
+          alert(translatedMsg);
+        });
         return
       }
 
@@ -117,18 +166,38 @@ export class CartService {
 
     console.log(this.listOfBets)
 
-    this.setCartDataListener(this.listOfBets)
-    this.storageSrv.setItem('cartData', this.listOfBets)
+    this.setSBCartDataListener(this.listOfBets)
+    this.storageSrv.setItem('sbCartData', this.listOfBets)
   }
 
-  removeBetItem(betItem: any) {
-    let storageData = this.storageSrv.getItem('cartData')
-    let matchIndex = storageData.findIndex((itemInStorage: any) => itemInStorage.MatchId == betItem.MatchId)
-    storageData.splice(matchIndex, 1)
-    this.listOfBets.splice(matchIndex, 1)
-    this.removeCartData(betItem.MatchId)
-    this.storageSrv.setItem('cartData', storageData)
-    this.setCartDataListener(storageData)
+
+  /**
+   * Set Cart Data
+   * @param cartData 
+   */
+  async setSBCartDataListener(cartData: any) {
+    let minimumOddRequired: any = 0
+    if (this.bonusRules.length == 0) {
+      this.bonusRules = await this.getBonusRules(this.PersonId, this.gameid)
+    }
+
+    minimumOddRequired = this.bonusRules[0].MinOddRequiered
+    //minimumOddRequired = 2
+    console.log(minimumOddRequired)
+    let multipliedOdds = 1
+    let totalBets = 0
+    cartData.forEach((element: any) => {
+      if (element.Odd >= minimumOddRequired) {
+        element.hasMinimumOdd = true
+      }
+      totalBets++
+      multipliedOdds *= element.Odd
+    });
+    multipliedOdds = Math.round(multipliedOdds * 100) / 100
+
+    this.storageSrv.setItem('TotaldOdds', multipliedOdds.toString())
+    this.storageSrv.setItem('totalBets', totalBets.toString())
+    this.addSBCartData$.next(cartData);
   }
 
 
@@ -139,94 +208,26 @@ export class CartService {
       TimeStamp: this.gnrcSrv.getFormattedToday(),
     }
 
-    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetBonusRules', 'POST', params)
+    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetBonusRules', 'POST', params, false)
     console.log(apiResponse)
     return apiResponse
   }
 
-  // setPmuBets(race: any, horse: any, typeOfBetName: any, fixedConfig: any) {
-  //   let existingRace: any;
-  //   console.log(existingRace)
-  //   if (existingRace == undefined) {
-  //     let newRace: any = {
-  //       GameEventId: race.GameEventId,
-  //       raceTitle: race.EventName,
-  //       betTypeName: typeOfBetName,
-  //       listOfHorses: [],
-  //       multiplicator: 1,
-  //       fixedConfig: fixedConfig
-  //     }
-
-  //     if (horse) {
-  //       newRace.listOfHorses.push(horse)
-  //     }
-
-  //     this.pmuBets.push(newRace)
-  //   }
-
-  //   else {
-
-  //     if (!horse) {
-  //       existingRace.betTypeName = typeOfBetName
-  //       existingRace.fixedConfig = fixedConfig
-  //     }
-  //     else {
-  //       let horseId = horse.id
-  //       const existingHorseIndex = existingRace.listOfHorses.findIndex((horse: any) => horse.id === horseId);
-  //       if (existingHorseIndex !== -1) {
-  //         existingRace.listOfHorses.splice(existingHorseIndex, 1)
-  //       }
-  //       else {
-  //         existingRace.listOfHorses.push(horse)
-  //       }
-  //     }
-
-  //   }
-
-  //   existingRace = this.pmuBets.find((raceItem: any) => raceItem.GameEventId === race.GameEventId);
-  //   if ((existingRace.listOfHorses.length == 0) && !existingRace.betTypeName) {
-  //     let raceIndex = this.pmuBets.findIndex((raceItem: any) => raceItem.GameEventId == race.GameEventId)
-  //     this.pmuBets.splice(raceIndex, 1)
-  //   }
-  //   else {
-  //     if ((existingRace.listOfHorses.length == 0) || !existingRace.betTypeName) {
-  //       existingRace.showRace = false
-  //       existingRace.multiplicator = 1
-  //     }
-  //     else {
-  //       existingRace.multiplicator = 1
-  //       existingRace.showRace = true
-  //     }
-  //   }
-  //   console.log(this.pmuBets)
-  //   this.addCartData$.next(this.pmuBets[0]);
-  //   // this.storageSrv.setItem('pmuCartData', this.pmuBets)
-
-  // }
-
-  setPmuBets(race: any) {
-    if ((race.horses.find((horse: any) => horse.isSelected == true) == undefined) || (race.FixedConfiguration.find((item: any) => item.isSelected == true) == undefined)) {
-      race.showRace = false
-    }
-    else {
-      race.showRace = true
-    }
-    race.listOfHorses = race.horses.filter((horse: any) => horse.isSelected == true)
-    race.selectedFixedConfig = race.FixedConfiguration.find((item: any) => item.isSelected == true)
-    this.addCartData$.next(race);
+  removeBetItem(betItem: any) {
+    let storageData = this.storageSrv.getItem('sbCartData')
+    let matchIndex = storageData.findIndex((itemInStorage: any) => itemInStorage.MatchId == betItem.MatchId)
+    storageData.splice(matchIndex, 1)
+    this.listOfBets.splice(matchIndex, 1)
+    this.removeCartData(betItem.MatchId)
+    this.storageSrv.setItem('sbCartData', storageData)
+    this.setSBCartDataListener(storageData)
   }
 
-  updateMultiplicator(betItem: any, value: any) {
-    betItem.multiplicator += value
-    this.addCartData$.next(betItem);
-  }
-
-
+  //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
 
   clearBets() {
-    this.storageSrv.removeItem('cartData')
     this.listOfBets = []
-    this.setCartDataListener(this.listOfBets)
+    this.addSBCartData$.next(this.listOfBets);
   }
 
 

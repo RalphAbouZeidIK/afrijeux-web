@@ -1,0 +1,298 @@
+@use '/src/variables' as *;
+
+header {
+
+    .header-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        position: relative;
+    }
+
+}
+
+
+.isloggedIn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.settings {
+    width: 41px;
+    height: 41px;
+    display: flex;
+    align-items: center;
+    background-color: $lightBg;
+    justify-content: center;
+    border-radius: 50%;
+    margin-left: 15px;
+}
+
+.dropdown-header {
+    padding-left: 15px;
+    position: relative;
+    cursor: pointer;
+
+    .dropdown-list {
+        border-radius: 0 0 10px 10px;
+        background-color: $darkBg;
+        border: 1px solid $lightBg;
+
+        .dropdown-item {
+            cursor: pointer;
+            color: $white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-bottom: 1px solid $lightBg;
+
+            &:hover {
+                background: $yellow;
+                color: $darkBg
+            }
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    &.active {
+        .dropdown-list {
+            display: block;
+        }
+    }
+}
+
+.header-text {
+    color: $white;
+    font-weight: 700;
+
+    .header-balance {
+
+        color: $lightGrey;
+        font-size: 14px;
+    }
+}
+
+.logo {
+    cursor: pointer;
+}
+
+
+.mobile-toggle {
+    height: 30px;
+    width: 50px;
+    position: relative;
+
+    &:after {
+        content: '';
+        height: 3px;
+        width: 21px;
+        background-color: $white;
+        position: absolute;
+        bottom: 7px;
+        left: 0;
+    }
+
+    &:before {
+        content: '';
+        height: 10px;
+        width: 21px;
+        border-top: 3px solid $white;
+        border-bottom: 3px solid $white;
+        position: absolute;
+        top: 6px;
+        left: 0;
+    }
+}
+
+header {
+    &.active-mobile-menu {
+
+        .mobile-toggle:before {
+            top: 6px;
+            left: 3px;
+            transform: rotate(45deg);
+            border-top: none
+        }
+
+        .mobile-toggle:after {
+            bottom: 15px;
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+.language-selector-toggle {
+    height: 41px;
+    width: 41px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $lightBg;
+    border-radius: 50%;
+    cursor: pointer;
+    color: $white;
+    font-weight: bold;
+    text-transform: uppercase;  
+    text-decoration: none;
+}
+
+@media all and (max-width:767px) {
+    .overlay {
+        content: '';
+        height: calc(100vh - 60px);
+        width: 100%;
+        background-color: rgba(256, 256, 256, 0.6);
+        top: 60px;
+        left: 0;
+        position: fixed;
+        visibility: hidden;
+        opacity: 0;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .user-icon img {
+        display: block;
+        height: 30px
+    }
+
+    .logo {
+        height: 30px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .balance-settings-holder {
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .settings {
+        height: 30px;
+        width: 30px;
+
+        img {
+            width: 12px;
+        }
+    }
+
+    .nav-holder {
+        position: fixed;
+        background-color: #1E2328;
+        width: 100%;
+        z-index: 10;
+        top: 60px;
+        display: block;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        overflow: auto;
+        border-radius: 0px 0px 10px 10px;
+        max-height: 0;
+
+    }
+
+    header {
+        background: #1E2328;
+        position: fixed;
+        z-index: 3;
+        width: 100%;
+        top: 0;
+        left: 0;
+
+
+
+    }
+
+    .active-mobile-menu {
+        >.overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-holder {
+            max-height: calc(100vh - 60px);
+        }
+    }
+
+    .dropdown-header {
+
+        &.active {
+            >.overlay {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        .dropdown-list {
+            background: #1E2328;
+            border-radius: 0px 0px 10px 10px;
+            max-height: 0;
+            display: block;
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            -ms-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            top: 45px;
+            width: 100vw;
+            right: -15px;
+            left: auto;
+            overflow: auto;
+            border: none;
+
+            .dropdown-item {
+                padding: 17px 0;
+                text-align: center;
+                border-top: 1px solid #18191C;
+
+                &.header-text {
+                    background: #18191C;
+                }
+            }
+        }
+    }
+
+    .dropdown-header.active .dropdown-list {
+        max-height: calc(100vh - 60px);
+    }
+
+    .nav {
+        display: block;
+
+        .nav-item {
+            margin: 0;
+            border-top: 1px solid #18191C;
+        }
+
+        .nav-link {
+            justify-content: center;
+
+            &.active {
+                border: none;
+            }
+        }
+    }
+
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}

@@ -4,10 +4,10 @@ import { CartService } from 'src/app/services/cart.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
-    selector: 'app-outcomes-list',
-    templateUrl: './outcomes-list.component.html',
-    styleUrls: ['./outcomes-list.component.scss'],
-    standalone: false
+  selector: 'app-outcomes-list',
+  templateUrl: './outcomes-list.component.html',
+  styleUrls: ['./outcomes-list.component.scss'],
+  standalone:false
 })
 export class OutcomesListComponent implements OnChanges {
   @Input() outcomesList: any
@@ -20,7 +20,7 @@ export class OutcomesListComponent implements OnChanges {
 
   constructor(private cartSrv: CartService, private storageSrv: LocalStorageService) {
 
-    this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
+    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
       // Create a map for matches by MatchId for fast lookup
       console.log(this.outcomesList)
       // Set all odds outcomes' isSelected to false
@@ -53,7 +53,7 @@ export class OutcomesListComponent implements OnChanges {
     }
 
     if (!changes['outcomesList'].firstChange) {
-      this.setOddsFromCart(this.storageSrv.getItem('cartData'))
+      this.setOddsFromCart(this.storageSrv.getItem('sbCartData'))
     }
   }
 

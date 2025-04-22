@@ -5,6 +5,8 @@ $white: #FFF;
 $lightBg: #1E2328;
 $countryBg: #252B31;
 $offWhite : #F5f5f5;
+$right: right;
+$left: left;
 
 @mixin transition($duration) {
     -webkit-transition: all $duration;

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
-
+import { jwtDecode } from "jwt-decode";
+import { Router } from '@angular/router';
 /**
  * Service that has the main user functions 
  */
@@ -14,6 +15,10 @@ export class UserService {
    * login status subscriber
    */
   private loginStatus$ = new Subject();
+
+  private loginPopup$ = new Subject();
+
+  private userBalance$ = new Subject();
 
   /**
    * Variable used to store user data
@@ -29,7 +34,10 @@ export class UserService {
    * Service that has the main user functions 
    * @param localStorageSrv 
    */
-  constructor(private localStorageSrv: LocalStorageService) { }
+  constructor(
+    private localStorageSrv: LocalStorageService,
+    private router: Router
+  ) { }
 
   /**
    * Function to get the login status subsciber
@@ -47,12 +55,39 @@ export class UserService {
     this.loginStatus$.next(status);
   }
 
+
+  /**
+   * Change the login status subscriber
+   * @param {Boolean} status login status true or false
+   */
+  setLoginPopupStatus(status: any) {
+    this.loginPopup$.next(status);
+  }
+
+  /**
+   * Function to get the login status subsciber
+   * @returns 
+   */
+  getLoginPopupStatus(): Observable<any> {
+    return this.loginPopup$;
+  }
+
+  setUserBalance(balance: any) {
+    this.userBalance$.next(balance);
+  }
+
+  getUserBalance(): Observable<any> {
+    return this.userBalance$;
+  }
+
+
+
   /**
    * Set session expiry date on login
    * @param date 
    */
   setAccountExpiry(date: any) {
-    let newDate = date.setSeconds(date.getSeconds() + this.localStorageSrv.getItem('user_data', true).userInfo.expirationDate);
+    let newDate = date.setSeconds(date.getSeconds() + 50000);
     this.localStorageSrv.setItem('expiryDate', newDate, true)
   }
 
@@ -113,6 +148,28 @@ export class UserService {
 
   }
 
+
+  /**
+   * Notifications subject, to update notifications where needed 
+   */
+  private $notificationSb = new Subject();
+
+  /**
+   * Function to call when notifications need to be updated
+   * @returns 
+   */
+  $notifyUsers(): Observable<any> {
+    return this.$notificationSb
+  }
+
+  /**
+   * Trigger notications subscriber
+   * @param notification 
+   */
+  triggerNotification(notification: any) {
+    this.$notificationSb.next(notification);
+  }
+
   /**
    * Setting user data after login
    * @param data 
@@ -131,12 +188,28 @@ export class UserService {
     return (userData != '' && userData !== undefined) ? userData.userInfo : '';
   }
 
+
+  /**
+   * Get user id from token
+   */
+  gettUserId() {
+    let token = this.localStorageSrv.getItem('user_data', true).token
+    let decoded: any = jwtDecode(token);
+    console.log(decoded)
+    return decoded.PersonId
+  }
+
   /**
    * Remove user data and sign out 
    */
   signOut() {
-    this.localStorageSrv.clear();
+    this.localStorageSrv.setItem('isLoggedIn', 'false')
+    this.localStorageSrv.removeItem('user_data');
+    this.localStorageSrv.removeItem('expiryDate');
+    this.router.navigate(['']);
     this.setLoginStatus(false);
   }
 
 }
+
+

@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
-    selector: 'app-odd-item',
-    templateUrl: './odd-item.component.html',
-    styleUrls: ['./odd-item.component.scss'],
-    standalone: false
+  selector: 'app-odd-item',
+  templateUrl: './odd-item.component.html',
+  styleUrls: ['./odd-item.component.scss'],
+  standalone:false
 })
 export class OddItemComponent {
   @Input() oddItem: any
@@ -18,6 +18,6 @@ export class OddItemComponent {
 
   addOdd(oddItem: any) {
     oddItem.OutcomeName = oddItem.Outcome
-    this.cartSrv.setListOfBets(oddItem)
+    this.cartSrv.setSBBets(oddItem)
   }
 }

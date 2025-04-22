@@ -1,0 +1,12 @@
+@use '/src/variables' as *;
+
+@use '/src/variables' as *;
+
+
+@media all and (max-width:767px) {
+    .header-container {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+}

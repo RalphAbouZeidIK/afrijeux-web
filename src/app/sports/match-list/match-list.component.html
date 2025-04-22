@@ -1,5 +1,5 @@
 <ng-container *ngIf="matchesList.length>0;else templateName">
-    <span class="market-name">Market: {{matchesList[0].OddsOutcomes[0].Market}}</span>
+    <span class="market-name">{{ 'sb.matchList.market' | translate }}: {{matchesList[0].OddsOutcomes[0].Market}}</span>
     <div *ngFor="let matchItem of matchesList" class="match-item">
         <div class="date-title">
             <span class="date">
@@ -24,6 +24,6 @@
 
 <ng-template #templateName>
     <div class="no-matches">
-        <h2>No matches available</h2>
+        <h2>{{ 'sb.matchList.noMatchesAvailable' | translate }}</h2>
     </div>
 </ng-template>

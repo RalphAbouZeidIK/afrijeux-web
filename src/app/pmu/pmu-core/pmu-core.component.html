@@ -1,10 +1,12 @@
+<app-nav [navList]="navList"></app-nav>
+<div class="container-fluid page-holder">
+
+    <main class="main" [ngClass]="{'fullWidth': isFullwidth}">
+        <router-outlet></router-outlet>
+    </main>
+    <aside class="cart">
+        <app-pmucart *ngIf="!isFullwidth"></app-pmucart>
+    </aside>
 
 
-<div class="body-holder">
-    <div class="container page-holder">
-        <main class="main" [ngClass]="{'fullWidth': true}">
-            <router-outlet></router-outlet>
-        </main>
-        <app-cart *ngIf="true"></app-cart>
-    </div>
 </div>

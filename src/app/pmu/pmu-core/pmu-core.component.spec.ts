@@ -6,12 +6,10 @@ describe('PmuCoreComponent', () => {
   let component: PmuCoreComponent;
   let fixture: ComponentFixture<PmuCoreComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PmuCoreComponent ]
-    })
-    .compileComponents();
-
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [PmuCoreComponent]
+    });
     fixture = TestBed.createComponent(PmuCoreComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,0 +1,57 @@
+<header (window:resize)="onResize($event)" [ngClass]="{'is-mobile':!isDesktop}" class="header-main">
+  <div class="overlay" (click)="hideMenus()"></div>
+  <div class="container-fluid header-container">
+    <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()"></a>
+    <img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />
+
+    <app-nav [navList]="navList" parentClass="header-nav"></app-nav>
+    <div class="right-section d-flex">
+      <div class="header-btns" *ngIf="isDesktop && !isLoggedIn">
+        <button class="btn btn-primary" (click)="togglePopupFn('login')">{{ 'generic.login' | translate }}</button>
+        <button class="btn btn-default" (click)="togglePopupFn('signup')">{{ 'generic.register' | translate }}</button>
+      </div>
+
+      <div class="header-btns isloggedIn" *ngIf="isLoggedIn">
+
+        <span class="header-text" *ngIf="isDesktop && userBalance?.Wallet > 0">
+          <span class="header-balance">Balance</span>
+          {{userBalance?.Wallet | number}} {{userBalance?.CurrencyCode}}
+        </span>
+
+        <div class="dropdown-header" ngbDropdown #myDrop="ngbDropdown">
+          <a type="button" class="user-icon" id="dropdownManual" ngbDropdownToggle>
+            <img src="assets/images/Profile.svg" />
+          </a>
+
+          <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-list">
+
+            <ng-container *ngFor="let menuItem of personNavList">
+
+
+              <div class="dropdown-item" [routerLink]="menuItem.path" *ngIf="menuItem.path !== 'User/logout'">
+                {{menuItem.title}}
+              </div>
+              <div class="dropdown-item" *ngIf="menuItem.path == 'User/logout'" (click)="logout()">
+                {{menuItem.title}}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="dropdown-header" ngbDropdown #langDrop="ngbDropdown">
+        <a type="button" class="language-selector-toggle" id="dropdownManual" ngbDropdownToggle>
+          {{selectedLanguage.code}}
+        </a>
+
+        <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-list language-selector">
+          <div class="dropdown-item" *ngFor="let lang of languages" (click)="changeLanguage(lang)">
+            {{lang.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>

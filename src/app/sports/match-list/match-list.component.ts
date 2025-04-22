@@ -5,10 +5,10 @@ import { CartService } from 'src/app/services/cart.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
-    selector: 'app-match-list',
-    templateUrl: './match-list.component.html',
-    styleUrls: ['./match-list.component.scss'],
-    standalone: false
+  selector: 'app-match-list',
+  templateUrl: './match-list.component.html',
+  styleUrls: ['./match-list.component.scss'],
+  standalone:false
 })
 export class MatchListComponent implements OnChanges {
   @Output() matchForOutcome = new EventEmitter<any>();
@@ -19,7 +19,7 @@ export class MatchListComponent implements OnChanges {
 
   constructor(private apiSrv: ApiService, private storageSrv: LocalStorageService, private cartSrv: CartService) {
 
-    this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
+    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
 
       // Create a map for matches by MatchId for fast lookup
       const matchMap = new Map(this.matchesList.map((match: any) => [match.MatchId, match]));
@@ -47,7 +47,7 @@ export class MatchListComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['matchesList'].firstChange) {
-      this.setOddsFromCart(this.storageSrv.getItem('cartData'))
+      this.setOddsFromCart(this.storageSrv.getItem('sbCartData'))
     }
   }
 

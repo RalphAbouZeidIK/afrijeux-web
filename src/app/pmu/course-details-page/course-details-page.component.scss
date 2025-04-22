@@ -1,0 +1,61 @@
+@use '/src/variables' as *;
+
+.reunion-infos {
+    display: flex;
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: normal;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+
+    h3 {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: 0;
+    }
+
+    .greenSquare {
+        min-width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        background: #3F8E3C;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px
+    }
+}
+
+.courses-list {
+    display: flex;
+
+    .course-item {
+        width: 11.1111%;
+        border-radius: 5px;
+        border: 1px solid $lightBg;
+        background: $darkBg;
+        font-weight: bold;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        &.selected-race {
+            border-color: $yellow;
+            color: $yellow
+        }
+    }
+}
+
+.reunion-item {
+    margin-bottom: 20px;
+    background-color: $lightBg;
+
+}
+
+.course-details-page{
+    padding-bottom: 50px;
+}

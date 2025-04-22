@@ -1,5 +1,5 @@
 <div class="sports-list">
-    <h2>Sports List</h2>
+    <h2> {{ 'sb.sportsList.title' | translate }}</h2>
     <ul>
         <li *ngFor="let sportItem of filtersList.Sports">
             <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">

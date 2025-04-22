@@ -1,5 +1,5 @@
 
-@import '/src/variables.scss';
+@use '/src/variables' as *;
 
 .odd-item {
     text-align: center;

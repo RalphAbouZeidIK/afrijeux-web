@@ -33,7 +33,7 @@ export class SharedGuard  {
     }
     else {
 
-      this.router.navigate([''], { queryParams: { redirectUrl: state.url } });
+      this.router.navigate(['']);
       return false;
     }
 

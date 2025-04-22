@@ -1,0 +1,40 @@
+<div class="form-holder" (window:resize)="onResize($event)" [ngClass]="{'full-page': isFullPage}">
+    <div class="form-bg">
+        <h2>{{ 'user.myBets.title' | translate }}</h2>
+        <a class="close-icon" (click)="hidePopup()">
+            <img src="assets/images/close-icon.svg" alt="close" />
+        </a>
+
+        <div class="row-popup">
+            <ul class="nav">
+                <li class="nav-item" (click)="filterData(null, 'all')" [class.active]="activeFilter === 'all'">
+                    <a class="nav-link">{{ 'user.myBets.filter.all' | translate }}</a>
+                </li>
+                <li class="nav-item" (click)="filterData(true, 'winning')" [class.active]="activeFilter === 'winning'">
+                    <a class="nav-link">{{ 'user.myBets.filter.winning' | translate }}</a>
+                </li>
+                <li class="nav-item" (click)="filterData(false, 'losing')" [class.active]="activeFilter === 'losing'">
+                    <a class="nav-link">{{ 'user.myBets.filter.losing' | translate }}</a>
+                </li>
+            </ul>
+            <span class="right-text">
+                <span class="text">{{ 'user.myBets.filterBy' | translate }}</span>30 {{ 'user.myBets.lastDays' | translate }}
+            </span>
+        </div>
+
+        <div class="mes-paris-data" *ngFor="let item of filteredDataInfo">
+            <div class="top-row">
+                <span class="title">{{ item.title }}</span>
+                <span class="date">{{ item.date }}</span>
+            </div>
+            <div class="mid-row">
+                <span class="type {{ item.class }}"> {{ item.type }}</span>
+                <span>{{ item.cheval }}</span>
+            </div>
+            <div class="bottom-row">
+                <span>{{ 'user.myBets.stake' | translate }}</span>
+                <span>{{ item.nbreMise }}</span>
+            </div>
+        </div>
+    </div>
+</div>

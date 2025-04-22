@@ -1,0 +1,235 @@
+{
+    "generic": {
+        "login": "Se connecter",
+        "logout": "Se déconnecter",
+        "register": "S'inscrire"
+    },
+    "routerLinks": {
+        "appTitle": {
+            "hpb": "HPB - PMU",
+            "User": "Mon Profile"
+        },
+        "HPBTitles": {
+            "mesParies": "Mes Paris",
+            "libanaises": "Courses Libanaises",
+            "francaises": "Courses Françaises",
+            "resultats": "Résultats",
+            "commentParier": "Comment Parier",
+            "course": "Course"
+        },
+        "Sports": {
+            "viewTickets": "Voir les Billets",
+            "canceledBets": "Paris Annulés",
+            "matchList": "Liste des Matchs"
+        },
+        "UserTitles": {
+            "myProfile": "Mon Profil",
+            "myBets": "Mes Paris",
+            "deposit": "Déposer des fonds",
+            "withdraw": "Retirer",
+            "logout": "Se déconnecter"
+        }
+    },
+    "alerts": {
+        "complete_previous_bet": "Veuillez d'abord terminer le pari précédent",
+        "unauthorized": "Non autorisé",
+        "multipleBetsNoAllowed": "Les paris multiples sur le même match ne sont actuellement pas autorisés",
+        "minimum_horses_required": "Minimum {{count}} chevaux requis"
+    },
+    "shared": {
+        "login": {
+            "loginTitle": "Se connecter",
+            "signUpTitle": "S'inscrire",
+            "username": "Nom d'utilisateur",
+            "password": "Mot de passe",
+            "forgotPassword": "Mot de passe oublié ?",
+            "firstName": "Prénom",
+            "firstNameRequired": "Le prénom est requis.",
+            "lastName": "Nom",
+            "lastNameRequired": "Le nom est requis.",
+            "email": "Email",
+            "emailRequired": "L'email est requis.",
+            "emailInvalid": "Format d'email invalide.",
+            "phone": "Téléphone",
+            "phoneRequired": "Le numéro de téléphone est requis.",
+            "phoneInvalid": "Numéro de téléphone invalide (doit contenir 10 chiffres).",
+            "dateOfBirth": "Date de naissance",
+            "dobRequired": "La date de naissance est requise.",
+            "dobUnderage": "Vous devez avoir au moins 18 ans.",
+            "usernameRequired": "Le nom d'utilisateur est requis.",
+            "usernameMinlength": "Le nom d'utilisateur doit comporter au moins 3 caractères.",
+            "passwordRequired": "Le mot de passe est requis.",
+            "passwordMinlength": "Le mot de passe doit comporter au moins 6 caractères.",
+            "confirmPassword": "Confirmer le mot de passe",
+            "confirmPasswordRequired": "La confirmation du mot de passe est requise.",
+            "passwordMismatch": "Les mots de passe ne correspondent pas.",
+            "ageTermsAgreement": "Je certifie avoir au moins 18 ans et avoir pris connaissance des Conditions générales et du règlement, et en accepter l'application.",
+            "invalidCredentials": "Identifiants invalides",
+            "login": "Se connecter",
+            "register": "S'inscrire",
+            "noAccount": "Vous n'avez pas de compte ?",
+            "registerHere": "Inscrivez-vous ici",
+            "alreadyRegistered": "Déjà inscrit ?",
+            "loginHere": "Connectez-vous ici"
+        }
+    },
+    "user": {
+        "deposit": {
+            "title": "Déposer des fonds",
+            "cardNumber": "Numéro de carte de crédit",
+            "cardNumberPlaceholder": "1234 5678 1234 5678",
+            "expiryDate": "Date d'expiration (MM/AA)",
+            "expiryDatePlaceholder": "MM/AA",
+            "cvv": "CVV",
+            "cvvPlaceholder": "123",
+            "cardholderName": "Nom du titulaire de la carte",
+            "cardholderNamePlaceholder": "Jean Dupont",
+            "amount": "Montant du dépôt ($)",
+            "submit": "Déposer"
+        },
+        "myBets": {
+            "title": "Mes paris",
+            "filter": {
+                "all": "Tout",
+                "winning": "Gagnant",
+                "losing": "Perdu"
+            },
+            "filterBy": "Filtrer par:",
+            "lastDays": "derniers jours",
+            "stake": "Mise"
+        },
+        "withdraw": {
+            "title": "Retirer des fonds",
+            "balanceMessage": "Solde disponible pour retrait :",
+            "amountLabel": "Montant à retirer",
+            "amountPlaceholder": "500",
+            "amountError": "Le montant doit être compris entre 1 et {{max}}",
+            "currencyLabel": "Devise",
+            "selectCurrency": "Sélectionner",
+            "submit": "Retirer"
+        }
+    },
+    "hpb": {
+        "howToPlay": {
+            "cards": [
+                {
+                    "title": "Les types de courses.",
+                    "description": "La structuration des courses hippiques obéit à une hiérarchie prédéfinie afin de permettre aux chevaux de différentes statures de prendre part à des épreuves adaptées à leurs compétences.",
+                    "img": "assets/images/panier-img.jpg",
+                    "link": ""
+                },
+                {
+                    "title": "Guide des paris.",
+                    "description": "Découvrez tout ce que vous devez savoir à propos du pari turf en ligne, des différents types de paris et leurs spécificités au fonctionnement des différentes courses hippiques pour vous aider à parier de manière judicieuse et à maîtriser l’univers des courses de chevaux.",
+                    "img": "assets/images/panier-img-1.jpg",
+                    "link": ""
+                },
+                {
+                    "title": "Comment parier?",
+                    "description": "Devenez un turfiste averti grâce à de nombreux conseils qui vous permettront de mieux connaitre les différentes courses hippiques.",
+                    "img": "assets/images/panier-img-2.jpg",
+                    "link": ""
+                }
+            ]
+        },
+        "courseDetails": {
+            "starters": "Partants",
+            "prizeAmount": "Montant de prix",
+            "trackTypes": "Types de pistes",
+            "availableBets": "Les Paris Disponibles",
+            "betTypes": "Formules",
+            "simple": "Simple",
+            "reducedField": "Champ Reduit",
+            "fullField": "Champ Total",
+            "horsesJockeys": "Chevaux/Jockeys",
+            "form": "Musique",
+            "base": "Base",
+            "associated": "Associated"
+        },
+        "courses": {
+            "dailyProgram": "Programme du jour",
+            "noRacesAvailable": "Aucune course disponible pour cette date"
+        },
+        "horse": {
+            "jockeyName": "Nom du jockey",
+            "horseMusic": "Musique du cheval",
+            "moreInfo": "Plus d'infos",
+            "music": "Musique",
+            "horse": "Cheval",
+            "age": "Âge",
+            "sex": "Sexe",
+            "ageSex": "Âge/Sexe",
+            "coach": "Entraîneur",
+            "breeder": "Éleveur/s",
+            "owner": "Propriétaire/s",
+            "genealogy": "Généalogie",
+            "mother": "Mère",
+            "maternalGrandfather": "Grand-Père maternel",
+            "father": "Père",
+            "jockeyWeight": "Poids du jockey",
+            "lastRaces": "Dernières courses",
+            "position": "Pos.",
+            "raceDate": "Date de course",
+            "race": "Course",
+            "jockey": "Cavalier"
+        },
+        "results": {
+            "title": "Resultats",
+            "noRacesAvailable": "Aucun résultat pour cette date"
+        },
+        "cart": {
+            "cartTitle": "Panier",
+            "clearAll": "Tout effacer",
+            "ticketType": "Type de billet",
+            "allOrders": "Tous les ordres",
+            "baseHorses": "Chevaux de base",
+            "associatedHorses": "Chevaux associés",
+            "singlePrice": "Prix simple",
+            "pickPrice": "Prix par sélection",
+            "addToTicket": "Ajouter au ticket",
+            "ticketPrice": "Prix du ticket",
+            "price": "Prix",
+            "placeBet": "Placer le pari"
+        }
+    },
+    "sb": {
+        "canceledBets": {
+            "matchName": "Nom du match",
+            "marketName": "Nom du marché"
+        },
+        "leftmenu": {
+            "viewTickets": "Voir les tickets",
+            "canceledBets": "Paris annulés"
+        },
+        "matchDetails": {
+            "eventDate": "Date de l'événement"
+        },
+        "matchList": {
+            "market": "Marché",
+            "noMatchesAvailable": "Aucun match disponible"
+        },
+        "sportsList": {
+            "title": "Liste des sports"
+        },
+        "tickets": {
+            "ticketCode": "Code du ticket",
+            "stake": "Mise",
+            "payout": "Gain",
+            "dateIssued": "Date d’émission",
+            "cancelStatus": "Statut d’annulation",
+            "canceled": "Annulé",
+            "uncanceled": "Non annulé",
+            "view": "Voir",
+            "hide": "Masquer",
+            "picks": "sélections",
+            "cancelTicket": "Annuler le ticket",
+            "eventCode": "Code de l’événement",
+            "sport": "Sport",
+            "status": "Statut",
+            "odd": "Cote",
+            "eventName": "Nom de l’événement",
+            "marketName": "Nom du marché",
+            "outcomeName": "Nom du résultat"
+        }
+    }
+}

@@ -4,10 +4,9 @@ import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 
 @Component({
-    selector: 'app-race-details',
-    templateUrl: './race-details.component.html',
-    styleUrls: ['./race-details.component.scss'],
-    standalone: false
+  selector: 'app-race-details',
+  templateUrl: './race-details.component.html',
+  styleUrls: ['./race-details.component.scss']
 })
 export class RaceDetailsComponent implements OnInit {
 

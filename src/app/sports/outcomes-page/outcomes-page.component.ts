@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-    selector: 'app-outcomes-page',
-    templateUrl: './outcomes-page.component.html',
-    styleUrls: ['./outcomes-page.component.scss'],
-    standalone: false
+  selector: 'app-outcomes-page',
+  templateUrl: './outcomes-page.component.html',
+  styleUrls: ['./outcomes-page.component.scss'],
+  standalone:false
 })
 export class OutcomesPageComponent implements OnInit {
   outcomesList = []
@@ -34,7 +34,7 @@ export class OutcomesPageComponent implements OnInit {
 
     console.log(params)
 
-    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', params)
+    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', params,false)
     console.log(apiResponse)
     this.matchDetails = {
       MatchName: apiResponse[0].MatchName,

@@ -1,0 +1,243 @@
+@use '/src/variables' as *;
+
+
+.table-row {
+    position: relative;
+
+    &.header {
+        font-size: 14px;
+        color: $lightGrey;
+        display: flex;
+        flex-wrap: wrap;
+        //padding: 0 20px;
+    }
+}
+
+.table-row:not(.header) {
+    border-radius: 10px;
+    background: $lightBg;
+    margin-bottom: 10px;
+
+    &.active {
+        padding-bottom: 10px;
+
+        .hidden-infos {
+            display: block;
+        }
+    }
+
+
+}
+
+.more-info {
+
+    cursor: pointer;
+}
+
+.checkbox {
+    background: #18191C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    border-radius: 3px;
+
+    &.isSelected {
+        background: $yellow;
+        background-image: url(/assets/images/checkmark.png);
+        background-position: center;
+        background-repeat: no-repeat;
+
+    }
+
+    &.isDisabled {
+        cursor: default;
+    }
+
+}
+
+.table-item {
+    font-weight: 700;
+
+
+
+    .dot {
+        height: 3px;
+        width: 3px;
+        border-radius: 50%;
+        margin: 7px 3px 3px 8px;
+        display: inline-block;
+        background-color: $lightGrey;
+    }
+
+    .jockey {
+        font-size: 14px;
+        color: $lightGrey;
+        font-weight: 400;
+    }
+}
+
+.row-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.hidden-infos {
+    width: 100%;
+    border-top: 1px solid #18191C;
+    padding: 0 20px;
+}
+
+
+.details-holder {
+    margin-bottom: 10px;
+    padding-top: 10px;
+
+    &.last-races {
+        margin-bottom: 0;
+    }
+
+    .label-with-bg {
+        display: block;
+        background-color: $countryBg;
+        border-radius: 5px;
+        padding: 9px 12px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .list-item {
+        font-weight: 400;
+        padding-right: 10px;
+
+        >span {
+            color: $lightGrey;
+
+            &.mobile-right-table-item {
+                color: $white;
+            }
+        }
+
+        .label-block {
+            color: $lightGrey;
+            display: block;
+        }
+    }
+}
+
+
+.table-container {
+    width: 100%;
+
+    thead {
+        border-bottom: 1px solid $lightGrey;
+    }
+
+    th {
+        font-size: 12px;
+        font-weight: 300;
+        color: $lightGrey;
+        padding-bottom: 10px;
+        width: 0%;
+    }
+
+    td {
+        padding: 7px 0;
+    }
+}
+
+@media all and (max-width:767px) {
+
+    .hidden-infos {
+        padding: 0;
+        border-top: 0;
+    }
+
+    .row-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .details-holder {
+        padding-top: 0;
+
+        .label-with-bg {
+            border-radius: 0;
+            margin-bottom: 0;
+            display: inline;
+            background: none;
+            padding: 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .list-item {
+            font-weight: 600;
+            font-size: 14px;
+            padding-right: 0;
+
+            .mobile-right-table-item,
+            &.mobile-right-table-item {
+                color: $white;
+                font-weight: 400;
+            }
+
+            .label-block {
+                color: $white;
+            }
+        }
+
+        .row,
+        &.row {
+            margin: 0;
+        }
+
+
+    }
+
+    .table-row:not(.header).active {
+        padding-bottom: 0;
+    }
+
+    .mobile-right-table-item {
+        font-weight: 400;
+        font-size: 14px;
+
+    }
+
+    .dark-bgrd,
+    .light-bgrd {
+
+        &.mobileOnly {
+            display: flex !important;
+        }
+
+        padding: 12px 15px;
+        display: flex;
+        justify-content: space-between;
+
+        >.list-item {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+
+            &.mobile-right-table-item {
+                width: auto;
+            }
+
+            &.mobileOnly {
+                display: flex !important;
+            }
+        }
+    }
+
+    .light-bgrd {
+        border-top: 1px solid $darkBg;
+        border-bottom: 1px solid $darkBg;
+        background-color: $countryBg;
+    }
+}

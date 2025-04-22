@@ -1,0 +1,9 @@
+<div class="nav-holder {{parentClass}}">
+    <ul class="nav justify-content-center">
+        <li *ngFor="let navItem of navList" class="nav-item">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="[navItem.path]">
+                {{navItem.data.title | translate}}
+            </a>
+        </li>
+    </ul>
+</div>

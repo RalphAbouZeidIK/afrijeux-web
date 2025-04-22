@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-    selector: 'app-canceled-bets',
-    templateUrl: './canceled-bets.component.html',
-    styleUrls: ['./canceled-bets.component.scss'],
-    standalone: false
+  selector: 'app-canceled-bets',
+  templateUrl: './canceled-bets.component.html',
+  styleUrls: ['./canceled-bets.component.scss'],
+  standalone:false
 })
 export class CanceledBetsComponent implements OnInit {
   betsList: any;

@@ -3,10 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-    selector: 'app-tickets',
-    templateUrl: './tickets.component.html',
-    styleUrls: ['./tickets.component.scss'],
-    standalone: false
+  selector: 'app-tickets',
+  templateUrl: './tickets.component.html',
+  styleUrls: ['./tickets.component.scss'],
+  standalone:false
 })
 export class TicketsComponent implements OnInit {
   ticketsList: any = []

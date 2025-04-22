@@ -1,0 +1,156 @@
+<div class="form-holder">
+    <div class="form-bg">
+        <h2 *ngIf="isSignup">{{ 'shared.login.signUpTitle' | translate }}</h2>
+        <h2 *ngIf="!isSignup">{{ 'shared.login.loginTitle' | translate }}</h2>
+
+        <a class="close-icon" (click)="hidePopup()">
+            <img src="assets/images/close-icon.svg" alt="close">
+        </a>
+
+        <!-- Login form -->
+        <div class="form-content" [formGroup]="loginForm" (keydown)="keyDownFunction($event)" *ngIf="!isSignup">
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.username' | translate }}</label>
+                <input type="text" class="form-control" title="Username" formControlName="UserName" />
+            </div>
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.password' | translate }}</label>
+                <input type="password" class="form-control" title="password" formControlName="Password" />
+                <p class="text text-end" *ngIf="!isSignup">
+                    <a>{{ 'shared.login.forgotPassword' | translate }}</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Signup form -->
+        <div class="form-content" [formGroup]="signupForm" (keydown)="keyDownFunction($event)" *ngIf="isSignup">
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.firstName' | translate }}</label>
+                <input type="text" class="form-control" formControlName="firstName" />
+                <div *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched">
+                    <small class="text-danger">{{ 'shared.login.firstNameRequired' | translate }}</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.lastName' | translate }}</label>
+                <input type="text" class="form-control" formControlName="lastName" />
+                <div *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched">
+                    <small class="text-danger">{{ 'shared.login.lastNameRequired' | translate }}</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.email' | translate }}</label>
+                <input type="email" class="form-control" formControlName="email" />
+                <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+                    <small class="text-danger" *ngIf="signupForm.get('email')?.hasError('required')">
+                        {{ 'shared.login.emailRequired' | translate }}
+                    </small>
+                    <small class="text-danger" *ngIf="signupForm.get('email')?.hasError('email')">
+                        {{ 'shared.login.emailInvalid' | translate }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.phone' | translate }}</label>
+                <input type="text" class="form-control" formControlName="phone" />
+                <div *ngIf="signupForm.get('phone')?.invalid && signupForm.get('phone')?.touched">
+                    <small class="text-danger" *ngIf="signupForm.get('phone')?.hasError('required')">
+                        {{ 'shared.login.phoneRequired' | translate }}
+                    </small>
+                    <small class="text-danger" *ngIf="signupForm.get('phone')?.hasError('pattern')">
+                        {{ 'shared.login.phoneInvalid' | translate }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.dateOfBirth' | translate }}</label>
+                <input type="date" class="form-control" formControlName="dateOfBirth"
+                    (keydown)="preventTyping($event)" />
+                <div *ngIf="signupForm.get('dateOfBirth')?.invalid && signupForm.get('dateOfBirth')?.touched">
+                    <small class="text-danger" *ngIf="signupForm.get('dateOfBirth')?.hasError('underage')">
+                        {{ 'shared.login.dobUnderage' | translate }}
+                    </small>
+                    <small class="text-danger" *ngIf="signupForm.get('dateOfBirth')?.hasError('required')">
+                        {{ 'shared.login.dobRequired' | translate }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.username' | translate }}</label>
+                <input type="text" class="form-control" formControlName="username" />
+                <div *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+                    <small class="text-danger" *ngIf="signupForm.get('username')?.hasError('required')">
+                        {{ 'shared.login.usernameRequired' | translate }}
+                    </small>
+                    <small class="text-danger" *ngIf="signupForm.get('username')?.hasError('minlength')">
+                        {{ 'shared.login.usernameMinlength' | translate }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.password' | translate }}</label>
+                <input type="password" class="form-control" formControlName="password" />
+                <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+                    <small class="text-danger" *ngIf="signupForm.get('password')?.hasError('required')">
+                        {{ 'shared.login.passwordRequired' | translate }}
+                    </small>
+                    <small class="text-danger" *ngIf="signupForm.get('password')?.hasError('minlength')">
+                        {{ 'shared.login.passwordMinlength' | translate }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">{{ 'shared.login.confirmPassword' | translate }}</label>
+                <input type="password" class="form-control" formControlName="confirmPassword" />
+                <div *ngIf="signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched">
+                    <small class="text-danger" *ngIf="signupForm.get('confirmPassword')?.hasError('required')">
+                        {{ 'shared.login.confirmPasswordRequired' | translate }}
+                    </small>
+                    <small class="text-danger" *ngIf="signupForm.get('confirmPassword')?.hasError('passwordMismatch')">
+                        {{ 'shared.login.passwordMismatch' | translate }}
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group" *ngIf="isSignup">
+                <label class="checkbox-container">
+                    <input type="checkbox" />
+                    <span class="geekmark"></span>
+                    {{ 'shared.login.ageTermsAgreement' | translate }}
+                </label>
+            </div>
+        </div>
+
+        <span class="text-danger" *ngIf="showErrorMessage">
+            {{ 'shared.login.invalidCredentials' | translate }}
+        </span>
+
+        <div class="form-btns">
+            <button class="btn btn-primary" *ngIf="!isSignup" (click)="submitLogin()" [disabled]="loginForm.invalid">
+                {{ 'shared.login.login' | translate }}
+            </button>
+            <button class="btn btn-primary" *ngIf="isSignup" (click)="submitSignUp()" [disabled]="signupForm.invalid">
+                {{ 'shared.login.register' | translate }}
+            </button>
+        </div>
+
+        <p class="text text-center">
+            <span *ngIf="!isSignup">
+                {{ 'shared.login.noAccount' | translate }}
+                <a class="underline-word" (click)="swtichToSignUp(true)">{{ 'shared.login.registerHere' | translate }}</a>
+            </span>
+            <span *ngIf="isSignup">
+                {{ 'shared.login.alreadyRegistered' | translate }}
+                <a class="underline-word" (click)="swtichToSignUp(false)">{{ 'shared.login.loginHere' | translate }}</a>
+            </span>
+        </p>
+    </div>
+</div>

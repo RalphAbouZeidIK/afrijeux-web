@@ -4,10 +4,10 @@ import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-    selector: 'app-homepage',
-    templateUrl: './homepage.component.html',
-    styleUrls: ['./homepage.component.scss'],
-    standalone: false
+  selector: 'app-homepage',
+  templateUrl: './homepage.component.html',
+  styleUrls: ['./homepage.component.scss'],
+  standalone:false
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   matchesList = []
@@ -46,7 +46,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
       PageSize: 100,
       PageNumber: 1,
     }
-    this.matchesList = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetMatchListByName', 'POST', params)
+    this.matchesList = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetMatchListByName', 'POST', params,false)
     console.log(this.matchesList)
 
     // let matchDetailsById = await this.apiSrv.betradarapi('v1/sports/en/sport_events/sr:match:51828433/fixture.xml', 'GET')

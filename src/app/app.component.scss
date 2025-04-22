@@ -1,35 +1,8 @@
-.body-holder {
-    padding-top: 25px;
-}
-
-.container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 100%;
-}
-
-aside,
-app-cart {
-    flex: 1 0 270px;
-    max-width: 270px;
-}
-
-main {
-    flex: 1 0 calc(100% - 600px);
-    max-width: calc(100% - 600px);
-}
 
 
-@media all and (max-width:1200px) {
-    .container {
-        flex-direction: column;
+
+@media all and (max-width:767px) {
+    .main-holder {
+        margin-top: 75px;
     }
-
-    main,
-    aside,
-    app-cart {
-        flex: 1 0 100%;
-        max-width: 100%;
-    }
-
 }
