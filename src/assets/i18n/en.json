@@ -172,7 +172,8 @@
             "position": "Pos.",
             "raceDate": "Race Date",
             "race": "Race",
-            "jockey": "Jockey"
+            "jockey": "Jockey",
+            "noPartant": "Not starting"
         },
         "results": {
             "title": "Results",
