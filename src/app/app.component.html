@@ -1,13 +1,12 @@
 <app-header [isLoggedIn]="isLoggedIn" [navList]="navList"></app-header>
 <app-login *ngIf="loginObject.show" [loginObject]="loginObject"></app-login>
+
+
 <router-outlet></router-outlet>
 
 <app-loader *ngIf="isLoading"></app-loader>
 
 <app-notifications-popup [list]="notificationsList" *ngIf="isLoggedIn"
-    (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
+  (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
 
-
-<div id="test">
-    this is a testing print from web
-</div>
+<!-- <app-print></app-print> -->

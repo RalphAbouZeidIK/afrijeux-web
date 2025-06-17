@@ -11,6 +11,7 @@ body {
     font-size: 16px;
     line-height: normal;
     font-weight: 400;
+    padding: 0;
 }
 
 ul {
@@ -68,8 +69,41 @@ h2 {
 
 }
 
-.cart {
-    width: 20%;
+@media all and (min-width:1200px) {
+    .cart {
+        width: 20%;
+    }
+
+    .cart>*,
+    main,
+    aside {
+        max-height: calc(100vh - 143px);
+        overflow: auto;
+        display: block;
+        padding-bottom: 20px;
+
+        >* {
+            display: block;
+            max-width: calc(100% - 10px);
+        }
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 7px $lightGrey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: $yellow;
+        border-radius: 10px;
+    }
 }
 
 .main {
@@ -350,36 +384,7 @@ h2 {
 }
 
 
-.cart>*,
-main,
-aside {
-    max-height: calc(100vh - 143px);
-    overflow: auto;
-    display: block;
-    padding-bottom: 20px;
 
-    >* {
-        display: block;
-        max-width: calc(100% - 10px);
-    }
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 6px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 7px $lightGrey;
-    border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: $yellow;
-    border-radius: 10px;
-}
 
 
 aside {
@@ -441,7 +446,25 @@ aside {
     max-width: 100%;
 }
 
+
+
+.overflow-hidden .main-holder {
+    overflow: hidden;
+}
+
+label {
+    margin-top: 0;
+}
+
+
 @media all and (max-width:1200px) {
+
+    .container,
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     .main {
         width: 100%;
     }
@@ -507,10 +530,4 @@ aside {
     h2 {
         font-size: 20px;
     }
-}
-
-
-
-.overflow-hidden .main-holder {
-    overflow: hidden;
 }

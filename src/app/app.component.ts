@@ -7,6 +7,7 @@ import { LoaderService } from './services/loader-service.service';
 import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PageTitleService } from './services/page-title.service';
+import { NativeBridgeService } from './services/native-bridge.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ import { PageTitleService } from './services/page-title.service';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'PMU';
   isFullwidth = false
-
+  scanned = '';
   /**
    * Subscribe to login status
    */
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * Array to store notifications list 
    */
   notificationsList: any = []
+  scannedResult: any = '';
 
   constructor(
     private translate: TranslateService,
@@ -55,7 +57,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private loaderService: LoaderService,
     private changeDetectorRef: ChangeDetectorRef,
     private gnrcSrv: GenericService,
-    private pageTitleService: PageTitleService
+    private pageTitleService: PageTitleService,
+    private bridge: NativeBridgeService
   ) {
 
 
@@ -115,6 +118,19 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isLoggedIn = this.usrSrv.isUserLoggedIn();
     this.getMenuItems()
     this.pageTitleService.init();
+
+    this.bridge.scanResult$.subscribe((result) => {
+      if (result) {
+        this.scanned = result;
+      }
+    });
+
+    this.bridge.scanResult$.subscribe(result => {
+      this.scannedResult = result;
+      if (result) {
+        alert(`Scanned result: ${result}`);
+      }
+    });
   }
 
 
@@ -207,4 +223,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.translate.use('fr');
   }
 
+  onScan() {
+    this.bridge.requestScan();
+  }
+
+  onPrint() {
+    this.bridge.print();
+  }
 }

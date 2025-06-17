@@ -19,6 +19,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } f
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { NotificationsPopupComponent } from './notifications-popup/notifications-popup.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { PrintComponent } from './print/print.component';
 
 
 // Custom date formats
@@ -42,7 +43,8 @@ export const MY_FORMATS = {
     BannerComponent,
     NavComponent,
     DatepickerComponent,
-    NotificationsPopupComponent
+    NotificationsPopupComponent,
+    PrintComponent
   ],
   exports: [
     HeaderComponent,
@@ -56,7 +58,8 @@ export const MY_FORMATS = {
     NavComponent,
     DatepickerComponent,
     NotificationsPopupComponent,
-    TranslateModule
+    TranslateModule,
+    PrintComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,
