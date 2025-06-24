@@ -33,7 +33,7 @@
 .header-nav {
     margin-bottom: 0;
 
-    .nav {
+    >.nav {
         background-color: transparent;
 
         .nav-link {
@@ -44,4 +44,52 @@
             }
         }
     }
+}
+
+.sub-nav-holder {
+    display: none;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 71px;
+    padding: 15px 0;
+}
+
+.active .sub-nav-holder {
+    display: flex;
+}
+
+@media all and (max-width: 767px) {
+
+    .sub-nav-holder {
+        position: static;
+    }
+
+    .nav {
+        display: block;
+
+        .nav-item {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+
+    .active .sub-nav-holder {
+        display: block;
+    }
+
+    .sub-nav-holder {
+        padding: 10px 15px;
+
+        li {
+            margin-bottom: 5px;
+
+        }
+    }
+
+    .header-nav {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
 }

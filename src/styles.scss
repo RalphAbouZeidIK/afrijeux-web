@@ -74,7 +74,7 @@ h2 {
         width: 20%;
     }
 
-    .cart>*,
+
     main,
     aside {
         max-height: calc(100vh - 143px);
@@ -456,8 +456,12 @@ label {
     margin-top: 0;
 }
 
+.body-holder {
+    margin-top: 132px;
+}
 
 @media all and (max-width:1200px) {
+
 
     .container,
     .container-fluid {
@@ -508,6 +512,9 @@ label {
 
 @media all and (max-width:767px) {
 
+    .body-holder {
+        margin-top: 70px;
+    }
 
     .hidden-mobile {
         display: none !important;
@@ -530,4 +537,32 @@ label {
     h2 {
         font-size: 20px;
     }
+
+    .horses-list-container {
+        .table-item:last-of-type {
+            display: none;
+        }
+
+        .table-item:not(:last-of-type) {
+            margin-right: 10px;
+        }
+
+        .table-row {
+            padding: 10px;
+        }
+
+        .first-checkbox {
+            margin-left: 0;
+        }
+
+        .table-item:first-of-type {
+            width: 52%
+        }
+
+        .table-item.first-checkbox {
+            width: 40px
+        }
+    }
+
+
 }

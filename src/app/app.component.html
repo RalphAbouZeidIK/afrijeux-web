@@ -1,8 +1,10 @@
 <app-header [isLoggedIn]="isLoggedIn" [navList]="navList"></app-header>
 <app-login *ngIf="loginObject.show" [loginObject]="loginObject"></app-login>
 
+<div class="body-holder">
+  <router-outlet></router-outlet>
+</div>
 
-<router-outlet></router-outlet>
 
 <app-loader *ngIf="isLoading"></app-loader>
 

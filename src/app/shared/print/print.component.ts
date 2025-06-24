@@ -8,17 +8,21 @@ import { NativeBridgeService } from 'src/app/services/native-bridge.service';
   standalone: false
 })
 export class PrintComponent {
-  normalText = '';
+  normalText = ['PMU Hybrid\n---------------------------\n\n',
+    "#indicator#",
+    "Course:C1 30444\\Test\n10 Partants\n06/19/2025 04:09:00 PM\n\nSimple Gagnant\nCH.Joues:102\nTotale : 500 XAF\n---------------------------\nMise: 500 XAF\n06/19/2025 11:40:02 AM\nAgent: Marcelino Bou Daher\nPOS: 6666\nTicket Code: 222A1AF\nValide Au: 06/26/2025\n---------------------------"
+  ];
+
   barcodeText = '';
   qrCodeText = '';
 
   constructor(public nativeBridge: NativeBridgeService) { }
 
-  sendPrint(type: 'normalText' | 'barcode' | 'qrcode', value: string): void {
-    if (!value?.trim()) {
-      alert('Please enter a value');
-      return;
-    }
+  sendPrint(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[]): void {
+    // if (!value?.trim()) {
+    //   alert('Please enter a value');
+    //   return;
+    // }
     this.nativeBridge.sendPrintMessage(type, value);
   }
 

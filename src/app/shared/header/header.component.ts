@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { GenericService } from 'src/app/services/generic.service';
+import { MenuItem, MenuService } from 'src/app/services/menu.service';
 import { UserRouteConfig } from 'src/app/services/routing.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -12,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./header.component.scss'],
   standalone: false
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnChanges {
   type: any = ''
 
   showDocumentsPopup = false
@@ -44,11 +45,14 @@ export class HeaderComponent implements OnInit {
     { code: 'en', name: 'English' }
   ];
 
+  menu: MenuItem[] = [];
+
   constructor(
     private usrSrv: UserService,
     private route: Router,
     private gnrcSrv: GenericService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private menuSvc: MenuService
   ) {
     this.balanceSubsription = this.usrSrv.getUserBalance().subscribe((data) => {
       console.log(data)
@@ -57,7 +61,8 @@ export class HeaderComponent implements OnInit {
     this.translate.use(this.selectedLanguage.code)
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.getMenu()
     if (window.innerWidth < 767) {
       this.isDesktop = false
     }
@@ -72,6 +77,11 @@ export class HeaderComponent implements OnInit {
       this.composeRoutes();
     });
 
+  }
+
+  async getMenu() {
+    this.menu = await this.menuSvc.getMenu();
+    console.log(this.menu)
   }
 
   async getUserBalance() {
@@ -160,11 +170,20 @@ export class HeaderComponent implements OnInit {
   changeLanguage(language: { code: string, name: string }) {
     this.selectedLanguage = language;
     this.translate.use(language.code);
+    this.getMenu(); // Refresh menu with new translations
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
+    if (!changes['isLoggedIn'].firstChange) {
+      this.getMenu()
+    }
+  }
 
   ngOnDestroy() {
     // Cleanup subscription to avoid memory leaks
     this.langChangeSub?.unsubscribe();
   }
+
+
 }

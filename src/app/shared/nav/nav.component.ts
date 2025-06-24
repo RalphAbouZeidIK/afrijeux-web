@@ -11,8 +11,11 @@ export class NavComponent implements OnInit {
 
   @Input() parentClass: any
 
+  @Input() fullMenu: any
+
   constructor() { }
 
   ngOnInit(): void {
+    console.log('NavComponent initialized with navList:', this.fullMenu);
   }
 }

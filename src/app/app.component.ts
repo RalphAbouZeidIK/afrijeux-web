@@ -131,6 +131,13 @@ export class AppComponent implements OnInit, AfterViewInit {
         alert(`Scanned result: ${result}`);
       }
     });
+
+    if (this.bridge.isInAndroidWebView()) {
+      alert("📱 You're running inside an Android WebView!");
+    } else {
+      alert("🌐 You're running in a normal browser.");
+    }
+    alert(navigator.userAgent);
   }
 
 

@@ -18,6 +18,11 @@ declare global {
   }
 }
 
+declare global {
+  interface Window {
+    _isAndroidWebView?: boolean;
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -83,7 +88,7 @@ export class NativeBridgeService {
   }
 
   /** Send structured print command to Flutter */
-  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string): void {
+  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[]): void {
     const message = JSON.stringify({ type, value });
 
     if (window.PrintChannel?.postMessage) {
@@ -124,6 +129,17 @@ export class NativeBridgeService {
       console.error("Error sending image to Flutter:", error);
       alert("Failed to print image.");
     }
+  }
+
+  isInAndroidWebView(): boolean {
+    // ✅ Check URL query param (most reliable)
+    const params = new URLSearchParams(window.location.search);
+    const viaUrl = params.get('wv') === 'true';
+
+    // ✅ Optional JS flag injected from Flutter WebView
+    const viaInjectedFlag = (window as any)._isAndroidWebView === true;
+
+    return viaUrl || viaInjectedFlag;
   }
 
 }

@@ -1,5 +1,5 @@
 <div class="cart-container" (window:resize)="onResize($event)" [ngClass]="{'show-cart':showOnClickMobile}">
-    <div class="overlay" (click)="hideMenus()"></div>
+    <!-- <div class="overlay" (click)="hideMenus()"></div> -->
     <div class="cart-header" (click)="OnclickIsMobile()">
         <span class="mobileOnly rect-bar"></span>
         <p class="cart-title">{{'hpb.cart.cartTitle' | translate}}</p>
@@ -89,24 +89,26 @@
                     </div>
                 </ng-template>
             </div>
-            <div class="type-list type-multi">
-                <span class="type">{{'hpb.cart.singlePrice' | translate}}</span>
-                <span class="choose-quantity">
-                    <input type="number" [(ngModel)]="betItem[0].price" (ngModelChange)="onPriceChange($event)">
-                </span>
+            <div class="inputs-block">
+                <div class="type-list type-multi">
+                    <span class="type">{{'hpb.cart.singlePrice' | translate}}</span>
+                    <span class="choose-quantity">
+                        <input type="number" [(ngModel)]="betItem[0].price" (ngModelChange)="onPriceChange($event)">
+                    </span>
+                </div>
+                <div class="type-list type-multi">
+                    <span class="type">{{'hpb.cart.pickPrice' | translate}}</span>
+                    <span class="choose-quantity">
+                        <input type="number" disabled [value]="betItem[0].price * combinations">
+                    </span>
+                </div>
             </div>
-            <div class="type-list type-multi">
-                <span class="type">{{'hpb.cart.pickPrice' | translate}}</span>
-                <span class="choose-quantity">
-                    <input type="number" [value]="betItem[0].price * combinations">
-                </span>
-            </div>
+
         </div>
 
         <button class="btn btn-primary" type="submit" (click)="addBetToTicket(betItem)">{{'hpb.cart.addToTicket' |
             translate}}</button>
     </div>
-
     <div class="cart-body-holder ticket-body" *ngIf="listOfBets && listOfBets.length > 0">
         <div class="list-of-bets">
 

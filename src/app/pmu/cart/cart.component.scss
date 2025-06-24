@@ -3,6 +3,7 @@
 .cart-container {
     overflow: hidden;
     padding-left: 20px;
+
     .btn {
         width: 100%;
         border-radius: 0;
@@ -260,6 +261,16 @@ input[type="number"]::-webkit-inner-spin-button {
         -ms-transition: all 0.5s ease-in-out;
         -o-transition: all 0.5s ease-in-out;
         transition: all 0.5s ease-in-out;
+        margin-bottom: 0;
+    }
+
+    .bet-item {
+        background: transparent;
+        padding-bottom: 0;
+    }
+
+    input {
+        background: $darkBg
     }
 
     .show-cart {
@@ -268,7 +279,7 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         .clear-btn {
-            width: 58px;
+            width: auto;
 
         }
 
@@ -301,11 +312,21 @@ input[type="number"]::-webkit-inner-spin-button {
     .cart-container {
         background-color: $white;
         border-radius: 10px 10px 0 0;
+        padding-left: 0;
+        // position: relative;
+        // bottom: -100px;
+        // transition: all 0.3s ease;
+
+        // &.show-full {
+        //     bottom: 0;
+        // }
 
         .cart-header {
             cursor: pointer;
-            padding: 23px 20px 21px 20px;
+            padding: 13px 20px 11px 20px;
             border-color: #f5f5f5;
+            background: transparent;
+
 
             .rect-bar {
                 height: 4px;
@@ -337,20 +358,21 @@ input[type="number"]::-webkit-inner-spin-button {
 
         .type-container {
             background-color: $offWhite;
+            padding: 12px 20px;
+        }
+
+        .type-list.type-multi:first-of-type {
+            margin-top: 0;
         }
 
         .type-list.type-multi {
-            padding-top: 15px;
-            padding-bottom: 15px;
-
-            .type {
-                font-size: 16px;
-            }
+            margin-top: 5px;
+            padding: 0;
         }
 
         .choose-quantity {
             width: 100px;
-            height: 40px;
+            height: auto;
             background-color: $offWhite;
 
             >span {
@@ -363,25 +385,21 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         .btn {
-            padding: 15px 20px;
+            padding: 8px 20px;
         }
 
         .clear-btn {
-            font-size: 16px;
             font-weight: 400;
         }
 
         .race-title {
-            padding: 0 20px;
-            font-size: 16px;
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
+            padding: 0;
         }
 
         .close-icon {
-            margin-right: 0;
+            margin-right: 10px;
             width: 12px;
+            display: flex;
 
             img {
                 width: 100%;
@@ -389,16 +407,50 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         .type-list {
-            padding: 10px 20px 15px;
+            padding: 0;
             color: $darkBg;
+            padding-top: 10px;
+
+            &.price-holder {
+                padding: 0px 20px 10px;
+                background: $offWhite;
+            }
         }
+
+
+
+        .type-list.ticket-type {
+            margin-bottom: 10px;
+            padding: 0
+        }
+
+        .title-order {
+            padding: 0
+        }
+
+        .inputs-block {
+            padding: 10px 20px;
+        }
+
     }
 
     .cart-title {
         color: $darkBg;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 700;
     }
+
+    .cart-container .btn,
+    .clear-btn {
+        font-size: 14px
+    }
+
+    .cart-body-holder,
+    .race-title,
+    .cart-container .type-list.type-multi .type {
+        font-size: 12px;
+    }
+
 }
 
 @media all and (max-width:767px) {

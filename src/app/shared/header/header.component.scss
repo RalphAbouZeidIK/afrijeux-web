@@ -1,6 +1,13 @@
 @use '/src/variables' as *;
 
 header {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    top: 0;
+    left: 0;
+    min-height: 122px;
+    background-color: $darkBg;
 
     .header-container {
         display: flex;
@@ -12,8 +19,15 @@ header {
         position: relative;
     }
 
+
 }
 
+.mobile-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
 
 .isloggedIn {
     display: flex;
@@ -38,6 +52,7 @@ header {
     padding-left: 15px;
     position: relative;
     cursor: pointer;
+    margin-right: 15px;
 
     .dropdown-list {
         border-radius: 0 0 10px 10px;
@@ -88,7 +103,9 @@ header {
 .mobile-toggle {
     height: 30px;
     width: 50px;
-    position: relative;
+    position: absolute;
+    top: 15px;
+    left: 15px;
 
     &:after {
         content: '';
@@ -112,22 +129,6 @@ header {
     }
 }
 
-header {
-    &.active-mobile-menu {
-
-        .mobile-toggle:before {
-            top: 6px;
-            left: 3px;
-            transform: rotate(45deg);
-            border-top: none
-        }
-
-        .mobile-toggle:after {
-            bottom: 15px;
-            transform: rotate(-45deg);
-        }
-    }
-}
 
 .language-selector-toggle {
     height: 41px;
@@ -140,7 +141,7 @@ header {
     cursor: pointer;
     color: $white;
     font-weight: bold;
-    text-transform: uppercase;  
+    text-transform: uppercase;
     text-decoration: none;
 }
 
@@ -169,10 +170,7 @@ header {
 
     .logo {
         height: 30px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        margin: 15px auto;
     }
 
     .balance-settings-holder {
@@ -182,97 +180,6 @@ header {
         align-items: center;
     }
 
-    .settings {
-        height: 30px;
-        width: 30px;
-
-        img {
-            width: 12px;
-        }
-    }
-
-    .nav-holder {
-        position: fixed;
-        background-color: #1E2328;
-        width: 100%;
-        z-index: 10;
-        top: 60px;
-        display: block;
-        -webkit-transition: all 0.3s ease-in-out;
-        -moz-transition: all 0.3s ease-in-out;
-        -ms-transition: all 0.3s ease-in-out;
-        -o-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-        overflow: auto;
-        border-radius: 0px 0px 10px 10px;
-        max-height: 0;
-
-    }
-
-    header {
-        background: #1E2328;
-        position: fixed;
-        z-index: 3;
-        width: 100%;
-        top: 0;
-        left: 0;
-
-
-
-    }
-
-    .active-mobile-menu {
-        >.overlay {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .nav-holder {
-            max-height: calc(100vh - 60px);
-        }
-    }
-
-    .dropdown-header {
-
-        &.active {
-            >.overlay {
-                opacity: 1;
-                visibility: visible;
-            }
-        }
-
-        .dropdown-list {
-            background: #1E2328;
-            border-radius: 0px 0px 10px 10px;
-            max-height: 0;
-            display: block;
-            -webkit-transition: all 0.3s ease-in-out;
-            -moz-transition: all 0.3s ease-in-out;
-            -ms-transition: all 0.3s ease-in-out;
-            -o-transition: all 0.3s ease-in-out;
-            transition: all 0.3s ease-in-out;
-            top: 45px;
-            width: 100vw;
-            right: -15px;
-            left: auto;
-            overflow: auto;
-            border: none;
-
-            .dropdown-item {
-                padding: 17px 0;
-                text-align: center;
-                border-top: 1px solid #18191C;
-
-                &.header-text {
-                    background: #18191C;
-                }
-            }
-        }
-    }
-
-    .dropdown-header.active .dropdown-list {
-        max-height: calc(100vh - 60px);
-    }
 
     .nav {
         display: block;
@@ -291,6 +198,53 @@ header {
         }
     }
 
+    header {
+        min-height: 60px;
+        background-color: #1E2328;
+
+        .header-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            border-top: 2px solid $yellow;
+            padding-left: 0;
+            padding-right: 0;
+
+            .logo {
+                display: none;
+            }
+        }
+    }
+
+
+    .right-section {
+        margin-top: 10px;
+        padding-top: 20px;
+        border-top: 2px solid $yellow;
+        padding-left: 15px;
+    }
+
+    header {
+        &.active-mobile-menu {
+            height: 100vh;
+
+            .header-container {
+                display: block;
+            }
+
+            .mobile-toggle:before {
+                top: 6px;
+                left: 3px;
+                transform: rotate(45deg);
+                border-top: none
+            }
+
+            .mobile-toggle:after {
+                bottom: 15px;
+                transform: rotate(-45deg);
+            }
+        }
+    }
 }
 
 .dropdown-toggle::after {
