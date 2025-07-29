@@ -7,9 +7,9 @@ import { ApiService } from './api.service';
 })
 export class GamesService {
 
-  PersonId = null
+  PersonId = 8746
 
-  MachineId = null
+  MachineId = 2338
 
   gameObject: any
 
