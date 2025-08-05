@@ -21,7 +21,7 @@
         min-width: 35px;
         height: 35px;
         border-radius: 5px;
-        background: #3F8E3C;
+        background: $green;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -43,6 +43,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+
         &.selected-race {
             border-color: $yellow;
             color: $yellow
@@ -56,6 +57,6 @@
 
 }
 
-.course-details-page{
+.course-details-page {
     padding-bottom: 50px;
 }

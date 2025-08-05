@@ -19,7 +19,7 @@
 }
 
 .nav-item.active .nav-link {
-    background-color: #FFE600;
+    background-color: $yellow;
     color: $darkBg;
     font-weight: 700;
 }
@@ -75,11 +75,11 @@
             display: inline-block;
 
             &.green {
-                background-color: #02A509;
+                background-color: $green;
             }
 
             &.red {
-                background-color: #E12D4B;
+                background-color: $red;
             }
         }
     }

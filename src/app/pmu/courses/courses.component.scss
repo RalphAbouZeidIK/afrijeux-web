@@ -197,7 +197,7 @@
 
     .date {
         display: block;
-        color: #F7D956;
+        color: $yellow;
         font-size: 14px;
         font-weight: 400;
         display: block;
@@ -228,64 +228,13 @@
         flex-wrap: wrap;
 
         li {
-            color: #909090;
+            color: $lightGrey;
             margin-right: 30px;
             font-size: 14px;
 
             &:last-of-type {
                 margin-right: 0;
             }
-        }
-    }
-}
-
-.paris-disponibles {
-    margin-bottom: 20px;
-
-    h3 {
-        font-weight: 700;
-        font-size: 16px;
-        margin-bottom: 15px;
-
-    }
-
-    ul {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    li {
-        padding: 8px 14px 12px;
-        margin-right: 15px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-
-        &.color1 {
-            background-color: #E12D4B;
-        }
-
-        &.color2 {
-            background-color: #14A2B7;
-        }
-
-        &.color3 {
-            background-color: #F2797E;
-        }
-
-        &.color4 {
-            background-color: #F6A530;
-        }
-
-        &.color5 {
-            background-color: #7FCD1A;
-        }
-
-        &.color6 {
-            background-color: #7978E6;
-        }
-
-        &.color7 {
-            background-color: #02A509;
         }
     }
 }
@@ -303,7 +252,7 @@
         margin-bottom: 10px;
 
         .table-item:nth-of-type(4) {
-            background: #18191C;
+            background: $darkBg;
 
         }
     }
@@ -408,7 +357,7 @@
             min-width: 35px;
             height: 35px;
             border-radius: 5px;
-            background: #3F8E3C;
+            background: $green;
             display: flex;
             align-items: center;
             justify-content: center;

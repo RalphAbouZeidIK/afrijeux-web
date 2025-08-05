@@ -35,7 +35,7 @@
 }
 
 .checkbox {
-    background: #18191C;
+    background: $darkBg;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -87,7 +87,7 @@
 
 .hidden-infos {
     width: 100%;
-    border-top: 1px solid #18191C;
+    border-top: 1px solid $darkBg;
     padding: 0 20px;
 }
 

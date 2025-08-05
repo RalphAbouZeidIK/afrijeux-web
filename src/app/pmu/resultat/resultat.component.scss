@@ -5,7 +5,7 @@
 .country-label,
 .course-item {
     display: flex;
-    background-color: #1E2328;
+    background-color: $lightBg;
     border-radius: 10px;
     margin-bottom: 10px;
     font-size: 16px;
@@ -46,7 +46,7 @@
         min-width: 35px;
         height: 35px;
         border-radius: 5px;
-        background: #3F8E3C;
+        background: $green;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -127,8 +127,8 @@
         .result-item {
 
             display: flex;
-            
-            &:not(:last-of-type){
+
+            &:not(:last-of-type) {
                 margin-bottom: 10px;
             }
         }

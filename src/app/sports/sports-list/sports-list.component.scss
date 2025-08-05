@@ -1,3 +1,5 @@
+@use '/src/variables' as *;
+
 .sports-list {
     margin-bottom: 25px;
 }
@@ -15,7 +17,7 @@
 }
 
 .categories {
-    background: #1e2328;
+    background: $lightBg;
     padding: 10px;
     margin-bottom: 20px;
     margin-top: 10px;

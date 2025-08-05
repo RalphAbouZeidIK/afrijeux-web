@@ -8,7 +8,7 @@
 
     .date {
         display: block;
-        color: #F7D956;
+        color: $yellow;
         font-size: 14px;
         font-weight: 400;
         display: block;
@@ -38,7 +38,7 @@
         flex-wrap: wrap;
 
         li {
-            color: #909090;
+            color: $lightGrey;
             margin-right: 30px;
             font-size: 14px;
 
@@ -70,41 +70,6 @@
         margin-bottom: 10px;
         border: 1px solid;
         cursor: pointer;
-
-        &.color1 {
-            background-color: #E12D4B;
-            border-color: #E12D4B;
-        }
-
-        &.color2 {
-            background-color: #14A2B7;
-            border-color: #14A2B7;
-        }
-
-        &.color3 {
-            background-color: #F2797E;
-            border-color: #F2797E;
-        }
-
-        &.color4 {
-            background-color: #F6A530;
-            border-color: #F6A530;
-        }
-
-        &.color5 {
-            background-color: #7FCD1A;
-            border-color: #7FCD1A;
-        }
-
-        &.color6 {
-            background-color: #7978E6;
-            border-color: #7978E6;
-        }
-
-        &.color7 {
-            background-color: #02A509;
-            border-color: #02A509;
-        }
 
         &.isSelected {
             background-color: $yellow;

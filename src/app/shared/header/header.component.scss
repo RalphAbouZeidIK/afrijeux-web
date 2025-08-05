@@ -186,7 +186,7 @@ header {
 
         .nav-item {
             margin: 0;
-            border-top: 1px solid #18191C;
+            border-top: 1px solid $darkBg;
         }
 
         .nav-link {
@@ -200,7 +200,7 @@ header {
 
     header {
         min-height: 60px;
-        background-color: #1E2328;
+        background-color: $lightBg;
 
         .header-container {
             display: none;

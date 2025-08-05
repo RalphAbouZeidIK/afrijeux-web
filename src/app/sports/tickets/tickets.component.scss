@@ -1,6 +1,8 @@
+@use '/src/variables' as *;
+
 .first-level td {
     border-top-width: 10px;
-    border-color: #18191C
+    border-color: $darkBg
 }
 
 .link{
