@@ -37,8 +37,8 @@ export class OutcomesPageComponent implements OnInit {
     const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', params,false)
     console.log(apiResponse)
     this.matchDetails = {
-      MatchName: apiResponse[0].MatchName,
-      EventDate: apiResponse[0].EventDate,
+      MatchName: apiResponse[0].matchName,
+      EventDate: apiResponse[0].eventDate,
       EventId: this.matchId
     }
 

@@ -42,13 +42,13 @@ export class ApiService {
     this.errorHandled = true;
 
     if (error.status === 401 || error.status === 403) {
-      this.translate.get('alerts.unauthorized').subscribe((translatedMsg: string) => {
-        alert(translatedMsg);
-      });
-      if (this.router.url !== '/') {
-        this.userSrv.signOut();
-        this.router.navigate(['']);
-      }
+      // this.translate.get('alerts.unauthorized').subscribe((translatedMsg: string) => {
+      //   alert(translatedMsg);
+      // });
+      // if (this.router.url !== '/') {
+      //   this.userSrv.signOut();
+      //   this.router.navigate(['']);
+      // }
       setTimeout(() => {
         this.errorHandled = false;
       }, 5000);

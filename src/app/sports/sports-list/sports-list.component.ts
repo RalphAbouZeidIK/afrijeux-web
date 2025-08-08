@@ -33,7 +33,7 @@ export class SportsListComponent implements OnInit, OnChanges {
 
   async getData() {
     const apiResponse = await this.gnrcSrv.getFiltersLists()
-    this.filtersList = apiResponse
+    this.filtersList = apiResponse.data
     this.setSelectedToFalse()
     this.resetSelected()
 
@@ -46,19 +46,19 @@ export class SportsListComponent implements OnInit, OnChanges {
   }
 
   resetSelected() {
-
-    let selectedFilters = this.filtersList.Sports.find((item: any) => item.SportId == this.selectedFilters.sportId)
+    console.log(this.filtersList.sports)
+    let selectedFilters = this.filtersList.sports.find((item: any) => item.sportId == this.selectedFilters.sportId)
     if (selectedFilters) {
       selectedFilters.isSelected = true
     }
 
-    let selectedCategory = this.filtersList.Categories.find((item: any) => item.CategoryId == this.selectedFilters.categoryId)
+    let selectedCategory = this.filtersList.categories.find((item: any) => item.categoryId == this.selectedFilters.categoryId)
     if (selectedCategory) {
       selectedCategory.isSelected = true
       this.getCategories(selectedFilters)
     }
 
-    let selectedTournament = this.filtersList.Tournaments.find((item: any) => item.TournamentId == this.selectedFilters.tournamentId)
+    let selectedTournament = this.filtersList.tournaments.find((item: any) => item.tournamentId == this.selectedFilters.tournamentId)
     if (selectedTournament) {
       selectedTournament.isSelected = true
       this.getTournaments(selectedCategory)
@@ -68,23 +68,23 @@ export class SportsListComponent implements OnInit, OnChanges {
   }
 
   setSelectedToFalse() {
-    this.filtersList.Sports = this.filtersList.Sports.map((obj: any) => ({
+    this.filtersList.sports = this.filtersList.sports.map((obj: any) => ({
       ...obj,
       isSelected: false
     }));
-    this.filtersList.Categories = this.filtersList.Categories.map((obj: any) => ({
+    this.filtersList.categories = this.filtersList.categories.map((obj: any) => ({
       ...obj,
       isSelected: false
     }));
-    this.filtersList.Tournaments = this.filtersList.Tournaments.map((obj: any) => ({
+    this.filtersList.tournaments = this.filtersList.tournaments.map((obj: any) => ({
       ...obj,
       isSelected: false
     }));
   }
 
   getCategories(sportItem: any) {
-    if (!sportItem.Categories) {
-      sportItem.Categories = this.filtersList.Categories.filter((item: any) => item.SportId == sportItem.SportId)
+    if (!sportItem.categories) {
+      sportItem.categories = this.filtersList.categories.filter((item: any) => item.sportId == sportItem.sportId)
       sportItem.showCategories = true
       return
     }
@@ -93,8 +93,8 @@ export class SportsListComponent implements OnInit, OnChanges {
   }
 
   getTournaments(categoryItem: any) {
-    if (!categoryItem.Tournaments) {
-      categoryItem.Tournaments = this.filtersList.Tournaments.filter((item: any) => item.CategoryId == categoryItem.CategoryId)
+    if (!categoryItem.tournaments) {
+      categoryItem.tournaments = this.filtersList.tournaments.filter((item: any) => item.categoryId == categoryItem.categoryId)
       categoryItem.showTournaments = true
       return
     }
@@ -103,7 +103,7 @@ export class SportsListComponent implements OnInit, OnChanges {
 
   redirectTo(listItem: any) {
     console.log(listItem)
-    this.router.navigate([`${location.pathname.split('/')[1]}/${listItem.SportId}${(listItem.CategoryId) ? `/Categories/${listItem.CategoryId}` : ''}${(listItem.TournamentId) ? `/Tournaments/${listItem.TournamentId}` : ''}`])
+    this.router.navigate([`${location.pathname.split('/')[1]}/${listItem.sportId}${(listItem.categoryId) ? `/Categories/${listItem.categoryId}` : ''}${(listItem.tournamentId) ? `/Tournaments/${listItem.tournamentId}` : ''}`])
     listItem.isSelected = true
   }
 }

@@ -115,7 +115,7 @@ export class GenericService {
     let params = {
       Language: 'en',
     }
-    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetFiltersLists', 'POST', params,false)
+    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'GET',{})
     return apiResponse
   }
 

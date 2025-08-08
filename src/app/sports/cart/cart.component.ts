@@ -118,19 +118,19 @@ export class CartComponent implements OnInit {
     this.BonusId = 0
     let allowedCumulatedOdds = 1
     if (this.bonusRules.length == 0) {
-      this.bonusRules = await this.cartSrv.getBonusRules(this.PersonId, this.gameid)
+      this.bonusRules = await this.cartSrv.getBonusRules()
     }
 
     if (this.listOfBets && this.listOfBets.length > 0) {
       this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).forEach((oddItem: any) => {
-        allowedCumulatedOdds *= oddItem.Odd
+        allowedCumulatedOdds *= oddItem.odd
       });
-      let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.FromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length) && (selectedBonus.MinStackeRequiered <= this.stake))
+      let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.fromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length) && (selectedBonus.minStackeRequiered <= this.stake))
       console.log(selectedBonus)
       if (selectedBonus) {
-        this.BonusId = selectedBonus?.BonusRuleId
+        this.BonusId = selectedBonus?.bonusRuleId
         let unitStake = this.stake / this.listOfBets.length
-        this.bonus = (selectedBonus?.Percentage / 100) * unitStake * this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length * allowedCumulatedOdds
+        this.bonus = (selectedBonus?.percentage / 100) * unitStake * this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length * allowedCumulatedOdds
         this.bonus = Math.round(this.bonus * 100) / 100;
       }
       else {

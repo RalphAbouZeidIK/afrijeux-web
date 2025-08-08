@@ -135,26 +135,26 @@ export class CartService {
 
   setSBBets(betItem: any) {
     console.log(betItem)
-    let existingMatch = this.listOfBets.find((match: any) => match.MatchId === betItem.MatchId);
+    let existingMatch = this.listOfBets.find((match: any) => match.matchId === betItem.matchId);
 
     if (existingMatch) {
-      if (existingMatch.MarketId != betItem.MarketId) {
+      if (existingMatch.marketId != betItem.marketId) {
         this.translate.get('alerts.multipleBetsNoAllowed').subscribe((translatedMsg: string) => {
           alert(translatedMsg);
         });
         return
       }
 
-      else if (existingMatch.OutcomeId != betItem.OutcomeId || (existingMatch.OutcomeId == betItem.OutcomeId) && (existingMatch.Specifiers != betItem.Specifiers)) {
+      else if (existingMatch.outcomeId != betItem.outcomeId || (existingMatch.outcomeId == betItem.outcomeId) && (existingMatch.specifiers != betItem.specifiers)) {
         console.log('same market different odd')
-        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
+        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.matchId === betItem.matchId);
         this.listOfBets.splice(existingMatchIndex, 1)
         console.log(this.listOfBets)
         this.listOfBets.push(betItem)
       }
 
       else {
-        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
+        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.matchId === betItem.matchId);
         this.listOfBets.splice(existingMatchIndex, 1)
       }
 
@@ -178,20 +178,20 @@ export class CartService {
   async setSBCartDataListener(cartData: any) {
     let minimumOddRequired: any = 0
     if (this.bonusRules.length == 0) {
-      this.bonusRules = await this.getBonusRules(this.PersonId, this.gameid)
+      this.bonusRules = await this.getBonusRules()
     }
 
-    minimumOddRequired = this.bonusRules[0].MinOddRequiered
+    minimumOddRequired = this.bonusRules[0].minOddRequiered
     //minimumOddRequired = 2
     console.log(minimumOddRequired)
     let multipliedOdds = 1
     let totalBets = 0
     cartData.forEach((element: any) => {
-      if (element.Odd >= minimumOddRequired) {
+      if (element.odd >= minimumOddRequired) {
         element.hasMinimumOdd = true
       }
       totalBets++
-      multipliedOdds *= element.Odd
+      multipliedOdds *= element.odd
     });
     multipliedOdds = Math.round(multipliedOdds * 100) / 100
 
@@ -201,24 +201,18 @@ export class CartService {
   }
 
 
-  async getBonusRules(personId: any, gameId: any) {
-    let params = {
-      PersonId: personId,
-      GameId: gameId,
-      TimeStamp: this.gnrcSrv.getFormattedToday(),
-    }
-
-    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetBonusRules', 'POST', params, false)
+  async getBonusRules() {
+    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetBonusRules', 'GET', {})
     console.log(apiResponse)
-    return apiResponse
+    return apiResponse.data
   }
 
   removeBetItem(betItem: any) {
     let storageData = this.storageSrv.getItem('sbCartData')
-    let matchIndex = storageData.findIndex((itemInStorage: any) => itemInStorage.MatchId == betItem.MatchId)
+    let matchIndex = storageData.findIndex((itemInStorage: any) => itemInStorage.matchId == betItem.matchId)
     storageData.splice(matchIndex, 1)
     this.listOfBets.splice(matchIndex, 1)
-    this.removeCartData(betItem.MatchId)
+    this.removeCartData(betItem.matchId)
     this.storageSrv.setItem('sbCartData', storageData)
     this.setSBCartDataListener(storageData)
   }

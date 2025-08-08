@@ -7,7 +7,7 @@ import { ApiService } from 'src/app/services/api.service';
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   matchesList = []
@@ -38,15 +38,17 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async getMatches() {
     let params = {
-      Language: 'en',
-      MatchName: null,
-      TournamentId: this.tournamentId,
-      CategoryId: this.categoryId,
-      SportId: this.sportId,
-      PageSize: 100,
-      PageNumber: 1,
+      body: {
+        Language: 'en',
+        MatchName: null,
+        TournamentId: this.tournamentId,
+        CategoryId: this.categoryId,
+        SportId: this.sportId,
+        PageSize: 100,
+        PageNumber: 1,
+      }
     }
-    this.matchesList = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetMatchListByName', 'POST', params,false)
+    this.matchesList = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetMatchListByName', 'POST', params)
     console.log(this.matchesList)
 
     // let matchDetailsById = await this.apiSrv.betradarapi('v1/sports/en/sport_events/sr:match:51828433/fixture.xml', 'GET')
@@ -64,7 +66,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async getMatchOutcome(event: any) {
     console.log(event)
-    this.router.navigate([`${location.pathname.split('/')[1]}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])
+    this.router.navigate([`${location.pathname.split('/')[1]}/${event.sportId}/Categories/${event.categoryId}/Tournaments/${event.tournamentId}/Outcomes/${event.matchId}`])
   }
 
   ngOnDestroy(): void {

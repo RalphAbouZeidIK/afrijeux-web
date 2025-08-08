@@ -25,16 +25,16 @@ export class MatchListComponent implements OnChanges {
       const matchMap = new Map(this.matchesList.map((match: any) => [match.MatchId, match]));
       // Set all odds outcomes' isSelected to false
       this.matchesList.forEach((matchItem: any) => {
-        matchItem.OddsOutcomes.forEach((oddItem: any) => {
+        matchItem.oddsOutcomes.forEach((oddItem: any) => {
           oddItem.isSelected = false;
         });
       });
 
       //Now iterate over the data and set isSelected to true for matching odds
       data.forEach((oddItem: any) => {
-        const match: any = matchMap.get(oddItem.MatchId);
+        const match: any = matchMap.get(oddItem.matchId);
         if (match) {
-          const oddOutcome = match.OddsOutcomes.find((odd: any) => odd.OutcomeId === oddItem.OutcomeId);
+          const oddOutcome = match.oddsOutcomes.find((odd: any) => odd.outcomeId === oddItem.outcomeId);
           if (oddOutcome) {
             oddOutcome.isSelected = true;
           }
@@ -59,9 +59,9 @@ export class MatchListComponent implements OnChanges {
   setOddsFromCart(oddsList: any) {
     if (oddsList && oddsList.length > 0) {
       oddsList.forEach((oddItem: any) => {
-        let matchItem = this.matchesList.find((match: any) => match.MatchId == oddItem.MatchId)
+        let matchItem = this.matchesList.find((match: any) => match.matchId == oddItem.matchId)
         if (matchItem) {
-          matchItem.OddsOutcomes.find((odd: any) => odd.OutcomeId == oddItem.OutcomeId).isSelected = true
+          matchItem.oddsOutcomes.find((odd: any) => odd.outcomeId == oddItem.outcomeId).isSelected = true
         }
       });
     }
