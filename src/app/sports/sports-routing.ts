@@ -6,6 +6,7 @@ import { OutcomesPageComponent } from "./outcomes-page/outcomes-page.component";
 import { SportsCoreComponent } from "./sports-core/sports-core.component";
 import { TicketsComponent } from "./tickets/tickets.component";
 import { CanceledBetsComponent } from "./canceled-bets/canceled-bets.component";
+import { SharedGuard } from "../shared.guard";
 
 
 const routes: Routes = [
@@ -18,8 +19,8 @@ const routes: Routes = [
     path: '',
     component: SportsCoreComponent,
     children: [
-      { path: 'Tickets', component: TicketsComponent, data: { showLink: true, title: 'routerLinks.Sports.viewTickets' } },
-      { path: 'Canceled-Bets', component: CanceledBetsComponent, data: { showLink: true, title: 'routerLinks.Sports.canceledBets' } },
+      { path: 'Tickets', component: TicketsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.Sports.viewTickets' }, canActivate: [SharedGuard] },
+      { path: 'Canceled-Bets', component: CanceledBetsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.Sports.canceledBets' }, canActivate: [SharedGuard] },
       { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Categories/:categoryId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },

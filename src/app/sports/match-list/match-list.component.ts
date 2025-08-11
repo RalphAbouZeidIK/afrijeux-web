@@ -8,7 +8,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
   selector: 'app-match-list',
   templateUrl: './match-list.component.html',
   styleUrls: ['./match-list.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class MatchListComponent implements OnChanges {
   @Output() matchForOutcome = new EventEmitter<any>();
@@ -22,14 +22,13 @@ export class MatchListComponent implements OnChanges {
     this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
 
       // Create a map for matches by MatchId for fast lookup
-      const matchMap = new Map(this.matchesList.map((match: any) => [match.MatchId, match]));
+      const matchMap = new Map(this.matchesList.map((match: any) => [match.matchId, match]));
       // Set all odds outcomes' isSelected to false
       this.matchesList.forEach((matchItem: any) => {
         matchItem.oddsOutcomes.forEach((oddItem: any) => {
           oddItem.isSelected = false;
         });
       });
-
       //Now iterate over the data and set isSelected to true for matching odds
       data.forEach((oddItem: any) => {
         const match: any = matchMap.get(oddItem.matchId);
@@ -61,7 +60,11 @@ export class MatchListComponent implements OnChanges {
       oddsList.forEach((oddItem: any) => {
         let matchItem = this.matchesList.find((match: any) => match.matchId == oddItem.matchId)
         if (matchItem) {
-          matchItem.oddsOutcomes.find((odd: any) => odd.outcomeId == oddItem.outcomeId).isSelected = true
+          let foundOdd = matchItem.oddsOutcomes.find((odd: any) => odd.outcomeId == oddItem.outcomeId)
+          if (foundOdd) {
+            foundOdd.isSelected = true
+          }
+
         }
       });
     }

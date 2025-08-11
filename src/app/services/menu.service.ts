@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router, Route, RouteConfigLoadEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from './user.service';
 
 export interface MenuItem {
   path: string;
@@ -15,7 +16,8 @@ export class MenuService {
   constructor(
     private router: Router,
     private injector: Injector,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private userService: UserService
   ) {
     // Access Angular's private loader
     // @ts-ignore
@@ -39,26 +41,36 @@ export class MenuService {
    */
   async getMenu(): Promise<MenuItem[]> {
     const menuItems: MenuItem[] = [];
+    const isLoggedIn = this.userService.isUserLoggedIn(); // assume synchronous check
 
     for (const r of this.router.config) {
-      if (!r.data?.['showLink']) continue;
+      const data = r.data || {};
+
+      // Check showLink and shouldBeLoggedIn
+      if (!data['showLink']) continue;
+      if (data['shouldBeLoggedIn'] && !isLoggedIn) continue;
 
       const item: MenuItem = {
         path: r.path!,
-        title: r.data['title']
+        title: data['title']
       };
 
+      // Handle lazy-loaded children
       if (r.loadChildren) {
         const subRoutes: Route[] = await this.loadSubRoutes(r); // now a Route[]
-
         const parent = subRoutes.find(sr => Array.isArray(sr.children));
         const children = parent?.children ?? [];
 
         item.children = children
-          .filter(c => c.data?.['showLink'])
+          .filter(c => {
+            const cData = c.data || {};
+            if (!cData['showLink']) return false;
+            if (cData['shouldBeLoggedIn'] && !isLoggedIn) return false;
+            return true;
+          })
           .map(c => ({
             path: `${r.path}/${c.path}`,
-            title: c.data?.['title']
+            title: c.data!['title']
           }));
       }
 
@@ -72,6 +84,7 @@ export class MenuService {
     ]);
     const trans = await this.translate.get(keys).toPromise();
 
+    // Map translations
     return menuItems.map(i => ({
       path: i.path,
       title: trans[i.title] || i.title,
@@ -81,4 +94,5 @@ export class MenuService {
       }))
     }));
   }
+
 }

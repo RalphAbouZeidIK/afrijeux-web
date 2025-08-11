@@ -42,13 +42,13 @@ export class ApiService {
     this.errorHandled = true;
 
     if (error.status === 401 || error.status === 403) {
-      // this.translate.get('alerts.unauthorized').subscribe((translatedMsg: string) => {
-      //   alert(translatedMsg);
-      // });
-      // if (this.router.url !== '/') {
-      //   this.userSrv.signOut();
-      //   this.router.navigate(['']);
-      // }
+      this.translate.get('alerts.unauthorized').subscribe((translatedMsg: string) => {
+        alert(translatedMsg);
+      });
+      if (this.router.url !== '/') {
+        this.userSrv.signOut();
+        this.router.navigate(['']);
+      }
       setTimeout(() => {
         this.errorHandled = false;
       }, 5000);
@@ -106,10 +106,10 @@ export class ApiService {
         response = this.http.post(apiEndPoint, params.body || {}, httpOptions).pipe(timeout(30000));
         break;
     }
-
     try {
       if (isNormalApi) {
-        return firstValueFrom(response)
+        let responseToReturn = await firstValueFrom(response);
+        return responseToReturn
       }
       else {
         let encryptedResponse = await firstValueFrom(response);

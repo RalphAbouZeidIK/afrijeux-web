@@ -6,7 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
   selector: 'app-outcomes-page',
   templateUrl: './outcomes-page.component.html',
   styleUrls: ['./outcomes-page.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class OutcomesPageComponent implements OnInit {
   outcomesList = []
@@ -28,23 +28,25 @@ export class OutcomesPageComponent implements OnInit {
 
   async getMatchOutcome() {
     let params = {
-      Language: 'en',
-      MatchId: this.matchId,
+      body: {
+        Language: 'en',
+        MatchId: this.matchId,
+      }
     }
 
     console.log(params)
 
-    const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', params,false)
+    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', params)
     console.log(apiResponse)
     this.matchDetails = {
-      MatchName: apiResponse[0].matchName,
-      EventDate: apiResponse[0].eventDate,
-      EventId: this.matchId
+      matchName: apiResponse[0].matchName,
+      eventDate: apiResponse[0].eventDate,
+      eventId: this.matchId
     }
 
     this.outcomesList = apiResponse
 
-    console.log(apiResponse)
+    console.log(this.matchDetails)
 
 
   }

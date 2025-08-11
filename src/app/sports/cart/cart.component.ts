@@ -181,6 +181,14 @@ export class CartComponent implements OnInit {
   }
 
   async issueTicket() {
+    if (!this.isLoggedIn) {
+      this.usrSrv.setLoginPopupStatus({
+        show: true,
+        type: 'login'
+      })
+      return
+    }
+    
     this.loaderService.setHttpProgressStatus(true);
     setTimeout(async () => {
       let date = new Date()
