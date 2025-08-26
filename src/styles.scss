@@ -74,10 +74,17 @@ h2 {
         width: 20%;
     }
 
+    .menu-with-sub-nav {
+
+        main,
+        aside {
+            max-height: calc(100vh - 143px);
+        }
+    }
 
     main,
     aside {
-        max-height: calc(100vh - 143px);
+        max-height: calc(100vh - 75px);
         overflow: auto;
         display: block;
         padding-bottom: 20px;
@@ -457,7 +464,23 @@ label {
 }
 
 .body-holder {
-    margin-top: 132px;
+    margin-top: 75px;
+}
+
+header {
+
+    min-height: 73px;
+}
+
+.menu-with-sub-nav {
+    .body-holder {
+        margin-top: 132px;
+    }
+
+    header {
+
+        min-height: 122px;
+    }
 }
 
 @media all and (max-width:1200px) {

@@ -1,12 +1,13 @@
 @use '/src/variables' as *;
 
+
+
 header {
     position: fixed;
     z-index: 3;
     width: 100%;
     top: 0;
     left: 0;
-    min-height: 122px;
     background-color: $darkBg;
 
     .header-container {

@@ -3,7 +3,7 @@
  */
 export const environment = {
   production: true,
-  BaseUrl: 'http://test.gamecooks.com:3333/',
+  BaseUrl: 'http://localhost:5000/',
   gcSrv: 'GameCooksService/',
   subUrls: {
     auth: 'GameCooksAuth/',
