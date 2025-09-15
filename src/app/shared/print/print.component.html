@@ -1,0 +1,46 @@
+<h2>Test from Angular 1</h2>
+
+<div>
+    <label>Normal Text:</label>
+    <input [(ngModel)]="normalText" placeholder="Enter normal text">
+    <button (click)="sendPrint('normalText', normalText)">Print Normal Text</button>
+</div>
+
+<div>
+    <label>Barcode Text:</label>
+    <input [(ngModel)]="barcodeText" placeholder="Enter barcode text">
+    <button (click)="sendPrint('barcode', barcodeText)">Print Barcode</button>
+</div>
+
+<div>
+    <label>QR Code Text:</label>
+    <input [(ngModel)]="qrCodeText" placeholder="Enter QR code text">
+    <button (click)="sendPrint('qrcode', qrCodeText)">Print QR Code</button>
+</div>
+
+<hr>
+
+<h3>Print Image</h3>
+
+<div>
+  <img id="printableImage" src="assets/images/panier-img.jpg" alt="Printable Image" style="max-width: 100%;">
+  <br>
+  <button (click)="printImage()">Print Image</button>
+</div>
+
+<hr>
+
+<button (click)="scanQrCode()">Scan QR Code</button>
+<button (click)="getSerial()">Get Serial</button>
+
+<hr>
+
+<div>
+    <strong>Scan Result:</strong>
+    <span *ngIf="(nativeBridge.scanResult$ | async) as result">{{ result }}</span>
+</div>
+
+<div>
+    <strong>Serial Number:</strong>
+    <span *ngIf="(nativeBridge.getSerialSource$ | async) as serial">{{ serial }}</span>
+</div>

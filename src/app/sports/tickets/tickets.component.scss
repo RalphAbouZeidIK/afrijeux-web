@@ -1,0 +1,13 @@
+@use '/src/variables' as *;
+
+.first-level td {
+    border-top-width: 10px;
+    border-color: $darkBg
+}
+
+.link{
+    font-size:14px;
+    &:not(:last-of-type){
+        margin-right:15px;
+    }
+}

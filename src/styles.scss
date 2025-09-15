@@ -1,0 +1,594 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;600;700&display=swap');
+
+
+
+body {
+    background-color: $darkBg;
+    color: $white;
+    font-family: "Lato", sans-serif;
+    font-size: 16px;
+    line-height: normal;
+    font-weight: 400;
+    padding: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: $white;
+    padding-bottom: 15px;
+    margin-bottom: 5px;
+}
+
+.btn-check:checked+.btn,
+:not(.btn-check)+.btn:active,
+.btn:first-child:active,
+.btn.active,
+.btn.show {
+    background-color: $yellow;
+    color: $darkBg;
+}
+
+.btn {
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 10px 20px 12px;
+    line-height: normal;
+
+    &.btn-primary {
+        background-color: $yellow;
+        color: $darkBg;
+        border: 0;
+    }
+
+    &.btn-default {
+        color: $white;
+        border: 1px solid $yellow;
+        margin-left: 10px;
+    }
+}
+
+.error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+@media all and (min-width:1400px) {
+    .container {
+        max-width: 1440px;
+        padding: 0 25px;
+    }
+
+}
+
+@media all and (min-width:1200px) {
+    .cart {
+        width: 20%;
+    }
+
+    .menu-with-sub-nav {
+
+        main,
+        aside {
+            max-height: calc(100vh - 143px);
+        }
+    }
+
+    main,
+    aside {
+        max-height: calc(100vh - 75px);
+        overflow: auto;
+        display: block;
+        padding-bottom: 20px;
+
+        >* {
+            display: block;
+            max-width: calc(100% - 10px);
+        }
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 7px $lightGrey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: $yellow;
+        border-radius: 10px;
+    }
+}
+
+.main {
+    width: 80%;
+
+    &.fullWidth {
+        width: 100%;
+    }
+}
+
+.form-holder {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    &.full-page-form {
+        position: static;
+        height: auto;
+        width: auto;
+        background: transparent;
+
+        .form-bg {
+            margin-top: 25px;
+            width: 500px;
+        }
+    }
+
+    .close-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+    }
+
+    .form-bg {
+        background-color: $lightBg;
+        padding: 25px 25px;
+        width: 400px;
+        max-width: calc(100% - 30px);
+        max-height: calc(100vh - 30px);
+        position: relative;
+        border-radius: 10px;
+        overflow: auto;
+    }
+}
+
+.header-text {
+    color: $white;
+    font-weight: 700;
+
+    .header-balance {
+
+        color: $lightGrey;
+        font-size: 14px;
+    }
+}
+
+.mobileOnly,
+.mobile-toggle {
+    display: none !important;
+}
+
+.horses-list-container {
+    .table-row {
+        padding: 10px 20px;
+
+        &.header {
+            font-size: 14px;
+            color: $lightGrey;
+            display: flex;
+            flex-wrap: wrap;
+            //padding: 0 20px;
+        }
+    }
+
+    .table-item {
+        &:first-of-type {
+            width: 40%;
+        }
+
+        &:nth-of-type(2) {
+            width: 20%;
+        }
+
+        &:nth-of-type(3) {
+            width: 70px;
+        }
+
+        &:nth-of-type(4) {
+            width: 70px;
+        }
+
+        &:not(:last-of-type) {
+            margin-right: 30px;
+        }
+
+        &:last-of-type {
+            width: 78px
+        }
+    }
+
+    .first-checkbox {
+        margin-left: auto;
+    }
+
+
+}
+
+.form-holder {
+    .title-label {
+        font-size: 12px;
+        color: $white;
+        padding-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        background-color: $darkBg;
+        border-color: $darkBg;
+        padding: 10px 12px;
+        color: $white;
+
+        &::placeholder {
+            color: $lightGrey
+        }
+    }
+
+
+
+    .form-btns {
+        margin-bottom: 10px;
+        margin-top: 25px;
+
+        .btn {
+            width: 100%;
+            padding: 10px 0;
+        }
+    }
+}
+
+.tel-phone {
+    display: flex;
+
+    .code-country {
+        width: 25%;
+        margin-right: 10px;
+    }
+}
+
+.geekmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.text {
+    font-size: 12px;
+    padding-top: 10px;
+    color: $white;
+    margin-bottom: 0;
+
+    a {
+        cursor: pointer;
+    }
+}
+
+.checkbox-container {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    font-size: 12px;
+    font-weight: 300;
+    padding-left: 35px;
+    margin-top: 20px;
+
+    /* Hide the default checkbox */
+    input[type=checkbox] {
+        visibility: hidden;
+        width: 0;
+    }
+
+    /* Creating a custom checkbox based on demand */
+    .geekmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        border-radius: 3px;
+        background-color: $darkBg;
+
+        &:after {
+            left: 9px;
+            bottom: 7px;
+            width: 6px;
+            height: 12px;
+            border: solid $lightBg;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    }
+
+    /* Specify the background color to be shown when checkbox is checked */
+    input:checked~.geekmark {
+        background-color: $yellow;
+    }
+
+    /* Display checkmark when checked */
+    input:checked~.geekmark:after {
+        display: block;
+    }
+}
+
+.underline-word {
+    text-decoration: underline;
+    color: $yellow;
+}
+
+.resulats-page {
+    .mdc-text-field--filled.mdc-text-field--disabled {
+        background-color: transparent;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+
+    .mat-mdc-form-field-infix {
+        display: flex;
+        align-items: center;
+    }
+
+    .mdc-floating-label {
+        position: static;
+        width: auto;
+        max-width: 100%;
+        transform: none !important;
+        overflow: visible;
+        margin-right: 5px;
+    }
+
+    .mat-mdc-form-field {
+        border: none !important;
+    }
+
+    .mdc-text-field--filled {
+        --mdc-filled-text-field-active-indicator-height: 0;
+    }
+
+    .mdc-text-field__input {
+        line-height: 19px !important;
+    }
+
+    .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+        padding-top: 11px;
+    }
+
+    .mdc-floating-label,
+    .mat-mdc-input-element {
+        color: $white!important
+    }
+
+    .mat-mdc-form-field-infix {
+        width: 140px;
+    }
+}
+
+
+
+
+
+aside {
+
+    a {
+        cursor: pointer;
+
+        &.active {
+            color: $yellow
+        }
+    }
+
+    h2 {
+        padding-bottom: 10px;
+    }
+
+    ul {
+        padding-left: 15px;
+
+        li {
+            margin-bottom: 10px;
+
+            >a {
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 16px;
+                color: $white;
+
+                display: flex;
+                align-items: center;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+}
+
+.sports-betting {
+
+    aside,
+    .cart {
+        flex: 1 0 270px;
+        max-width: 270px;
+    }
+
+    main {
+        flex: 1 0 calc(100% - 600px);
+        max-width: calc(100% - 600px);
+    }
+}
+
+
+.page-holder {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+}
+
+
+
+.overflow-hidden .main-holder {
+    overflow: hidden;
+}
+
+label {
+    margin-top: 0;
+}
+
+.body-holder {
+    margin-top: 75px;
+}
+
+header {
+
+    min-height: 73px;
+}
+
+.menu-with-sub-nav {
+    .body-holder {
+        margin-top: 132px;
+    }
+
+    header {
+
+        min-height: 122px;
+    }
+}
+
+@media all and (max-width:1200px) {
+
+    .page-holder {
+        flex-direction: column;
+    }
+
+    .container,
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .sports-betting {
+
+        main,
+        aside,
+        .cart {
+            flex: 1 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    .cart>* {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        padding: 0 !important;
+        width: 568px;
+        max-width: 100%;
+        z-index: 2;
+    }
+
+    app-mes-paries-popup {
+        margin-bottom: 68px;
+    }
+
+    aside {
+        ul {
+            display: flex;
+
+            li {
+                margin-right: 15px;
+            }
+        }
+    }
+
+}
+
+@media all and (max-width:767px) {
+
+    .body-holder {
+        margin-top: 70px;
+    }
+
+    .hidden-mobile {
+        display: none !important;
+    }
+
+    .mobileOnly,
+    .mobile-toggle {
+        display: block !important;
+    }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    app-header {
+        overflow: hidden;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .horses-list-container {
+        .table-item:last-of-type {
+            display: none;
+        }
+
+        .table-item:not(:last-of-type) {
+            margin-right: 10px;
+        }
+
+        .table-row {
+            padding: 10px;
+        }
+
+        .first-checkbox {
+            margin-left: 0;
+        }
+
+        .table-item:first-of-type {
+            width: 52%
+        }
+
+        .table-item.first-checkbox {
+            width: 40px
+        }
+    }
+
+
+}

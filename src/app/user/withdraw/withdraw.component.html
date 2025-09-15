@@ -1,0 +1,44 @@
+<div class="form-holder full-page-form">
+    <div class="form-bg">
+        <h2>{{ 'user.withdraw.title' | translate }}</h2>
+
+        <h5>
+            {{ 'user.withdraw.balanceMessage' | translate }}
+            {{ userBalance.WinningAmount }} {{ userBalance.CurrencyCode }}
+        </h5>
+
+        <div class="form-content">
+            <div class="row">
+                <div class="form-group col-md-8">
+                    <label for="withdrawAmount" class="title-label">
+                        {{ 'user.withdraw.amountLabel' | translate }}
+                    </label>
+                    <input type="number" id="withdrawAmount" name="withdrawAmount" class="form-control"
+                        placeholder="{{ 'user.withdraw.amountPlaceholder' | translate }}" required
+                        [(ngModel)]="withdrawAmount" min="0" [max]="userBalance.WinningAmount" />
+                    <small class="text-danger" *ngIf="showError">
+                        {{ 'user.withdraw.amountError' | translate:{ max: userBalance.WinningAmount } }}
+                    </small>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="currencyId" class="title-label">
+                        {{ 'user.withdraw.currencyLabel' | translate }}
+                    </label>
+                    <select class="form-control form-select" aria-label="Currency" [(ngModel)]="currencyId">
+                        <option disabled>{{ 'user.withdraw.selectCurrency' | translate }}</option>
+                        <option *ngFor="let currency of currencies" [value]="currency.id">
+                            {{ currency.code }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-btns">
+            <button class="btn btn-primary" (click)="submitWithdraw()">
+                {{ 'user.withdraw.submit' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

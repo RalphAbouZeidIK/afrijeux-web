@@ -1,0 +1,45 @@
+<header (window:resize)="onResize($event)" [ngClass]="{'is-mobile':!isDesktop}" class="header-main">
+  <div class="overlay" (click)="hideMenus()"></div>
+  <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()"></a>
+  <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/']" />
+  
+  <div class="container-fluid header-container">
+
+    <img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />
+
+    <app-nav parentClass="header-nav" [fullMenu]="menu"></app-nav>
+
+    <div class="right-section d-flex">
+
+
+      <div class="header-btns isloggedIn" *ngIf="isLoggedIn">
+        <span class="header-text" *ngIf="userBalance?.Wallet > 0">
+          <span class="header-balance">Balance</span>
+          {{userBalance?.Wallet | number}} {{userBalance?.CurrencyCode}}
+        </span>
+      </div>
+
+      <div class="dropdown-header" ngbDropdown #langDrop="ngbDropdown">
+        <a type="button" class="language-selector-toggle" id="dropdownManual" ngbDropdownToggle>
+          {{selectedLanguage.code}}
+        </a>
+
+        <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-list language-selector">
+          <div class="dropdown-item" *ngFor="let lang of languages" (click)="changeLanguage(lang)">
+            {{lang.name}}
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="logout()">{{ 'generic.logout' | translate
+        }}</button>
+      <div class="header-btns" *ngIf="!isLoggedIn">
+        <button class="btn btn-primary" (click)="togglePopupFn('login')">{{ 'generic.login' | translate }}</button>
+        <button class="btn btn-default" (click)="togglePopupFn('signup')">{{ 'generic.register' | translate
+          }}</button>
+      </div>
+    </div>
+
+
+
+  </div>
+</header>

@@ -1,0 +1,140 @@
+@use '/src/variables' as *;
+
+.form-bg {
+    width: 846px;
+}
+
+.nav-item {
+    padding-right: 10px;
+}
+
+.nav-link {
+    border-radius: 5px;
+    background-color: $lightBg;
+    text-decoration: none;
+    color: $white;
+    font-size: 14px;
+
+
+}
+
+.nav-item.active .nav-link {
+    background-color: $yellow;
+    color: $darkBg;
+    font-weight: 700;
+}
+
+.row-popup {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.right-text {
+    font-weight: 300;
+
+    .text {
+        color: $lightGrey;
+    }
+}
+
+.mes-paris-data {
+    border-radius: 10px;
+    background-color: $lightBg;
+    overflow: hidden;
+    margin-bottom: 10px;
+
+    .top-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px 10px 20px;
+
+        .title {
+            font-weight: 700;
+        }
+
+        .date {
+            font-size: 14px;
+            color: $yellow;
+        }
+    }
+
+    .mid-row {
+        padding: 0 20px;
+
+        .type {
+            font-size: 12px;
+            border-radius: 5px;
+            font-weight: 700;
+            margin-right: 10px;
+            padding: 8px 12px;
+            display: inline-block;
+
+            &.green {
+                background-color: $green;
+            }
+
+            &.red {
+                background-color: $red;
+            }
+        }
+    }
+
+    .bottom-row {
+        background-color: $countryBg;
+        margin-top: 20px;
+        padding: 8px 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.nav-item {
+    cursor: pointer;
+}
+
+
+.full-page.form-holder {
+    position: relative;
+    background-color: $darkBg;
+    padding-bottom: 68px;
+    z-index: 0;
+
+    .form-bg {
+        width: 100%;
+        max-width: 100%;
+        background: none;
+        max-height: 100%;
+        padding: 0;
+    }
+
+    .close-icon,
+    .right-text {
+        display: none;
+    }
+
+    .mes-paris-data {
+        .mid-row .type {
+            font-size: 16px;
+        }
+
+        .top-row {
+            flex-direction: column-reverse;
+            align-items: start;
+        }
+    }
+
+    .nav-link {
+        font-size: 16px;
+    }
+
+    .date {
+        padding-bottom: 10px;
+    }
+}

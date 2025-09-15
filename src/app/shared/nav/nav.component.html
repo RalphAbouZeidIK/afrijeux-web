@@ -1,0 +1,18 @@
+<div class="nav-holder {{ parentClass }}">
+    <ul class="nav justify-content-center">
+        <li *ngFor="let navItem of fullMenu" class="nav-item" routerLinkActive="active" #parentRla="routerLinkActive">
+            <a class="nav-link" [routerLink]="[navItem.path]" routerLinkActive="active">
+                {{ navItem.title }}
+            </a>
+            <ul class="nav justify-content-center sub-nav-holder"
+                *ngIf="navItem.children?.length">
+                <li *ngFor="let child of navItem.children" class="nav-item">
+                    <a class="nav-link" [routerLink]="[child.path]" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }">
+                        {{ child.title }}
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

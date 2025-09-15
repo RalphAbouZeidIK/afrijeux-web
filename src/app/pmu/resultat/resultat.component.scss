@@ -1,0 +1,208 @@
+@use '/src/variables' as *;
+
+
+.reunion-infos,
+.country-label,
+.course-item {
+    display: flex;
+    background-color: $lightBg;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: normal;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+
+
+
+    h3 {
+        margin-bottom: 0;
+        font-weight: 700;
+        text-transform: capitalize;
+    }
+}
+
+.reunion-infos {
+    padding: 10px;
+
+    h3 {
+        font-size: 16px;
+    }
+
+    &::before {
+        content: "";
+        width: 13px;
+        height: 7px;
+        flex-shrink: 0;
+        position: absolute;
+        background-image: url(/assets/images/arrow-down.svg);
+        top: 25px;
+        right: 25px;
+        transition: all 0.2s;
+    }
+
+    .greenSquare {
+        min-width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        background: $green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+    }
+
+}
+
+.country-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 17px 10px;
+
+    &::before {
+        content: "";
+        width: 13px;
+        height: 7px;
+        flex-shrink: 0;
+        position: absolute;
+        background-image: url(/assets/images/arrow-down.svg);
+        top: 25px;
+        right: 25px;
+        transition: all 0.2s;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .flag {
+        height: 14px;
+        display: block;
+        margin-right: 10px;
+    }
+}
+
+.course-item {
+    padding: 15px 10px;
+    justify-content: space-between;
+    cursor: default;
+
+    .item {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            padding-bottom: 10px;
+            font-weight: 700;
+            width: 350px;
+        }
+
+        .time {
+            color: $yellow;
+            font-size: 14px;
+
+
+        }
+
+        &.non-partant {
+            font-size: 14px;
+            color: $lightGrey;
+        }
+
+        .value {
+            font-size: 16px;
+            color: $white;
+            margin-top: 10px;
+        }
+
+
+    }
+
+    .label-values {
+        width: 290px;
+        justify-content: flex-end;
+
+        .result-item {
+
+            display: flex;
+
+            &:not(:last-of-type) {
+                margin-bottom: 10px;
+            }
+        }
+
+        .horse-number {
+            width: 55px;
+            height: 50px;
+            border-radius: 5px;
+            background-color: $darkBg;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 3px;
+        }
+    }
+}
+
+.reunion-item {
+    display: block;
+
+    &.active {
+        .reunion-infos {
+            &::before {
+                transform: rotate(-180deg);
+            }
+        }
+
+        .courses-list {
+            display: block;
+        }
+    }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+}
+
+
+@media all and (max-width:992px) {
+    .course-item {
+        display: block;
+
+        .item {
+            flex-direction: column-reverse;
+            margin-bottom: 10px;
+
+            .value {
+                margin-top: 0;
+                margin-left: 10px;
+            }
+
+            .time {
+                padding-bottom: 7px;
+            }
+
+            &.non-partant {
+                align-items: center;
+                flex-direction: row;
+            }
+
+        }
+
+        .label-values {
+            justify-content: flex-start;
+        }
+
+    }
+
+}

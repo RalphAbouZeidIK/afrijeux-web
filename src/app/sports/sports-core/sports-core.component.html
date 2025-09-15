@@ -1,0 +1,14 @@
+<div class="body-holder sports-betting">
+    <div class="container-fluid page-holder">
+        <aside>
+            <app-sports-list [selectedFilters]="selectedFilters"></app-sports-list>
+        </aside>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+        <aside class="cart">
+            <app-sbcart></app-sbcart>
+        </aside>
+    
+    </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="cart-container" (window:resize)="onResize($event)" [ngClass]="{'show-cart':showOnClickMobile}">
+    <!-- <div class="overlay" (click)="hideMenus()"></div> -->
+    <div class="cart-header" (click)="OnclickIsMobile()">
+        <span class="mobileOnly rect-bar"></span>
+        <p class="cart-title">{{'hpb.cart.cartTitle' | translate}}</p>
+        <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
+        <a class="clear-btn" *ngIf="showCartButtons" (click)="clearBets()">{{'hpb.cart.clearAll' | translate}}</a>
+    </div>
+
+    <div class="cart-body-holder" *ngIf="betItem[0]?.showRace">
+
+        <div class="bet-item">
+            <div class="type-container">
+                <div class="type-list ticket-type">
+                    <span class="type">
+                        {{'hpb.cart.ticketType' | translate}}:
+                    </span>
+                    <span class="type">
+                        {{betItem[0].selectedFixedConfig.details}}
+                        <ng-container
+                            *ngIf="betItem[0].selectedFormule && betItem[0].selectedFixedConfig.isAssociatedHorse == 1 && !isParoli">
+                            / {{betItem[0].selectedFormule.name}}
+                        </ng-container>
+                    </span>
+                </div>
+
+                <div class="title-order" *ngIf="!isParoli && !isDouble">
+                    <span class="race-title">
+                        <span>{{betItem[0].name}}</span>
+                    </span>
+                    <div class="bet-options" *ngIf="betItem[0].selectedFixedConfig.isAllOrder == 1">
+                        <div class="checkbox-apple">
+                            <input class="yep" id="check-apple" type="checkbox" [(ngModel)]="isAllOrder"
+                                (ngModelChange)="orderTypeChange($event)">
+                            <label for="check-apple"></label>
+                        </div>
+                        {{'hpb.cart.allOrders' | translate}}
+                    </div>
+                </div>
+
+                <ng-container *ngIf="isParoli || isDouble; else elseBlock">
+                    <div class="type-container paroli-item" *ngFor="let pickItem of betItem">
+                        <span class="race-title">
+                            <span>{{pickItem.name}}</span>
+                        </span>
+
+                        <div class="type-list" *ngIf="pickItem.baseHorses.length > 0">
+                            <span class="type">
+                                {{'hpb.cart.baseHorses' | translate}}
+                            </span>
+                            <span class="list-of-horses">
+                                <ng-container *ngFor="let horse of pickItem.baseHorses;let i = index">
+                                    <span>
+                                        <span class="dash">-</span>
+                                        {{horse.horseName}}
+                                    </span>
+                                </ng-container>
+                            </span>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <div class="type-list" *ngIf="betItem[0].baseHorses.length > 0">
+                        <span class="type">
+                            {{'hpb.cart.baseHorses' | translate}}
+                        </span>
+                        <span class="list-of-horses">
+                            <ng-container *ngFor="let horse of betItem[0].baseHorses;let i = index">
+                                <span>
+                                    <span class="dash">-</span>
+                                    {{(horse.isDummy)?horse.horseNameDisplay:horse.horseName}}
+                                </span>
+                            </ng-container>
+                        </span>
+                    </div>
+
+                    <div class="type-list" *ngIf="betItem[0].associatedHorses.length > 0">
+                        <span class="type">
+                            {{'hpb.cart.associatedHorses' | translate}}
+                        </span>
+                        <span class="list-of-horses">
+                            <ng-container *ngFor="let horse of betItem[0].associatedHorses;let i = index">
+                                <span>
+                                    <span class="dash">-</span>
+                                    {{(horse.isDummy)?horse.horseNameDisplay:horse.horseName}}
+                                </span>
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="inputs-block">
+                <div class="type-list type-multi">
+                    <span class="type">{{'hpb.cart.singlePrice' | translate}}</span>
+                    <span class="choose-quantity">
+                        <input type="number" [(ngModel)]="betItem[0].price" (ngModelChange)="onPriceChange($event)">
+                    </span>
+                </div>
+                <div class="type-list type-multi">
+                    <span class="type">{{'hpb.cart.pickPrice' | translate}}</span>
+                    <span class="choose-quantity">
+                        <input type="number" disabled [value]="betItem[0].price * combinations">
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="btn btn-primary" type="submit" (click)="addBetToTicket(betItem)">{{'hpb.cart.addToTicket' |
+            translate}}</button>
+    </div>
+    <div class="cart-body-holder ticket-body" *ngIf="listOfBets && listOfBets.length > 0">
+        <div class="list-of-bets">
+
+            <div class="bet-item" *ngFor="let betItem of listOfBets">
+                <div class="pick-item" *ngFor="let pickItem of betItem.PickDetails;let i = index">
+
+                    <div class="type-container">
+                        <div class="type-list ticket-type" *ngIf="i == 0">
+                            <a class="close-icon" (click)="removeItemFormSlip(betItem)">
+                                <img src="assets/images/close-icon-grey.svg" />
+                            </a>
+                            <span class="type">
+                                {{'hpb.cart.ticketType' | translate}}:
+                            </span>
+                            <span class="type">
+                                {{pickItem.BetType}}
+                                <ng-container *ngIf="pickItem.FormuleType != '' && betItem.PickDetails.length == 1">
+                                    / {{pickItem.FormuleType}}
+                                </ng-container>
+                            </span>
+                        </div>
+                        <span class="race-title">
+                            <span>{{pickItem.name}}</span>
+                        </span>
+                        <div class="type-list">
+                            <span class="type">
+                                {{'hpb.cart.baseHorses' | translate}}
+                            </span>
+                            <span class="list-of-horses">
+                                {{pickItem.BaseHorsesDisplay}}
+                            </span>
+                        </div>
+
+                        <div class="type-list" *ngIf="pickItem.showAssociatedHorses">
+                            <span class="type">
+                                {{'hpb.cart.associatedHorses' | translate}}
+                            </span>
+                            <span class="list-of-horses">
+                                {{pickItem.AssociatedHorses}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="type-list price-holder">
+                    <span class="type">
+                        {{'hpb.cart.price' | translate}}
+                    </span>
+                    <span class="list-of-horses">
+                        {{betItem.TicketPrice}} KL
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="total-holder" *ngIf="showCartButtons">
+            {{'hpb.cart.ticketPrice' | translate}}: <span>{{(listOfBets.TicketPrice) | number}} KL </span>
+        </div>
+        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons"
+            (click)="issueTicket()">{{'hpb.cart.placeBet' | translate}}</button>
+    </div>
+</div>

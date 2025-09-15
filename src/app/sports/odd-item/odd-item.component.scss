@@ -1,0 +1,32 @@
+
+@use '/src/variables' as *;
+
+.odd-item {
+    text-align: center;
+    padding: 10px;
+    background: $darkBg;
+    border-radius: 5px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    min-height: 100%;
+
+    &.isSelected {
+        background-color: $yellow;
+        color: $darkBg;
+
+        .odd {
+            color: $darkBg
+        }
+    }
+}
+
+.odd {
+    color: $yellow;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+}

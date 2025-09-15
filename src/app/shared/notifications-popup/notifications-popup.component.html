@@ -1,0 +1,7 @@
+<div class="notifications-parent" id="notificationParent">
+    <div class="notificationItem" *ngFor="let notification of list" [ngClass]="{'latest':notification.isLatest}">
+        <div class="notMessage">{{notification.msg}}</div>
+        <img src="assets/images/close-icon.svg" class="close-icon"
+            (click)="removeNotification(notification)" />
+    </div>
+</div>

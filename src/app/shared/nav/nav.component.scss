@@ -1,0 +1,95 @@
+@use '/src/variables' as *;
+
+.nav-holder {
+    margin-bottom: 15px;
+}
+
+.nav {
+    background-color: $lightBg;
+
+    .nav-item {
+        --bs-nav-link-color: $white;
+        --bs-nav-link-hover-color: $white;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .nav-link {
+        padding: 17px 0;
+        display: flex;
+        align-items: center;
+        font-weight: 400;
+        padding-left: 0;
+        padding-right: 0;
+
+        &.active {
+            color: $yellow;
+            font-weight: 700;
+            border-bottom: 2px solid $yellow;
+        }
+    }
+}
+
+.header-nav {
+    margin-bottom: 0;
+
+    >.nav {
+        background-color: transparent;
+
+        .nav-link {
+            padding: 0;
+
+            &.active {
+                border: none
+            }
+        }
+    }
+}
+
+.sub-nav-holder {
+    display: none;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 71px;
+    padding: 15px 0;
+}
+
+.active .sub-nav-holder {
+    display: flex;
+}
+
+@media all and (max-width: 767px) {
+
+    .sub-nav-holder {
+        position: static;
+    }
+
+    .nav {
+        display: block;
+
+        .nav-item {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+
+    .active .sub-nav-holder {
+        display: block;
+    }
+
+    .sub-nav-holder {
+        padding: 10px 15px;
+
+        li {
+            margin-bottom: 5px;
+
+        }
+    }
+
+    .header-nav {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+}

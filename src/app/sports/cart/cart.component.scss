@@ -1,0 +1,356 @@
+@import '/src/variables.scss';
+
+.cart-container {
+    border-radius: 10px;
+    background: $lightBg;
+    overflow: hidden;
+    font-size: 14px;
+    margin-bottom: 25px;
+
+    .btn {
+        width: 100%;
+        border-radius: 0;
+
+    }
+
+    .cart-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 3px solid $yellow;
+    }
+
+    .clear-btn {
+        color: $yellow;
+        font-size: 12px;
+        font-weight: 300;
+        text-decoration-line: underline;
+        cursor: pointer;
+    }
+
+    .cart-title {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .close-icon {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .type-container {
+        background-color: $darkBg;
+        padding-top: 15px;
+    }
+
+    .type-list {
+        font-weight: 700;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        flex-wrap: wrap;
+
+        &.type-multi {
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            .type {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .choose-quantity {
+        border-radius: 5px;
+        background-color: $countryBg;
+        padding: 4px 5px;
+        width: 80px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >span {
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+            color: $white;
+        }
+
+        .minus,
+        .plus {
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+
+    .bet-item {
+        padding: 15px;
+        border-bottom: 1px solid $yellow;
+
+        font-weight: bold;
+    }
+
+    .title-odd {
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .odd {
+        font-weight: bold;
+        color: $yellow;
+        margin-left: auto
+    }
+
+    .ticket-infos {
+        padding: 15px;
+        border-top: 3px solid $yellow;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        align-items: center;
+
+        span:nth-of-type(2) {
+            font-weight: bold;
+        }
+    }
+
+    input {
+        background: transparent;
+        color: $white;
+        border: 1px solid;
+        text-align: center;
+        padding: 6px;
+        border-radius: 5px !important;
+        outline: none;
+        width: 100px;
+    }
+}
+
+.total-holder {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: $yellow;
+    color: $darkBg;
+    border-bottom: 1px solid $darkBg;
+    font-weight: bold;
+}
+
+@media all and (max-width:1400px) {
+
+    .cart-container .cart-header,
+    .cart-container .type-list {
+        padding: 15px 10px;
+    }
+
+    .cart-container .race-title {
+        padding: 0 10px;
+    }
+
+    .total-holder {
+        padding: 10px;
+    }
+}
+
+@media all and (max-width:1200px) {
+    .cart-body-holder {
+        max-height: 0;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+    }
+
+    .show-cart {
+        .cart-body-holder {
+            max-height: 100vh;
+        }
+
+        .clear-btn {
+            width: 58px;
+
+        }
+
+        .yellow-circle {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+    }
+
+    .clear-btn {
+        overflow: hidden;
+        width: 0;
+        -webkit-transition: width 0.5s ease-in-out;
+        -moz-transition: width 0.5s ease-in-out;
+        -ms-transition: width 0.5s ease-in-out;
+        -o-transition: width 0.5s ease-in-out;
+        transition: width 0.5s ease-in-out;
+        white-space: nowrap;
+    }
+
+    .showOnClickMobile {
+        display: none;
+    }
+
+    .list-of-bets {
+        overflow: auto;
+        max-height: 200px;
+    }
+
+    .cart-container {
+        background-color: $white;
+        border-radius: 10px 10px 0 0;
+
+        .cart-header {
+            cursor: pointer;
+            padding: 15px;
+            border-color: $offWhite;
+
+            .rect-bar {
+                height: 4px;
+                border-radius: 4px;
+                width: 43px;
+                background-color: $lightBlue;
+                position: absolute;
+                top: 10px;
+                left: 46%;
+            }
+
+            .yellow-circle {
+                background-color: $yellow;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                color: $darkBg;
+                text-align: center;
+                font-size: 14px;
+                font-weight: 600;
+                padding-top: 3px;
+                margin-left: auto;
+
+                &.mobileOnly {
+                    display: block !important;
+                }
+            }
+        }
+
+        .type-container {
+            background-color: $offWhite;
+        }
+
+        .type-list.type-multi {
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            .type {
+                font-size: 16px;
+            }
+        }
+
+        .choose-quantity {
+            width: 100px;
+            height: 40px;
+            background-color: $offWhite;
+
+            >span {
+                color: $darkBg;
+            }
+        }
+
+        .total-holder {
+            padding: 15px 20px;
+        }
+
+        .btn {
+            padding: 15px 20px;
+        }
+
+        .clear-btn {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .race-title {
+            padding: 0 20px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+
+        .close-icon {
+            margin-right: 0;
+            width: 12px;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .type-list {
+            padding: 10px 20px 15px;
+            color: $darkBg;
+        }
+    }
+
+    .cart-title {
+        color: $darkBg;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+@media all and (max-width:1200px) {
+    .overlay {
+        content: '';
+        height: calc(100vh - 330px);
+        width: 100%;
+        top: 60px;
+        left: 0;
+        position: fixed;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .show-cart .overlay {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .cart-container {
+        margin-bottom: 0;
+        position: fixed;
+        bottom: -55px;
+        left: 12px;
+        width: calc(100% - 24px);
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+
+        * {
+            color: $darkBg
+        }
+
+        &.has-bets {
+            bottom: 0;
+
+        }
+    }
+
+    .cart-container input {
+        border-color: $darkBg;
+        color: $darkBg
+    }
+}

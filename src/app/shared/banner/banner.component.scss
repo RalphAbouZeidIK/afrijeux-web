@@ -1,0 +1,58 @@
+.banner {
+    margin-bottom: 20px;
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px rgba(30, 35, 40, 0.5);
+    overflow: hidden;
+    padding: 26px 35px;
+    border-radius: 10px;
+    .banner-text {
+        h2 {
+            padding-bottom: 0;
+        }
+        .description {
+            font-weight: 300;
+            display: block;
+        }
+        .btn {
+            margin-top: 20px;
+        }
+    }
+    .logo-icon {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        width: 44px;
+        transform: rotate(-20deg);
+    }
+}
+
+@media all and (max-width:767px) {
+    .btn {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        border-radius: 10px 0 0 0;
+    }
+    .banner {
+        position: relative;
+        height: 120px;
+        padding-left: 20px;
+        .logo-icon {
+            top: 12px;
+            right: 10px;
+            width: 22px;
+            transform: initial;
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .banner {
+        display: none;
+        margin-left: -15px;
+        width: calc(100% + 30px);
+        border-radius: 0;
+    }
+}

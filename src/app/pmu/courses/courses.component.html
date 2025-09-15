@@ -1,0 +1,81 @@
+<app-banner title="Parier sur les prochaines courses" backgroundImageUrl="url(/assets/images/banner.jpg)"
+    description="Paris Vicennes - Prix Freia" linkText="Parier" logoSrc="/assets/images/logo.svg"
+    *ngIf="isFullPage"></app-banner>
+
+<div class="courses-main" [ngClass]="{'isFullPage':isFullPage}">
+    <div class="d-flex">
+        <div class="full-page" *ngIf="isFullPage">
+            <div class="reunions-list">
+                <div class="page-header">
+                    <h2>{{ 'hpb.courses.dailyProgram' | translate }}</h2>
+                    <app-datepicker (dateChangeEvent)="onDateChange($event)" parentClass="resulats-page"
+                        [minDate]="today"></app-datepicker>
+                </div>
+                <div class="reunion-items" *ngIf="dataArray && dataArray.length > 0">
+                    <ng-container *ngFor="let reunionItem of dataArray">
+                        <div *ngIf="reunionItem" class="reunion-item" [ngClass]="{'active': reunionItem.isExpanded}">
+                            <div class="reunion-infos" (click)="toggleSub(reunionItem)">
+                                <span class="greenSquare">
+                                    {{reunionItem.reunionCode}}
+                                </span>
+                                <h3>{{reunionItem.reunionCode}}</h3>
+                            </div>
+                            <div class="courses-list" *ngIf="reunionItem.isExpanded">
+                                <div *ngFor="let race of reunionItem.events" class="course-item"
+                                    [ngClass]="{'selected-race': selectedRace === race.id}">
+                                    <div class="square">
+                                        C{{race.raceNumber}}
+                                        <span class="time">{{race.time}}</span>
+                                    </div>
+                                    <app-course-details [courseDetails]="race" [isFullPage]="isFullPage"
+                                        (onEventBet)="eventBetSet($event)"></app-course-details>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="no-data" *ngIf="!dataArray || dataArray.length === 0">
+                    <h5>{{ 'hpb.courses.noRacesAvailable' | translate }}</h5>
+                </div>
+
+            </div>
+        </div>
+        <div class="aside" *ngIf="!isFullPage">
+            <div class="first-level" *ngFor="let type of typesStructure;let i = index" #itemsContainer>
+                <span class="type-label" (click)="toggleSub('first-level')">
+                    {{type.name}}
+                </span>
+                <div class="countries-list">
+                    <div class="country-level" *ngFor="let country of type.countries;let i = index">
+                        <div class="country-label" (click)="toggleSub('country-level')">
+                            <span>{{country.name}}</span>
+                            <span class="flag">
+                                <img [src]="'/assets/images/'+country.name+'.svg'" [alt]="country.name">
+                            </span>
+                        </div>
+                        <div class="reunions-list">
+                            <div *ngFor="let item of dataArray">
+                                <div *ngIf="item" class="reunion-item">
+                                    <h2 (click)="toggleSub('reunion-item')">{{item.ReunionName}}</h2>
+                                    <div class="courses-list">
+                                        <div *ngFor="let race of item.races" class="course-item"
+                                            [ngClass]="{'selected-race': selectedRace === race.id}">
+                                            <div class="square" (click)="getRaceById(item.id,race.id)">
+                                                C{{race.raceNumber}}
+                                                <span class="time">{{race.time}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <app-course-details [courseDetails]="courseDetails" class="courseDetailsWrapper"
+            *ngIf="!isFullPage"></app-course-details> -->
+
+    </div>
+</div>
