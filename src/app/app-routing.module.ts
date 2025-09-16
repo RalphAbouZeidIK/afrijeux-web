@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedGuard } from './shared.guard';
 import { DatePipe } from '@angular/common';
+import { LoginComponent } from './shared/login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'HPBPMU', pathMatch: 'full', data: { showLink: false } },
@@ -37,7 +38,7 @@ const routes: Routes = [
       title: 'routerLinks.appTitle.User',
     }
   },
-
+  { path: 'Login', component: LoginComponent},
 
 ];
 

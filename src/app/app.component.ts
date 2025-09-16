@@ -145,13 +145,13 @@ export class AppComponent implements OnInit, AfterViewInit {
         alert(`Scanned result: ${result}`);
       }
     });
-    const serial = await this.bridge.getSerial();
+    let serial = await this.bridge.getSerial()
     const apiResponse = await this.machineSrv.registerMachine(serial, '1.0.0');
-
-
-    if (!this.isAppRegistered) {
-
+    console.log(apiResponse)
+    if (apiResponse.CommunicationKey) {
+      this.isAppRegistered = true
     }
+
   }
 
   /**

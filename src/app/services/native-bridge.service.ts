@@ -73,21 +73,35 @@ export class NativeBridgeService {
   getSerial(): Promise<string> {
     return new Promise((resolve, reject) => {
       if ((window as any).FlutterChannel?.postMessage) {
+        let sub: any;
+
         // Subscribe once
-        const sub = this.getSerialSource$.subscribe((val) => {
+        sub = this.getSerialSource$.subscribe((val: any) => {
           if (val) {
             resolve(val);
-            sub.unsubscribe();
+
+            // Unsubscribe safely
+            if (sub) {
+              sub.unsubscribe();
+            }
           }
         });
 
         // Ask Flutter
         (window as any).FlutterChannel.postMessage("getSerialNumber");
+
+        // Optional: timeout to reject if Flutter doesn't respond
+        setTimeout(() => {
+          if (sub) sub.unsubscribe();
+          reject("❌ Flutter did not respond in time");
+        }, 5000); // 5 seconds
       } else {
         reject("❌ get serial not supported");
       }
     });
   }
+
+
 
   /** Trigger print from Angular (calls Flutter) */
   print(): void {

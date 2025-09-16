@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { Buffer } from 'buffer';
 import { TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
+import { NativeBridgeService } from './native-bridge.service';
 
 (window as any).Buffer = Buffer;
 declare var require: any;
@@ -21,15 +22,16 @@ declare var require: any;
 export class ApiService {
   private errorHandled: boolean = false;
 
-  machineId = 'B42M001K02400065';
-  encryptionPass = 'dAQ1Rj/cbIQ=';
+  machineId: any = '';
+  encryptionPass = '';
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private userSrv: UserService,
     private translate: TranslateService,
-    public datePipe: DatePipe
+    public datePipe: DatePipe,
+    private bridge: NativeBridgeService
   ) {
     (window as any).onCacheLoaded = (key: string, cachedValue: any) => {
       if (this.cacheCallbacks[key]) {
@@ -169,6 +171,8 @@ export class ApiService {
     }
 
     if (!isNormalApi) {
+      console.log(params);
+      this.machineId = await this.bridge.getSerial()
       params = this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
       console.log(params);
     }
@@ -198,11 +202,18 @@ export class ApiService {
 
     try {
       if (navigator.onLine) {
-        const apiResponse = await firstValueFrom(response);
+        let apiResponse = await firstValueFrom(response);
 
         // Save full API response exactly
-        this.saveToFlutterOfflineCache(cacheKey, apiResponse);
 
+        if (!isNormalApi) {
+          if (apiResponse.encryptedResponse) {
+            apiResponse = this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
+          }
+
+        }
+
+        this.saveToFlutterOfflineCache(cacheKey, apiResponse);
         return apiResponse;
       } else {
         console.warn('⚡ Offline mode: loading from Flutter cache');
@@ -259,9 +270,18 @@ export class ApiService {
     };
   }
 
-  decrypt(base64String: any) {
+  decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
     const xxtea = require('xxtea-node');
-    const decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.encryptionPass)));
+    let decrypted: any;
+    if (isRegisterMachineApi) {
+      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(this.machineId))))
+      
+      this.encryptionPass = JSON.parse(decrypted).CommunicationKey;
+      console.log(`Encryption Pass ${this.encryptionPass}`)
+    }
+    else {
+      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.encryptionPass)));
+    }
     return JSON.parse(decrypted);
   }
 }
