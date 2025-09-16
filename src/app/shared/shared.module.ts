@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 
-import {  NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderInterceptor } from '../loader-inerceptor';
@@ -73,6 +73,7 @@ export const MY_FORMATS = {
     TranslateModule
   ],
   providers: [
+    NgbModalConfig, NgbModal,
     DecimalPipe,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     {

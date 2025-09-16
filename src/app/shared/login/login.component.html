@@ -3,7 +3,7 @@
         <h2 *ngIf="isSignup">{{ 'shared.login.signUpTitle' | translate }}</h2>
         <h2 *ngIf="!isSignup">{{ 'shared.login.loginTitle' | translate }}</h2>
 
-        <a class="close-icon" (click)="hidePopup()">
+        <a class="close-icon" (click)="hidePopup()" *ngIf="!isAndroidApp">
             <img src="assets/images/close-icon.svg" alt="close">
         </a>
 
@@ -16,14 +16,14 @@
             <div class="form-group">
                 <label class="title-label">{{ 'shared.login.password' | translate }}</label>
                 <input type="password" class="form-control" title="password" formControlName="Password" />
-                <p class="text text-end" *ngIf="!isSignup">
+                <p class="text text-end" *ngIf="!isSignup && !isAndroidApp">
                     <a>{{ 'shared.login.forgotPassword' | translate }}</a>
                 </p>
             </div>
         </div>
 
         <!-- Signup form -->
-        <div class="form-content" [formGroup]="signupForm" (keydown)="keyDownFunction($event)" *ngIf="isSignup">
+        <div class=" form-content" [formGroup]="signupForm" (keydown)="keyDownFunction($event)" *ngIf="isSignup">
 
             <div class="form-group">
                 <label class="title-label">{{ 'shared.login.firstName' | translate }}</label>
@@ -142,14 +142,16 @@
             </button>
         </div>
 
-        <p class="text text-center">
+        <p class="text text-center" *ngIf="!isAndroidApp">
             <span *ngIf="!isSignup">
                 {{ 'shared.login.noAccount' | translate }}
-                <a class="underline-word" (click)="swtichToSignUp(true)">{{ 'shared.login.registerHere' | translate }}</a>
+                <a class="underline-word" (click)="swtichToSignUp(true)">{{ 'shared.login.registerHere' | translate
+                    }}</a>
             </span>
             <span *ngIf="isSignup">
                 {{ 'shared.login.alreadyRegistered' | translate }}
-                <a class="underline-word" (click)="swtichToSignUp(false)">{{ 'shared.login.loginHere' | translate }}</a>
+                <a class="underline-word" (click)="swtichToSignUp(false)">{{ 'shared.login.loginHere' | translate
+                    }}</a>
             </span>
         </p>
     </div>

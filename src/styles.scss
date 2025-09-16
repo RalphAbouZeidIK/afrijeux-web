@@ -483,6 +483,10 @@ header {
     }
 }
 
+.modal-content {
+    background-color: $darkBg;
+}
+
 @media all and (max-width:1200px) {
 
     .page-holder {

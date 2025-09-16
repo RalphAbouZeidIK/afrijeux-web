@@ -156,16 +156,4 @@ export class NativeBridgeService {
     }
   }
 
-  isInAndroidWebView(): boolean {
-    // ✅ Check URL query param (most reliable)
-    const params = new URLSearchParams(window.location.search);
-    const viaUrl = params.get('wv') === 'true';
-
-    // ✅ Optional JS flag injected from Flutter WebView
-    const viaInjectedFlag = (window as any)._isAndroidWebView === true;
-
-    console.log(viaInjectedFlag)
-    return viaUrl || viaInjectedFlag;
-  }
-
 }

@@ -6,6 +6,7 @@ import { ageValidator } from 'src/app/ageValidator';
 import { ApiService } from 'src/app/services/api.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { MachineService } from 'src/app/services/machine.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -25,6 +26,8 @@ export class LoginComponent implements OnChanges, OnInit {
 
   signupForm: FormGroup | any;
 
+  isAndroidApp = false
+
 
   constructor(
     private router: Router,
@@ -32,7 +35,8 @@ export class LoginComponent implements OnChanges, OnInit {
     private apiSrv: ApiService,
     private usrSrv: UserService,
     private gnrcSrv: GenericService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private machineSrv: MachineService
   ) {
 
   }
@@ -42,10 +46,11 @@ export class LoginComponent implements OnChanges, OnInit {
   loginForm = new FormGroup({
     UserName: new FormControl('', [Validators.required]),
     Password: new FormControl('', [Validators.required]),
-    ip: new FormControl('10.1.3.254', Validators.required),
+    Ip: new FormControl('10.1.3.254', Validators.required),
   });
 
   ngOnInit(): void {
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.signupForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -104,20 +109,26 @@ export class LoginComponent implements OnChanges, OnInit {
       return
     }
     let loginParams = this.loginForm.value
-    try {
-      const loginResponse = await this.login(loginParams)
-      console.log(loginResponse)
-      if (loginResponse.isSuccess) {
-        this.successfullLogin(loginResponse.userInfo, loginResponse.userInfo.token)
-      }
-      else {
-        this.showErrorMessage = true
-      }
-    } catch (error: any) {
-      if (error.error.status != undefined && error.error.status == 401) {
-        this.showErrorMessage = true
+    if (this.isAndroidApp) {
+      this.machineSrv.loginMachine(loginParams)
+    }
+    else {
+      try {
+        const loginResponse = await this.login(loginParams)
+        console.log(loginResponse)
+        if (loginResponse.isSuccess) {
+          this.successfullLogin(loginResponse.userInfo, loginResponse.userInfo.token)
+        }
+        else {
+          this.showErrorMessage = true
+        }
+      } catch (error: any) {
+        if (error.error.status != undefined && error.error.status == 401) {
+          this.showErrorMessage = true
+        }
       }
     }
+
   }
 
   async submitSignUp() {

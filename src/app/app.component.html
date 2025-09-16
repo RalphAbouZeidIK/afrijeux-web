@@ -13,8 +13,9 @@
     (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
 </ng-container>
 
-<ng-container *ngIf="isAndroidApp && isAppRegistered">
+<ng-container *ngIf="isAndroidApp">
   <div class="body-holder">
-    
+    <router-outlet></router-outlet>
   </div>
 </ng-container>
+

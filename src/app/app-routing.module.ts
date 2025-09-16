@@ -38,7 +38,14 @@ const routes: Routes = [
       title: 'routerLinks.appTitle.User',
     }
   },
-  { path: 'Login', component: LoginComponent},
+  {
+    path: 'Machine',
+    loadChildren: () => import('./machine/machine.module').then(m => m.MachineModule),
+    data: {
+      breadcrumb: 'Machine',
+      title: 'routerLinks.appTitle.Machine',
+    }
+  }
 
 ];
 

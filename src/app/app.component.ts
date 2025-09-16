@@ -7,8 +7,6 @@ import { LoaderService } from './services/loader-service.service';
 import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PageTitleService } from './services/page-title.service';
-import { NativeBridgeService } from './services/native-bridge.service';
-import { MachineService } from './services/machine.service';
 
 @Component({
   selector: 'app-root',
@@ -19,14 +17,13 @@ import { MachineService } from './services/machine.service';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'PMU';
   isFullwidth = false
-  scanned = '';
   /**
    * Subscribe to login status
    */
-  loginStatusSubscription: Subscription;
+  loginStatusSubscription: Subscription | any;
 
 
-  loginPopupStatusSubscription: Subscription;
+  loginPopupStatusSubscription: Subscription | any;
 
   /**
    * Flag to check if user is logged in
@@ -51,9 +48,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   notificationsList: any = []
   scannedResult: any = '';
 
-  isAndroidApp = this.bridge.isInAndroidWebView()
+  isAndroidApp = false
 
-  isAppRegistered = false
 
   constructor(
     private translate: TranslateService,
@@ -62,97 +58,74 @@ export class AppComponent implements OnInit, AfterViewInit {
     private loaderService: LoaderService,
     private changeDetectorRef: ChangeDetectorRef,
     private gnrcSrv: GenericService,
-    private pageTitleService: PageTitleService,
-    private bridge: NativeBridgeService,
-    private machineSrv: MachineService
+    private pageTitleService: PageTitleService
   ) {
 
 
     translate.setDefaultLang('en');
     translate.use('en');
 
-    this.isLoggedIn = this.usrSrv.isUserLoggedIn();
-    this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
-      this.isLoggedIn = loggedIn;
-      this.getMenuItems()
-    });
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
 
-    this.loginPopupStatusSubscription = this.usrSrv.getLoginPopupStatus().subscribe((data) => {
-      console.log(data)
-      this.loginObject = data
-    });
-    console.log(this.isLoggedIn)
+    if (!this.isAndroidApp) {
+      this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+      this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
+        this.isLoggedIn = loggedIn;
+        this.getMenuItems()
+      });
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
-        if ((event.url == '/resultat') || (event.url == '/comment-parier')) {
-          this.isFullwidth = true
-        } else {
-          this.isFullwidth = false
+      this.loginPopupStatusSubscription = this.usrSrv.getLoginPopupStatus().subscribe((data) => {
+        console.log(data)
+        this.loginObject = data
+      });
+      console.log(this.isLoggedIn)
+
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
+          if ((event.url == '/resultat') || (event.url == '/comment-parier')) {
+            this.isFullwidth = true
+          } else {
+            this.isFullwidth = false
+          }
         }
-      }
-    });
+      });
 
-    this.usrSrv.$notifyUsers().subscribe((event: any) => {
-      this.notificationsList.push({
-        msg: event.message,
-        isLatest: false,
-        id: Date.now(),
-        type: event.type
-      })
-      setTimeout(() => {
-        this.notificationsList[this.notificationsList.length - 1].isLatest = true
-      }, 100);
+      this.usrSrv.$notifyUsers().subscribe((event: any) => {
+        this.notificationsList.push({
+          msg: event.message,
+          isLatest: false,
+          id: Date.now(),
+          type: event.type
+        })
+        setTimeout(() => {
+          this.notificationsList[this.notificationsList.length - 1].isLatest = true
+        }, 100);
 
-      setTimeout(() => {
-        if (this.notificationsList.length > 0) {
-          this.notificationsList[0].isLatest = false
-          setTimeout(() => {
-            this.notificationsList.splice(0, 1)
-          }, 500);
+        setTimeout(() => {
+          if (this.notificationsList.length > 0) {
+            this.notificationsList[0].isLatest = false
+            setTimeout(() => {
+              this.notificationsList.splice(0, 1)
+            }, 500);
 
-        }
-      }, 10000);
-    });
-
+          }
+        }, 10000);
+      });
+    }
   }
 
 
   ngOnInit(): void {
-    //this.getMachineData()
-    if (this.isAndroidApp) {
-      this.getMachineData()
-    }
-
-    this.isLoggedIn = this.usrSrv.isUserLoggedIn();
-    this.getMenuItems()
-    this.pageTitleService.init();
-    console.log(navigator.userAgent);
-  }
-
-  async getMachineData() {
-
-    this.bridge.scanResult$.subscribe((result) => {
-      if (result) {
-        this.scanned = result;
-      }
-    });
-
-    this.bridge.scanResult$.subscribe(result => {
-      this.scannedResult = result;
-      if (result) {
-        alert(`Scanned result: ${result}`);
-      }
-    });
-    let serial = await this.bridge.getSerial()
-    const apiResponse = await this.machineSrv.registerMachine(serial, '1.0.0');
-    console.log(apiResponse)
-    if (apiResponse.CommunicationKey) {
-      this.isAppRegistered = true
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    if (!this.isAndroidApp) {
+      this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+      this.getMenuItems()
+      this.pageTitleService.init();
     }
 
   }
+
 
   /**
    * Set loading flag after the view init
@@ -243,11 +216,4 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.translate.use('fr');
   }
 
-  onScan() {
-    this.bridge.requestScan();
-  }
-
-  onPrint() {
-    this.bridge.print();
-  }
 }

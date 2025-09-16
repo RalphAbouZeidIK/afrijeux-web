@@ -30,6 +30,10 @@ export class GenericService {
     return path
   }
 
+  isMachineApp(){
+    return this.getFirstPathName() == 'Machine'
+  }
+
   /**
    * Get url's first path
    * @returns 
