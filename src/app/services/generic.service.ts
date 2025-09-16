@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GenericService {
 
-  constructor(private apiSrv: ApiService, private usrSrv: UserService) { }
+  constructor(private apiSrv: ApiService, private usrSrv: UserService, private router: Router) { }
 
   getFormattedToday() {
     const date = new Date();
@@ -30,8 +31,9 @@ export class GenericService {
     return path
   }
 
-  isMachineApp(){
-    return this.getFirstPathName() == 'Machine'
+  isMachineApp() {
+    const currentUrl: any = window.location.href;
+    return currentUrl.includes('Machine') || (!navigator.onLine)
   }
 
   /**
@@ -119,7 +121,7 @@ export class GenericService {
     let params = {
       Language: 'en',
     }
-    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'GET',{})
+    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'GET', {})
     return apiResponse
   }
 

@@ -59,9 +59,8 @@ export class ApiService {
     }
   }
 
-  private generateCacheKey(subRoute: string, apiRoute: string, params: any, method: string) {
-    const canonicalParams = this.canonicalizeParams(params);
-    return `${method}:${subRoute}/${apiRoute}:${JSON.stringify(canonicalParams)}`;
+  private generateCacheKey(subRoute: string, apiRoute: string, method: string) {
+    return `${method}:${subRoute}/${apiRoute}`;
   }
 
   private canonicalizeParams(obj: any): any {
@@ -118,6 +117,7 @@ export class ApiService {
   private cacheCallbacks: Record<string, (value: any) => void> = {};
 
   private async getFromFlutterOfflineCache(key: string): Promise<any | null> {
+    console.log('🔍 Requesting from Flutter OfflineCache:', key);
     return new Promise((resolve) => {
       // Store the callback by cache key
       this.cacheCallbacks[key] = (cachedValue: any) => {
@@ -197,7 +197,7 @@ export class ApiService {
         break;
     }
 
-    const cacheKey = this.generateCacheKey(subRoute, apiRoute, params, method);
+    const cacheKey = this.generateCacheKey(subRoute, apiRoute, method);
     console.log('Cache key:', cacheKey);
 
     try {
@@ -216,7 +216,7 @@ export class ApiService {
         this.saveToFlutterOfflineCache(cacheKey, apiResponse);
         return apiResponse;
       } else {
-        console.warn('⚡ Offline mode: loading from Flutter cache');
+        console.warn('⚡ Offline mode: loading from Flutter cache', cacheKey);
         const cachedData = await this.getFromFlutterOfflineCache(cacheKey);
         console.log('CACHED DATA HERE:', cachedData);
         if (cachedData) return cachedData; // already parsed to JS object
@@ -275,7 +275,7 @@ export class ApiService {
     let decrypted: any;
     if (isRegisterMachineApi) {
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(this.machineId))))
-      
+
       this.encryptionPass = JSON.parse(decrypted).CommunicationKey;
       console.log(`Encryption Pass ${this.encryptionPass}`)
     }
