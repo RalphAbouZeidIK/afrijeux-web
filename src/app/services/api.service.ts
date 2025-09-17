@@ -33,12 +33,7 @@ export class ApiService {
     public datePipe: DatePipe,
     private bridge: NativeBridgeService
   ) {
-    (window as any).onCacheLoaded = (key: string, cachedValue: any) => {
-      if (this.cacheCallbacks[key]) {
-        this.cacheCallbacks[key](cachedValue);
-        delete this.cacheCallbacks[key]; // cleanup
-      }
-    };
+    
   }
 
   private handleError(error: any) {
@@ -59,103 +54,6 @@ export class ApiService {
     }
   }
 
-  private generateCacheKey(subRoute: string, apiRoute: string, method: string) {
-    return `${method}:${subRoute}/${apiRoute}`;
-  }
-
-  private canonicalizeParams(obj: any): any {
-    if (obj === null || obj === undefined) return null;
-    if (Array.isArray(obj)) return obj.map(v => this.canonicalizeParams(v));
-    if (typeof obj === 'object') {
-      const sorted: any = {};
-      Object.keys(obj)
-        .sort()
-        .forEach(k => {
-          if (obj[k] !== undefined) {
-            sorted[k] = this.canonicalizeParams(obj[k]);
-          }
-        });
-      return sorted;
-    }
-    // convert numbers to string consistently if needed
-    return obj;
-  }
-
-
-  /** Recursively sort object properties alphabetically */
-  private sortObject(obj: any): any {
-    if (obj === null || typeof obj !== 'object') return obj;
-    if (Array.isArray(obj)) return obj.map((v) => this.sortObject(v));
-
-    return Object.keys(obj)
-      .sort()
-      .reduce((res, key) => {
-        res[key] = this.sortObject(obj[key]);
-        return res;
-      }, {} as any);
-  }
-
-
-  private saveToFlutterOfflineCache(key: string, data: any) {
-    try {
-      if ((window as any).OfflineCache) {
-        const message = {
-          action: 'save',
-          key: key,
-          value: JSON.stringify(data) // send raw API response as JSON string
-        };
-        (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        console.log('✅ Sent data to Flutter OfflineCache:', key);
-      } else {
-        console.warn('⚠️ OfflineCache channel not found');
-      }
-    } catch (err) {
-      console.error('❌ Error sending to OfflineCache', err);
-    }
-  }
-
-  private cacheCallbacks: Record<string, (value: any) => void> = {};
-
-  private async getFromFlutterOfflineCache(key: string): Promise<any | null> {
-    console.log('🔍 Requesting from Flutter OfflineCache:', key);
-    return new Promise((resolve) => {
-      // Store the callback by cache key
-      this.cacheCallbacks[key] = (cachedValue: any) => {
-        resolve(cachedValue ? JSON.parse(cachedValue) : null);
-        delete this.cacheCallbacks[key]; // cleanup
-      };
-
-      if ((window as any).OfflineCache) {
-        (window as any).OfflineCache.postMessage(
-          JSON.stringify({ action: 'get', key })
-        );
-      } else {
-        console.warn('⚠️ OfflineCache channel not found');
-        resolve(null);
-      }
-    });
-  }
-
-  public GetMachineDefaultKey(MachineSerial: string): string {
-    const FirstStatKey = "Q1W2E3R4T5Y6U7I8O9P0A1S2D3F4G5H6J7K8L9Z0X1C2V3B4N5M6";
-    let key = "";
-
-    // In JS/TS, use split('') instead of toCharArray()
-    const serialList = MachineSerial.split('');
-    const firstStatList = FirstStatKey.split('');
-
-    for (let i = 0; i < serialList.length; i++) {
-      key += firstStatList[i] + serialList[i];
-    }
-
-    // In JS/TS, string has .length property, not length()
-    key = (key.length > 6) ? key.substring(0, 6) : key;
-    console.log("Machine Default Key: " + key);
-    return key;
-
-  }
-
-
 
   async makeApi(
     subRoute: string,
@@ -170,12 +68,6 @@ export class ApiService {
       return;
     }
 
-    if (!isNormalApi) {
-      console.log(params);
-      this.machineId = await this.bridge.getSerial()
-      params = this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
-      console.log(params);
-    }
 
     const apiEndPoint = `${environment.BaseUrl}${environment.gcSrv}${subRoute}/${apiRoute}`;
     console.log(apiEndPoint);
@@ -197,31 +89,10 @@ export class ApiService {
         break;
     }
 
-    const cacheKey = this.generateCacheKey(subRoute, apiRoute, method);
-    console.log('Cache key:', cacheKey);
 
     try {
-      if (navigator.onLine) {
-        let apiResponse = await firstValueFrom(response);
-
-        // Save full API response exactly
-
-        if (!isNormalApi) {
-          if (apiResponse.encryptedResponse) {
-            apiResponse = this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
-          }
-
-        }
-
-        this.saveToFlutterOfflineCache(cacheKey, apiResponse);
-        return apiResponse;
-      } else {
-        console.warn('⚡ Offline mode: loading from Flutter cache', cacheKey);
-        const cachedData = await this.getFromFlutterOfflineCache(cacheKey);
-        console.log('CACHED DATA HERE:', cachedData);
-        if (cachedData) return cachedData; // already parsed to JS object
-        throw new Error('No cached data available');
-      }
+      let apiResponse = await firstValueFrom(response);
+      return apiResponse;
     } catch (error) {
       this.handleError(error);
       throw error;
@@ -229,59 +100,5 @@ export class ApiService {
 
   }
 
-  encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
-    let timeStamp = this.datePipe.transform(new Date(), 'MM/dd/yyyy HH:mm:ss')
-    console.log(objectToEncrypt)
-    objectToEncrypt = JSON.stringify(objectToEncrypt);
-    const xxtea = require('xxtea-node');
-    let encryptData: any;
-    if (isRegisterMachineApi) {
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(this.machineId)));
-    }
-    else {
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.encryptionPass));
-    }
 
-
-    const uint8Array = new Uint8Array(encryptData);
-    let binaryString = '';
-    for (let i = 0; i < uint8Array.length; i++) {
-      binaryString += String.fromCharCode(uint8Array[i]);
-    }
-
-    const base64String = btoa(binaryString);
-
-    return {
-      body: {
-        machine: this.machineId,
-        timeStamp: timeStamp,
-        encryptedRequestDTO: base64String,
-        geolocation: {
-          latitude: "0",
-          longitude: "0",
-          timeStamp: timeStamp
-        },
-        ip: null,
-        culture: null,
-        machineCode: null,
-        currency: null,
-        amount: null
-      },
-    };
-  }
-
-  decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
-    const xxtea = require('xxtea-node');
-    let decrypted: any;
-    if (isRegisterMachineApi) {
-      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(this.machineId))))
-
-      this.encryptionPass = JSON.parse(decrypted).CommunicationKey;
-      console.log(`Encryption Pass ${this.encryptionPass}`)
-    }
-    else {
-      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.encryptionPass)));
-    }
-    return JSON.parse(decrypted);
-  }
 }
