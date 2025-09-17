@@ -114,6 +114,9 @@ export class LoginComponent implements OnChanges, OnInit {
       if (respoonse.status == false) {
         this.machineSrv.setModalData(true, false, respoonse.message)
       }
+      else{
+        this.router.navigate(['Machine/PMUHybrid/Courses'])
+      }
       console.log(respoonse)
     }
     else {

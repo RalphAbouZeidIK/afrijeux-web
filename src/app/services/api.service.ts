@@ -33,7 +33,7 @@ export class ApiService {
     public datePipe: DatePipe,
     private bridge: NativeBridgeService
   ) {
-    
+
   }
 
   private handleError(error: any) {
@@ -73,9 +73,9 @@ export class ApiService {
     console.log(apiEndPoint);
 
     let headers = new HttpHeaders();
-    if (this.userSrv.getUserToken()) {
-      headers = headers.append('Authorization', `Bearer ${this.userSrv.getUserToken()}`);
-    }
+
+    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTgxMTAxNDgsImV4cCI6MTc1ODEyMDk0OCwiaWF0IjoxNzU4MTEwMTQ4fQ.Hyik4WZ2qQQCmnP8UsCSGz62HoafFEO_846v5reJsQ4`);
+
 
     const httpOptions = { headers, params: params.query || {} };
     let response: Observable<any>;

@@ -15,6 +15,7 @@ export class MachineService {
   machineId: any;
   machineData: any;
   encryptionPass = '';
+  userData: any;
   /** modal status subscriber */
   private openModal$ = new Subject();
 
@@ -200,6 +201,9 @@ export class MachineService {
       // Save full API response exactly
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       this.saveToFlutterOfflineCache(cacheKey, apiResponse);
+      if (apiRoute === 'LoginMachine') {
+        this.saveToFlutterOfflineCache('user_data', apiResponse);
+      }
     }
     else {
       console.warn('⚡ Offline mode: loading from Flutter cache');
@@ -210,13 +214,10 @@ export class MachineService {
       apiResponse = this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
       return apiResponse;
     }
-    
+
     else {
       return { status: false, message: 'No internet connection and no cached data available.' };
     }
-
-
-
   }
 
   async registerMachine() {
@@ -248,8 +249,26 @@ export class MachineService {
 
     console.log(params)
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
+    this.userData = apiResponse
     console.log(apiResponse)
     return apiResponse;
+  }
+
+  async getGameEvents() {
+    //let gameObject = await this.getGame()
+    let userData = await this.getFromFlutterOfflineCache('user_data')
+    userData = this.decrypt(userData.encryptedResponse, false)
+    console.log(userData)
+    let params: any = {
+      PersonId: userData.PersonId,
+      GameId: 28,
+      GameConfiguration: [],
+      TimeStamp: new Date().toISOString(),
+      UserOnlineStatus: true
+    }
+
+    let gameEventsResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/GetEventConfiguration`, 'POST', params)
+    return gameEventsResponse
   }
 
 }

@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { race, Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
+import { GenericService } from 'src/app/services/generic.service';
+import { MachineService } from 'src/app/services/machine.service';
 
 @Component({
-    selector: 'app-courses',
-    templateUrl: './courses.component.html',
-    styleUrls: ['./courses.component.scss'],
-    standalone: false
+  selector: 'app-courses',
+  templateUrl: './courses.component.html',
+  styleUrls: ['./courses.component.scss'],
+  standalone: false
 })
 export class CoursesComponent implements OnInit, AfterViewInit {
 
@@ -57,10 +59,14 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
   countryCode = 'Bey'
 
+  isAndroidApp = false
+
   constructor(
     private router: Router,
     private gamesSrv: GamesService,
-    private cartSrv: CartService
+    private cartSrv: CartService,
+    private gnrcSrv: GenericService,
+    private machineSrv: MachineService,
   ) {
     this.cartSubscription = this.cartSrv.getEventFromCart().subscribe((data) => {
       this.getGameEvents()
@@ -74,6 +80,7 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
 
     const currentUrl = this.router.url;
     if (currentUrl.includes('courses-francaises') || currentUrl.includes('courses-libanaises')) {
@@ -95,7 +102,7 @@ export class CoursesComponent implements OnInit, AfterViewInit {
   }
 
   async getRaceById(reunionId: any, raceId: any) {
-  
+
   }
 
   /**
@@ -107,18 +114,36 @@ export class CoursesComponent implements OnInit, AfterViewInit {
   }
 
   async getGameEvents() {
-    let gameEventsResponse = await this.gamesSrv.getGameEvents(this.date, this.countryCode)
-    console.log(gameEventsResponse)
+    let gameEventsResponse: any
 
-    this.dataArray = gameEventsResponse.eventConfiguration
-    if (this.dataArray) {
-      this.dataArray.forEach((reunionItem: any) => {
-        reunionItem.events.forEach((raceItem: any) => {
+    if (this.isAndroidApp) {
+      gameEventsResponse = await this.machineSrv.getGameEvents()
+      this.dataArray = gameEventsResponse.GameConfiguration.EventConfiguration
+      if (this.dataArray) {
+        this.dataArray.forEach((raceItem: any) => {
           this.getEventConfig(raceItem)
         });
-      });
 
+      }
     }
+    else {
+      gameEventsResponse = await this.gamesSrv.getGameEvents(this.date, this.countryCode)
+      this.dataArray = gameEventsResponse.eventConfiguration
+      if (this.dataArray) {
+        this.dataArray.forEach((reunionItem: any) => {
+          reunionItem.events.forEach((raceItem: any) => {
+            this.getEventConfig(raceItem)
+          });
+        });
+
+      }
+    }
+
+    console.log(gameEventsResponse)
+    console.log(this.dataArray)
+
+
+
 
     console.log(this.dataArray)
   }
@@ -179,10 +204,10 @@ export class CoursesComponent implements OnInit, AfterViewInit {
         if ((raceItem.gameEventId != event.gameEventId) || (event.selectedFixedConfig == null)) {
           this.resetEventData(raceItem, true)
         }
-        else{
+        else {
           this.resetEventData(event, false)
         }
-       
+
       });
     });
     console.log(event)
