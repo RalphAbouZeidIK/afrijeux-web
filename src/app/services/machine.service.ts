@@ -3,6 +3,7 @@ import { ApiService } from './api.service';
 import { NativeBridgeService } from './native-bridge.service';
 import { DatePipe } from '@angular/common';
 import { Buffer } from 'buffer';
+import { Subject, Observable } from 'rxjs';
 
 declare var require: any;
 (window as any).Buffer = Buffer;
@@ -14,6 +15,9 @@ export class MachineService {
   machineId: any;
   machineData: any;
   encryptionPass = '';
+  /** modal status subscriber */
+  private openModal$ = new Subject();
+
   constructor(
     private apiSrv: ApiService,
     private bridge: NativeBridgeService,
@@ -25,6 +29,24 @@ export class MachineService {
         delete this.cacheCallbacks[key]; // cleanup
       }
     };
+  }
+
+
+  setModalData(openModal: boolean, success: boolean, messageCode: string) {
+    let modalStatus = {
+      openModal: openModal,
+      success: success,
+      msgCode: messageCode
+    }
+    this.setModalStatus(modalStatus)
+  }
+
+  getModalStatus(): Observable<any> {
+    return this.openModal$;
+  }
+
+  setModalStatus(status: any) {
+    this.openModal$.next(status);
   }
 
   encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
@@ -48,10 +70,9 @@ export class MachineService {
     }
 
     const base64String = btoa(binaryString);
-
-    return {
+    console.log({
       body: {
-        machine: this.machineId,
+        machine: (isRegisterMachineApi) ? this.machineId : this.machineData?.MachineId,
         timeStamp: timeStamp,
         encryptedRequestDTO: base64String,
         geolocation: {
@@ -61,11 +82,29 @@ export class MachineService {
         },
         ip: null,
         culture: null,
-        machineCode: null,
+        machineCode: (isRegisterMachineApi) ? null : this.machineData?.MachineCode,
+        currency: null,
+        amount: null
+      },
+    })
+    return {
+      body: {
+        machine: (isRegisterMachineApi) ? this.machineId : this.machineData?.MachineId.toString(),
+        timeStamp: timeStamp,
+        encryptedRequestDTO: base64String,
+        geolocation: {
+          latitude: "0",
+          longitude: "0",
+          timeStamp: timeStamp
+        },
+        ip: null,
+        culture: null,
+        machineCode: (isRegisterMachineApi) ? null : this.machineData?.MachineCode,
         currency: null,
         amount: null
       },
     };
+
   }
 
   public GetMachineDefaultKey(MachineSerial: string): string {
@@ -121,28 +160,12 @@ export class MachineService {
     }
   }
 
-  private generateCacheKey(subRoute: string, apiRoute: string, method: string) {
-    console.log('Generating cache key with:', { subRoute, apiRoute, method });
-    return `${method}:${subRoute}/${apiRoute}`;
-  }
+  private generateCacheKey(subRoute: string, apiRoute: string, method: string, params: any) {
+    const normalizedParams = { ...params };
+    delete normalizedParams.TimeStamp; // remove volatile field(s)
 
-
-  private canonicalizeParams(obj: any): any {
-    if (obj === null || obj === undefined) return null;
-    if (Array.isArray(obj)) return obj.map(v => this.canonicalizeParams(v));
-    if (typeof obj === 'object') {
-      const sorted: any = {};
-      Object.keys(obj)
-        .sort()
-        .forEach(k => {
-          if (obj[k] !== undefined) {
-            sorted[k] = this.canonicalizeParams(obj[k]);
-          }
-        });
-      return sorted;
-    }
-    // convert numbers to string consistently if needed
-    return obj;
+    console.log('Normalized params:', normalizedParams);
+    return `${method}:${subRoute}/${apiRoute}/${JSON.stringify(normalizedParams)}`;
   }
 
   private cacheCallbacks: Record<string, (value: any) => void> = {};
@@ -167,7 +190,7 @@ export class MachineService {
   }
 
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
-    const cacheKey = this.generateCacheKey(subRoute, apiRoute, method);
+    const cacheKey = this.generateCacheKey(subRoute, apiRoute, method, params);
     params = this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
     console.log('Cache key here:', cacheKey);
 
@@ -183,11 +206,16 @@ export class MachineService {
       apiResponse = await this.getFromFlutterOfflineCache(cacheKey);
     }
 
-    if (apiResponse.encryptedResponse) {
+    if (apiResponse?.encryptedResponse) {
       apiResponse = this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
+      return apiResponse;
+    }
+    
+    else {
+      return { status: false, message: 'No internet connection and no cached data available.' };
     }
 
-    return apiResponse;
+
 
   }
 
@@ -219,8 +247,8 @@ export class MachineService {
     }
 
     console.log(params)
-
-    const apiResponse = await this.apiSrv.makeApi('GameCooksAuth', 'LoginMachine', 'POST', params, false)
+    let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
+    console.log(apiResponse)
     return apiResponse;
   }
 

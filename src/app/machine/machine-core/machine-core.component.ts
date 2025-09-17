@@ -25,11 +25,13 @@ export class MachineCoreComponent implements OnInit {
     private machineSrv: MachineService
   ) { }
 
+
+
   showPopup() {
-    this.openModal = true;
-    setTimeout(() => {
-      this.openModal = false;
-    }, 5000);
+    this.machineSrv.setModalData(true, false, this.description)
+    // setTimeout(() => {
+    //   this.machineSrv.setModalData(false, false, 'ErrorSuccessMessages.Unothorized')
+    // }, 5000);
   }
 
   closePopup() {
@@ -54,7 +56,7 @@ export class MachineCoreComponent implements OnInit {
         alert(`Scanned result: ${result}`);
       }
     });
-    
+
     const apiResponse = await this.machineSrv.registerMachine();
     console.log(apiResponse)
     if (apiResponse.CommunicationKey) {

@@ -1,6 +1,6 @@
 <div class="container-fluid page-holder">
     <main class="main">
         <router-outlet *ngIf="isAppRegistered"></router-outlet>
-        <app-popup #popup [title]="title" [description]="description" [isModalOpen]="openModal"></app-popup>
+        <app-modal></app-modal>
     </main>
 </div>

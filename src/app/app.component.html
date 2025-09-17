@@ -8,7 +8,7 @@
   </div>
 
 
-  <app-loader *ngIf="isLoading"></app-loader>
+  
 
   <app-notifications-popup [list]="notificationsList" *ngIf="isLoggedIn"
     (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
@@ -20,3 +20,4 @@
   </div>
 </ng-container>
 
+<app-loader *ngIf="isLoading"></app-loader>

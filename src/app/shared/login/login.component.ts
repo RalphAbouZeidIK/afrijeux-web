@@ -110,7 +110,11 @@ export class LoginComponent implements OnChanges, OnInit {
     }
     let loginParams = this.loginForm.value
     if (this.isAndroidApp) {
-      this.machineSrv.loginMachine(loginParams)
+      let respoonse = await this.machineSrv.loginMachine(loginParams)
+      if (respoonse.status == false) {
+        this.machineSrv.setModalData(true, false, respoonse.message)
+      }
+      console.log(respoonse)
     }
     else {
       try {

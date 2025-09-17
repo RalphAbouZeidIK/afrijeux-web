@@ -162,6 +162,9 @@ h2 {
         border-radius: 10px;
         overflow: auto;
     }
+    &.machine-layout{
+        z-index: 3;
+    }
 }
 
 .header-text {

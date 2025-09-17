@@ -1,0 +1,12 @@
+<ng-template #content>
+	<div class="modal-parent" [ngClass]="{'success':isSuccess}">
+		<ng-container *ngIf="isSuccess">
+			<img src="/assets/images/success-icon.svg" alt="">
+		</ng-container>
+		<ng-container *ngIf="!isSuccess">
+			<img src="/assets/images/error-icon.svg" alt="">
+		</ng-container>
+		<h2>{{msgCode | translate}}</h2>
+	</div>
+
+</ng-template>

@@ -1,0 +1,25 @@
+.modal-parent {
+    padding: 30px;
+    text-align: center;
+
+    img {
+        display: block;
+        width: 60px;
+        margin: 0 auto;
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        color: #d75a4a
+    }
+
+    &.success {
+        h2 {
+            color: #25ae88;
+        }
+    }
+}
