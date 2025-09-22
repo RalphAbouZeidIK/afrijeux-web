@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
+import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 @Component({
   selector: 'app-course-details',
@@ -10,7 +11,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
   styleUrls: ['./course-details.component.scss'],
   standalone: false
 })
-export class CourseDetailsComponent {
+export class CourseDetailsComponent implements OnInit {
 
   @Input() isFullPage = false
 
@@ -25,6 +26,8 @@ export class CourseDetailsComponent {
   selectedTypeOfBet: any
 
   fieldChoice = 1
+
+  isAndroidApp = false
 
 
   typesList = [{
@@ -46,11 +49,14 @@ export class CourseDetailsComponent {
   constructor(
     private cartSrv: CartService,
     private storageSrv: LocalStorageService,
-    private gamesSrv: GamesService,
+    private gnrcSrv: GenericService,
     private translate: TranslateService
   ) {
 
 
+  }
+  ngOnInit(): void {
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
   }
 
   toggleSub(item: any) {

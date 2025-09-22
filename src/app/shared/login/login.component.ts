@@ -28,6 +28,8 @@ export class LoginComponent implements OnChanges, OnInit {
 
   isAndroidApp = false
 
+  showLoginPage = false
+
 
   constructor(
     private router: Router,
@@ -51,6 +53,12 @@ export class LoginComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    if (this.isAndroidApp) {
+      this.autoLogin()
+    }
+    else {
+      this.showLoginPage = true
+    }
     this.signupForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -100,6 +108,18 @@ export class LoginComponent implements OnChanges, OnInit {
     this.showErrorMessage = false
   }
 
+  async autoLogin() {
+    let userData = await this.machineSrv.getFromFlutterOfflineCache('user_data')
+    console.log(userData)
+    if (userData.status == false || !userData) {
+      this.showLoginPage = true
+      return
+    }
+    this.loginForm.controls['UserName'].setValue(userData?.UserName)
+    this.loginForm.controls['Password'].setValue(userData?.UserPassword)
+    this.submitLogin()
+  }
+
   /**
  * Submit login method on login click
  */
@@ -114,8 +134,8 @@ export class LoginComponent implements OnChanges, OnInit {
       if (respoonse.status == false) {
         this.machineSrv.setModalData(true, false, respoonse.message)
       }
-      else{
-        this.router.navigate(['Machine/PMUHybrid/Courses'])
+      else {
+        this.router.navigate(['Machine/PMUHybrid/courses'])
       }
       console.log(respoonse)
     }
@@ -204,7 +224,7 @@ export class LoginComponent implements OnChanges, OnInit {
     this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
     this.hidePopup()
     this.usrSrv.gettUserId()
-    this.router.navigate(['HPBPMU/courses-libanaises'])
+    this.router.navigate(['HPBPMU/courses'])
   }
 
 }

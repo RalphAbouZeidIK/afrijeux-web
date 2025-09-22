@@ -2,22 +2,32 @@
     <div class="course-header" (click)="toggleSub(courseDetails)">
         <div class="date-title-holder">
             <span class="date">
-                {{courseDetails.gameEventDate | date:'HH:mm'}}
+                {{courseDetails.gameEventDate || courseDetails.GameEventDate | date:'HH:mm'}}
             </span>
             <span class="title">
                 <img src="/assets/images/pmu.svg" alt="PMU" class="pmuIcon">
-                {{courseDetails.name}}
+                {{courseDetails.name || courseDetails.EventName}}
                 <img src="/assets/images/cloud.svg" alt="Cloud" class="weatherIcon">
             </span>
         </div>
         <ul class="list">
-            <li> {{ 'hpb.courseDetails.starters' | translate }}: <strong>{{courseDetails.numberOfHorses}}</strong></li>
-            <li>{{ 'hpb.courseDetails.prizeAmount' | translate }}: <strong>{{courseDetails.prize}}</strong></li>
-            <li>{{ 'hpb.courseDetails.trackTypes' | translate }}: <strong>{{courseDetails.typeDePiste}}</strong></li>
-            <li class="hidden-mobile">{{ 'hpb.courseDetails.prizeAmount' | translate }}:
-                <strong>{{courseDetails.prize}}</strong></li>
-            <li class="hidden-mobile">{{ 'hpb.courseDetails.trackTypes' | translate }}:
-                <strong>{{courseDetails.typeDePiste}}</strong></li>
+            <li> {{ 'hpb.courseDetails.starters' | translate }}: <strong>{{courseDetails.numberOfHorses ||
+                    courseDetails.HorseNumber}}</strong></li>
+            <ng-container *ngIf="courseDetails.prize">
+                <li>{{ 'hpb.courseDetails.prizeAmount' | translate }}: <strong>{{courseDetails.prize}}</strong></li>
+                <li class="hidden-mobile">{{ 'hpb.courseDetails.prizeAmount' | translate }}:
+                    <strong>{{courseDetails.prize}}</strong>
+                </li>
+            </ng-container>
+            <ng-container *ngIf="courseDetails.typeDePiste">
+                <li>{{ 'hpb.courseDetails.trackTypes' | translate }}: <strong>{{courseDetails.typeDePiste}}</strong>
+                </li>
+
+                <li class="hidden-mobile">{{ 'hpb.courseDetails.trackTypes' | translate }}:
+                    <strong>{{courseDetails.typeDePiste}}</strong>
+                </li>
+            </ng-container>
+
         </ul>
     </div>
     <ng-container *ngIf="courseDetails.isExpanded">
@@ -32,7 +42,7 @@
                 </ng-container>
             </ul>
         </div>
-        <div class="paris-disponibles" *ngIf="courseDetails.selectedFixedConfig?.isAssociatedHorse == 1">
+        <div class="paris-disponibles" *ngIf="courseDetails.selectedFixedConfig?.IsAssociatedHorse == 1">
             <h3>{{ 'hpb.courseDetails.betTypes' | translate }}</h3>
             <ul>
                 <li class="raceType" [ngClass]="[(fieldChoice == 1) ? 'isSelected' : '']" (click)="changeFieldType(1)">

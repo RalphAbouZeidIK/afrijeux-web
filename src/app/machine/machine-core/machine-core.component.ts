@@ -26,6 +26,9 @@ export class MachineCoreComponent implements OnInit {
   ) { }
 
 
+  clearFlutterOfflineCache() {
+    this.machineSrv.clearFlutterOfflineCache();
+  }
 
   showPopup() {
     this.machineSrv.setModalData(true, false, this.description)
@@ -43,7 +46,6 @@ export class MachineCoreComponent implements OnInit {
   }
 
   async getMachineData() {
-
     this.bridge.scanResult$.subscribe((result) => {
       if (result) {
         this.scanned = result;

@@ -12,7 +12,7 @@ import { SharedGuard } from "../shared.guard";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '1',  // Redirect to 'courses-libanaises' by default
+    redirectTo: '1',  // Redirect to 'courses' by default
     pathMatch: 'full'  // Ensure this redirect happens for the root of the submodule
   },
   {

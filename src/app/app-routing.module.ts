@@ -6,6 +6,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 const routes: Routes = [
+  // Main entry routes
   { path: '', redirectTo: 'HPBPMU', pathMatch: 'full', data: { showLink: false } },
   {
     path: 'HPBPMU',
@@ -18,9 +19,18 @@ const routes: Routes = [
     }
   },
   {
+    path: 'PMUHybrid',
+    loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
+    data: {
+      breadcrumb: 'HPB PMU',
+      shouldBeLoggedIn: false,
+      showLink: true,
+      title: 'routerLinks.appTitle.hpb',
+    }
+  },
+  {
     path: 'Sports',
     loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
-    title: 'Affrijeux - Sports Betting',
     data: {
       breadcrumb: 'Sports Betting',
       shouldBeLoggedIn: false,
@@ -39,16 +49,44 @@ const routes: Routes = [
       title: 'routerLinks.appTitle.User',
     }
   },
+
+  // Machine-prefixed versions
   {
     path: 'Machine',
-    loadChildren: () => import('./machine/machine.module').then(m => m.MachineModule),
-    data: {
-      breadcrumb: 'Machine',
-      title: 'routerLinks.appTitle.Machine',
-    }
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./machine/machine.module').then(m => m.MachineModule),
+        data: {
+          breadcrumb: 'Machine',
+          title: 'routerLinks.appTitle.Machine',
+        }
+      },
+      {
+        path: 'HPBPMU',
+        loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
+        data: { breadcrumb: 'HPB PMU (Machine)', showLink: true }
+      },
+      {
+        path: 'Sports',
+        loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
+        data: { breadcrumb: 'Sports (Machine)', showLink: true }
+      },
+      {
+        path: 'User',
+        loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+        canActivate: [SharedGuard],
+        data: { breadcrumb: 'My profile (Machine)', showLink: true }
+      },
+      {
+        path: 'PMUHybrid',
+        loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
+        data: { breadcrumb: 'HPB PMU (Machine)', showLink: true }
+      },
+    ]
   }
-
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

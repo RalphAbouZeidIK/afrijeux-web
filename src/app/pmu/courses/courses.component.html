@@ -8,17 +8,17 @@
             <div class="reunions-list">
                 <div class="page-header">
                     <h2>{{ 'hpb.courses.dailyProgram' | translate }}</h2>
-                    <app-datepicker (dateChangeEvent)="onDateChange($event)" parentClass="resulats-page"
-                        [minDate]="today"></app-datepicker>
+                    <!-- <app-datepicker (dateChangeEvent)="onDateChange($event)" parentClass="resulats-page"
+                        [minDate]="today"></app-datepicker> -->
                 </div>
                 <div class="reunion-items" *ngIf="dataArray && dataArray.length > 0">
                     <ng-container *ngFor="let reunionItem of dataArray">
                         <div *ngIf="reunionItem" class="reunion-item" [ngClass]="{'active': reunionItem.isExpanded}">
                             <div class="reunion-infos" (click)="toggleSub(reunionItem)">
                                 <span class="greenSquare">
-                                    {{reunionItem.reunionCode}}
+                                    {{reunionItem.ReunionCode}}
                                 </span>
-                                <h3>{{reunionItem.reunionCode}}</h3>
+                                <h3>{{reunionItem.ReunionCode}}</h3>
                             </div>
                             <div class="courses-list" *ngIf="reunionItem.isExpanded">
                                 <div *ngFor="let race of reunionItem.events" class="course-item"

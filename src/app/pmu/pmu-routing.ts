@@ -12,7 +12,7 @@ import { CoursesComponent } from "./courses/courses.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'courses-libanaises',  // Redirect to 'courses-libanaises' by default
+    redirectTo: 'courses',  // Redirect to 'courses' by default
     pathMatch: 'full'  // Ensure this redirect happens for the root of the submodule
   },
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
         path: 'mes-paries', component: MesPariesPopupComponent, data: { showLink: false, title: 'routerLinks.HPBTitles.mesParies' }
       },
       {
-        path: 'courses-libanaises', component: CoursesComponent, data: { showLink: true, title: 'routerLinks.HPBTitles.libanaises' }
+        path: 'courses', component: CoursesComponent, data: { showLink: true, title: 'routerLinks.HPBTitles.libanaises' }
       },
       {
         path: 'courses-francaises', component: CoursesComponent, data: { showLink: true, title: 'routerLinks.HPBTitles.francaises' }

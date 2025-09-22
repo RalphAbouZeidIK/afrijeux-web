@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
     selector: 'app-horse',
@@ -7,12 +8,14 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./horse.component.scss'],
     standalone: false
 })
-export class HorseComponent {
+export class HorseComponent implements OnInit {
   @Input() horse: any
 
   @Input() fieldChoice = 1
 
   @Input() isBettingDisabled = false
+
+  isAndroidApp = false
 
   /**
    * Event emiter on horse select 
@@ -20,11 +23,16 @@ export class HorseComponent {
   @Output() addToBet = new EventEmitter<any>();
 
    constructor(
-      private translate:TranslateService
+      private translate:TranslateService,
+      private gnrcSrv: GenericService
     ) {
   
   
     }
+
+  ngOnInit(): void {
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
+  }
 
   addHorseToBet(horse: any, horseType: string) {
     if (this.isBettingDisabled) {

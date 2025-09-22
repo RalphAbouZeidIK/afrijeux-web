@@ -74,7 +74,7 @@ export class ApiService {
 
     let headers = new HttpHeaders();
 
-    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTgxMTAxNDgsImV4cCI6MTc1ODEyMDk0OCwiaWF0IjoxNzU4MTEwMTQ4fQ.Hyik4WZ2qQQCmnP8UsCSGz62HoafFEO_846v5reJsQ4`);
+    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg1MjMxOTIsImV4cCI6MTc1ODUzMzk5MiwiaWF0IjoxNzU4NTIzMTkyfQ.0t6P5CXL3hVTGufOmpT_ym3Ajby88u-so-yPpq7KcwM`);
 
 
     const httpOptions = { headers, params: params.query || {} };

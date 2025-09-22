@@ -81,9 +81,9 @@ export class CoursesComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
-
+    this.isFullPage = true
     const currentUrl = this.router.url;
-    if (currentUrl.includes('courses-francaises') || currentUrl.includes('courses-libanaises')) {
+    if (currentUrl.includes('courses-francaises') || currentUrl.includes('courses')) {
       this.isFullPage = true
     }
     if (currentUrl.includes('courses-francaises')) {
@@ -118,14 +118,20 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGameEvents()
-      this.dataArray = gameEventsResponse.GameConfiguration.EventConfiguration
+      const groupedRaces = this.groupByCategory(gameEventsResponse.GameConfiguration.EventConfiguration);
+      this.dataArray = Object.values(groupedRaces)
+
+      console.log(this.dataArray)
       if (this.dataArray) {
-        this.dataArray.forEach((raceItem: any) => {
-          this.getEventConfig(raceItem)
+        this.dataArray.forEach((reunionItem: any) => {
+          reunionItem.events.forEach((raceItem: any) => {
+            this.composeEventDetails(raceItem)
+          });
         });
 
       }
     }
+
     else {
       gameEventsResponse = await this.gamesSrv.getGameEvents(this.date, this.countryCode)
       this.dataArray = gameEventsResponse.eventConfiguration
@@ -146,6 +152,24 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
 
     console.log(this.dataArray)
+  }
+
+  groupByCategory(events: any): { ReunionCode: string, events: any }[] {
+    // Group races by category
+    const grouped = events.reduce((acc: any, race: any) => {
+      if (!acc[race.ReunionCode]) {
+        acc[race.ReunionCode] = [];
+      }
+      acc[race.ReunionCode].push(race);
+      return acc;
+    }, {} as Record<string, any>);
+
+    // Convert the grouped data into the desired format
+    return Object.keys(grouped).map(ReunionCode => ({
+      ReunionCode,
+      events: grouped[ReunionCode],
+      ReunionName: ReunionCode
+    }));
   }
 
   onDateChange(event: any) {
@@ -272,6 +296,41 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
 
     console.log(this.dataArray)
+  }
+
+  async composeEventDetails(raceItem: any) {
+    let fixedConfig = await this.machineSrv.getFixedConfiguration(raceItem.FixedConfigurationVersion)
+    console.log(fixedConfig)
+
+    // Build a lookup from array a
+    const idsInA = new Set(raceItem.GameEventTicketTypeConfiguration.map((item: any) => item.TicketTypeId));
+
+    // Filter b to keep only items that exist in a
+    const filteredB = fixedConfig.filter((item: any) => idsInA.has(item.TicketTypeId));
+    console.log(filteredB)
+
+    raceItem.fixedConfigs = filteredB
+    raceItem.fixedConfigs.forEach((fixedConfigItem: any) => {
+      fixedConfigItem.isSelected = false
+      fixedConfigItem.isParoli = false
+
+      if (fixedConfigItem.isCumulative && fixedConfigItem.isMultiEvent) {
+        fixedConfigItem.isParoli = true
+      }
+    })
+
+    raceItem.baseHorses = []
+    raceItem.associatedHorses = []
+    raceItem.horseList = []
+    for (let index = 0; index < raceItem.HorseNumber; index++) {
+      raceItem.horseList.push({
+        id: index + 1,
+        HorseName: (index + 1).toString().padStart(2, '0'),
+      })
+    }
+
+    raceItem.multiplicator = 1
+    console.log(raceItem)
   }
 
   resetEventData(raceItem: any, resetConfig: boolean) {

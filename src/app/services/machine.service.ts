@@ -14,7 +14,7 @@ export class MachineService {
 
   machineId: any;
   machineData: any;
-  encryptionPass = '';
+  encryptionPass: any = '';
   userData: any;
   /** modal status subscriber */
   private openModal$ = new Subject();
@@ -50,17 +50,21 @@ export class MachineService {
     this.openModal$.next(status);
   }
 
-  encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
+  async encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
     let timeStamp = this.datePipe.transform(new Date(), 'MM/dd/yyyy HH:mm:ss')
     console.log(objectToEncrypt)
     objectToEncrypt = JSON.stringify(objectToEncrypt);
     const xxtea = require('xxtea-node');
+    let machineData: any
     let encryptData: any;
     if (isRegisterMachineApi) {
       encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(this.machineId)));
     }
     else {
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.encryptionPass));
+      machineData = await this.getFromFlutterOfflineCache('machine_data')
+      let encryptionPass = machineData?.CommunicationKey
+      console.log(`Encryption Pass ${encryptionPass}`)
+      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(encryptionPass));
     }
 
 
@@ -73,7 +77,7 @@ export class MachineService {
     const base64String = btoa(binaryString);
     console.log({
       body: {
-        machine: (isRegisterMachineApi) ? this.machineId : this.machineData?.MachineId,
+        machine: (isRegisterMachineApi) ? this.machineId : machineData?.MachineId,
         timeStamp: timeStamp,
         encryptedRequestDTO: base64String,
         geolocation: {
@@ -83,14 +87,14 @@ export class MachineService {
         },
         ip: null,
         culture: null,
-        machineCode: (isRegisterMachineApi) ? null : this.machineData?.MachineCode,
+        machineCode: (isRegisterMachineApi) ? null : machineData?.MachineCode,
         currency: null,
         amount: null
       },
     })
     return {
       body: {
-        machine: (isRegisterMachineApi) ? this.machineId : this.machineData?.MachineId.toString(),
+        machine: (isRegisterMachineApi) ? this.machineId : machineData?.MachineId.toString(),
         timeStamp: timeStamp,
         encryptedRequestDTO: base64String,
         geolocation: {
@@ -100,7 +104,7 @@ export class MachineService {
         },
         ip: null,
         culture: null,
-        machineCode: (isRegisterMachineApi) ? null : this.machineData?.MachineCode,
+        machineCode: (isRegisterMachineApi) ? null : machineData?.MachineCode,
         currency: null,
         amount: null
       },
@@ -127,17 +131,20 @@ export class MachineService {
 
   }
 
-  decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
+  async decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
     const xxtea = require('xxtea-node');
     let decrypted: any;
     if (isRegisterMachineApi) {
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(this.machineId))))
-
       this.encryptionPass = JSON.parse(decrypted).CommunicationKey;
       console.log(`Encryption Pass ${this.encryptionPass}`)
     }
     else {
-      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.encryptionPass)));
+      let machineData: any = await this.getFromFlutterOfflineCache('machine_data')
+      let encryptionPass = machineData?.CommunicationKey
+      console.log(`Encryption Pass ${this.encryptionPass}`)
+      console.log(this.encryptionPass)
+      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(encryptionPass)));
     }
     return JSON.parse(decrypted);
   }
@@ -171,7 +178,7 @@ export class MachineService {
 
   private cacheCallbacks: Record<string, (value: any) => void> = {};
 
-  private async getFromFlutterOfflineCache(key: string): Promise<any | null> {
+  async getFromFlutterOfflineCache(key: string): Promise<any | null> {
     return new Promise((resolve) => {
       // Store the callback by cache key
       this.cacheCallbacks[key] = (cachedValue: any) => {
@@ -190,9 +197,24 @@ export class MachineService {
     });
   }
 
+  async clearFlutterOfflineCache(): Promise<void> {
+
+    return new Promise((resolve) => {
+      if ((window as any).OfflineCache) {
+        (window as any).OfflineCache.postMessage(
+          JSON.stringify({ action: 'clear' })
+        );
+        resolve();
+      } else {
+        console.warn('⚠️ OfflineCache channel not found');
+        resolve();
+      }
+    });
+  }
+
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
     const cacheKey = this.generateCacheKey(subRoute, apiRoute, method, params);
-    params = this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
+    params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
     console.log('Cache key here:', cacheKey);
 
     let apiResponse: any
@@ -201,17 +223,15 @@ export class MachineService {
       // Save full API response exactly
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       this.saveToFlutterOfflineCache(cacheKey, apiResponse);
-      if (apiRoute === 'LoginMachine') {
-        this.saveToFlutterOfflineCache('user_data', apiResponse);
-      }
     }
+
     else {
       console.warn('⚡ Offline mode: loading from Flutter cache');
       apiResponse = await this.getFromFlutterOfflineCache(cacheKey);
     }
 
     if (apiResponse?.encryptedResponse) {
-      apiResponse = this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
+      apiResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
       return apiResponse;
     }
 
@@ -229,10 +249,8 @@ export class MachineService {
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
-
-    this.machineData = apiResponse
-
-    console.log(this.machineData);
+    this.saveToFlutterOfflineCache('machine_data', apiResponse);
+    this.machineData = await this.getFromFlutterOfflineCache('machine_data')
     return apiResponse;
   }
 
@@ -250,15 +268,20 @@ export class MachineService {
     console.log(params)
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
     this.userData = apiResponse
+    this.saveToFlutterOfflineCache('user_data', apiResponse);
     console.log(apiResponse)
     return apiResponse;
   }
 
+  // async getGame() {
+  //   let apiRespnse = await this.gnrcSrv.getGame('HPBPMU')
+  //   this.gameObject = apiRespnse
+  //   return apiRespnse
+  // }
+
   async getGameEvents() {
     //let gameObject = await this.getGame()
     let userData = await this.getFromFlutterOfflineCache('user_data')
-    userData = this.decrypt(userData.encryptedResponse, false)
-    console.log(userData)
     let params: any = {
       PersonId: userData.PersonId,
       GameId: 28,
@@ -269,6 +292,21 @@ export class MachineService {
 
     let gameEventsResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/GetEventConfiguration`, 'POST', params)
     return gameEventsResponse
+  }
+
+  async getFixedConfiguration(fixedConfigurationId: any) {
+    let userData = await this.getFromFlutterOfflineCache('user_data')
+
+    let params: any = {
+      PersonId: userData.PersonId,
+      GameId: 28,
+      GameConfiguration: [],
+      TimeStamp: new Date().toISOString(),
+      UserOnlineStatus: true,
+      FixedConfigurationId: fixedConfigurationId
+    }
+    let gameEventsResponse1 = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/GetFixedConfiguration`, 'POST', params)
+    return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
   }
 
 }
