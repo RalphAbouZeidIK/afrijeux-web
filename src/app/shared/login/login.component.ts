@@ -111,7 +111,7 @@ export class LoginComponent implements OnChanges, OnInit {
   async autoLogin() {
     let userData = await this.machineSrv.getFromFlutterOfflineCache('user_data')
     console.log(userData)
-    if (userData.status == false || !userData) {
+    if (userData?.status == false || !userData) {
       this.showLoginPage = true
       return
     }

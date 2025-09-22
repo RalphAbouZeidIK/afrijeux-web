@@ -68,13 +68,13 @@ export class ApiService {
       return;
     }
 
-
+    console.log(`${apiRoute} api route from make api` )
     const apiEndPoint = `${environment.BaseUrl}${environment.gcSrv}${subRoute}/${apiRoute}`;
     console.log(apiEndPoint);
 
     let headers = new HttpHeaders();
 
-    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg1MjMxOTIsImV4cCI6MTc1ODUzMzk5MiwiaWF0IjoxNzU4NTIzMTkyfQ.0t6P5CXL3hVTGufOmpT_ym3Ajby88u-so-yPpq7KcwM`);
+    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg1MzQ1MTksImV4cCI6MTc1ODU0NTMxOSwiaWF0IjoxNzU4NTM0NTE5fQ.oGJ4bRIDdqXKJq9SGB5_FR-F_Uc5sPCNL5xB9dJbmmM`);
 
 
     const httpOptions = { headers, params: params.query || {} };
