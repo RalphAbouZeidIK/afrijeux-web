@@ -60,19 +60,16 @@ export class MachineService {
     let timeStamp = this.datePipe.transform(new Date(), 'MM/dd/yyyy HH:mm:ss')
     objectToEncrypt = JSON.stringify(objectToEncrypt);
     const xxtea = require('xxtea-node');
-    let machineData: any
     let encryptData: any;
+    let machineData = await this.getMachineData();
     if (isRegisterMachineApi) {
       encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(this.machineId)));
     }
     else {
-      //machineData = await this.getFromFlutterOfflineCache('machine_data')
-      //let encryptionPass = 'TDUT9J6gTig='
-      let machineData = await this.getFromFlutterOfflineCache('machine_data');
-      ////console.log(machineData)
+
       if (!machineData) {
         console.warn("⚠️ No machineData found yet, retrying...");
-        machineData = await this.getFromFlutterOfflineCache('machine_data');
+        machineData = await this.getMachineData();
       }
       let encryptionPass = machineData?.CommunicationKey || 'default';
       ////console.log(`Encryption Pass ${encryptionPass}`)
@@ -89,39 +86,28 @@ export class MachineService {
     }
 
     const base64String = btoa(binaryString);
-    // //console.log({
-    //   machine: (isRegisterMachineApi) ? this.machineId : machineData?.MachineId.toString(),
-    //   timeStamp: timeStamp,
-    //   encryptedRequestDTO: base64String,
-    //   geolocation: {
-    //     latitude: "0",
-    //     longitude: "0",
-    //     timeStamp: timeStamp
-    //   },
-    //   ip: null,
-    //   culture: null,
-    //   machineCode: (isRegisterMachineApi) ? null : machineData?.MachineCode,
-    //   currency: null,
-    //   amount: null
-    // })
-    return {
-      body: {
-        machine: (isRegisterMachineApi) ? this.machineId : "3359",  //("3359")
-        timeStamp: timeStamp,
-        encryptedRequestDTO: base64String,
-        geolocation: {
-          latitude: "0",
-          longitude: "0",
-          timeStamp: timeStamp
-        },
-        ip: null,
-        culture: null,
-        machineCode: (isRegisterMachineApi) ? null : "6821",   //("6821")
-        currency: null,
-        amount: amount
-      },
-    };
 
+    const body: any = {
+      machine: (isRegisterMachineApi) ? this.machineId : machineData.MachineId.toString(),  //("3359")
+      timeStamp: timeStamp,
+      encryptedRequestDTO: base64String,
+      geolocation: {
+        latitude: "0",
+        longitude: "0",
+        timeStamp: timeStamp
+      },
+      ip: null,
+      culture: null,
+      machineCode: (isRegisterMachineApi) ? null : machineData.MachineCode,   //("6821")
+      currency: null,
+      amount: amount
+    }
+
+    console.log(body)
+
+    return {
+      body
+    }
   }
 
   public GetMachineDefaultKey(MachineSerial: string): string {
@@ -150,7 +136,7 @@ export class MachineService {
       this.encryptionPass = JSON.parse(decrypted).CommunicationKey;
     }
     else {
-      let machineData: any = await this.getFromFlutterOfflineCache('machine_data')
+      let machineData: any = await this.getMachineData()
       let encryptionPass = machineData?.CommunicationKey || 'default';
       ////console.log(`Encryption Pass ${this.encryptionPass}`)
       ////console.log(this.encryptionPass)
@@ -287,8 +273,19 @@ export class MachineService {
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
     this.saveToFlutterOfflineCache('machine_data', apiResponse);
-    this.machineData = await this.getFromFlutterOfflineCache('machine_data')
+    this.machineData = await this.getMachineData()
     return apiResponse;
+  }
+
+  async getMachineData() {
+    let machineData: any = await this.getFromFlutterOfflineCache('machine_data')
+    return machineData;
+  }
+
+  async getGameId(routerName: any) {
+    console.log(routerName)
+    let machineData: any = await this.getMachineData()
+    console.log(machineData)
   }
 
   async loginMachine(loginParams: any) {
@@ -308,15 +305,16 @@ export class MachineService {
     return apiResponse;
   }
 
-  // async getGame() {
-  //   let apiRespnse = await this.gnrcSrv.getGame('HPBPMU')
-  //   this.gameObject = apiRespnse
-  //   return apiRespnse
-  // }
+
+  async getUserData() {
+    let machineData: any = await this.getFromFlutterOfflineCache('user_data')
+    return machineData;
+  }
 
   async getGameEvents() {
     //let gameObject = await this.getGame()
-    let userData = await this.getFromFlutterOfflineCache('user_data')
+    let userData = await this.getUserData()
+    //this.getGameId(location.pathname.split('/'))
     //console.log(userData)
     let params: any = {
       PersonId: userData.PersonId,  //(9791)
@@ -331,7 +329,7 @@ export class MachineService {
   }
 
   async getFixedConfiguration(fixedConfigurationId: any) {
-    let userData = await this.getFromFlutterOfflineCache('user_data')
+    let userData = await this.getUserData()
     //console.log(userData)
 
     let params: any = {
@@ -347,8 +345,8 @@ export class MachineService {
   }
 
   async issueTicket(ticketObject: any) {
-    let userData = await this.getFromFlutterOfflineCache('user_data')
-    let machineData = await this.getFromFlutterOfflineCache('machine_data');
+    let userData = await this.getUserData()
+    let machineData = await this.getMachineData();
     //console.log(userData)
 
     let date = new Date()

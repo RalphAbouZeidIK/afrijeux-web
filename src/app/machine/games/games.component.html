@@ -1,0 +1,5 @@
+<div class="games-list">
+    <div class="game-card" *ngFor="let game of games" (click)="selectGame(game)">
+        <a class="btn btn-primary">{{game.Name}}</a>
+    </div>
+</div>

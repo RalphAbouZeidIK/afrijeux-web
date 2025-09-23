@@ -162,7 +162,8 @@ h2 {
         border-radius: 10px;
         overflow: auto;
     }
-    &.machine-layout{
+
+    &.machine-layout {
         z-index: 3;
     }
 }
@@ -547,6 +548,10 @@ header {
 
     .body-holder {
         margin-top: 70px;
+    }
+
+    .body-holder.android-app {
+        margin-top: 20px;
     }
 
     .hidden-mobile {

@@ -5,6 +5,7 @@ import { MachineCoreComponent } from "./machine-core/machine-core.component";
 import { LoginComponent } from "../shared/login/login.component";
 import { CoursesComponent } from "../pmu/courses/courses.component";
 import { PmuCoreComponent } from "../pmu/pmu-core/pmu-core.component";
+import { GamesComponent } from "./games/games.component";
 
 
 const routes: Routes = [
@@ -19,7 +20,11 @@ const routes: Routes = [
         children: [
             {
                 path: 'Login', component: LoginComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Login' }
+            },
+            {
+                path: 'Games', component: GamesComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Games' }
             }
+
         ]
     }
 ];
