@@ -1,4 +1,4 @@
-<div class="course-details" *ngIf="courseDetails" [ngClass]="{'isExpanded':courseDetails.isExpanded}">
+<div class="course-details" *ngIf="courseDetails" [ngClass]="{'isExpanded':courseDetails.IsExpanded}">
     <div class="course-header" (click)="toggleSub(courseDetails)">
         <div class="date-title-holder">
             <span class="date">
@@ -6,52 +6,51 @@
             </span>
             <span class="title">
                 <img src="/assets/images/pmu.svg" alt="PMU" class="pmuIcon">
-                {{courseDetails.name || courseDetails.EventName}}
+                {{courseDetails.Name || courseDetails.EventName}}
                 <img src="/assets/images/cloud.svg" alt="Cloud" class="weatherIcon">
             </span>
         </div>
         <ul class="list">
-            <li> {{ 'hpb.courseDetails.starters' | translate }}: <strong>{{courseDetails.numberOfHorses ||
-                    courseDetails.HorseNumber}}</strong></li>
-            <ng-container *ngIf="courseDetails.prize">
-                <li>{{ 'hpb.courseDetails.prizeAmount' | translate }}: <strong>{{courseDetails.prize}}</strong></li>
-                <li class="hidden-mobile">{{ 'hpb.courseDetails.prizeAmount' | translate }}:
-                    <strong>{{courseDetails.prize}}</strong>
+            <li> {{ 'hpb.courseDetails.starters' | translate }}: <strong>{{courseDetails.HorseNumber}}</strong></li>
+            <ng-container *ngIf="courseDetails.Prize">
+                <li>{{ 'hpb.courseDetails.PrizeAmount' | translate }}: <strong>{{courseDetails.Prize}}</strong></li>
+                <li class="hidden-mobile">{{ 'hpb.courseDetails.PrizeAmount' | translate }}:
+                    <strong>{{courseDetails.Prize}}</strong>
                 </li>
             </ng-container>
-            <ng-container *ngIf="courseDetails.typeDePiste">
-                <li>{{ 'hpb.courseDetails.trackTypes' | translate }}: <strong>{{courseDetails.typeDePiste}}</strong>
+            <ng-container *ngIf="courseDetails.TypeDePiste">
+                <li>{{ 'hpb.courseDetails.trackTypes' | translate }}: <strong>{{courseDetails.TypeDePiste}}</strong>
                 </li>
 
                 <li class="hidden-mobile">{{ 'hpb.courseDetails.trackTypes' | translate }}:
-                    <strong>{{courseDetails.typeDePiste}}</strong>
+                    <strong>{{courseDetails.TypeDePiste}}</strong>
                 </li>
             </ng-container>
 
         </ul>
     </div>
-    <ng-container *ngIf="courseDetails.isExpanded">
+    <ng-container *ngIf="courseDetails.IsExpanded">
         <div class="paris-disponibles">
             <h3>{{ 'hpb.courseDetails.availableBets' | translate }}</h3>
             <ul>
-                <ng-container *ngFor="let paris of courseDetails.fixedConfigs">
-                    <li class="raceType" [ngClass]="[paris.isSelected ? 'isSelected' : '']"
+                <ng-container *ngFor="let paris of courseDetails.FixedConfigs">
+                    <li class="raceType" [ngClass]="[paris.IsSelected ? 'isSelected' : '']"
                         (click)="chooseBetType(paris)">
                         {{paris.details}}
                     </li>
                 </ng-container>
             </ul>
         </div>
-        <div class="paris-disponibles" *ngIf="courseDetails.selectedFixedConfig?.IsAssociatedHorse == 1">
+        <div class="paris-disponibles" *ngIf="courseDetails.SelectedFixedConfig?.IsAssociatedHorse == 1">
             <h3>{{ 'hpb.courseDetails.betTypes' | translate }}</h3>
             <ul>
-                <li class="raceType" [ngClass]="[(fieldChoice == 1) ? 'isSelected' : '']" (click)="changeFieldType(1)">
+                <li class="raceType" [ngClass]="[(FieldChoice == 1) ? 'isSelected' : '']" (click)="changeFieldType(1)">
                     {{ 'hpb.courseDetails.simple' | translate }}
                 </li>
-                <li class="raceType" [ngClass]="[(fieldChoice == 2) ? 'isSelected' : '']" (click)="changeFieldType(2)">
+                <li class="raceType" [ngClass]="[(FieldChoice == 2) ? 'isSelected' : '']" (click)="changeFieldType(2)">
                     {{ 'hpb.courseDetails.reducedField' | translate }}
                 </li>
-                <li class="raceType" [ngClass]="[(fieldChoice == 3) ? 'isSelected' : '']" (click)="changeFieldType(3)">
+                <li class="raceType" [ngClass]="[(FieldChoice == 3) ? 'isSelected' : '']" (click)="changeFieldType(3)">
                     {{ 'hpb.courseDetails.fullField' | translate }}
                 </li>
             </ul>
@@ -63,12 +62,12 @@
                 </div>
                 <div class="table-item hidden-mobile">{{ 'hpb.courseDetails.music' | translate }} test</div>
                 <div class="table-item first-checkbox">{{ 'hpb.courseDetails.base' | translate }}</div>
-                <div class="table-item" *ngIf="fieldChoice == 2">{{ 'hpb.courseDetails.associated' | translate }}</div>
+                <div class="table-item" *ngIf="FieldChoice == 2">{{ 'hpb.courseDetails.associated' | translate }}</div>
                 <div class=" table-item"></div>
             </div>
-            <ng-container *ngFor="let horse of courseDetails.horseList; let i=index">
-                <app-horse [horse]="horse" (addToBet)="addToBet($event)" [fieldChoice]="fieldChoice"
-                    [isBettingDisabled]="courseDetails.isBettingDisabled"></app-horse>
+            <ng-container *ngFor="let horse of courseDetails.HorseList; let i=index">
+                <app-horse [horse]="horse" (addToBet)="addToBet($event)" [FieldChoice]="FieldChoice"
+                    [IsBettingDisabled]="courseDetails.IsBettingDisabled"></app-horse>
             </ng-container>
         </div>
     </ng-container>

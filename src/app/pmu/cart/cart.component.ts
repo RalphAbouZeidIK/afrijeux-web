@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
-import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { MachineService } from 'src/app/services/machine.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -30,7 +30,9 @@ export class CartComponent implements OnInit {
 
   isDesktop = true
 
-  fieldChoice: any
+  FieldChoice: any
+
+  isAndroidApp = false
 
   /**
    * Subscribe to login status
@@ -44,22 +46,22 @@ export class CartComponent implements OnInit {
 
   showOnClickMobile = false
 
-  isAllOrder = false
+  IsAllOrder = false
 
 
   betItem: any = []
   combinations = 0;
   pickDetailsArray: any = [];
-  isParoli = false
-  isDouble = false
+  IsParoli = false
+  IsDouble = false
 
   constructor(
     private cartSrv: CartService,
     private storageSrv: LocalStorageService,
     private usrSrv: UserService,
     private gnrcSrv: GenericService,
-    private gamesService: GamesService,
-    private translate:TranslateService
+    private machineSrv: MachineService,
+    private translate: TranslateService
   ) {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
@@ -76,7 +78,10 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    if (!this.isAndroidApp) {
+      this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+    }
     if (window.innerWidth < 1200) {
       this.isDesktop = false
     }
@@ -140,17 +145,18 @@ export class CartComponent implements OnInit {
   }
 
   onCartEventChange(data: any) {
-    if (data.typeChanged) {
+    console.log(data)
+    if (data.TypeChanged) {
       this.betItem = []
     }
 
-    if (data.selectedFixedConfig?.isParoli) {
-      this.isParoli = true
-      this.isDouble = false
-      if (this.betItem && this.betItem.length > 0 && !data.typeChanged) {
-        let raceIndex = this.betItem.findIndex((item: any) => item.gameEventId == data.gameEventId)
+    if (data.SelectedFixedConfig?.IsParoli) {
+      this.IsParoli = true
+      this.IsDouble = false
+      if (this.betItem && this.betItem.length > 0 && !data.TypeChanged) {
+        let raceIndex = this.betItem.findIndex((item: any) => item.GameEventId == data.GameEventId)
         if (raceIndex != -1) {
-          data.baseHorses.length === 0 ? this.betItem.splice(raceIndex, 1) : this.betItem[raceIndex] = data;
+          data.BaseHorses.length === 0 ? this.betItem.splice(raceIndex, 1) : this.betItem[raceIndex] = data;
         }
         else {
           this.betItem.push(data)
@@ -161,11 +167,11 @@ export class CartComponent implements OnInit {
       }
     }
 
-    else if (data.selectedFixedConfig?.isForTicketTypeEvent == 1) {
-      this.isParoli = false
-      this.isDouble = true
-      let raceIndex = this.betItem.findIndex((item: any) => item.gameEventId == data.gameEventId)
-      if (data.isDoubleMain) {
+    else if (data.SelectedFixedConfig?.IsForTicketTypeEvent == 1) {
+      this.IsParoli = false
+      this.IsDouble = true
+      let raceIndex = this.betItem.findIndex((item: any) => item.GameEventId == data.GameEventId)
+      if (data.IsDoubleMain) {
         if (raceIndex != -1) {
           this.betItem[raceIndex] = data
         }
@@ -178,7 +184,7 @@ export class CartComponent implements OnInit {
           this.betItem[raceIndex] = data
         }
         else {
-          this.betItem = this.betItem.filter((eventItems: any) => eventItems.isDoubleMain == true)
+          this.betItem = this.betItem.filter((eventItems: any) => eventItems.IsDoubleMain == true)
           this.betItem.push(data)
           this.cartSrv.setResetOtherEvents(data)
         }
@@ -187,10 +193,10 @@ export class CartComponent implements OnInit {
     }
 
     else {
-      this.isParoli = false
-      this.isDouble = false
-      if (data.selectedFixedConfig.isAllOrder == 0) {
-        this.isAllOrder = false
+      this.IsParoli = false
+      this.IsDouble = false
+      if (data.SelectedFixedConfig.IsAllOrder == 0) {
+        this.IsAllOrder = false
       }
       this.betItem = [data]
 
@@ -203,16 +209,16 @@ export class CartComponent implements OnInit {
     let firstLength = 0
     let secondLength = 0
 
-    if (this.isParoli) {
-      (betItem[0]?.selectedFixedConfig.horsesNumberTelpo == 1) ? this.combinations = 1 : this.combinations = this.gnrcSrv.calculateCombinations(betItem.length, secondLength, betItem[0]?.selectedFixedConfig?.horsesNumberTelpo, this.isAllOrder)
+    if (this.IsParoli) {
+      (betItem[0]?.SelectedFixedConfig.HorsesNumberTelpo == 1) ? this.combinations = 1 : this.combinations = this.gnrcSrv.calculateCombinations(betItem.length, secondLength, betItem[0]?.SelectedFixedConfig?.HorsesNumberTelpo, this.IsAllOrder)
       return
     }
 
-    if (this.isDouble) {
+    if (this.IsDouble) {
       console.log(betItem)
-      console.log(betItem.find((eventItems: any) => eventItems.isDoubleMain == false)?.baseHorses)
-      if (betItem.find((eventItems: any) => eventItems.isDoubleMain == false)?.baseHorses) {
-        this.combinations = betItem.find((eventItems: any) => eventItems.isDoubleMain == false)?.baseHorses?.length
+      console.log(betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses)
+      if (betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses) {
+        this.combinations = betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses?.length
       }
       else {
         this.combinations = 0
@@ -222,24 +228,25 @@ export class CartComponent implements OnInit {
 
 
     let betItemVar = this.betItem[0]
-    switch (betItemVar.fieldChoice) {
+    console.log(betItemVar)
+    switch (betItemVar.FieldChoice) {
       case 2:
-        firstLength = betItemVar.associatedHorses.length
-        secondLength = betItemVar.baseHorses.filter((item: any) => item.isDummy != true).length
+        firstLength = betItemVar.AssociatedHorses.length
+        secondLength = betItemVar.BaseHorses.filter((item: any) => item.IsDummy != true).length
         break;
 
       case 3:
-        secondLength = betItemVar.baseHorses.filter((item: any) => item.isDummy != true).length
-        firstLength = betItemVar.horseList.length - secondLength
+        secondLength = betItemVar.BaseHorses.filter((item: any) => item.IsDummy != true).length
+        firstLength = betItemVar.HorseList.filter((item: any) => !item.IsNoPartant).length - secondLength
         break;
 
       default:
-        firstLength = betItemVar.baseHorses.length
+        firstLength = betItemVar.BaseHorses.length
         secondLength = 0
 
         break;
     }
-    this.combinations = this.gnrcSrv.calculateCombinations(firstLength, secondLength, betItem[0]?.selectedFixedConfig?.horsesNumberTelpo, this.isAllOrder)
+    this.combinations = this.gnrcSrv.calculateCombinations(firstLength, secondLength, betItem[0]?.SelectedFixedConfig?.HorsesNumberTelpo, this.IsAllOrder)
 
 
     console.log(this.combinations)
@@ -258,18 +265,18 @@ export class CartComponent implements OnInit {
     let BaseHorses = ''
 
 
-    if (this.isDouble) {
-      let mainEvent = betItem.find((pickItem: any) => pickItem.isDoubleMain == true)
-      let secondaryEvent = betItem.find((pickItem: any) => pickItem.isDoubleMain == false)
+    if (this.IsDouble) {
+      let mainEvent = betItem.find((pickItem: any) => pickItem.IsDoubleMain == true)
+      let secondaryEvent = betItem.find((pickItem: any) => pickItem.IsDoubleMain == false)
 
       if (mainEvent && secondaryEvent) {
 
-        secondaryEvent.baseHorses.forEach((horseItem: any) => {
+        secondaryEvent.BaseHorses.forEach((horseItem: any) => {
 
-          let horsesArray: any = new Array(secondaryEvent.selectedFixedConfig.horsesNumberTelpo).fill("00");
+          let horsesArray: any = new Array(secondaryEvent.SelectedFixedConfig.HorsesNumberTelpo).fill("00");
           horsesArray = horsesArray.join(",");
           BaseHorses = horsesArray
-          AssociatedHorses = mainEvent.baseHorses[0].horseName
+          AssociatedHorses = mainEvent.BaseHorses[0].HorseName
 
           mainEvent = {
             ...mainEvent,
@@ -281,7 +288,7 @@ export class CartComponent implements OnInit {
           this.composePickDetails(mainEvent)
 
 
-          AssociatedHorses = horseItem.horseName
+          AssociatedHorses = horseItem.HorseName
 
           secondaryEvent = {
             ...secondaryEvent,
@@ -295,8 +302,8 @@ export class CartComponent implements OnInit {
           let PickObject = {
             NumberOfCombinations: 2,
             Multiplier: 1,
-            TicketTypeId: betItem[0].selectedFixedConfig.ticketTypeId,
-            FormuleId: (this.isAllOrder) ? 2 : 1,
+            TicketTypeId: betItem[0].SelectedFixedConfig.TicketTypeId,
+            FormuleId: (this.IsAllOrder) ? 2 : 1,
             PickDetails: this.pickDetailsArray,
             TicketPrice: betItem[0].price,
             Stake: betItem[0].price,
@@ -308,7 +315,7 @@ export class CartComponent implements OnInit {
       }
 
       else {
-        this.translate.get('alerts.minimum_horses_required', { count: betItem[0].selectedFixedConfig.horsesNumberTelpo })
+        this.translate.get('alerts.minimum_horses_required', { count: betItem[0].SelectedFixedConfig.HorsesNumberTelpo })
           .subscribe((translatedMsg: string) => {
             alert(translatedMsg);
           });
@@ -319,9 +326,9 @@ export class CartComponent implements OnInit {
 
     else {
 
-      if (this.isParoli) {
-        if (betItem.length < betItem[0].selectedFixedConfig.horsesNumberTelpo) {
-          this.translate.get('alerts.minimum_horses_required', { count: betItem[0].selectedFixedConfig.horsesNumberTelpo })
+      if (this.IsParoli) {
+        if (betItem.length < betItem[0].SelectedFixedConfig.HorsesNumberTelpo) {
+          this.translate.get('alerts.minimum_horses_required', { count: betItem[0].SelectedFixedConfig.HorsesNumberTelpo })
             .subscribe((translatedMsg: string) => {
               alert(translatedMsg);
             });
@@ -329,8 +336,8 @@ export class CartComponent implements OnInit {
         }
 
         betItem.forEach((paroliBetItem: any) => {
-          AssociatedHorses = paroliBetItem.baseHorses.map((horse: any) => horse.horseName).join(',')
-          let horsesArray: any = new Array(paroliBetItem.selectedFixedConfig.horsesNumberTelpo).fill("00");
+          AssociatedHorses = paroliBetItem.BaseHorses.map((horse: any) => horse.HorseName).join(',')
+          let horsesArray: any = new Array(paroliBetItem.SelectedFixedConfig.HorsesNumberTelpo).fill("00");
 
           horsesArray = horsesArray.join(",");
           BaseHorses = horsesArray
@@ -352,10 +359,10 @@ export class CartComponent implements OnInit {
 
 
       else {
-        switch (betItem[0].fieldChoice) {
+        switch (betItem[0].FieldChoice) {
           case 2:
-            if (betItem[0].baseHorses.filter((item: any) => item.isDummy != true).length + betItem[0].associatedHorses.length < betItem[0].selectedFixedConfig.horsesNumberTelpo) {
-              this.translate.get('alerts.minimum_horses_required', { count: betItem[0].selectedFixedConfig.horsesNumberTelpo })
+            if (betItem[0].BaseHorses.filter((item: any) => item.IsDummy != true).length + betItem[0].AssociatedHorses.length < betItem[0].SelectedFixedConfig.HorsesNumberTelpo) {
+              this.translate.get('alerts.minimum_horses_required', { count: betItem[0].SelectedFixedConfig.HorsesNumberTelpo })
                 .subscribe((translatedMsg: string) => {
                   alert(translatedMsg);
                 });
@@ -364,8 +371,8 @@ export class CartComponent implements OnInit {
             break;
 
           default:
-            if (betItem[0].baseHorses.length < betItem[0].selectedFixedConfig.horsesNumberTelpo) {
-              this.translate.get('alerts.minimum_horses_required', { count: betItem[0].selectedFixedConfig.horsesNumberTelpo })
+            if (betItem[0].BaseHorses.length < betItem[0].SelectedFixedConfig.HorsesNumberTelpo) {
+              this.translate.get('alerts.minimum_horses_required', { count: betItem[0].SelectedFixedConfig.HorsesNumberTelpo })
                 .subscribe((translatedMsg: string) => {
                   alert(translatedMsg);
                 });
@@ -376,29 +383,29 @@ export class CartComponent implements OnInit {
         }
 
 
-        switch (betItem[0].fieldChoice) {
+        switch (betItem[0].FieldChoice) {
           case 1:
-            AssociatedHorses = betItem[0].baseHorses.map((horse: any) => horse.horseName).join(',')
-            let updatedHorses = betItem[0].baseHorses.map((horse: any) => ({
+            AssociatedHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
+            let updatedHorses = betItem[0].BaseHorses.map((horse: any) => ({
               ...horse,
-              horseName: '0'
+              HorseName: '0'
             }));
-            BaseHorses = updatedHorses.map((horse: any) => horse.horseName).join(',')
+            BaseHorses = updatedHorses.map((horse: any) => horse.HorseName).join(',')
             break
           case 2:
-            BaseHorses = betItem[0].baseHorses.map((horse: any) => horse.horseName).join(',')
-            AssociatedHorses = betItem[0].associatedHorses.map((horse: any) => horse.horseName).join(',')
+            BaseHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
+            AssociatedHorses = betItem[0].AssociatedHorses.map((horse: any) => horse.HorseName).join(',')
             break;
           case 3:
-            BaseHorses = betItem[0].baseHorses.map((horse: any) => horse.horseName).join(',')
-            AssociatedHorses = betItem[0].horseList.filter((horse: any) => !horse.isBase).map((horse: any) => horse.horseName).join(',')
+            BaseHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
+            AssociatedHorses = betItem[0].HorseList.filter((horse: any) => !horse.IsBase && !horse.IsNoPartant).map((horse: any) => horse.HorseName).join(',')
             break;
 
           default:
             break;
         }
 
-        let BaseHorsesDisplay = betItem[0].baseHorses.map((horse: any) => (horse.isDummy) ? horse.horseNameDisplay : horse.horseName).join(',')
+        let BaseHorsesDisplay = betItem[0].BaseHorses.map((horse: any) => (horse.IsDummy) ? horse.HorseNameDisplay : horse.HorseName).join(',')
 
 
         betItem[0] = {
@@ -406,8 +413,8 @@ export class CartComponent implements OnInit {
           AssociatedHorses: AssociatedHorses,
           BaseHorses: BaseHorses,
           BaseHorsesDisplay: BaseHorsesDisplay,
-          FormuleType: betItem[0].selectedFormule?.name || null,
-          showAssociatedHorses: (betItem[0].selectedFormule.id == 2) ? true : false
+          FormuleType: betItem[0].SelectedFormule?.name || null,
+          showAssociatedHorses: (betItem[0].SelectedFormule.id == 2) ? true : false
         }
         this.composePickDetails(betItem[0])
       }
@@ -415,8 +422,8 @@ export class CartComponent implements OnInit {
       let PickObject = {
         NumberOfCombinations: this.combinations,
         Multiplier: 1,
-        TicketTypeId: betItem[0].selectedFixedConfig.ticketTypeId,
-        FormuleId: (this.isAllOrder) ? 2 : 1,
+        TicketTypeId: betItem[0].SelectedFixedConfig.TicketTypeId,
+        FormuleId: (this.IsAllOrder) ? 2 : 1,
         PickDetails: this.pickDetailsArray,
         TicketPrice: betItem[0].price * this.combinations,
         Stake: betItem[0].price * this.combinations,
@@ -433,13 +440,13 @@ export class CartComponent implements OnInit {
       AssociatedHorses: event.AssociatedHorses,
       BaseHorses: event.BaseHorses,
       BaseHorsesDisplay: event.BaseHorsesDisplay,
-      FormuleId: (this.isAllOrder) ? 2 : 1,
-      gameEventId: event.gameEventId,
+      FormuleId: (this.IsAllOrder) ? 2 : 1,
+      gameEventId: event.GameEventId,
       name: event.name,
       SinglePrice: event.price,
-      BetType: event.selectedFixedConfig.details,
+      BetType: event.SelectedFixedConfig.details,
       FormuleType: event.FormuleType,
-      showAssociatedHorses: event.showAssociatedHorses || false
+      showAssociatedHorses: event.ShowAssociatedHorses || false
     }
 
     this.pickDetailsArray.push(PickDetails)
@@ -454,7 +461,7 @@ export class CartComponent implements OnInit {
     this.betItem = []
     this.pickDetailsArray = []
 
-    this.isAllOrder = false
+    this.IsAllOrder = false
     console.log(this.listOfBets)
     this.storageSrv.setItem('cartData', this.listOfBets)
     this.showCartButtons = this.listOfBets.length > 0
@@ -462,7 +469,7 @@ export class CartComponent implements OnInit {
   }
 
   async issueTicket() {
-    if (!this.isLoggedIn) {
+    if (!this.isAndroidApp && !this.isLoggedIn) {
       this.usrSrv.setLoginPopupStatus({
         show: true,
         type: 'login'
@@ -470,9 +477,9 @@ export class CartComponent implements OnInit {
       return
     }
 
-    const apiResponse = await this.gamesService.issueTicket(this.listOfBets)
+    const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
     console.log(apiResponse)
-    if (apiResponse.status) {
+    if (apiResponse.DataToPrint) {
       this.clearBets()
     }
   }

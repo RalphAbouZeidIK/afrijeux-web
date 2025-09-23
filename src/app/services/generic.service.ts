@@ -68,10 +68,10 @@ export class GenericService {
   }
 
 
-  calculateCombinations(associatedHorsesNumber: any, baseHorsesNumber: any, minHorseNumber: any, isAllOrder: any) {
+  calculateCombinations(associatedHorsesNumber: any, baseHorsesNumber: any, minHorseNumber: any, IsAllOrder: any) {
     let combinationsNumber = 1;
 
-    const isDoubleComplete = baseHorsesNumber === 0 && isAllOrder;
+    const IsDoubleComplete = baseHorsesNumber === 0 && IsAllOrder;
 
     if (minHorseNumber === 1) {
       return associatedHorsesNumber;
@@ -81,7 +81,7 @@ export class GenericService {
       combinationsNumber *= i;
     }
 
-    if (isAllOrder) {
+    if (IsAllOrder) {
       for (let i = minHorseNumber; i > minHorseNumber - baseHorsesNumber; --i) {
         combinationsNumber *= i;
       }
@@ -93,7 +93,7 @@ export class GenericService {
       }
     }
 
-    if (isDoubleComplete) {
+    if (IsDoubleComplete) {
       for (let i = minHorseNumber; i > minHorseNumber - baseHorsesNumber; --i) {
         combinationsNumber *= i;
       }

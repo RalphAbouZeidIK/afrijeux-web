@@ -11,9 +11,9 @@ import { GenericService } from 'src/app/services/generic.service';
 export class HorseComponent implements OnInit {
   @Input() horse: any
 
-  @Input() fieldChoice = 1
+  @Input() FieldChoice = 1
 
-  @Input() isBettingDisabled = false
+  @Input() IsBettingDisabled = false
 
   isAndroidApp = false
 
@@ -35,7 +35,7 @@ export class HorseComponent implements OnInit {
   }
 
   addHorseToBet(horse: any, horseType: string) {
-    if (this.isBettingDisabled) {
+    if (this.IsBettingDisabled) {
       this.translate.get('alerts.complete_previous_bet').subscribe((translatedMsg: string) => {
         alert(translatedMsg);
       });
@@ -43,36 +43,36 @@ export class HorseComponent implements OnInit {
     }
 
 
-    if (horse.isNoPartant) {
+    if (horse.IsNoPartant) {
       return
     }
-    if (horse.isParoli || horse.isDouble) {
+    if (horse.IsParoli || horse.IsDouble) {
       this.addToBet.emit(horse);
       return
     }
 
     else {
-      // If horse is disabled, prevent modifying the base checkbox (isBase)
-      if (horseType === 'isBase' && horse.isDisabled && !horse.isBase) {
+      // If horse is disabled, prevent modifying the base checkbox (IsBase)
+      if (horseType === 'IsBase' && horse.isDisabled && !horse.IsBase) {
         return;
       }
 
       // Toggle the checkboxes based on the type
       switch (horseType) {
-        case 'isBase':
-          horse.isBase = !horse.isBase;  // Toggle base
-          horse.isAssociated = false;   // Reset associated when base is toggled
+        case 'IsBase':
+          horse.IsBase = !horse.IsBase;  // Toggle base
+          horse.IsAssociated = false;   // Reset associated when base is toggled
           break;
-        case 'isAssociated':
-          horse.isAssociated = !horse.isAssociated;  // Toggle associated
-          horse.isBase = false;  // Reset base when associated is toggled
+        case 'IsAssociated':
+          horse.IsAssociated = !horse.IsAssociated;  // Toggle associated
+          horse.IsBase = false;  // Reset base when associated is toggled
           break;
         default:
           break;
       }
 
       // Update the selection state based on base or associated status
-      horse.isSelected = horse.isBase || horse.isAssociated;
+      horse.IsSelected = horse.IsBase || horse.IsAssociated;
     }
 
 
@@ -87,6 +87,6 @@ export class HorseComponent implements OnInit {
     * Expand Collapse function
     */
   toggleSub(item: any) {
-    item.isExpanded = !item.isExpanded
+    item.IsExpanded = !item.IsExpanded
   }
 }

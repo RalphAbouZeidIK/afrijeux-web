@@ -44,10 +44,10 @@ export class ApiService {
       this.translate.get('alerts.unauthorized').subscribe((msg: string) => {
         alert(msg);
       });
-      if (this.router.url !== '/') {
-        this.userSrv.signOut();
-        this.router.navigate(['']);
-      }
+      // if (this.router.url !== '/') {
+      //   this.userSrv.signOut();
+      //   this.router.navigate(['']);
+      // }
       setTimeout(() => (this.errorHandled = false), 5000);
     } else {
       console.warn('API Error:', error);
@@ -68,13 +68,13 @@ export class ApiService {
       return;
     }
 
-    console.log(`${apiRoute} api route from make api` )
+    //console.log(`${apiRoute} api route from make api` )
     const apiEndPoint = `${environment.BaseUrl}${environment.gcSrv}${subRoute}/${apiRoute}`;
-    console.log(apiEndPoint);
+    //console.log(apiEndPoint);
 
     let headers = new HttpHeaders();
 
-    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg1MzQ1MTksImV4cCI6MTc1ODU0NTMxOSwiaWF0IjoxNzU4NTM0NTE5fQ.oGJ4bRIDdqXKJq9SGB5_FR-F_Uc5sPCNL5xB9dJbmmM`);
+    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg2MjIwNjMsImV4cCI6MTc1ODYzMjg2MywiaWF0IjoxNzU4NjIyMDYzfQ.I6PCXTFd3IysjBG8OjS22cEtoAtKzFFzfHTgOBhCxGU`);
 
 
     const httpOptions = { headers, params: params.query || {} };

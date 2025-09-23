@@ -341,7 +341,7 @@
             flex-shrink: 0;
             position: absolute;
             background-image: url(/assets/images/arrow-down.svg);
-            top: 25px;
+            top: calc(50% - 3px);
             right: 25px;
             @include transition(0.2s);
         }

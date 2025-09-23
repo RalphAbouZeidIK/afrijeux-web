@@ -3,7 +3,8 @@ import { ApiService } from './api.service';
 import { NativeBridgeService } from './native-bridge.service';
 import { DatePipe } from '@angular/common';
 import { Buffer } from 'buffer';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, retry } from 'rxjs';
+import { GenericService } from './generic.service';
 
 declare var require: any;
 (window as any).Buffer = Buffer;
@@ -22,7 +23,9 @@ export class MachineService {
   constructor(
     private apiSrv: ApiService,
     private bridge: NativeBridgeService,
-    public datePipe: DatePipe
+    public datePipe: DatePipe,
+    private gnrcSrv: GenericService,
+    private nativeBridge: NativeBridgeService
   ) {
     (window as any).onCacheLoaded = (key: string, cachedValue: any) => {
       const callbacks = this.cacheCallbacks[key];
@@ -52,7 +55,8 @@ export class MachineService {
   }
 
   async encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
-    console.log(`${objectToEncrypt} api route from encrypted`)
+    ////console.log(objectToEncrypt)
+    let amount = objectToEncrypt.Ticket?.Stake || null
     let timeStamp = this.datePipe.transform(new Date(), 'MM/dd/yyyy HH:mm:ss')
     objectToEncrypt = JSON.stringify(objectToEncrypt);
     const xxtea = require('xxtea-node');
@@ -65,13 +69,13 @@ export class MachineService {
       //machineData = await this.getFromFlutterOfflineCache('machine_data')
       //let encryptionPass = 'TDUT9J6gTig='
       let machineData = await this.getFromFlutterOfflineCache('machine_data');
-      console.log(machineData)
+      ////console.log(machineData)
       if (!machineData) {
         console.warn("⚠️ No machineData found yet, retrying...");
         machineData = await this.getFromFlutterOfflineCache('machine_data');
       }
       let encryptionPass = machineData?.CommunicationKey || 'default';
-      console.log(`Encryption Pass ${encryptionPass}`)
+      ////console.log(`Encryption Pass ${encryptionPass}`)
       encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(encryptionPass));
 
 
@@ -85,7 +89,7 @@ export class MachineService {
     }
 
     const base64String = btoa(binaryString);
-    // console.log({
+    // //console.log({
     //   machine: (isRegisterMachineApi) ? this.machineId : machineData?.MachineId.toString(),
     //   timeStamp: timeStamp,
     //   encryptedRequestDTO: base64String,
@@ -114,7 +118,7 @@ export class MachineService {
         culture: null,
         machineCode: (isRegisterMachineApi) ? null : "6821",   //("6821")
         currency: null,
-        amount: null
+        amount: amount
       },
     };
 
@@ -148,8 +152,8 @@ export class MachineService {
     else {
       let machineData: any = await this.getFromFlutterOfflineCache('machine_data')
       let encryptionPass = machineData?.CommunicationKey || 'default';
-      console.log(`Encryption Pass ${this.encryptionPass}`)
-      console.log(this.encryptionPass)
+      ////console.log(`Encryption Pass ${this.encryptionPass}`)
+      ////console.log(this.encryptionPass)
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(encryptionPass)));
     }
     return JSON.parse(decrypted);
@@ -245,7 +249,7 @@ export class MachineService {
   }
 
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
-    console.log(apiRoute)
+    console.log(params)
     const cacheKey = this.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
@@ -253,7 +257,7 @@ export class MachineService {
 
     if (navigator.onLine) {
       // Save full API response exactly
-      console.log(`${apiRoute} api route from navigator online`)
+      //console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       this.saveToFlutterOfflineCache(cacheKey, apiResponse);
     }
@@ -313,7 +317,7 @@ export class MachineService {
   async getGameEvents() {
     //let gameObject = await this.getGame()
     let userData = await this.getFromFlutterOfflineCache('user_data')
-    console.log(userData)
+    //console.log(userData)
     let params: any = {
       PersonId: userData.PersonId,  //(9791)
       GameId: 28,
@@ -328,7 +332,7 @@ export class MachineService {
 
   async getFixedConfiguration(fixedConfigurationId: any) {
     let userData = await this.getFromFlutterOfflineCache('user_data')
-    console.log(userData)
+    //console.log(userData)
 
     let params: any = {
       PersonId: userData.PersonId,  //(9791)
@@ -340,6 +344,71 @@ export class MachineService {
     }
     let gameEventsResponse1 = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/GetFixedConfiguration`, 'POST', params)
     return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
+  }
+
+  async issueTicket(ticketObject: any) {
+    let userData = await this.getFromFlutterOfflineCache('user_data')
+    let machineData = await this.getFromFlutterOfflineCache('machine_data');
+    //console.log(userData)
+
+    let date = new Date()
+    let ticketRequestId = Math.floor(Math.random() * 1e12).toString() + this.gnrcSrv.getFormattedToday() + 28
+    ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
+
+    let ticketBody = {
+      GameId: 28,
+      FullTicketId: '',
+      EncryptedTicketKey: '',
+      IsVoucher: 0,
+      Stake: ticketObject.TicketPrice,
+      MachineId: machineData.MachineId,
+      PersonId: userData.PersonId,
+      MachineTicketId: 0,
+      MachineDateIssued: date.toISOString(),
+      ServiceDateIssued: date.toISOString(),
+      TicketRequestId: ticketRequestId,
+      GamePick: ticketObject,
+      LoyalityReferenceId: 0,
+      ReferenceId: '',
+      IsPromotion: false,
+      PromotionRuleId: 0,
+    }
+
+    let params = {
+      GameId: 28,
+      PersonId: userData.PersonId,
+      MachineId: machineData.MachineId,
+      Ticket: ticketBody,
+      TicketRequestId: ticketRequestId,
+      LoyalityReferenceId: 0,
+      TimeStamp: 'string',
+    }
+
+
+    // let params = {
+    //   body: {
+    //     "timeStamp": "string",
+    //     "issueTicketRequest": issueTicketRequest,
+    //     "ip": "10.1.3.254",
+    //     "culture": "en",
+    //     "currency": 4,
+    //     "amount": ticketBody.Stake
+    //   }
+    // }
+    //console.log(params)
+
+
+    try {
+      const apiResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/IssueTicket`, 'POST', params)
+      //console.log(apiResponse)
+      if (apiResponse.DataToPrint) {
+        this.nativeBridge.sendPrintMessage('normalText', apiResponse.DataToPrint);
+        return apiResponse
+      }
+      //console.log(apiResponse)
+    } catch (error) {
+      //console.log(error)
+    }
   }
 
 }

@@ -25,7 +25,7 @@ export class CourseDetailsComponent implements OnInit {
 
   selectedTypeOfBet: any
 
-  fieldChoice = 1
+  FieldChoice = 1
 
   isAndroidApp = false
 
@@ -60,48 +60,49 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   toggleSub(item: any) {
-    item.isExpanded = !item.isExpanded
+    item.IsExpanded = !item.IsExpanded
   }
 
   addToBet(horse: any) {
-    if (this.courseDetails.selectedFixedConfig?.isParoli) {
-      horse.isSelected = !horse.isSelected
-      if (horse.isSelected) {
-        this.courseDetails.baseHorses = []
-        this.courseDetails.baseHorses.push(horse)
-        this.courseDetails.horseList.forEach((horseItem: any) => {
-          if (horseItem.horseId != horse.horseId) {
-            horseItem.isSelected = false
+
+    if (this.courseDetails.SelectedFixedConfig?.IsParoli) {
+      horse.IsSelected = !horse.IsSelected
+      if (horse.IsSelected) {
+        this.courseDetails.BaseHorses = []
+        this.courseDetails.BaseHorses.push(horse)
+        this.courseDetails.HorseList.forEach((horseItem: any) => {
+          if (horseItem.HorseId != horse.HorseId) {
+            horseItem.IsSelected = false
           }
         });
       }
       else {
-        this.courseDetails.baseHorses = []
+        this.courseDetails.BaseHorses = []
       }
 
       this.setPmuBets(false);
       return
     }
 
-    if (this.courseDetails.selectedFixedConfig?.isForTicketTypeEvent == 1) {
-      horse.isSelected = !horse.isSelected
-      if (this.courseDetails.isDoubleMain) {
-        this.courseDetails.baseHorses = []
-        if (horse.isSelected) {
-          this.courseDetails.baseHorses.push(horse)
-          this.courseDetails.horseList.forEach((horseItem: any) => {
-            if (horseItem.horseId != horse.horseId) {
-              horseItem.isSelected = false
+    if (this.courseDetails.SelectedFixedConfig?.IsForTicketTypeEvent == 1) {
+      horse.IsSelected = !horse.IsSelected
+      if (this.courseDetails.IsDoubleMain) {
+        this.courseDetails.BaseHorses = []
+        if (horse.IsSelected) {
+          this.courseDetails.BaseHorses.push(horse)
+          this.courseDetails.HorseList.forEach((horseItem: any) => {
+            if (horseItem.HorseId != horse.HorseId) {
+              horseItem.IsSelected = false
             }
           });
         }
       }
       else {
-        if (horse.isSelected) {
-          this.courseDetails.baseHorses.push(horse)
+        if (horse.IsSelected) {
+          this.courseDetails.BaseHorses.push(horse)
         }
         else {
-          this.courseDetails.baseHorses = this.courseDetails.baseHorses.filter((item: any) => item.horseId != horse.horseId)
+          this.courseDetails.BaseHorses = this.courseDetails.BaseHorses.filter((item: any) => item.HorseId != horse.HorseId)
         }
       }
 
@@ -110,58 +111,58 @@ export class CourseDetailsComponent implements OnInit {
       return
     }
 
-    if (!horse.isSelected) {
-      let horseIndex = this.courseDetails.baseHorses.findIndex((horseItem: any) => horseItem.horseId == horse.horseId);
+    if (!horse.IsSelected) {
+      let horseIndex = this.courseDetails.BaseHorses.findIndex((horseItem: any) => horseItem.HorseId == horse.HorseId);
       if (horseIndex != -1) {
-        if (this.fieldChoice == 1) {
-          this.courseDetails.baseHorses.splice(horseIndex, 1)
+        if (this.FieldChoice == 1) {
+          this.courseDetails.BaseHorses.splice(horseIndex, 1)
         }
         else {
-          this.courseDetails.baseHorses[this.courseDetails.baseHorses.indexOf(horse)] = {
-            horseNameDisplay: 'XX',
-            isDummy: true,
+          this.courseDetails.BaseHorses[this.courseDetails.BaseHorses.indexOf(horse)] = {
+            HorseNameDisplay: 'XX',
+            IsDummy: true,
             isSelected: true,
-            horseName: '00'
+            HorseName: '00'
           }
         }
 
       }
       else {
-        this.courseDetails.associatedHorses.splice(this.courseDetails.associatedHorses.indexOf(horse), 1)
+        this.courseDetails.AssociatedHorses.splice(this.courseDetails.AssociatedHorses.indexOf(horse), 1)
       }
 
     }
 
     else {
-      const targetArray = horse.isBase ? this.courseDetails.baseHorses : this.courseDetails.associatedHorses;
-      const otherArray = horse.isBase ? this.courseDetails.associatedHorses : this.courseDetails.baseHorses;
+      const targetArray = horse.IsBase ? this.courseDetails.BaseHorses : this.courseDetails.AssociatedHorses;
+      const otherArray = horse.IsBase ? this.courseDetails.AssociatedHorses : this.courseDetails.BaseHorses;
 
       // Remove horse from the other array if it exists
-      const otherArrayIndex = otherArray.findIndex((horseItem: any) => horseItem.horseId === horse.horseId);
+      const otherArrayIndex = otherArray.findIndex((horseItem: any) => horseItem.HorseId === horse.HorseId);
       if (otherArrayIndex !== -1) {
-        if (horse.isAssociated) {
-          this.courseDetails.baseHorses[otherArrayIndex] = {
-            horseNameDisplay: 'XX',
-            isDummy: true,
+        if (horse.IsAssociated) {
+          this.courseDetails.BaseHorses[otherArrayIndex] = {
+            HorseNameDisplay: 'XX',
+            IsDummy: true,
             isSelected: true,
-            horseName: '00'
+            HorseName: '00'
           };
         } else {
           otherArray.splice(otherArrayIndex, 1);
         }
       }
 
-      let isDummyReplaced = false;
+      let IsDummyReplaced = false;
 
       // Check if there's a dummy horse in the target array and replace it
-      const dummyIndex = targetArray.findIndex((horseItem: any) => horseItem.isDummy === true);
+      const dummyIndex = targetArray.findIndex((horseItem: any) => horseItem.IsDummy === true);
       if (dummyIndex !== -1) {
         targetArray[dummyIndex] = horse;
-        isDummyReplaced = true;
+        IsDummyReplaced = true;
       }
 
       // If no dummy horse was replaced, add the horse to the target array
-      if (!isDummyReplaced) {
+      if (!IsDummyReplaced) {
         targetArray.push(horse);
       }
 
@@ -169,14 +170,14 @@ export class CourseDetailsComponent implements OnInit {
     }
 
 
-    if (this.courseDetails.baseHorses.filter((horse: any) => horse.isDummy === true).length == 1) {
-      this.courseDetails.horseList.forEach((horseItem: any) => {
+    if (this.courseDetails.BaseHorses.filter((horse: any) => horse.IsDummy === true).length == 1) {
+      this.courseDetails.HorseList.forEach((horseItem: any) => {
         horseItem.isDisabled = true
 
       });
     }
     else {
-      this.courseDetails.horseList.forEach((horseItem: any) => {
+      this.courseDetails.HorseList.forEach((horseItem: any) => {
         horseItem.isDisabled = false
       });
     }
@@ -185,7 +186,7 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   chooseBetType(parisItem: any) {
-    if (this.courseDetails.isBettingDisabled) {
+    if (this.courseDetails.IsBettingDisabled) {
       this.translate.get('alerts.complete_previous_bet').subscribe((translatedMsg: string) => {
         console.log(translatedMsg)
         alert(translatedMsg);
@@ -195,20 +196,20 @@ export class CourseDetailsComponent implements OnInit {
 
     this.resetSelections();
 
-    if (parisItem.isSelected) {
-      parisItem.isSelected = false;
-      this.courseDetails.selectedFixedConfig = null
-      this.courseDetails.selectedFormule = null
+    if (parisItem.IsSelected) {
+      parisItem.IsSelected = false;
+      this.courseDetails.SelectedFixedConfig = null
+      this.courseDetails.SelectedFormule = null
     }
 
     else {
-      this.courseDetails.fixedConfigs.forEach((item: any) => {
-        item.isSelected = false;
-        this.courseDetails.selectedFixedConfig = null
+      this.courseDetails.FixedConfigs.forEach((item: any) => {
+        item.IsSelected = false;
+        this.courseDetails.SelectedFixedConfig = null
       });
 
-      parisItem.isSelected = true;
-      this.courseDetails.selectedFixedConfig = this.courseDetails.fixedConfigs.find((item: any) => item.isSelected == true)
+      parisItem.IsSelected = true;
+      this.courseDetails.SelectedFixedConfig = this.courseDetails.FixedConfigs.find((item: any) => item.IsSelected == true)
       this.changeFieldType(1, true)
 
     }
@@ -216,40 +217,40 @@ export class CourseDetailsComponent implements OnInit {
     this.setPmuBets(true);
   }
 
-  setPmuBets(isTypeChange: boolean) {
+  setPmuBets(IsTypeChange: boolean) {
 
-    if (!this.courseDetails.price || isTypeChange) {
-      this.courseDetails.price = this.courseDetails.selectedFixedConfig?.singlePrice
+    if (!this.courseDetails.price || IsTypeChange) {
+      this.courseDetails.price = this.courseDetails.SelectedFixedConfig?.SinglePrice
     }
-    if ((this.courseDetails.baseHorses.find((horse: any) => horse.isSelected == true) == undefined) || (this.courseDetails.fixedConfigs.find((item: any) => item.isSelected == true) == undefined)) {
-      this.courseDetails.showRace = false
+    if ((this.courseDetails.BaseHorses.find((horse: any) => horse.IsSelected == true) == undefined) || (this.courseDetails.FixedConfigs.find((item: any) => item.IsSelected == true) == undefined)) {
+      this.courseDetails.ShowRace = false
     }
 
     else {
-      this.courseDetails.showRace = true
+      this.courseDetails.ShowRace = true
     }
 
 
 
     //console.log(this.courseDetails)
-    this.courseDetails.typeChanged = isTypeChange
+    this.courseDetails.TypeChanged = IsTypeChange
     this.cartSrv.setPmuBets(this.courseDetails);
   }
 
   changeFieldType(event: any, isAutoChange?: boolean) {
     this.resetSelections()
-    this.fieldChoice = event
-    this.courseDetails.fieldChoice = event
-    this.courseDetails.selectedFormule = this.typesList.find((item: any) => item.id == event)
+    this.FieldChoice = event
+    this.courseDetails.FieldChoice = event
+    this.courseDetails.SelectedFormule = this.typesList.find((item: any) => item.id == event)
     //console.log('here')
     //console.log(this.courseDetails)
-    if (this.fieldChoice != 1) {
-      for (let index = 0; index < this.courseDetails.selectedFixedConfig.horsesNumberTelpo; index++) {
-        this.courseDetails.baseHorses.push({
-          horseNameDisplay: 'XX',
-          isDummy: true,
+    if (this.FieldChoice != 1) {
+      for (let index = 0; index < this.courseDetails.SelectedFixedConfig.HorsesNumberTelpo; index++) {
+        this.courseDetails.BaseHorses.push({
+          HorseNameDisplay: 'XX',
+          IsDummy: true,
           isSelected: true,
-          horseName: '00'
+          HorseName: '00'
         })
 
       }
@@ -262,15 +263,15 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   resetSelections() {
-    this.fieldChoice = 1;
-    this.courseDetails.baseHorses = []
-    this.courseDetails.associatedHorses = []
+    this.FieldChoice = 1;
+    this.courseDetails.BaseHorses = []
+    this.courseDetails.AssociatedHorses = []
 
 
-    this.courseDetails.horseList.forEach((horseItem: any) => {
-      horseItem.isSelected = false
-      horseItem.isBase = false
-      horseItem.isAssociated = false
+    this.courseDetails.HorseList.forEach((horseItem: any) => {
+      horseItem.IsSelected = false
+      horseItem.IsBase = false
+      horseItem.IsAssociated = false
       horseItem.isDisabled = false
     });
   }

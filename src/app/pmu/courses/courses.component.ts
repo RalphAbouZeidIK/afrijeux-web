@@ -110,7 +110,7 @@ export class CoursesComponent implements OnInit, AfterViewInit {
    */
 
   toggleSub(item: any) {
-    item.isExpanded = !item.isExpanded
+    item.IsExpanded = !item.IsExpanded
   }
 
   async getGameEvents() {
@@ -118,13 +118,14 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGameEvents()
+      //console.log(gameEventsResponse)
       const groupedRaces = this.groupByCategory(gameEventsResponse.GameConfiguration.EventConfiguration);
       this.dataArray = Object.values(groupedRaces)
 
-      console.log(this.dataArray)
+      //console.log(this.dataArray)
       if (this.dataArray) {
         this.dataArray.forEach((reunionItem: any) => {
-          reunionItem.events.forEach((raceItem: any) => {
+          reunionItem.Events.forEach((raceItem: any) => {
             this.composeEventDetails(raceItem)
           });
         });
@@ -134,10 +135,10 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
     else {
       gameEventsResponse = await this.gamesSrv.getGameEvents(this.date, this.countryCode)
-      this.dataArray = gameEventsResponse.eventConfiguration
+      this.dataArray = gameEventsResponse.EventConfiguration
       if (this.dataArray) {
         this.dataArray.forEach((reunionItem: any) => {
-          reunionItem.events.forEach((raceItem: any) => {
+          reunionItem.Events.forEach((raceItem: any) => {
             this.getEventConfig(raceItem)
           });
         });
@@ -145,16 +146,16 @@ export class CoursesComponent implements OnInit, AfterViewInit {
       }
     }
 
-    console.log(gameEventsResponse)
-    console.log(this.dataArray)
+    //console.log(gameEventsResponse)
+    //console.log(this.dataArray)
 
 
 
 
-    console.log(this.dataArray)
+    //console.log(this.dataArray)
   }
 
-  groupByCategory(events: any): { ReunionCode: string, events: any }[] {
+  groupByCategory(events: any): { ReunionCode: string, Events: any }[] {
     // Group races by category
     const grouped = events.reduce((acc: any, race: any) => {
       if (!acc[race.ReunionCode]) {
@@ -167,7 +168,7 @@ export class CoursesComponent implements OnInit, AfterViewInit {
     // Convert the grouped data into the desired format
     return Object.keys(grouped).map(ReunionCode => ({
       ReunionCode,
-      events: grouped[ReunionCode],
+      Events: grouped[ReunionCode],
       ReunionName: ReunionCode
     }));
   }
@@ -178,40 +179,40 @@ export class CoursesComponent implements OnInit, AfterViewInit {
   }
 
   async getEventConfig(raceItem: any) {
-    raceItem.fixedConfigs.forEach((fixedConfigItem: any) => {
-      fixedConfigItem.isSelected = false
-      fixedConfigItem.isParoli = false
+    raceItem.FixedConfigs.forEach((fixedConfigItem: any) => {
+      fixedConfigItem.IsSelected = false
+      fixedConfigItem.IsParoli = false
 
       if (fixedConfigItem.isCumulative && fixedConfigItem.isMultiEvent) {
-        fixedConfigItem.isParoli = true
+        fixedConfigItem.IsParoli = true
       }
     });
 
-    raceItem.baseHorses = []
-    raceItem.associatedHorses = []
+    raceItem.BaseHorses = []
+    raceItem.AssociatedHorses = []
 
-    raceItem.horseList.forEach((horseItem: any) => {
-      (horseItem.startingStatus == 1) ? horseItem.isNoPartant = false : horseItem.isNoPartant = true
-      horseItem.isExpanded = false,
+    raceItem.HorseList.forEach((horseItem: any) => {
+      (horseItem.StartingStatus == 1) ? horseItem.IsNoPartant = false : horseItem.IsNoPartant = true
+      horseItem.IsExpanded = false,
         horseItem.isDisabled = true
-      horseItem.horseName = horseItem.horseName.padStart(2, '0');
+      horseItem.HorseName = horseItem.HorseName.padStart(2, '0');
     });
 
-    raceItem.isExpanded = false
-    console.log(raceItem)
+    raceItem.IsExpanded = false
+    //console.log(raceItem)
   }
 
   resetOnEventChange(data: any) {
-    console.log(data)
-    if (data.selectedFixedConfig.isForTicketTypeEvent == 1) {
+    //console.log(data)
+    if (data.SelectedFixedConfig.IsForTicketTypeEvent == 1) {
       let sameReunion = this.dataArray.find((item: any) => item.reunionCode == data.reunionCode)
       if (sameReunion) {
-        sameReunion.events.forEach((eventItem: any) => {
-          if (!eventItem.isDoubleMain && (eventItem.gameEventId != data.gameEventId)) {
-            eventItem.baseHorses = []
-            eventItem.associatedHorses = []
-            eventItem.horseList.forEach((horseItem: any) => {
-              horseItem.isSelected = false
+        sameReunion.Events.forEach((eventItem: any) => {
+          if (!eventItem.IsDoubleMain && (eventItem.GameEventId != data.GameEventId)) {
+            eventItem.BaseHorses = []
+            eventItem.AssociatedHorses = []
+            eventItem.HorseList.forEach((horseItem: any) => {
+              horseItem.IsSelected = false
             });
           }
         });
@@ -222,10 +223,10 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
 
   eventBetSet(event: any) {
-    console.log(event)
+    //console.log(event)
     this.dataArray.forEach((reunionItem: any) => {
-      reunionItem.events.forEach((raceItem: any) => {
-        if ((raceItem.gameEventId != event.gameEventId) || (event.selectedFixedConfig == null)) {
+      reunionItem.Events.forEach((raceItem: any) => {
+        if ((raceItem.GameEventId != event.GameEventId) || (event.SelectedFixedConfig == null)) {
           this.resetEventData(raceItem, true)
         }
         else {
@@ -234,59 +235,59 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
       });
     });
-    console.log(event)
-    if (event.selectedFixedConfig) {
-      let selectedTypeId = event.selectedFixedConfig.ticketTypeId
+    //console.log(event)
+    if (event.SelectedFixedConfig) {
+      let selectedTypeId = event.SelectedFixedConfig.TicketTypeId
       this.dataArray.forEach((reunionItem: any) => {
-        reunionItem.events.forEach((raceItem: any) => {
-          if (raceItem.gameEventId != event.gameEventId) {
-            raceItem.isBettingDisabled = true
-            raceItem.fixedConfigs.forEach((configItem: any) => {
-              configItem.isSelected = false
+        reunionItem.Events.forEach((raceItem: any) => {
+          if (raceItem.GameEventId != event.GameEventId) {
+            raceItem.IsBettingDisabled = true
+            raceItem.FixedConfigs.forEach((configItem: any) => {
+              configItem.IsSelected = false
             });
-            raceItem.selectedFixedConfig = null
+            raceItem.SelectedFixedConfig = null
 
           }
         })
       })
 
-      if (event.selectedFixedConfig.isParoli) {
+      if (event.SelectedFixedConfig.IsParoli) {
         let selectedReunion = this.dataArray.find((reunionItem: any) => reunionItem.reunionCode == event.reunionCode)
-        selectedReunion.events.forEach((raceItem: any) => {
-          let sameConfig = raceItem.fixedConfigs.find((item: any) => item.ticketTypeId == selectedTypeId)
+        selectedReunion.Events.forEach((raceItem: any) => {
+          let sameConfig = raceItem.FixedConfigs.find((item: any) => item.TicketTypeId == selectedTypeId)
           if (sameConfig) {
-            raceItem.selectedFixedConfig = event.selectedFixedConfig
-            sameConfig.isSelected = true
-            raceItem.isBettingDisabled = false
-            raceItem.horseList.forEach((horseItem: any) => {
+            raceItem.SelectedFixedConfig = event.SelectedFixedConfig
+            sameConfig.IsSelected = true
+            raceItem.IsBettingDisabled = false
+            raceItem.HorseList.forEach((horseItem: any) => {
               horseItem.isDisabled = false
-              horseItem.isParoli = true
+              horseItem.IsParoli = true
             });
           }
         })
 
       }
 
-      if (event.selectedFixedConfig.isForTicketTypeEvent == 1) {
-        event.isDoubleMain = true
-        event.horseList.forEach((horseItem: any) => {
+      if (event.SelectedFixedConfig.IsForTicketTypeEvent == 1) {
+        event.IsDoubleMain = true
+        event.HorseList.forEach((horseItem: any) => {
           horseItem.isDisabled = false
-          horseItem.isDouble = true
+          horseItem.IsDouble = true
         });
         let selectedReunion = this.dataArray.find((reunionItem: any) => reunionItem.reunionCode == event.reunionCode)
         event.doubleGagnantConfiguration.forEach((allowedDG: any) => {
-          let foundRace = selectedReunion.events.find((eventItem: any) => eventItem.gameEventId == allowedDG.secondaryGameEventId)
-          foundRace.selectedFixedConfig = event.selectedFixedConfig
+          let foundRace = selectedReunion.Events.find((eventItem: any) => eventItem.GameEventId == allowedDG.secondaryGameEventId)
+          foundRace.SelectedFixedConfig = event.SelectedFixedConfig
 
-          foundRace.isBettingDisabled = false
-          foundRace.horseList.forEach((horseItem: any) => {
+          foundRace.IsBettingDisabled = false
+          foundRace.HorseList.forEach((horseItem: any) => {
             horseItem.isDisabled = false
-            horseItem.isDouble = true
+            horseItem.IsDouble = true
           });
 
-          let sameConfig = foundRace.fixedConfigs.find((item: any) => item.ticketTypeId == selectedTypeId)
+          let sameConfig = foundRace.FixedConfigs.find((item: any) => item.TicketTypeId == selectedTypeId)
           if (sameConfig) {
-            sameConfig.isSelected = true
+            sameConfig.IsSelected = true
           }
 
         });
@@ -295,65 +296,71 @@ export class CoursesComponent implements OnInit, AfterViewInit {
     }
 
 
-    console.log(this.dataArray)
+    //console.log(this.dataArray)
   }
 
   async composeEventDetails(raceItem: any) {
     let fixedConfig = await this.machineSrv.getFixedConfiguration(raceItem.FixedConfigurationVersion)
-    console.log(fixedConfig)
+    //console.log(fixedConfig)
 
     // Build a lookup from array a
     const idsInA = new Set(raceItem.GameEventTicketTypeConfiguration.map((item: any) => item.TicketTypeId));
 
     // Filter b to keep only items that exist in a
     const filteredB = fixedConfig.filter((item: any) => idsInA.has(item.TicketTypeId));
-    console.log(filteredB)
+    //console.log(filteredB)
 
-    raceItem.fixedConfigs = filteredB
-    raceItem.fixedConfigs.forEach((fixedConfigItem: any) => {
-      fixedConfigItem.isSelected = false
-      fixedConfigItem.isParoli = false
+    raceItem.FixedConfigs = filteredB
+    raceItem.FixedConfigs.forEach((fixedConfigItem: any) => {
+      fixedConfigItem.IsSelected = false
+      fixedConfigItem.IsParoli = false
 
       if (fixedConfigItem.isCumulative && fixedConfigItem.isMultiEvent) {
-        fixedConfigItem.isParoli = true
+        fixedConfigItem.IsParoli = true
       }
     })
 
-    raceItem.baseHorses = []
-    raceItem.associatedHorses = []
-    raceItem.horseList = []
+    raceItem.BaseHorses = []
+    raceItem.AssociatedHorses = []
+    raceItem.HorseList = []
+    const nonPartantIds = raceItem.NonPartant
+      ? raceItem.NonPartant.split(",").map((id: any) => parseInt(id.trim(), 10))
+      : [];
+
     for (let index = 0; index < raceItem.HorseNumber; index++) {
-      raceItem.horseList.push({
-        id: index + 1,
-        HorseName: (index + 1).toString().padStart(2, '0'),
-      })
+      const HorseId = index + 1;
+
+      raceItem.HorseList.push({
+        HorseId: HorseId,
+        HorseName: HorseId.toString().padStart(2, '0'),
+        IsNoPartant: nonPartantIds.includes(HorseId) // 👈 check here
+      });
     }
 
-    raceItem.multiplicator = 1
-    console.log(raceItem)
+    raceItem.Multiplicator = 1
+    //console.log(raceItem)
   }
 
   resetEventData(raceItem: any, resetConfig: boolean) {
 
     if (resetConfig) {
-      raceItem.selectedFixedConfig = null
-      raceItem.fixedConfigs.forEach((configItem: any) => {
-        configItem.isSelected = false
+      raceItem.SelectedFixedConfig = null
+      raceItem.FixedConfigs.forEach((configItem: any) => {
+        configItem.IsSelected = false
       });
     }
-    raceItem.baseHorses = []
-    raceItem.associatedHorses = []
-    raceItem.isDoubleMain = false
-    raceItem.isBettingDisabled = false;
-    raceItem.horseList.forEach((horseItem: any) => {
+    raceItem.BaseHorses = []
+    raceItem.AssociatedHorses = []
+    raceItem.IsDoubleMain = false
+    raceItem.IsBettingDisabled = false;
+    raceItem.HorseList.forEach((horseItem: any) => {
       horseItem.isDisabled = false
-      horseItem.isParoli = false
-      horseItem.isDouble = false
-      horseItem.isBase = false
-      horseItem.isAssociated = false
-      horseItem.isSelected = false
+      horseItem.IsParoli = false
+      horseItem.IsDouble = false
+      horseItem.IsBase = false
+      horseItem.IsAssociated = false
+      horseItem.IsSelected = false
     });
-    console.log(raceItem)
   }
 
 }

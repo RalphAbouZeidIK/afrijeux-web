@@ -116,10 +116,10 @@ export class CartService {
     let totalMultiplicator = 0
     console.log(cartData)
     cartData.forEach((element: any) => {
-      console.log(element.multiplicator)
-      if (element.showRace) {
+      console.log(element.Multiplicator)
+      if (element.ShowRace) {
         totalBets++
-        totalMultiplicator += element.multiplicator
+        totalMultiplicator += element.Multiplicator
       }
     });
     this.storageSrv.setItem('totalBets', totalBets.toString())
