@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MachineService } from 'src/app/services/machine.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +10,12 @@ import { MachineService } from 'src/app/services/machine.service';
 })
 export class HomeComponent {
   constructor(
-    private machineSrv: MachineService,
+    private cacheSrv: CacheService,
     private router: Router
   ) { }
 
   async logout() {
-    await this.machineSrv.removeFromFlutterOfflineCache("user_data");
+    await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
     this.router.navigate(['/Machine']);
   }
 }

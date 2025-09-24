@@ -17,11 +17,21 @@ export class GamesComponent implements OnInit {
 
   games: any = []
 
+  isOnline = navigator.onLine
+
   async ngOnInit() {
+    console.log(this.isOnline)
     let machineData = await this.machineSrv.getMachineData()
     console.log(machineData)
-    this.games = machineData?.Games
+    let games = machineData?.Games
+    games.forEach((gameItem: any) => {
+      gameItem.ShowGame = false
+      if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
+        gameItem.ShowGame = true
+      }
+    });
     console.log(this.games)
+    this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 
   selectGame(game: any) {

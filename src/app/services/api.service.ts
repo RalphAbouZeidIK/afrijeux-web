@@ -12,6 +12,7 @@ import { Buffer } from 'buffer';
 import { TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 import { NativeBridgeService } from './native-bridge.service';
+import { CacheService } from './cache.service';
 
 (window as any).Buffer = Buffer;
 declare var require: any;
@@ -31,12 +32,12 @@ export class ApiService {
     private userSrv: UserService,
     private translate: TranslateService,
     public datePipe: DatePipe,
-    private bridge: NativeBridgeService
+    private cacheSrv: CacheService
   ) {
 
   }
 
-  private handleError(error: any) {
+  private async handleError(error: any) {
     if (this.errorHandled) return;
     this.errorHandled = true;
 
@@ -44,10 +45,19 @@ export class ApiService {
       this.translate.get('alerts.unauthorized').subscribe((msg: string) => {
         alert(msg);
       });
-      // if (this.router.url !== '/') {
-      //   this.userSrv.signOut();
-      //   this.router.navigate(['']);
-      // }
+
+      if (window.location.href.includes('Machine')) {
+        await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
+        this.router.navigate(['/Machine']);
+      }
+
+      else {
+        if (this.router.url !== '/') {
+          this.userSrv.signOut();
+          this.router.navigate(['']);
+        }
+      }
+
       setTimeout(() => (this.errorHandled = false), 5000);
     } else {
       console.warn('API Error:', error);
@@ -73,12 +83,19 @@ export class ApiService {
     //console.log(apiEndPoint);
 
     let headers = new HttpHeaders();
-    
-    // if (this.userSrv.getUserToken()) {
-    //   headers = headers.append('Authorization', `Bearer ${this.userSrv.getUserToken()}`); // Header Authorization Bearer
-    // }
 
-    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg3MDI1NzYsImV4cCI6MTc1ODcxMzM3NiwiaWF0IjoxNzU4NzAyNTc2fQ.O73BNcZxp2QzOoyzSEgZZ1Un3s9HhEKTL09qy7sLMFQ`);
+    let token: any = ''
+
+    if (this.userSrv.getUserToken()) {
+      token = this.userSrv.getUserToken()
+    }
+
+    else {
+      let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
+      token = (userData) ? userData.jwtToken : ''
+    }
+
+    headers = headers.append('Authorization', `Bearer ${token}`);
 
 
     const httpOptions = { headers, params: params.query || {} };

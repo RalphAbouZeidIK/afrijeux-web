@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ageValidator } from 'src/app/ageValidator';
 import { ApiService } from 'src/app/services/api.service';
+import { CacheService } from 'src/app/services/cache.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MachineService } from 'src/app/services/machine.service';
@@ -38,7 +39,8 @@ export class LoginComponent implements OnChanges, OnInit {
     private usrSrv: UserService,
     private gnrcSrv: GenericService,
     private fb: FormBuilder,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private cacheSrv:CacheService
   ) {
 
   }
@@ -110,7 +112,7 @@ export class LoginComponent implements OnChanges, OnInit {
   }
 
   async autoLogin() {
-    let userData = await this.machineSrv.getFromFlutterOfflineCache('user_data')
+    let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
     console.log(userData)
     if (userData?.status == false || !userData) {
       this.showLoginPage = true

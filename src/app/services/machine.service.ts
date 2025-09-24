@@ -7,6 +7,7 @@ import { Subject, Observable, retry } from 'rxjs';
 import { GenericService } from './generic.service';
 import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
+import { CacheService } from './cache.service';
 
 declare var require: any;
 (window as any).Buffer = Buffer;
@@ -29,18 +30,10 @@ export class MachineService {
     private bridge: NativeBridgeService,
     public datePipe: DatePipe,
     private gnrcSrv: GenericService,
-    private nativeBridge: NativeBridgeService,
     private localStorageSrv: LocalStorageService,
-    private router:Router
+    private router: Router,
+    private cacheSrv: CacheService
   ) {
-    (window as any).onCacheLoaded = (key: string, cachedValue: any) => {
-      const callbacks = this.cacheCallbacks[key];
-      if (callbacks?.length) {
-        callbacks.forEach((cb: any) => cb(cachedValue));
-        delete this.cacheCallbacks[key]; // clean up all after calling
-      }
-    };
-
     (window as any).handleNativeBack = () => {
       console.log("🔙 Native back pressed");
       this.router.navigate(['Machine/Home']); // redirect to your chosen route
@@ -156,116 +149,9 @@ export class MachineService {
     return JSON.parse(decrypted);
   }
 
-  private saveToFlutterOfflineCache(key: string, data: any) {
-    try {
-      if ((window as any).OfflineCache) {
-        const message = {
-          action: 'save',
-          key: key,
-          value: JSON.stringify(data) // send raw API response as JSON string
-        };
-        (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        console.log(`💾 Saved to OfflineCache with key: ${key}`);
-      } else {
-        console.warn('⚠️ OfflineCache channel not found');
-      }
-    } catch (err) {
-      console.error('❌ Error sending to OfflineCache', err);
-    }
-  }
-
-  private generateCacheKey(subRoute: string, apiRoute: string, method: string, params: any) {
-    const normalizedParams = { ...params };
-    delete normalizedParams.TimeStamp; // remove volatile field(s)
-
-    return `${method}:${subRoute}/${apiRoute}/${JSON.stringify(normalizedParams)}`;
-  }
-
-  private cacheCallbacks: Record<string, (value: any) => void> | any = {};
-
-  async getFromFlutterOfflineCache(key: string): Promise<any | null> {
-    return new Promise((resolve) => {
-      let resolved = false;
-
-      // Initialize array if it doesn't exist
-      if (!this.cacheCallbacks[key]) {
-        this.cacheCallbacks[key] = [];
-      }
-
-      // Push this request's callback into the array
-      this.cacheCallbacks[key].push((cachedValue: any) => {
-        try {
-          if (cachedValue === null || cachedValue === undefined) {
-            resolve(null);
-          } else if (typeof cachedValue === "string") {
-            resolve(JSON.parse(cachedValue));
-          } else {
-            resolve(cachedValue);
-          }
-        } catch (e) {
-          console.error("❌ Failed to parse cached value:", e, cachedValue);
-          resolve(null);
-        }
-      });
-
-      if ((window as any).OfflineCache) {
-        (window as any).OfflineCache.postMessage(
-          JSON.stringify({ action: "get", key })
-        );
-      } else {
-        console.warn("⚠️ OfflineCache channel not found");
-        resolve(null);
-      }
-
-      // Safety timeout
-      setTimeout(() => {
-        if (!resolved) {
-          //console.warn(`⚠️ Cache lookup for '${key}' timed out`);
-          resolve(null);
-          // Remove only this callback
-          this.cacheCallbacks[key] = this.cacheCallbacks[key]?.filter((cb: any) => cb !== resolve);
-        }
-      }, 2000);
-    });
-  }
-
-  async removeFromFlutterOfflineCache(key: string): Promise<void> {
-    return new Promise((resolve) => {
-      if ((window as any).OfflineCache) {
-        const message = {
-          action: 'delete',
-          key: key
-        };
-        (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        console.log(`🗑️ Requested delete for key: ${key}`);
-        resolve();
-      } else {
-        console.warn("⚠️ OfflineCache channel not found");
-        resolve();
-      }
-    });
-  }
-
-
-
-  async clearFlutterOfflineCache(): Promise<void> {
-
-    return new Promise((resolve) => {
-      if ((window as any).OfflineCache) {
-        (window as any).OfflineCache.postMessage(
-          JSON.stringify({ action: 'clear' })
-        );
-        resolve();
-      } else {
-        console.warn('⚠️ OfflineCache channel not found');
-        resolve();
-      }
-    });
-  }
-
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
     console.log(params)
-    const cacheKey = this.generateCacheKey(subRoute, apiRoute, method, params);
+    const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
     let apiResponse: any
@@ -274,12 +160,12 @@ export class MachineService {
       // Save full API response exactly
       //console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
-      this.saveToFlutterOfflineCache(cacheKey, apiResponse);
+      this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
     }
 
     else {
       console.warn('⚡ Offline mode: loading from Flutter cache');
-      apiResponse = await this.getFromFlutterOfflineCache(cacheKey);
+      apiResponse = await this.cacheSrv.getFromFlutterOfflineCache(cacheKey);
     }
 
     if (apiResponse?.encryptedResponse) {
@@ -306,14 +192,14 @@ export class MachineService {
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
-    this.saveToFlutterOfflineCache('machine_data', apiResponse);
+    this.cacheSrv.saveToFlutterOfflineCache('machine_data', apiResponse);
     this.localStorageSrv.setItem('machine_data', apiResponse, true)
     this.machineData = await this.getMachineData()
     return apiResponse;
   }
 
   async getMachineData() {
-    let machineData: any = await this.getFromFlutterOfflineCache('machine_data')
+    let machineData: any = await this.cacheSrv.getFromFlutterOfflineCache('machine_data')
     return machineData;
   }
 
@@ -337,14 +223,14 @@ export class MachineService {
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
     console.log(apiResponse)
     this.userData = apiResponse
-    this.saveToFlutterOfflineCache('user_data', apiResponse);
+    this.cacheSrv.saveToFlutterOfflineCache('user_data', apiResponse);
     this.localStorageSrv.setItem('user_data', this.userData, true)
     return apiResponse;
   }
 
 
   async getUserData() {
-    let machineData: any = await this.getFromFlutterOfflineCache('user_data')
+    let machineData: any = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
     return machineData;
   }
 
@@ -437,7 +323,7 @@ export class MachineService {
       const apiResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/IssueTicket`, 'POST', params)
       //console.log(apiResponse)
       if (apiResponse.DataToPrint) {
-        this.nativeBridge.sendPrintMessage('normalText', apiResponse.DataToPrint);
+        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint);
         return apiResponse
       }
       //console.log(apiResponse)
