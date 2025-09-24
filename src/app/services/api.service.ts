@@ -73,8 +73,12 @@ export class ApiService {
     //console.log(apiEndPoint);
 
     let headers = new HttpHeaders();
+    
+    // if (this.userSrv.getUserToken()) {
+    //   headers = headers.append('Authorization', `Bearer ${this.userSrv.getUserToken()}`); // Header Authorization Bearer
+    // }
 
-    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg2MjIwNjMsImV4cCI6MTc1ODYzMjg2MywiaWF0IjoxNzU4NjIyMDYzfQ.I6PCXTFd3IysjBG8OjS22cEtoAtKzFFzfHTgOBhCxGU`);
+    headers = headers.append('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQZXJzb25JZCI6Ijk3OTEiLCJ1c2VybmFtZSI6IjY4MjEiLCJJUCI6IjAuMC4wLjAiLCJDdWx0dXJlIjoiRW4iLCJuYmYiOjE3NTg3MDI1NzYsImV4cCI6MTc1ODcxMzM3NiwiaWF0IjoxNzU4NzAyNTc2fQ.O73BNcZxp2QzOoyzSEgZZ1Un3s9HhEKTL09qy7sLMFQ`);
 
 
     const httpOptions = { headers, params: params.query || {} };

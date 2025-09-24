@@ -5,6 +5,8 @@ import { DatePipe } from '@angular/common';
 import { Buffer } from 'buffer';
 import { Subject, Observable, retry } from 'rxjs';
 import { GenericService } from './generic.service';
+import { LocalStorageService } from './local-storage.service';
+import { Router } from '@angular/router';
 
 declare var require: any;
 (window as any).Buffer = Buffer;
@@ -17,6 +19,8 @@ export class MachineService {
   machineData: any;
   encryptionPass: any = '';  //(TDUT9J6gTig=)
   userData: any;
+
+
   /** modal status subscriber */
   private openModal$ = new Subject();
 
@@ -25,7 +29,9 @@ export class MachineService {
     private bridge: NativeBridgeService,
     public datePipe: DatePipe,
     private gnrcSrv: GenericService,
-    private nativeBridge: NativeBridgeService
+    private nativeBridge: NativeBridgeService,
+    private localStorageSrv: LocalStorageService,
+    private router:Router
   ) {
     (window as any).onCacheLoaded = (key: string, cachedValue: any) => {
       const callbacks = this.cacheCallbacks[key];
@@ -33,6 +39,11 @@ export class MachineService {
         callbacks.forEach((cb: any) => cb(cachedValue));
         delete this.cacheCallbacks[key]; // clean up all after calling
       }
+    };
+
+    (window as any).handleNativeBack = () => {
+      console.log("🔙 Native back pressed");
+      this.router.navigate(['Machine/Home']); // redirect to your chosen route
     };
   }
 
@@ -154,6 +165,7 @@ export class MachineService {
           value: JSON.stringify(data) // send raw API response as JSON string
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
+        console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
         console.warn('⚠️ OfflineCache channel not found');
       }
@@ -217,6 +229,23 @@ export class MachineService {
     });
   }
 
+  async removeFromFlutterOfflineCache(key: string): Promise<void> {
+    return new Promise((resolve) => {
+      if ((window as any).OfflineCache) {
+        const message = {
+          action: 'delete',
+          key: key
+        };
+        (window as any).OfflineCache.postMessage(JSON.stringify(message));
+        console.log(`🗑️ Requested delete for key: ${key}`);
+        resolve();
+      } else {
+        console.warn("⚠️ OfflineCache channel not found");
+        resolve();
+      }
+    });
+  }
+
 
 
   async clearFlutterOfflineCache(): Promise<void> {
@@ -259,7 +288,12 @@ export class MachineService {
     }
 
     else {
-      return { status: false, message: 'No internet connection and no cached data available.' };
+      if (apiResponse?.encryptedResponse === null) {
+        return { status: false, message: apiResponse.message };
+      }
+      else {
+        return { status: false, message: 'No internet connection and no cached data available.' };
+      }
     }
   }
 
@@ -273,6 +307,7 @@ export class MachineService {
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
     this.saveToFlutterOfflineCache('machine_data', apiResponse);
+    this.localStorageSrv.setItem('machine_data', apiResponse, true)
     this.machineData = await this.getMachineData()
     return apiResponse;
   }
@@ -300,8 +335,10 @@ export class MachineService {
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
+    console.log(apiResponse)
     this.userData = apiResponse
     this.saveToFlutterOfflineCache('user_data', apiResponse);
+    this.localStorageSrv.setItem('user_data', this.userData, true)
     return apiResponse;
   }
 

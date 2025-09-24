@@ -59,6 +59,7 @@ export class LoginComponent implements OnChanges, OnInit {
     else {
       this.showLoginPage = true
     }
+
     this.signupForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -135,7 +136,7 @@ export class LoginComponent implements OnChanges, OnInit {
         this.machineSrv.setModalData(true, false, respoonse.message)
       }
       else {
-        this.router.navigate(['Machine/Games'])
+        this.router.navigate(['Machine/Home'])
       }
       console.log(respoonse)
     }

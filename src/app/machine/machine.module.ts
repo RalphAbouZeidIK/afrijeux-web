@@ -5,11 +5,12 @@ import { routing } from './machine-routing';
 import { MachineCoreComponent } from './machine-core/machine-core.component';
 import { PopupComponent } from "src/app/shared/popup/popup.component";
 import { GamesComponent } from './games/games.component';
+import { HomeComponent } from './home/home.component';
 
 
 
 @NgModule({
-  declarations: [MachineCoreComponent, GamesComponent],
+  declarations: [MachineCoreComponent, GamesComponent, HomeComponent],
   imports: [
     routing,
     CommonModule,

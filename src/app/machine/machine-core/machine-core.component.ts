@@ -26,10 +26,6 @@ export class MachineCoreComponent implements OnInit {
   ) { }
 
 
-  clearFlutterOfflineCache() {
-    this.machineSrv.clearFlutterOfflineCache();
-  }
-
   showPopup() {
     this.machineSrv.setModalData(true, false, this.description)
     // setTimeout(() => {

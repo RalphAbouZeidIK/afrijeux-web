@@ -33,7 +33,5 @@ export class PmuCoreComponent implements OnInit {
     this.navList = this.languageSrv.composeRoutes()
   }
 
-  clearFlutterOfflineCache() {
-    this.machineSrv.clearFlutterOfflineCache();
-  }
+
 }
