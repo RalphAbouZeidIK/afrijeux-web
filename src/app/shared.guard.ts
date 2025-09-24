@@ -9,13 +9,15 @@ import { UserService } from './services/user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SharedGuard  {
+export class SharedGuard {
   /**
    * Main guard to activate the routes if the user is logged in or not 
    * @param usrSrv 
    * @param router 
    */
-  constructor(private usrSrv: UserService, private router: Router) {
+  constructor(
+    private usrSrv: UserService,
+    private router: Router) {
 
   }
 
@@ -25,15 +27,20 @@ export class SharedGuard  {
    * @param state 
    * @returns 
    */
-  canActivate(
+  async canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.usrSrv.isUserLoggedIn()) {
+    state: RouterStateSnapshot) {
+    if (await this.usrSrv.isUserLoggedIn()) {
       return true
     }
     else {
+      if (this.usrSrv.isMachineApp()) {
+        this.router.navigate(['Machine']);
+      }
+      else {
+        this.router.navigate(['']);
+      }
 
-      this.router.navigate(['']);
       return false;
     }
 

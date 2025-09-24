@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   showMesParis = false
 
-  @Input() isLoggedIn = false
+  @Input() isLoggedIn: any = false
 
   isDesktop = true
 
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnChanges {
     if (window.innerWidth < 767) {
       this.isDesktop = false
     }
-    if (this.usrSrv.isUserLoggedIn()) {
+    if (await this.usrSrv.isUserLoggedIn()) {
       this.getUserBalance()
     }
 

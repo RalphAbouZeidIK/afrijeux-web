@@ -5,6 +5,7 @@ import { MachineCoreComponent } from "./machine-core/machine-core.component";
 import { LoginComponent } from "../shared/login/login.component";
 import { GamesComponent } from "./games/games.component";
 import { HomeComponent } from "./home/home.component";
+import { SharedGuard } from "../shared.guard";
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
                 path: 'Login', component: LoginComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Login' }
             },
             {
-                path: 'Home', component: HomeComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Home' }
+                path: 'Home', component: HomeComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Home' },
+                canActivate: [SharedGuard]
             }
 
         ]

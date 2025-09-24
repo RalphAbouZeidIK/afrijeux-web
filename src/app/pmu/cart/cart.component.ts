@@ -42,7 +42,7 @@ export class CartComponent implements OnInit {
   /**
    * Flag to check if user is logged in
    */
-  isLoggedIn = false
+  isLoggedIn: any = false
 
   showOnClickMobile = false
 
@@ -70,17 +70,15 @@ export class CartComponent implements OnInit {
       // this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
     });
 
-    this.isLoggedIn = this.usrSrv.isUserLoggedIn();
-
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     if (!this.isAndroidApp) {
-      this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+      this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     }
     if (window.innerWidth < 1200) {
       this.isDesktop = false

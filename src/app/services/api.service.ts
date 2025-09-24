@@ -84,16 +84,7 @@ export class ApiService {
 
     let headers = new HttpHeaders();
 
-    let token: any = ''
-
-    if (this.userSrv.getUserToken()) {
-      token = this.userSrv.getUserToken()
-    }
-
-    else {
-      let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
-      token = (userData) ? userData.jwtToken : ''
-    }
+    let token = await this.userSrv.getUserToken()
 
     headers = headers.append('Authorization', `Bearer ${token}`);
 

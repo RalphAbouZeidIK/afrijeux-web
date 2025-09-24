@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * Flag to check if user is logged in
    */
-  isLoggedIn = false
+  isLoggedIn: any = false
 
   loginObject = {
     show: false,
@@ -68,7 +68,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
 
     if (!this.isAndroidApp) {
-      this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+      // this.isLoggedIn will be set in ngOnInit asynchronously
       this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
         this.isLoggedIn = loggedIn;
         this.getMenuItems()
@@ -116,10 +116,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     if (!this.isAndroidApp) {
-      this.isLoggedIn = this.usrSrv.isUserLoggedIn();
+      this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
       this.getMenuItems()
       this.pageTitleService.init();
     }
@@ -136,13 +136,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.setLoader()
     }, 1);
     this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationStart) {
-        if (this.usrSrv.getUserToken()) {
-          this.refreshToken()
-        }
+      // if (event instanceof NavigationStart) {
+      //   if (this.usrSrv.getUserToken()) {
+      //     this.refreshToken()
+      //   }
 
 
-      }
+      // }
 
       if (event instanceof NavigationEnd) {
 

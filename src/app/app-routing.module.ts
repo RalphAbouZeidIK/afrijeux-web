@@ -69,17 +69,14 @@ const routes: Routes = [
       },
       {
         path: 'Sports',
+        canActivate: [SharedGuard],
         loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
         data: { breadcrumb: 'Sports (Machine)', showLink: true }
       },
-      {
-        path: 'User',
-        loadChildren: () => import('./user/user.module').then(m => m.UserModule),
-        canActivate: [SharedGuard],
-        data: { breadcrumb: 'My profile (Machine)', showLink: true }
-      },
+     
       {
         path: 'PMUHybrid',
+        canActivate: [SharedGuard],
         loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
         data: { breadcrumb: 'HPB PMU (Machine)', showLink: true }
       },

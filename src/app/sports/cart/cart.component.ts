@@ -85,14 +85,15 @@ export class CartComponent implements OnInit {
     });
 
 
-    this.isLoggedIn = this.usrSrv.isUserLoggedIn();
 
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    
+    this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (window.innerWidth < 1200) {
       this.isDesktop = false
     }
@@ -188,7 +189,7 @@ export class CartComponent implements OnInit {
       })
       return
     }
-    
+
     this.loaderService.setHttpProgressStatus(true);
     setTimeout(async () => {
       let date = new Date()

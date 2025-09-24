@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { jwtDecode } from "jwt-decode";
 import { Router } from '@angular/router';
+import { CacheService } from './cache.service';
 /**
  * Service that has the main user functions 
  */
@@ -30,14 +31,22 @@ export class UserService {
     */
   sessionExpiryDate: any;
 
+  isAndroidApp = this.isMachineApp()
+
   /**
    * Service that has the main user functions 
    * @param localStorageSrv 
    */
   constructor(
     private localStorageSrv: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private cacheSrv: CacheService
   ) { }
+
+  isMachineApp() {
+    const currentUrl: any = window.location.href;
+    return currentUrl.includes('Machine') || (!navigator.onLine)
+  }
 
   /**
    * Function to get the login status subsciber
@@ -133,18 +142,29 @@ export class UserService {
    * Getting user token where needed
    * @returns 
    */
-  getUserToken() {
-    const userToken = this.localStorageSrv.getItem('user_data', true);
+  async getUserToken() {
+    let userToken: any = ''
 
-    return (userToken != '' && userToken !== undefined) ? userToken.token : '';
+    if (this.isAndroidApp) {
+      let userData: any
+      userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
+      userToken = (userData) ? userData.jwtToken : ''
+    }
+
+    else {
+      userToken = this.localStorageSrv.getItem('user_data', true).token;
+    }
+
+    return (userToken != '' && userToken !== undefined) ? userToken : '';
   }
 
   /**
    * Function to return if user is logged in or not 
    * @returns 
    */
-  isUserLoggedIn(): boolean {
-    return (this.getUserToken() == '') ? false : true;
+  async isUserLoggedIn() {
+    let isLoggedIn: any = (await this.getUserToken() == '') ? false : true
+    return isLoggedIn;
 
   }
 
