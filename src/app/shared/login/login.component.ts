@@ -146,8 +146,8 @@ export class LoginComponent implements OnChanges, OnInit {
       try {
         const loginResponse = await this.login(loginParams)
         console.log(loginResponse)
-        if (loginResponse.isSuccess) {
-          this.successfullLogin(loginResponse.userInfo, loginResponse.userInfo.token)
+        if (loginResponse.IsSuccess) {
+          this.successfullLogin(loginResponse.UserInfo, loginResponse.UserInfo.Token)
         }
         else {
           this.showErrorMessage = true

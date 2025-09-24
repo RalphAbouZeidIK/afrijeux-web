@@ -152,7 +152,7 @@ export class UserService {
     }
 
     else {
-      userToken = this.localStorageSrv.getItem('user_data', true).token;
+      userToken = this.localStorageSrv.getItem('user_data', true)?.token;
     }
 
     return (userToken != '' && userToken !== undefined) ? userToken : '';

@@ -175,7 +175,7 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
-    if (!changes['isLoggedIn'].firstChange) {
+    if (!changes['isLoggedIn']?.firstChange) {
       this.getMenu()
     }
   }

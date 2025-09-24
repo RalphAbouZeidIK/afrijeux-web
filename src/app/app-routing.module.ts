@@ -22,7 +22,7 @@ const routes: Routes = [
     path: 'PMUHybrid',
     loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
     data: {
-      breadcrumb: 'HPB PMU',
+      breadcrumb: 'PMU Hybrid',
       shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.hpb',
@@ -53,6 +53,10 @@ const routes: Routes = [
   // Machine-prefixed versions
   {
     path: 'Machine',
+    data: {
+      breadcrumb: 'Sports Betting',
+      showLink: false
+    },
     children: [
       {
         path: '',
@@ -73,7 +77,7 @@ const routes: Routes = [
         loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
         data: { breadcrumb: 'Sports (Machine)', showLink: true }
       },
-     
+
       {
         path: 'PMUHybrid',
         canActivate: [SharedGuard],
