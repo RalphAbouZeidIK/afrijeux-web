@@ -69,6 +69,10 @@ export class NativeBridgeService {
     }
   }
 
+  getScanResult() {
+    return this.scanResult$
+  }
+
   /** Trigger scan from Angular (calls Flutter) */
   getSerial(): Promise<string> {
     return new Promise((resolve, reject) => {

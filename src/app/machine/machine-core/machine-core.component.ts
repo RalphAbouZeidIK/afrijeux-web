@@ -48,13 +48,6 @@ export class MachineCoreComponent implements OnInit {
       }
     });
 
-    this.bridge.scanResult$.subscribe(result => {
-      this.scannedResult = result;
-      if (result) {
-        alert(`Scanned result: ${result}`);
-      }
-    });
-
     const apiResponse = await this.machineSrv.registerMachine();
     console.log(apiResponse)
     if (apiResponse.CommunicationKey) {

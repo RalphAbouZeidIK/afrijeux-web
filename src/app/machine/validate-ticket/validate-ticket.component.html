@@ -1,0 +1,18 @@
+<div class="form-holder">
+    <div class="form-bg">
+        <h2>{{'machine.validateTicketTitle' | translate}}</h2>
+        <div class=" form-content">
+            <div class="form-group">
+                <label class="title-label">{{'machine.fullTicketId' | translate}}</label>
+                <input type="text" class="form-control" [(ngModel)]="fullTicketId" />
+            </div>
+
+            <div class="form-btns">
+
+                <a class="btn btn-primary" (click)="scanCode()">Scan Ticket</a>
+                <a class="btn btn-primary" (click)="validateTicket()">Validate</a>
+            </div>
+
+        </div>
+    </div>
+</div>

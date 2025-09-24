@@ -233,5 +233,9 @@
             "marketName": "Nom du marché",
             "outcomeName": "Nom du résultat"
         }
+    },
+    "machine":{
+        "validateTicketTitle":"Valider Ticket",
+        "fullTicketId":"Full Ticket Id"
     }
 }

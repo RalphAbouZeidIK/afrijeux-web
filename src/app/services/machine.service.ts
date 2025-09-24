@@ -332,4 +332,18 @@ export class MachineService {
     }
   }
 
+
+  async validateTicket(fullTicketId: any) {
+    let userData = await this.getUserData()
+    let params: any = {
+      PersonId: userData.PersonId,  //(9791)
+      MachineId: 28,
+      FullTicketId: fullTicketId,
+      TimeStamp: new Date().toISOString()
+    }
+
+    let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
+    return validateTicketResponse
+  }
+
 }

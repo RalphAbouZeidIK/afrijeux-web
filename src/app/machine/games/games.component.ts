@@ -20,9 +20,7 @@ export class GamesComponent implements OnInit {
   isOnline = navigator.onLine
 
   async ngOnInit() {
-    console.log(this.isOnline)
     let machineData = await this.machineSrv.getMachineData()
-    console.log(machineData)
     let games = machineData?.Games
     games.forEach((gameItem: any) => {
       gameItem.ShowGame = false
