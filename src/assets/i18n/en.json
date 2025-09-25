@@ -8,7 +8,8 @@
         "appTitle": {
             "hpb": "HPB - PMU",
             "User": "My profile",
-            "Sports": "Sports"
+            "Sports": "Sports",
+            "pmu":"PMU"
         },
         "HPBTitles": {
             "mesParies": "My Bets",
@@ -17,6 +18,9 @@
             "resultats": "Results",
             "commentParier": "How to Bet",
             "course": "Race"
+        },
+        "PMUTitles": {
+            "courses": "Events"
         },
         "Sports": {
             "viewTickets": "View Tickets",

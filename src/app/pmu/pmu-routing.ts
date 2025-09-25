@@ -23,10 +23,27 @@ const routes: Routes = [
         path: 'mes-paries', component: MesPariesPopupComponent, data: { showLink: false, title: 'routerLinks.HPBTitles.mesParies' }
       },
       {
-        path: 'courses', component: CoursesComponent, data: { showLink: true, title: 'routerLinks.HPBTitles.libanaises' }
+        path: 'courses', component: CoursesComponent, 
+        data: { 
+          showLink: true, 
+          title: 'routerLinks.HPBTitles.libanaises',
+          game:'HPBPMU'
+        }
       },
       {
-        path: 'courses-francaises', component: CoursesComponent, data: { showLink: true, title: 'routerLinks.HPBTitles.francaises' }
+        path: 'courses', component: CoursesComponent, 
+        data: { 
+          showLink: true, 
+          title: 'routerLinks.PMUTitles.courses',
+          game:'PMUHybrid'
+        }
+      },
+      {
+        path: 'courses-francaises', component: CoursesComponent, 
+        data: { showLink: true, 
+          title: 'routerLinks.HPBTitles.francaises',
+          game:'HPBPMU'
+        }
       },
       {
         path: 'resultat', component: ResultatComponent, data: { showLink: true, title: 'routerLinks.HPBTitles.resultats' }

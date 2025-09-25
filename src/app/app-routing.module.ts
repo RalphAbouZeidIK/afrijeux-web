@@ -25,7 +25,7 @@ const routes: Routes = [
       breadcrumb: 'PMU Hybrid',
       shouldBeLoggedIn: false,
       showLink: true,
-      title: 'routerLinks.appTitle.hpb',
+      title: 'routerLinks.appTitle.pmu',
     }
   },
   {

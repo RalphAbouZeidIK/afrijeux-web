@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { GenericService } from 'src/app/services/generic.service';
 import { MenuItem, MenuService } from 'src/app/services/menu.service';
 import { UserRouteConfig } from 'src/app/services/routing.service';
@@ -62,6 +62,12 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
+    this.route.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => {
+        this.getMenu()
+      });
+
     this.getMenu()
     if (window.innerWidth < 767) {
       this.isDesktop = false

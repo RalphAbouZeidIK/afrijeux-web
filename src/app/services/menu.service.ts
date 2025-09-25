@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 export interface MenuItem {
   path: string;
   title: string;
+  game: string;
   children?: MenuItem[];
 }
 
@@ -36,6 +37,17 @@ export class MenuService {
 
     return moduleConfig.routes ?? [];  // Return actual Route[] array
   }
+
+  private getCurrentGameFromUrl(): string | null {
+    let url = this.router.url || '';
+    if ((!url || url === '/') && typeof window !== 'undefined') {
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#')) url = hash.slice(1);
+    }
+    const segments = url.split(/[?#]/)[0].split('/').filter(Boolean);
+    return segments.length ? segments[0] : null;
+  }
+
   /**
    * Build the full menu from router config + loaded lazy routes
    */
@@ -52,7 +64,8 @@ export class MenuService {
 
       const item: MenuItem = {
         path: r.path!,
-        title: data['title']
+        title: data['title'],
+        game: data['game']
       };
 
       // Handle lazy-loaded children
@@ -61,18 +74,28 @@ export class MenuService {
         const parent = subRoutes.find(sr => Array.isArray(sr.children));
         const children = parent?.children ?? [];
 
+        const currentGame = this.getCurrentGameFromUrl(); // 👈 extract from URL (HPBPMU, PMUHybrid, etc.)
+
         item.children = children
           .filter(c => {
             const cData = c.data || {};
             if (!cData['showLink']) return false;
             if (cData['shouldBeLoggedIn'] && !isLoggedIn) return false;
+
+            // ✅ Only include if game matches or is empty
+            if (cData['game'] && cData['game'] !== currentGame) {
+              return false;
+            }
+
             return true;
           })
           .map(c => ({
             path: `${r.path}/${c.path}`,
-            title: c.data!['title']
+            title: c.data!['title'],
+            game: c.data!['game'] ?? ''
           }));
       }
+
 
       menuItems.push(item);
     }
@@ -88,9 +111,11 @@ export class MenuService {
     return menuItems.map(i => ({
       path: i.path,
       title: trans[i.title] || i.title,
+      game: i.game,
       children: i.children?.map(c => ({
         path: c.path,
-        title: trans[c.title] || c.title
+        title: trans[c.title] || c.title,
+        game: c.game
       }))
     }));
   }

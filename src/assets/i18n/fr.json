@@ -7,7 +7,9 @@
     "routerLinks": {
         "appTitle": {
             "hpb": "HPB - PMU",
-            "User": "Mon Profile"
+            "User": "Mon Profile",
+            "Sports": "Sports",
+            "pmu": "PMU"
         },
         "HPBTitles": {
             "mesParies": "Mes Paris",
@@ -16,6 +18,9 @@
             "resultats": "Résultats",
             "commentParier": "Comment Parier",
             "course": "Course"
+        },
+        "PMUTitles": {
+            "courses": "Courses"
         },
         "Sports": {
             "viewTickets": "Voir les Billets",
@@ -234,8 +239,8 @@
             "outcomeName": "Nom du résultat"
         }
     },
-    "machine":{
-        "validateTicketTitle":"Valider Ticket",
-        "fullTicketId":"Full Ticket Id"
+    "machine": {
+        "validateTicketTitle": "Valider Ticket",
+        "fullTicketId": "Full Ticket Id"
     }
 }
