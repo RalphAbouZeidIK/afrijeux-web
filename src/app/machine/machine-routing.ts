@@ -7,6 +7,7 @@ import { GamesComponent } from "./games/games.component";
 import { HomeComponent } from "./home/home.component";
 import { SharedGuard } from "../shared.guard";
 import { ValidateTicketComponent } from "./validate-ticket/validate-ticket.component";
+import { ReportsComponent } from "./reports/reports.component";
 
 
 const routes: Routes = [
@@ -27,7 +28,11 @@ const routes: Routes = [
                 canActivate: [SharedGuard]
             },
             {
-                path: 'ValidateTicket', component: ValidateTicketComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Home' },
+                path: 'ValidateTicket', component: ValidateTicketComponent, data: { showLink: true, title: 'routerLinks.MachineTitle.Home' },
+                canActivate: [SharedGuard]
+            },
+            {
+                path: 'Reports', component: ReportsComponent, data: { showLink: true, title: 'routerLinks.MachineTitle.Home' },
                 canActivate: [SharedGuard]
             }
 

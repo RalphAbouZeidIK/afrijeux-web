@@ -98,8 +98,9 @@ export class MenuService {
 
 
       menuItems.push(item);
+      console.log(item)
     }
-
+    
     // Translate titles in bulk
     const keys = menuItems.flatMap(i => [
       i.title,

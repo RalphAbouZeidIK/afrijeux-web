@@ -55,7 +55,7 @@ const routes: Routes = [
     path: 'Machine',
     data: {
       breadcrumb: 'Sports Betting',
-      showLink: false
+      showLink: true
     },
     children: [
       {

@@ -66,13 +66,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     translate.use('en');
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
-
+    this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+      this.getMenuItems()
+    });
     if (!this.isAndroidApp) {
       // this.isLoggedIn will be set in ngOnInit asynchronously
-      this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
-        this.isLoggedIn = loggedIn;
-        this.getMenuItems()
-      });
+
 
       this.loginPopupStatusSubscription = this.usrSrv.getLoginPopupStatus().subscribe((data) => {
         console.log(data)
@@ -118,9 +118,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async ngOnInit(): Promise<void> {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    this.getMenuItems()
+
     if (!this.isAndroidApp) {
       this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
-      this.getMenuItems()
       this.pageTitleService.init();
     }
 

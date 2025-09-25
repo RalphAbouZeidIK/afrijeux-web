@@ -343,6 +343,10 @@ export class MachineService {
     }
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
+    console.log(validateTicketResponse)
+    if (validateTicketResponse.status == false) {
+      this.setModalData(true, false, validateTicketResponse.message)
+    }
     return validateTicketResponse
   }
 
