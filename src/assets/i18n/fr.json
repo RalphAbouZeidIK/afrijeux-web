@@ -242,9 +242,18 @@
     },
     "machine": {
         "routerLinks": {
-            "validateTicketTitle": "Valider Ticket",
-            "reports": "Reports"
+            "validateTicketTitle": "Valider le billet",
+            "reports": "Rapports"
         },
-        "fullTicketId": "Full Ticket Id"
+        "generic": {
+            "scan": "Scanner",
+            "ticket": "Billet",
+            "validate": "Valider",
+            "back": "Retour",
+            "submit": "Soumettre",
+            "print": "Imprimer"
+        },
+        "fullTicketId": "Numéro complet du billet",
+        "chooseGames": "Choisir des jeux"
     }
 }

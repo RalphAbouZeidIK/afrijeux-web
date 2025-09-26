@@ -10,10 +10,16 @@
 
             <div class="form-btns d-flex">
 
-                <button class="btn btn-primary" (click)="scanCode()">Scan Ticket</button>
-                <button class="btn btn-primary" (click)="validateTicket()"
-                    [disabled]="(!fullTicketId)?true:false">Validate</button>
-                <button class="btn btn-primary" routerLink="/Machine/Home">Back</button>
+                <button class="btn btn-primary" (click)="scanCode()">
+                    {{'machine.generic.scan' | translate}}
+                    {{'machine.generic.ticket' | translate}}
+                </button>
+                <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
+                    {{'machine.generic.validate' | translate}}
+                </button>
+                <button class="btn btn-primary" routerLink="/Machine/Home">
+                    {{'machine.generic.back' | translate}}
+                </button>
             </div>
 
         </div>

@@ -245,6 +245,15 @@
             "validateTicketTitle": "Validate Ticket",
             "reports": "Reports"
         },
-        "fullTicketId": "Full Ticket Id"
+        "generic": {
+            "scan": "Scan",
+            "ticket": "Ticket",
+            "validate": "Validate",
+            "back": "Back",
+            "submit": "Submit",
+            "print": "Print"
+        },
+        "fullTicketId": "Full Ticket Id",
+        "chooseGames": "Choose Games"
     }
 }

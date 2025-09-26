@@ -3,7 +3,7 @@
         <h2>{{'machine.routerLinks.reports' | translate}}</h2>
         <div class=" form-content">
             <div class="form-group">
-                <label class="title-label">Choose Games</label>
+                <label class="title-label">{{'machine.chooseGames' | translate}}</label>
                 <select class="form-control" multiple [(ngModel)]="selectedGames"
                     (ngModelChange)="selectedGamesChange($event)">
                     <option *ngFor="let game of gamesList" [ngValue]="game">{{ game.Name }}</option>
@@ -30,9 +30,15 @@
             <div [innerText]="dataToPrint" class="report-holder" *ngIf="dataToPrint && showReport"></div>
 
             <div class="form-btns d-flex">
-                <button class="btn btn-primary" (click)="getReports()">Submit</button>
-                <button class="btn btn-primary" (click)="getReports(true)">Print</button>
-                <button class="btn btn-primary" routerLink="/Machine/Home">Back</button>
+                <button class="btn btn-primary" (click)="getReports()">
+                    {{'machine.generic.submit' | translate}}
+                </button>
+                <button class="btn btn-primary" (click)="getReports(true)">
+                    {{'machine.generic.print' | translate}}
+                </button>
+                <button class="btn btn-primary" routerLink="/Machine/Home">
+                    {{'machine.generic.back' | translate}}
+                </button>
             </div>
 
         </div>
