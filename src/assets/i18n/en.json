@@ -9,7 +9,8 @@
             "hpb": "HPB - PMU",
             "User": "My profile",
             "Sports": "Sports",
-            "pmu":"PMU"
+            "pmu": "PMU",
+            "Machine": "Machine"
         },
         "HPBTitles": {
             "mesParies": "My Bets",
@@ -239,8 +240,11 @@
             "outcomeName": "Outcome Name"
         }
     },
-    "machine":{
-        "validateTicketTitle":"Validate Ticket",
-        "fullTicketId":"Full Ticket Id"
+    "machine": {
+        "routerLinks": {
+            "validateTicketTitle": "Validate Ticket",
+            "reports": "Reports"
+        },
+        "fullTicketId": "Full Ticket Id"
     }
 }

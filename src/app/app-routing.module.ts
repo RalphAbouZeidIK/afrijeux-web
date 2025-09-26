@@ -54,37 +54,11 @@ const routes: Routes = [
   {
     path: 'Machine',
     data: {
-      breadcrumb: 'Sports Betting',
-      showLink: true
+      breadcrumb: 'Machine',
+      showLink: false,
+      title: 'routerLinks.appTitle.Machine'
     },
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('./machine/machine.module').then(m => m.MachineModule),
-        data: {
-          breadcrumb: 'Machine',
-          title: 'routerLinks.appTitle.Machine',
-        }
-      },
-      {
-        path: 'HPBPMU',
-        loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
-        data: { breadcrumb: 'HPB PMU (Machine)', showLink: true }
-      },
-      {
-        path: 'Sports',
-        canActivate: [SharedGuard],
-        loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
-        data: { breadcrumb: 'Sports (Machine)', showLink: true }
-      },
-
-      {
-        path: 'PMUHybrid',
-        canActivate: [SharedGuard],
-        loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
-        data: { breadcrumb: 'HPB PMU (Machine)', showLink: true }
-      },
-    ]
+    loadChildren: () => import('./machine/machine.module').then(m => m.MachineModule),
   }
 ];
 

@@ -98,7 +98,6 @@ export class MenuService {
 
 
       menuItems.push(item);
-      console.log(item)
     }
     
     // Translate titles in bulk

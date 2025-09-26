@@ -1,17 +1,19 @@
 <div class="form-holder machine-layout">
     <div class="form-bg">
-        <h2>{{'machine.validateTicketTitle' | translate}}</h2>
+        <h2>{{'machine.routerLinks.validateTicketTitle' | translate}}</h2>
         <div class=" form-content">
             <div class="form-group">
                 <label class="title-label">{{'machine.fullTicketId' | translate}}</label>
-                <input type="text" class="form-control" [(ngModel)]="fullTicketId" pattern="[0-9]*" inputmode="numeric" />
+                <input type="text" class="form-control" [(ngModel)]="fullTicketId" pattern="[0-9]*"
+                    inputmode="numeric" />
             </div>
 
-            <div class="form-btns">
+            <div class="form-btns d-flex">
 
                 <button class="btn btn-primary" (click)="scanCode()">Scan Ticket</button>
                 <button class="btn btn-primary" (click)="validateTicket()"
                     [disabled]="(!fullTicketId)?true:false">Validate</button>
+                <button class="btn btn-primary" routerLink="/Machine/Home">Back</button>
             </div>
 
         </div>

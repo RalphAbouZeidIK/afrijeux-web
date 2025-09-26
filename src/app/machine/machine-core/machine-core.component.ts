@@ -67,7 +67,7 @@ export class MachineCoreComponent implements OnInit {
     this.bridge.requestScan();
   }
 
-  onPrint() {
-    this.bridge.print();
-  }
+  // onPrint() {
+  //   this.bridge.print();
+  // }
 }

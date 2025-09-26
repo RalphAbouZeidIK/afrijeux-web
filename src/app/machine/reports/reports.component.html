@@ -1,1 +1,40 @@
-<p>reports works!</p>
+<div class="form-holder machine-layout">
+    <div class="form-bg">
+        <h2>{{'machine.routerLinks.reports' | translate}}</h2>
+        <div class=" form-content">
+            <div class="form-group">
+                <label class="title-label">Choose Games</label>
+                <select class="form-control" multiple [(ngModel)]="selectedGames"
+                    (ngModelChange)="selectedGamesChange($event)">
+                    <option *ngFor="let game of gamesList" [ngValue]="game">{{ game.Name }}</option>
+                </select>
+
+                <!-- <p *ngIf="selectedGames.length > 0">Selected games :
+                    <span *ngFor="let game of selectedGames, let i = index">
+                        {{game.Name.toLowerCase()}} <ng-container
+                            *ngIf="i < (selectedGames.length - 1)">,</ng-container>
+                    </span>
+                </p> -->
+            </div>
+
+            <div class="form-group d-flex">
+                <div class="date-holder">
+                    <app-datepicker label="Date From"
+                        (dateChangeEvent)="onDateChange($event,'FromDate')"></app-datepicker>
+                </div>
+                <div class="date-holder">
+                    <app-datepicker label="Date To" (dateChangeEvent)="onDateChange($event,'ToDate')"></app-datepicker>
+                </div>
+            </div>
+
+            <div [innerText]="dataToPrint" class="report-holder" *ngIf="dataToPrint && showReport"></div>
+
+            <div class="form-btns d-flex">
+                <button class="btn btn-primary" (click)="getReports()">Submit</button>
+                <button class="btn btn-primary" (click)="getReports(true)">Print</button>
+                <button class="btn btn-primary" routerLink="/Machine/Home">Back</button>
+            </div>
+
+        </div>
+    </div>
+</div>

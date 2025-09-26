@@ -61,7 +61,7 @@ export class MachineService {
   async encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
     ////console.log(objectToEncrypt)
     let amount = objectToEncrypt.Ticket?.Stake || null
-    let timeStamp = this.datePipe.transform(new Date(), 'MM/dd/yyyy HH:mm:ss')
+    let timeStamp = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     objectToEncrypt = JSON.stringify(objectToEncrypt);
     const xxtea = require('xxtea-node');
     let encryptData: any;
@@ -188,7 +188,7 @@ export class MachineService {
     let params: any = {
       "Machine": this.machineId,
       "VersionCode": '1.0.0',
-      "TimeStamp": new Date().toISOString()
+      "TimeStamp": this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
@@ -217,7 +217,7 @@ export class MachineService {
       "Ip": loginParams.Ip,
       "MachineId": this.machineData?.MachineId,
       "GameOperationId": this.machineData?.OperationId,
-      "TimeStamp": new Date().toISOString()
+      "TimeStamp": this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
@@ -243,7 +243,7 @@ export class MachineService {
       PersonId: userData.PersonId,  //(9791)
       GameId: 28,
       GameConfiguration: [],
-      TimeStamp: new Date().toISOString(),
+      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       UserOnlineStatus: true
     }
 
@@ -259,7 +259,7 @@ export class MachineService {
       PersonId: userData.PersonId,  //(9791)
       GameId: 28,
       GameConfiguration: [],
-      TimeStamp: new Date().toISOString(),
+      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       UserOnlineStatus: true,
       FixedConfigurationId: fixedConfigurationId
     }
@@ -323,7 +323,7 @@ export class MachineService {
       const apiResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/IssueTicket`, 'POST', params)
       //console.log(apiResponse)
       if (apiResponse.DataToPrint) {
-        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint);
+        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint,'IssueTicket',apiResponse.FullTicketId);
         return apiResponse
       }
       //console.log(apiResponse)
@@ -335,11 +335,12 @@ export class MachineService {
 
   async validateTicket(fullTicketId: any) {
     let userData = await this.getUserData()
+    let machineData = await this.getMachineData();
     let params: any = {
       PersonId: userData.PersonId,  //(9791)
-      MachineId: 28,
+      MachineId: machineData.MachineId,
       FullTicketId: fullTicketId,
-      TimeStamp: new Date().toISOString()
+      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     }
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
@@ -348,6 +349,31 @@ export class MachineService {
       this.setModalData(true, false, validateTicketResponse.message)
     }
     return validateTicketResponse
+  }
+
+  async getReports(reportsParams: any, shouldPrint = false) {
+    let userData = await this.getUserData()
+    let machineData = await this.getMachineData();
+    let params: any = {
+      PersonId: userData.PersonId,  //(9791)
+      MachineId: machineData.MachineId,
+      ...reportsParams,
+      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
+      GameEventId: null
+    }
+    console.log(params)
+
+    let reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', params)
+    console.log(reportsResponse)
+    
+    if (reportsResponse.status == false) {
+      this.setModalData(true, false, reportsResponse.message)
+    }
+
+    if (shouldPrint) {
+      this.bridge.sendPrintMessage('normalText', reportsResponse.DataToPrint,'GetReports');
+    }
+    return reportsResponse
   }
 
 }

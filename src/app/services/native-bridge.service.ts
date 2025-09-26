@@ -43,13 +43,13 @@ export class NativeBridgeService {
       });
     };
 
-    // Optional: expose global print trigger (if Flutter calls it)
-    window['triggerPrint'] = () => {
-      this.ngZone.run(() => {
-        console.log("Print requested from Flutter");
-        this.print();
-      });
-    };
+    // // Optional: expose global print trigger (if Flutter calls it)
+    // window['triggerPrint'] = () => {
+    //   this.ngZone.run(() => {
+    //     console.log("Print requested from Flutter");
+    //     this.print();
+    //   });
+    // };
 
     // Optional: expose global print trigger (if Flutter calls it)
     (window as any).handleGetSerialResult = (result: string) => {
@@ -107,20 +107,21 @@ export class NativeBridgeService {
 
 
 
-  /** Trigger print from Angular (calls Flutter) */
-  print(): void {
-    if (window.PrintChannel?.postMessage) {
-      window.PrintChannel.postMessage("print");
-    } else {
-      alert("Print not supported");
-    }
-  }
+  // /** Trigger print from Angular (calls Flutter) */
+  // print(): void {
+  //   if (window.PrintChannel?.postMessage) {
+  //     window.PrintChannel.postMessage("print");
+  //   } else {
+  //     alert("Print not supported");
+  //   }
+  // }
 
   /** Send structured print command to Flutter */
-  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[]): void {
-    const message = JSON.stringify({ type, value });
+  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[], sender = 'IssueTicket', fullTicketId = ''): void {
+    const message = JSON.stringify({ type, value, sender, fullTicketId });
 
     if (window.PrintChannel?.postMessage) {
+      console.log(message)
       window.PrintChannel.postMessage(message);
     } else {
       alert("PrintChannel is not available.");

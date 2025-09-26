@@ -39,7 +39,7 @@ h2 {
 
 .btn {
     font-weight: 700;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 10px 20px 12px;
     line-height: normal;
 
@@ -55,6 +55,7 @@ h2 {
         margin-left: 10px;
     }
 }
+
 
 .error-msg {
     color: red;
@@ -121,6 +122,10 @@ h2 {
     }
 }
 
+.container-fluid .container-fluid {
+    padding: 0;
+}
+
 .form-holder {
     position: fixed;
     height: 100%;
@@ -165,7 +170,25 @@ h2 {
 
     &.machine-layout {
         z-index: 3;
+
+        .form-bg {
+            max-width: 100%;
+            border-radius: 0;
+            padding: 25px 15px;
+        }
     }
+}
+
+.mat-mdc-form-field-infix {
+    width: auto !important
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: $darkBg !important
+}
+
+.mat-mdc-form-field-subscript-wrapper{
+    display: none!important;
 }
 
 .header-text {
@@ -231,6 +254,11 @@ h2 {
 }
 
 .form-holder {
+    p {
+        margin-top: 10px;
+        display: block;
+    }
+
     .title-label {
         font-size: 12px;
         color: $white;
@@ -257,6 +285,13 @@ h2 {
     .form-btns {
         margin-bottom: 10px;
         margin-top: 25px;
+
+        &.d-flex {
+
+            .btn:not(:last-of-type) {
+                margin-right: 10px;
+            }
+        }
 
         .btn {
             width: 100%;

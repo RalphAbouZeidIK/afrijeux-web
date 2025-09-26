@@ -1,5 +1,7 @@
 <div class="machine-home">
-    <a class="btn btn-primary" routerLink="/Machine/ValidateTicket">{{'machine.validateTicketTitle' | translate}}</a>
+    <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">
+        {{routerItem.data.title | translate}}
+    </a>
     <app-games></app-games>
     <a class="btn btn-primary" (click)="logout();">Logout</a>
 </div>

@@ -9,7 +9,8 @@
             "hpb": "HPB - PMU",
             "User": "Mon Profile",
             "Sports": "Sports",
-            "pmu": "PMU"
+            "pmu": "PMU",
+            "Machine": "Machine"
         },
         "HPBTitles": {
             "mesParies": "Mes Paris",
@@ -240,7 +241,10 @@
         }
     },
     "machine": {
-        "validateTicketTitle": "Valider Ticket",
+        "routerLinks": {
+            "validateTicketTitle": "Valider Ticket",
+            "reports": "Reports"
+        },
         "fullTicketId": "Full Ticket Id"
     }
 }

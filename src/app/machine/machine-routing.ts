@@ -3,11 +3,9 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { MachineCoreComponent } from "./machine-core/machine-core.component";
 import { LoginComponent } from "../shared/login/login.component";
-import { GamesComponent } from "./games/games.component";
 import { HomeComponent } from "./home/home.component";
 import { SharedGuard } from "../shared.guard";
-import { ValidateTicketComponent } from "./validate-ticket/validate-ticket.component";
-import { ReportsComponent } from "./reports/reports.component";
+import { machineMenuRoutes } from "./machine-route";
 
 
 const routes: Routes = [
@@ -20,21 +18,26 @@ const routes: Routes = [
         path: '',
         component: MachineCoreComponent,
         children: [
+            
+            ...machineMenuRoutes,
             {
-                path: 'Login', component: LoginComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Login' }
+                path: 'HPBPMU',
+                loadChildren: () => import('../pmu/pmu.module').then(m => m.PmuModule),
+                data: { breadcrumb: 'HPB PMU (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
             },
             {
-                path: 'Home', component: HomeComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Home' },
-                canActivate: [SharedGuard]
+                path: 'Sports',
+                canActivate: [SharedGuard],
+                loadChildren: () => import('../sports/sports.module').then(m => m.SportsModule),
+                data: { breadcrumb: 'Sports (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
             },
+
             {
-                path: 'ValidateTicket', component: ValidateTicketComponent, data: { showLink: true, title: 'routerLinks.MachineTitle.Home' },
-                canActivate: [SharedGuard]
+                path: 'PMUHybrid',
+                canActivate: [SharedGuard],
+                loadChildren: () => import('../pmu/pmu.module').then(m => m.PmuModule),
+                data: { breadcrumb: 'HPB PMU (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
             },
-            {
-                path: 'Reports', component: ReportsComponent, data: { showLink: true, title: 'routerLinks.MachineTitle.Home' },
-                canActivate: [SharedGuard]
-            }
 
         ]
     }

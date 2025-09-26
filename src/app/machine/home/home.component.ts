@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CacheService } from 'src/app/services/cache.service';
 import { MenuService } from 'src/app/services/menu.service';
+import { machineMenuRoutes } from '../machine-route';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,7 @@ import { MenuService } from 'src/app/services/menu.service';
   standalone: false
 })
 export class HomeComponent {
+  machineMenu: any;
   constructor(
     private cacheSrv: CacheService,
     private router: Router,
@@ -19,8 +21,8 @@ export class HomeComponent {
   }
 
   async getMenu() {
-    let menu = await this.menuSvc.getMenu()
-    console.log(menu)
+    this.machineMenu = machineMenuRoutes.filter((routeItem: any) => routeItem.data.showLink)
+    console.log(this.machineMenu)
   }
 
   async logout() {
