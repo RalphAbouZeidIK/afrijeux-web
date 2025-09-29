@@ -323,7 +323,7 @@ export class MachineService {
       const apiResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/IssueTicket`, 'POST', params)
       //console.log(apiResponse)
       if (apiResponse.DataToPrint) {
-        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint,'IssueTicket',apiResponse.FullTicketId);
+        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, 'IssueTicket', apiResponse.FullTicketId);
         return apiResponse
       }
       //console.log(apiResponse)
@@ -358,20 +358,24 @@ export class MachineService {
       PersonId: userData.PersonId,  //(9791)
       MachineId: machineData.MachineId,
       ...reportsParams,
-      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
-      GameEventId: null
+      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     }
     console.log(params)
-
-    let reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', params)
+    let reportsResponse: any;
+    if (params.GameEventId) {
+      reportsResponse = await this.handleApiResponse(`${params.apiRoute}`, `${params.apiRoute}/EventResult`, 'POST', params)
+    }
+    else {
+      reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', params)
+    }
     console.log(reportsResponse)
-    
+
     if (reportsResponse.status == false) {
       this.setModalData(true, false, reportsResponse.message)
     }
 
     if (shouldPrint) {
-      this.bridge.sendPrintMessage('normalText', reportsResponse.DataToPrint,'GetReports');
+      this.bridge.sendPrintMessage('normalText', reportsResponse.DataToPrint, reportsResponse.Sender);
     }
     return reportsResponse
   }

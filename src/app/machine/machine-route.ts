@@ -24,5 +24,11 @@ export const machineMenuRoutes: Route[] = [
         component: ReportsComponent,
         data: { showLink: true, title: 'machine.routerLinks.reports' },
         canActivate: [SharedGuard]
+    },
+    {
+        path: 'CheckResults',
+        component: ReportsComponent,
+        data: { showLink: true, title: 'machine.routerLinks.checkResults' },
+        canActivate: [SharedGuard]
     }
 ];

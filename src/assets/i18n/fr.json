@@ -243,7 +243,8 @@
     "machine": {
         "routerLinks": {
             "validateTicketTitle": "Valider le billet",
-            "reports": "Rapports"
+            "reports": "Rapports",
+            "checkResults": "Check Results"
         },
         "generic": {
             "scan": "Scanner",
@@ -251,7 +252,8 @@
             "validate": "Valider",
             "back": "Retour",
             "submit": "Soumettre",
-            "print": "Imprimer"
+            "print": "Imprimer",
+            "eventId": "ID Événement"
         },
         "fullTicketId": "Numéro complet du billet",
         "chooseGames": "Choisir des jeux"

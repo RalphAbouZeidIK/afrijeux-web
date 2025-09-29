@@ -243,7 +243,8 @@
     "machine": {
         "routerLinks": {
             "validateTicketTitle": "Validate Ticket",
-            "reports": "Reports"
+            "reports": "Reports",
+            "checkResults": "Check Results"
         },
         "generic": {
             "scan": "Scan",
@@ -251,7 +252,8 @@
             "validate": "Validate",
             "back": "Back",
             "submit": "Submit",
-            "print": "Print"
+            "print": "Print",
+            "eventId": "Event Id"
         },
         "fullTicketId": "Full Ticket Id",
         "chooseGames": "Choose Games"

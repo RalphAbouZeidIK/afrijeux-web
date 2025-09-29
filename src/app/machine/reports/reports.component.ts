@@ -15,6 +15,9 @@ export class ReportsComponent implements OnInit {
   ToDate: any
   dataToPrint: any
   showReport = false
+  isCheckResults = window.location.href.includes('CheckResults')
+  EventId: any
+  genericDate: any
 
   constructor(
     private machineSrv: MachineService,
@@ -25,13 +28,13 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGames()
-    console.log(this.FromDate)
+    this.genericDate = this.datepipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS');
   }
 
   async getGames() {
     let machineData = await this.machineSrv.getMachineData()
     this.gamesList = machineData?.Games
-    this.selectedGames = [...this.gamesList]
+    this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
     console.log(this.gamesList)
   }
 
@@ -59,12 +62,15 @@ export class ReportsComponent implements OnInit {
 
   async getReports(shouldPrint = false) {
     console.log(this.selectedGames)
-    let ids = this.selectedGames.map((item: any) => item.GameId);
+    let ids = (this.isCheckResults) ? this.selectedGames[0].GameId : this.selectedGames.map((item: any) => item.GameId);
     let reportParams = {
       FromDate: this.FromDate,
-      ToDate: this.ToDate,
-      GameId: ids
+      ToDate: (!this.isCheckResults) ? this.ToDate : this.genericDate,
+      GameId: ids,
+      GameEventId: this.isCheckResults ? this.EventId : null,
+      apiRoute: this.isCheckResults ? this.selectedGames[0].GameApi.split('/')[1] : null
     }
+
     const apiReponse = await this.machineSrv.getReports(reportParams, shouldPrint)
     if (apiReponse.DataToPrint) {
       this.dataToPrint = apiReponse.DataToPrint

@@ -2,9 +2,10 @@
 
 .d-flex {
     justify-content: space-between;
+    gap: 10px;
 
     .date-holder {
-        flex: 0 0 49%
+        flex: 1;
     }
 }
 
@@ -23,4 +24,9 @@ p {
     margin-bottom: 15px;
     max-height: 200px;
     overflow: auto;
+}
+
+app-datepicker {
+    width: 100%;
+    display: block;
 }

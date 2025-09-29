@@ -1,10 +1,13 @@
 <div class="form-holder machine-layout">
     <div class="form-bg">
-        <h2>{{'machine.routerLinks.reports' | translate}}</h2>
+        <h2>{{ isCheckResults ?
+            ('machine.routerLinks.checkResults' | translate) :
+            ('machine.routerLinks.reports' | translate) }}
+        </h2>
         <div class=" form-content">
             <div class="form-group">
                 <label class="title-label">{{'machine.chooseGames' | translate}}</label>
-                <select class="form-control" multiple [(ngModel)]="selectedGames"
+                <select class="form-control" [multiple]="!isCheckResults" [(ngModel)]="selectedGames"
                     (ngModelChange)="selectedGamesChange($event)">
                     <option *ngFor="let game of gamesList" [ngValue]="game">{{ game.Name }}</option>
                 </select>
@@ -17,12 +20,18 @@
                 </p> -->
             </div>
 
+            <div class="form-group" *ngIf="isCheckResults">
+                <label class="title-label">{{ 'machine.generic.eventId' | translate }}</label>
+                <input type="number" class="form-control" [title]="'machine.generic.eventId' | translate"
+                    [(ngModel)]="EventId" />
+            </div>
+
             <div class="form-group d-flex">
                 <div class="date-holder">
                     <app-datepicker label="Date From"
                         (dateChangeEvent)="onDateChange($event,'FromDate')"></app-datepicker>
                 </div>
-                <div class="date-holder">
+                <div class="date-holder" *ngIf="!isCheckResults">
                     <app-datepicker label="Date To" (dateChangeEvent)="onDateChange($event,'ToDate')"></app-datepicker>
                 </div>
             </div>
