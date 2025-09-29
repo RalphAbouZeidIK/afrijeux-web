@@ -298,6 +298,15 @@ mat-form-field {
     }
 }
 
+.d-flex {
+    justify-content: space-between;
+    gap: 10px;
+
+    .date-holder {
+        flex: 1;
+    }
+}
+
 .tel-phone {
     display: flex;
 

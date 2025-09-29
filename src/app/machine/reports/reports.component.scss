@@ -1,14 +1,5 @@
 @use '/src/variables' as *;
 
-.d-flex {
-    justify-content: space-between;
-    gap: 10px;
-
-    .date-holder {
-        flex: 1;
-    }
-}
-
 span {
     text-transform: capitalize;
 }

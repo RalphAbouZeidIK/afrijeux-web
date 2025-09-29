@@ -68,6 +68,7 @@ export class ReportsComponent implements OnInit {
       ToDate: (!this.isCheckResults) ? this.ToDate : this.genericDate,
       GameId: ids,
       GameEventId: this.isCheckResults ? this.EventId : null,
+      EventCode: this.isCheckResults ? this.EventId : null,
       apiRoute: this.isCheckResults ? this.selectedGames[0].GameApi.split('/')[1] : null
     }
 

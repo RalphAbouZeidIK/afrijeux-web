@@ -39,10 +39,10 @@
             <div [innerText]="dataToPrint" class="report-holder" *ngIf="dataToPrint && showReport"></div>
 
             <div class="form-btns d-flex">
-                <button class="btn btn-primary" (click)="getReports()">
+                <button class="btn btn-primary" (click)="getReports()" [disabled]="isCheckResults && !EventId">
                     {{'machine.generic.submit' | translate}}
                 </button>
-                <button class="btn btn-primary" (click)="getReports(true)">
+                <button class="btn btn-primary" (click)="getReports(true)" [disabled]="isCheckResults && !EventId">
                     {{'machine.generic.print' | translate}}
                 </button>
                 <button class="btn btn-primary" routerLink="/Machine/Home">
