@@ -253,7 +253,9 @@
             "back": "Back",
             "submit": "Submit",
             "print": "Print",
-            "eventId": "Event Id"
+            "eventId": "Event Id",
+            "pay":"Pay",
+            "cancel":"Cancel"
         },
         "fullTicketId": "Full Ticket Id",
         "chooseGames": "Choose Games"

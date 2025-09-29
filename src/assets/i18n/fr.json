@@ -253,7 +253,9 @@
             "back": "Retour",
             "submit": "Soumettre",
             "print": "Imprimer",
-            "eventId": "ID Événement"
+            "eventId": "ID Événement",
+            "pay":"Payer",
+            "cancel":"Annuler"
         },
         "fullTicketId": "Numéro complet du billet",
         "chooseGames": "Choisir des jeux"

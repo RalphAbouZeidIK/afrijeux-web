@@ -2,25 +2,57 @@
     <div class="form-bg">
         <h2>{{'machine.routerLinks.validateTicketTitle' | translate}}</h2>
         <div class=" form-content">
-            <div class="form-group">
-                <label class="title-label">{{'machine.fullTicketId' | translate}}</label>
-                <input type="text" class="form-control" [(ngModel)]="fullTicketId" pattern="[0-9]*"
-                    inputmode="numeric" />
-            </div>
+            <ng-container *ngIf="!isPaying">
+                <div class="form-group">
+                    <label class="title-label">{{'machine.fullTicketId' | translate}}</label>
+                    <input type="text" class="form-control" [(ngModel)]="fullTicketId" pattern="[0-9]*"
+                        inputmode="numeric" />
+                </div>
 
-            <div class="form-btns d-flex">
+                <div class="form-btns d-flex">
 
-                <button class="btn btn-primary" (click)="scanCode()">
-                    {{'machine.generic.scan' | translate}}
-                    {{'machine.generic.ticket' | translate}}
-                </button>
-                <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
-                    {{'machine.generic.validate' | translate}}
-                </button>
-                <button class="btn btn-primary" routerLink="/Machine/Home">
-                    {{'machine.generic.back' | translate}}
-                </button>
-            </div>
+                    <button class="btn btn-primary" (click)="scanCode()">
+                        {{'machine.generic.scan' | translate}}
+                        {{'machine.generic.ticket' | translate}}
+                    </button>
+                    <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
+                        {{'machine.generic.validate' | translate}}
+                    </button>
+                    <button class="btn btn-primary" routerLink="/Machine/Home">
+                        {{'machine.generic.back' | translate}}
+                    </button>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="isPaying">
+                <div class="form-group">
+                    <input type="text" class="form-control" [value]="payTicketResponse.GameName" disabled />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control"
+                        [value]="(payTicketResponse.IsWinning == 1)?'Winner':'Not Winner'" disabled />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" [value]="payTicketResponse.WinningAmount" disabled />
+                </div>
+
+                <div [innerText]="payTicketResponse.dataToPrint" class="report-holder"></div>
+
+                <div class="form-btns d-flex">
+
+                    <button class="btn btn-primary" (click)="scanCode()">
+                        {{'machine.generic.pay' | translate}}
+                        {{'machine.generic.ticket' | translate}}
+                    </button>
+                    <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
+                        {{'machine.generic.cancel' | translate}} {{'machine.generic.ticket' | translate}}
+                    </button>
+                    <button class="btn btn-primary" (click)="isPaying = false">
+                        {{'machine.generic.back' | translate}}
+                    </button>
+                </div>
+            </ng-container>
+
 
         </div>
     </div>

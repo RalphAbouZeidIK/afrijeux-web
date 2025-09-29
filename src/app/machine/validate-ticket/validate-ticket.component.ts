@@ -12,6 +12,10 @@ export class ValidateTicketComponent {
 
   fullTicketId: any = '';
 
+  isPaying: boolean = false;
+
+  payTicketResponse: any
+
   constructor(
     private machineSrv: MachineService,
     private nativeBridge: NativeBridgeService
@@ -28,6 +32,11 @@ export class ValidateTicketComponent {
 
   async validateTicket() {
     let validateTicketReponse = await this.machineSrv.validateTicket(this.fullTicketId)
+    if (validateTicketReponse.status != false) {
+      this.payTicketResponse = validateTicketReponse
+      this.isPaying = true
+    }
+
     console.log(validateTicketReponse)
   }
 

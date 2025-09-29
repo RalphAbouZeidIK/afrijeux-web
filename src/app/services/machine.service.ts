@@ -326,6 +326,10 @@ export class MachineService {
         this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, 'IssueTicket', apiResponse.FullTicketId);
         return apiResponse
       }
+      else if (apiResponse.status == false) {
+        this.setModalData(true, false, apiResponse.message)
+        return apiResponse
+      }
       //console.log(apiResponse)
     } catch (error) {
       //console.log(error)
@@ -345,8 +349,13 @@ export class MachineService {
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
     console.log(validateTicketResponse)
+
     if (validateTicketResponse.status == false) {
       this.setModalData(true, false, validateTicketResponse.message)
+    }
+
+    else if (validateTicketResponse.dataToPrint) {
+      validateTicketResponse.dataToPrint = validateTicketResponse.dataToPrint.replace(/;/g, "\n");
     }
     return validateTicketResponse
   }

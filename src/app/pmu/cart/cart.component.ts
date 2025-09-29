@@ -384,11 +384,16 @@ export class CartComponent implements OnInit {
         switch (betItem[0].FieldChoice) {
           case 1:
             AssociatedHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
-            let updatedHorses = betItem[0].BaseHorses.map((horse: any) => ({
-              ...horse,
-              HorseName: '0'
-            }));
-            BaseHorses = updatedHorses.map((horse: any) => horse.HorseName).join(',')
+            let minHorses = betItem[0].SelectedFixedConfig.HorsesNumberTelpo
+            for (let i = 0; i < minHorses; i++) {
+              if ((i + 1) == minHorses) {
+                BaseHorses += '00'
+              }
+              else {
+                BaseHorses += '00,'
+              }
+            }
+            console.log(BaseHorses)
             break
           case 2:
             BaseHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
@@ -477,7 +482,7 @@ export class CartComponent implements OnInit {
 
     const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
     console.log(apiResponse)
-    if (apiResponse.DataToPrint) {
+    if (apiResponse?.DataToPrint) {
       this.clearBets()
     }
   }
