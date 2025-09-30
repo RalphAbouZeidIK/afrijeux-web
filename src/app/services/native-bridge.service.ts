@@ -54,7 +54,6 @@ export class NativeBridgeService {
     // Optional: expose global print trigger (if Flutter calls it)
     (window as any).handleGetSerialResult = (result: string) => {
       this.ngZone.run(() => {
-        console.log("📩 Received from Flutter:", result);
         this.getSerialSource.next(result);
       });
     };

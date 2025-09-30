@@ -22,7 +22,7 @@ export class HomeComponent {
 
   async getMenu() {
     this.machineMenu = machineMenuRoutes.filter((routeItem: any) => routeItem.data.showLink)
-    console.log(this.machineMenu)
+    //console.log(this.machineMenu)
   }
 
   async logout() {

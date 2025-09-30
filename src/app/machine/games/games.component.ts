@@ -28,7 +28,7 @@ export class GamesComponent implements OnInit {
         gameItem.ShowGame = true
       }
     });
-    console.log(this.games)
+    //console.log(games)
     this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 

@@ -188,7 +188,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.navList = this.router.config.filter((item: any) => item.data.showLink);
 
-    console.log(this.navList);
+    //console.log(this.navList);
 
   }
 

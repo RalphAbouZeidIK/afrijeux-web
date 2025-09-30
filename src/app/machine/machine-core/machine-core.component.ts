@@ -48,7 +48,13 @@ export class MachineCoreComponent implements OnInit {
       }
     });
 
-    const apiResponse = await this.machineSrv.registerMachine();
+    let params = {
+      Machine: await this.bridge.getSerial(),
+      VersionCode: '1.0.0'
+    }
+    
+    const apiResponse = await this.machineSrv.registerMachine(params);
+
     console.log(apiResponse)
     if (apiResponse.CommunicationKey) {
       this.isAppRegistered = true

@@ -24,7 +24,7 @@ export class CacheService {
           value: JSON.stringify(data) // send raw API response as JSON string
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        console.log(`💾 Saved to OfflineCache with key: ${key}`);
+        //console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
         console.warn('⚠️ OfflineCache channel not found');
       }
@@ -96,7 +96,7 @@ export class CacheService {
           key: key
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        console.log(`🗑️ Requested delete for key: ${key}`);
+        //console.log(`🗑️ Requested delete for key: ${key}`);
         resolve();
       } else {
         console.warn("⚠️ OfflineCache channel not found");

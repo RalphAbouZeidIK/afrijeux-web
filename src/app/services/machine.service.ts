@@ -16,12 +16,6 @@ declare var require: any;
 })
 export class MachineService {
 
-  machineId: any;
-  machineData: any;
-  encryptionPass: any = '';  //(TDUT9J6gTig=)
-  userData: any;
-
-
   /** modal status subscriber */
   private openModal$ = new Subject();
 
@@ -59,7 +53,8 @@ export class MachineService {
   }
 
   async encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false) {
-    ////console.log(objectToEncrypt)
+
+    let registerMachineId = objectToEncrypt.Machine || null
     let amount = objectToEncrypt.Ticket?.Stake || null
     let timeStamp = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     objectToEncrypt = JSON.stringify(objectToEncrypt);
@@ -67,7 +62,7 @@ export class MachineService {
     let encryptData: any;
     let machineData = await this.getMachineData();
     if (isRegisterMachineApi) {
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(this.machineId)));
+      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(registerMachineId)));
     }
     else {
 
@@ -92,7 +87,7 @@ export class MachineService {
     const base64String = btoa(binaryString);
 
     const body: any = {
-      machine: (isRegisterMachineApi) ? this.machineId : machineData.MachineId.toString(),  //("3359")
+      machine: (isRegisterMachineApi) ? registerMachineId : machineData.MachineId.toString(),  //("3359")
       timeStamp: timeStamp,
       encryptedRequestDTO: base64String,
       geolocation: {
@@ -107,7 +102,7 @@ export class MachineService {
       amount: amount
     }
 
-    console.log(body)
+    //console.log(body)
 
     return {
       body
@@ -135,21 +130,29 @@ export class MachineService {
   async decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
     const xxtea = require('xxtea-node');
     let decrypted: any;
+    let machineSerial = await this.bridge.getSerial()
     if (isRegisterMachineApi) {
-      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(this.machineId))))
-      this.encryptionPass = JSON.parse(decrypted).CommunicationKey;
+      decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(machineSerial))))
     }
     else {
       let machineData: any = await this.getMachineData()
       let encryptionPass = machineData?.CommunicationKey || 'default';
-      ////console.log(`Encryption Pass ${this.encryptionPass}`)
-      ////console.log(this.encryptionPass)
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(encryptionPass)));
     }
     return JSON.parse(decrypted);
   }
 
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
+    let userData = await this.getUserData()
+    let machineData = await this.getMachineData();
+
+    params = {
+      ...params,
+      PersonId: (userData) ? userData.PersonId : null,
+      GameOperationId: machineData.OperationId,
+      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
+      MachineId: machineData.MachineId,
+    }
     console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
@@ -183,18 +186,16 @@ export class MachineService {
     }
   }
 
-  async registerMachine() {
-    this.machineId = await this.bridge.getSerial()
-    let params: any = {
-      "Machine": this.machineId,
-      "VersionCode": '1.0.0',
-      "TimeStamp": this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
-    }
-
+  async registerMachine(params: any) {
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
+
+    apiResponse.Games = apiResponse.Games.map((gameItem: any) => ({
+      ...gameItem,
+      RouteName: gameItem.GameApi.split('/')[1]
+    }));
+
     this.cacheSrv.saveToFlutterOfflineCache('machine_data', apiResponse);
     this.localStorageSrv.setItem('machine_data', apiResponse, true)
-    this.machineData = await this.getMachineData()
     return apiResponse;
   }
 
@@ -203,28 +204,22 @@ export class MachineService {
     return machineData;
   }
 
-  async getGameId(routerName: any) {
-    console.log(routerName)
+  getGameRoute() {
+    let route = this.router.url.split('/')[2]
+    return route
+  }
+
+  async getGameId() {
     let machineData: any = await this.getMachineData()
-    console.log(machineData)
+    let gameId = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())?.GameId
+    return gameId
   }
 
   async loginMachine(loginParams: any) {
 
-    const params = {
-      "UserName": loginParams.UserName,
-      "Password": loginParams.Password,
-      "Ip": loginParams.Ip,
-      "MachineId": this.machineData?.MachineId,
-      "GameOperationId": this.machineData?.OperationId,
-      "TimeStamp": this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
-    }
-
-    let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', params)
-    console.log(apiResponse)
-    this.userData = apiResponse
+    let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', loginParams)
     this.cacheSrv.saveToFlutterOfflineCache('user_data', apiResponse);
-    this.localStorageSrv.setItem('user_data', this.userData, true)
+    this.localStorageSrv.setItem('user_data', apiResponse, true)
     return apiResponse;
   }
 
@@ -235,35 +230,26 @@ export class MachineService {
   }
 
   async getGameEvents() {
-    //let gameObject = await this.getGame()
-    let userData = await this.getUserData()
-    //this.getGameId(location.pathname.split('/'))
-    //console.log(userData)
+
     let params: any = {
-      PersonId: userData.PersonId,  //(9791)
-      GameId: 28,
+      GameId: await this.getGameId(),
       GameConfiguration: [],
-      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       UserOnlineStatus: true
     }
 
-    let gameEventsResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/GetEventConfiguration`, 'POST', params)
+    let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetEventConfiguration`, 'POST', params)
     return gameEventsResponse
   }
 
   async getFixedConfiguration(fixedConfigurationId: any) {
-    let userData = await this.getUserData()
-    //console.log(userData)
 
     let params: any = {
-      PersonId: userData.PersonId,  //(9791)
-      GameId: 28,
+      GameId: await this.getGameId(),
       GameConfiguration: [],
-      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       UserOnlineStatus: true,
       FixedConfigurationId: fixedConfigurationId
     }
-    let gameEventsResponse1 = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/GetFixedConfiguration`, 'POST', params)
+    let gameEventsResponse1 = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetFixedConfiguration`, 'POST', params)
     return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
   }
 
@@ -277,7 +263,7 @@ export class MachineService {
     ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
 
     let ticketBody = {
-      GameId: 28,
+      GameId: await this.getGameId(),
       FullTicketId: '',
       EncryptedTicketKey: '',
       IsVoucher: 0,
@@ -296,31 +282,14 @@ export class MachineService {
     }
 
     let params = {
-      GameId: 28,
-      PersonId: userData.PersonId,
-      MachineId: machineData.MachineId,
+      GameId: await this.getGameId(),
       Ticket: ticketBody,
       TicketRequestId: ticketRequestId,
       LoyalityReferenceId: 0,
-      TimeStamp: 'string',
     }
 
-
-    // let params = {
-    //   body: {
-    //     "timeStamp": "string",
-    //     "issueTicketRequest": issueTicketRequest,
-    //     "ip": "10.1.3.254",
-    //     "culture": "en",
-    //     "currency": 4,
-    //     "amount": ticketBody.Stake
-    //   }
-    // }
-    //console.log(params)
-
-
     try {
-      const apiResponse = await this.handleApiResponse(`PMUHybrid`, `PMUHybrid/IssueTicket`, 'POST', params)
+      const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
       //console.log(apiResponse)
       if (apiResponse.DataToPrint) {
         this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, 'IssueTicket', apiResponse.FullTicketId);
@@ -338,13 +307,9 @@ export class MachineService {
 
 
   async validateTicket(fullTicketId: any) {
-    let userData = await this.getUserData()
-    let machineData = await this.getMachineData();
+
     let params: any = {
-      PersonId: userData.PersonId,  //(9791)
-      MachineId: machineData.MachineId,
       FullTicketId: fullTicketId,
-      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     }
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
@@ -361,23 +326,14 @@ export class MachineService {
   }
 
   async getReports(reportsParams: any, shouldPrint = false) {
-    let userData = await this.getUserData()
-    let machineData = await this.getMachineData();
-    let params: any = {
-      PersonId: userData.PersonId,  //(9791)
-      MachineId: machineData.MachineId,
-      ...reportsParams,
-      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
-    }
-    console.log(params)
+
     let reportsResponse: any;
-    if (params.GameEventId) {
-      reportsResponse = await this.handleApiResponse(`${params.apiRoute}`, `${params.apiRoute}/EventResult`, 'POST', params)
+    if (reportsParams.GameEventId) {
+      reportsResponse = await this.handleApiResponse(`${reportsParams.apiRoute}`, `${reportsParams.apiRoute}/EventResult`, 'POST', reportsParams)
     }
     else {
-      reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', params)
+      reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', reportsParams)
     }
-    console.log(reportsResponse)
 
     if (reportsResponse.status == false) {
       this.setModalData(true, false, reportsResponse.message)

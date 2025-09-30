@@ -118,11 +118,9 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGameEvents()
-      //console.log(gameEventsResponse)
       const groupedRaces = this.groupByCategory(gameEventsResponse.GameConfiguration.EventConfiguration);
       this.dataArray = Object.values(groupedRaces)
 
-      //console.log(this.dataArray)
       if (this.dataArray) {
         this.dataArray.forEach((reunionItem: any) => {
           reunionItem.Events.forEach((raceItem: any) => {
@@ -145,14 +143,8 @@ export class CoursesComponent implements OnInit, AfterViewInit {
 
       }
     }
-
-    //console.log(gameEventsResponse)
     //console.log(this.dataArray)
 
-
-
-
-    //console.log(this.dataArray)
   }
 
   groupByCategory(events: any): { ReunionCode: string, Events: any }[] {

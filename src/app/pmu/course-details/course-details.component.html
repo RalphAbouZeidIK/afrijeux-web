@@ -2,7 +2,7 @@
     <div class="course-header" (click)="toggleSub(courseDetails)">
         <div class="date-title-holder">
             <span class="date">
-                {{courseDetails.gameEventDate || courseDetails.GameEventDate | date:'HH:mm'}}
+                {{courseDetails.EventDate | date:'HH:mm'}}
             </span>
             <span class="title">
                 <img src="/assets/images/pmu.svg" alt="PMU" class="pmuIcon">
