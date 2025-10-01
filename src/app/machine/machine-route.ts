@@ -7,28 +7,48 @@ import { HomeComponent } from './home/home.component';
 
 export const machineMenuRoutes: Route[] = [
     {
-        path: 'Login', component: LoginComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Login' }
+        path: 'Login', component: LoginComponent,
+        data: {
+            showLink: false,
+            title: 'routerLinks.MachineTitle.Login'
+        }
     },
     {
-        path: 'Home', component: HomeComponent, data: { showLink: false, title: 'routerLinks.MachineTitle.Home' },
+        path: 'Home', component: HomeComponent,
+        data: {
+            showLink: false,
+            title: 'routerLinks.MachineTitle.Home'
+        },
         canActivate: [SharedGuard]
     },
     {
         path: 'ValidateTicket',
         component: ValidateTicketComponent,
-        data: { showLink: true, title: 'machine.routerLinks.validateTicketTitle' },
+        data: {
+            showLink: true,
+            title: 'machine.routerLinks.validateTicketTitle',
+            PermissionName: 'TerminalCanValidateTicket'
+        },
         canActivate: [SharedGuard]
     },
     {
         path: 'Reports',
         component: ReportsComponent,
-        data: { showLink: true, title: 'machine.routerLinks.reports' },
+        data: {
+            showLink: true,
+            title: 'machine.routerLinks.reports',
+            PermissionName: 'TerminalCanViewReport'
+        },
         canActivate: [SharedGuard]
     },
     {
         path: 'CheckResults',
         component: ReportsComponent,
-        data: { showLink: true, title: 'machine.routerLinks.checkResults' },
+        data: {
+            showLink: true,
+            title: 'machine.routerLinks.checkResults',
+            PermissionName: 'TerminalCanViewResult'
+        },
         canActivate: [SharedGuard]
     }
 ];

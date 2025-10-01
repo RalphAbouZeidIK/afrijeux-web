@@ -14,7 +14,15 @@ export class ValidateTicketComponent {
 
   isPaying: boolean = false;
 
-  payTicketResponse: any
+  payTicketResponse: any;
+
+  canPayTicket: any = false
+
+  //canCancelTicket: any = false
+
+  canFlagToCancel: any = false
+
+  showCancelPage: boolean = false
 
   constructor(
     private machineSrv: MachineService,
@@ -25,6 +33,11 @@ export class ValidateTicketComponent {
     });
   }
 
+  async ngOnInit() {
+    this.fullTicketId = ''
+    this.canPayTicket = await this.machineSrv.getMachinePermission('TerminalCanPayTicket');
+  }
+
 
   scanCode(): void {
     this.nativeBridge.requestScan();
@@ -32,12 +45,46 @@ export class ValidateTicketComponent {
 
   async validateTicket() {
     let validateTicketReponse = await this.machineSrv.validateTicket(this.fullTicketId)
-    if (validateTicketReponse.status != false) {
+    if (validateTicketReponse.status == true) {
+      this.getCancelPermission()
       this.payTicketResponse = validateTicketReponse
       this.isPaying = true
+      if (validateTicketReponse.dataToPrint.trim() == '') {
+        this.showCancelPage = true
+      }
+
+
+
     }
 
     console.log(validateTicketReponse)
+  }
+
+  async payTicket() {
+    let payTicketReponse = await this.machineSrv.payTicket(this.fullTicketId)
+    if (payTicketReponse.DataToPrint) {
+      this.fullTicketId = ''
+      this.isPaying = false
+    }
+    console.log(payTicketReponse)
+  }
+
+  async getCancelPermission() {
+    let gameId = this.fullTicketId?.substring(0, 3);
+    //this.canCancelTicket = await this.machineSrv.getMachinePermission('TerminalCanCancel', Number(gameId))
+    this.canFlagToCancel = await this.machineSrv.getMachinePermission('TerminalCanFlagToCancel', Number(gameId))
+  }
+
+  async cancelTicket() {
+    let params = {
+      fullTicketId: this.fullTicketId,
+      IsLatest: true
+    }
+    let cancelTicketResponse = await this.machineSrv.cancelTicket(params)
+    if(cancelTicketResponse){
+      this.isPaying = false
+      this.fullTicketId = ''
+    }
   }
 
 }

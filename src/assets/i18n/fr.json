@@ -254,8 +254,11 @@
             "submit": "Soumettre",
             "print": "Imprimer",
             "eventId": "ID Événement",
-            "pay":"Payer",
-            "cancel":"Annuler"
+            "pay": "Payer",
+            "cancel": "Annuler",
+            "gameName": "Nom du jeu",
+            "amount": "Montant",
+            "status": "Statut"
         },
         "fullTicketId": "Numéro complet du billet",
         "chooseGames": "Choisir des jeux"

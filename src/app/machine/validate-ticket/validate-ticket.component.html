@@ -26,25 +26,29 @@
 
             <ng-container *ngIf="isPaying">
                 <div class="form-group">
+                    <label class="title-label">{{'machine.generic.gameName' | translate}}</label>
                     <input type="text" class="form-control" [value]="payTicketResponse.GameName" disabled />
                 </div>
                 <div class="form-group">
+                    <label class="title-label">{{'machine.generic.status' | translate}}</label>
                     <input type="text" class="form-control"
-                        [value]="(payTicketResponse.IsWinning == 1)?'Winner':'Not Winner'" disabled />
+                        [value]="(payTicketResponse.IsWinning == 1)?'Winner':'Not Validated Yet'" disabled />
                 </div>
-                <div class="form-group">
+                <div class="form-group" *ngIf="!showCancelPage">
+                    <label class="title-label">{{'machine.generic.amount' | translate}}</label>
                     <input type="text" class="form-control" [value]="payTicketResponse.WinningAmount" disabled />
                 </div>
 
-                <div [innerText]="payTicketResponse.dataToPrint" class="report-holder"></div>
+                <div [innerText]="payTicketResponse.dataToPrint" class="report-holder" *ngIf="!showCancelPage"></div>
 
                 <div class="form-btns d-flex">
 
-                    <button class="btn btn-primary" (click)="scanCode()">
+                    <button class="btn btn-primary" (click)="payTicket()" *ngIf="canPayTicket && !showCancelPage">
                         {{'machine.generic.pay' | translate}}
                         {{'machine.generic.ticket' | translate}}
                     </button>
-                    <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
+                    <button class="btn btn-primary" (click)="cancelTicket()" [disabled]="(!fullTicketId)?true:false"
+                        *ngIf="canFlagToCancel && showCancelPage">
                         {{'machine.generic.cancel' | translate}} {{'machine.generic.ticket' | translate}}
                     </button>
                     <button class="btn btn-primary" (click)="isPaying = false">

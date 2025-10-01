@@ -172,8 +172,13 @@ export class MachineService {
     }
 
     if (apiResponse?.encryptedResponse) {
-      apiResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
-      return apiResponse;
+      let decryptedResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
+
+      return {
+        ...decryptedResponse,
+        status: apiResponse.status,
+        message: apiResponse.message
+      };
     }
 
     else {
@@ -184,6 +189,20 @@ export class MachineService {
         return { status: false, message: 'No internet connection and no cached data available.' };
       }
     }
+  }
+
+  async getMachinePermission(permissionName: any, gameId: any = null) {
+    let userData = await this.getUserData()
+    console.log(
+      userData.UserSettings.map((usrSet: any) => {
+        return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
+      })
+    )
+
+    let hasPermission = userData.UserSettings.find((setting: any) => (setting.Name == permissionName) && (setting.GameId == gameId))?.BitValue
+
+    console.log(permissionName + '  ' + hasPermission)
+    return hasPermission
   }
 
   async registerMachine(params: any) {
@@ -292,7 +311,7 @@ export class MachineService {
       const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
       //console.log(apiResponse)
       if (apiResponse.DataToPrint) {
-        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, 'IssueTicket', apiResponse.FullTicketId);
+        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
         return apiResponse
       }
       else if (apiResponse.status == false) {
@@ -343,6 +362,31 @@ export class MachineService {
       this.bridge.sendPrintMessage('normalText', reportsResponse.DataToPrint, reportsResponse.Sender);
     }
     return reportsResponse
+  }
+
+  async payTicket(fullTicketId: any) {
+    let params: any = {
+      FullTicketId: fullTicketId,
+    }
+    let payTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/PayTicket`, 'POST', params)
+
+    if (payTicketResponse.status == false) {
+      this.setModalData(true, false, payTicketResponse.message)
+    }
+    else if (payTicketResponse.DataToPrint) {
+      this.bridge.sendPrintMessage('normalText', payTicketResponse.DataToPrint, payTicketResponse.Sender, payTicketResponse.FullTicketId);
+    }
+    return payTicketResponse
+  }
+
+  async cancelTicket(params: any) {
+
+    let cancelTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/FlagToCancelTicket`, 'POST', params)
+    console.log(cancelTicketResponse)
+    if (cancelTicketResponse) {
+      this.setModalData(true, cancelTicketResponse.status, cancelTicketResponse.message)
+    }
+    return cancelTicketResponse
   }
 
 }
