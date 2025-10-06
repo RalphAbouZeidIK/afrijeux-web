@@ -275,26 +275,31 @@ mat-form-field {
 
     .form-control {
         background-color: $darkBg;
-        border-color: $darkBg;
-        padding: 10px 12px;
-        color: $white;
-
-        &::placeholder {
-            color: $lightGrey
-        }
     }
 
+}
+
+.form-control {
+    background-color: $lightBg;
+    border-color: $lightBg;
+    padding: 10px 12px;
+    color: $white;
+
+    &::placeholder {
+        color: $lightGrey
+    }
+}
 
 
-    .form-btns {
-        margin-bottom: 10px;
-        margin-top: 25px;
+
+.form-btns {
+    margin-bottom: 10px;
+    margin-top: 25px;
 
 
-        .btn {
-            width: 100%;
-            padding: 10px 0;
-        }
+    .btn {
+        width: 100%;
+        padding: 10px 0;
     }
 }
 

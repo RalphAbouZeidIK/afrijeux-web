@@ -106,8 +106,9 @@
 
         </div>
 
-        <button class="btn btn-primary" type="submit" (click)="addBetToTicket(betItem)">{{'hpb.cart.addToTicket' |
-            translate}}</button>
+        <button class="btn btn-primary" type="submit" (click)="addBetToTicket(betItem)">
+            {{ (isPMUHybrid ? 'hpb.cart.placeBet' : 'hpb.cart.addToTicket') | translate }}
+        </button>
     </div>
     <div class="cart-body-holder ticket-body" *ngIf="listOfBets && listOfBets.length > 0">
         <div class="list-of-bets">

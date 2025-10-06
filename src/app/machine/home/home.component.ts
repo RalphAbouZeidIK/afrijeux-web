@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CacheService } from 'src/app/services/cache.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { machineMenuRoutes } from '../machine-route';
 import { MachineService } from 'src/app/services/machine.service';
 
@@ -11,14 +10,33 @@ import { MachineService } from 'src/app/services/machine.service';
   styleUrl: './home.component.scss',
   standalone: false
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   machineMenu: any = [];
+
+  games: any = []
+
+  isOnline = navigator.onLine
+
   constructor(
     private cacheSrv: CacheService,
     private router: Router,
     private machineSrv: MachineService
   ) {
     this.getMenu()
+
+  }
+
+  async ngOnInit() {
+    let machineData = await this.machineSrv.getMachineData()
+    let games = machineData?.Games
+    games.forEach((gameItem: any) => {
+      gameItem.ShowGame = false
+      if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
+        gameItem.ShowGame = true
+      }
+    });
+    //console.log(games)
+    this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 
   async getMenu() {
@@ -35,6 +53,12 @@ export class HomeComponent {
       }
     })
     console.log(this.machineMenu)
+  }
+
+  selectGame(game: any) {
+    console.log(game)
+    let url = game.GameApi.split('/')[1]
+    this.router.navigate([`/Machine/${url}`])
   }
 
   async logout() {

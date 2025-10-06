@@ -39,3 +39,21 @@
 .arrow.active {
     transform: rotate(90deg);
 }
+
+.form-control {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+    text-align: center;
+    flex: 0 0 32%
+}
+
+.form-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group {
+    flex: 0 0 32%
+}

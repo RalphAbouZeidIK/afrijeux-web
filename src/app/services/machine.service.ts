@@ -225,6 +225,7 @@ export class MachineService {
 
   getGameRoute() {
     let route = this.router.url.split('/')[2]
+    console.log(this.router.url)
     return route
   }
 

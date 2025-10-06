@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, NavigationError, Router, Event, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { GamesService } from 'src/app/services/games.service';
 
 @Component({
   selector: 'app-homepage',
@@ -20,30 +21,51 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   routeSub!: Subscription;
 
-  constructor(private apiSrv: ApiService, private router: Router, private route: ActivatedRoute) {
+  isMobile = false
+
+  filtersSubscription: Subscription
+
+  constructor(
+    private apiSrv: ApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private gamesSrv: GamesService
+  ) {
     this.route.params.subscribe(params => {
       console.log(params); // Log route params to check if they are correctly captured
     });
+
+    this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
+      if (this.isMobile) {
+        console.log(data)
+        this.getMatches(data)
+      }
+    })
   }
 
   ngOnInit(): void {
+    if (window.innerWidth < 1200) {
+      this.isMobile = true
+    }
     this.routeSub = this.route.params.subscribe(params => {
-      this.sportId = params['sportId']; // Update matchId when params change
-      this.tournamentId = params['tournamentId']; // Update matchId when params change
-      this.categoryId = params['categoryId']; // Update matchId when params change
-      this.getMatches()
+      let SportId = params['sportId']; // Update matchId when params change
+      let TournamentId = params['tournamentId']; // Update matchId when params change
+      let CategoryId = params['categoryId']; // Update matchId when params change
+      let apiParams = {
+        SportId: SportId,
+        TournamentId: TournamentId,
+        CategoryId: CategoryId
+      }
+      this.getMatches(apiParams)
     });
-    console.log(this.sportId)
   }
 
-  async getMatches() {
+  async getMatches(apiParams: any) {
     let params = {
       body: {
         Language: 'en',
         MatchName: null,
-        TournamentId: this.tournamentId,
-        CategoryId: this.categoryId,
-        SportId: this.sportId,
+        ...apiParams,
         PageSize: 100,
         PageNumber: 1,
       }
@@ -66,7 +88,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async getMatchOutcome(event: any) {
     console.log(event)
-    this.router.navigate([`${location.pathname.split('/')[1]}/${event.sportId}/Categories/${event.categoryId}/Tournaments/${event.tournamentId}/Outcomes/${event.matchId}`])
+    let firstPath = (this.isMobile) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
+    this.router.navigate([`${firstPath}/${event.sportId}/Categories/${event.categoryId}/Tournaments/${event.tournamentId}/Outcomes/${event.matchId}`])
   }
 
   ngOnDestroy(): void {

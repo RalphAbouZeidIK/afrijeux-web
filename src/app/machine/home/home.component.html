@@ -1,7 +1,12 @@
 <div class="machine-home">
-    <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">
-        {{routerItem.data.title | translate}}
-    </a>
-    <app-games></app-games>
-    <a class="btn btn-primary" (click)="logout();">Logout</a>
+    <div class="main-btns">
+        <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">
+            {{routerItem.data.title | translate}}
+        </a>
+        <ng-container *ngFor="let game of games">
+            <a class="btn btn-primary" (click)="selectGame(game)">{{game.Name.toLowerCase()}}</a>
+        </ng-container>
+    </div>
+
+    <a class="btn btn-primary logout-btn" (click)="logout();">Logout</a>
 </div>

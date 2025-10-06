@@ -26,7 +26,7 @@ const routes: Routes = [
                 data: { breadcrumb: 'HPB PMU (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
             },
             {
-                path: 'Sports',
+                path: 'AfrijeuxSportsBetting',
                 canActivate: [SharedGuard],
                 loadChildren: () => import('../sports/sports.module').then(m => m.SportsModule),
                 data: { breadcrumb: 'Sports (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }

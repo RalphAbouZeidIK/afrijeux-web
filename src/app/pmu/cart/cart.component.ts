@@ -34,6 +34,8 @@ export class CartComponent implements OnInit {
 
   isAndroidApp = false
 
+  isPMUHybrid = false
+
   /**
    * Subscribe to login status
    */
@@ -77,6 +79,7 @@ export class CartComponent implements OnInit {
 
   async ngOnInit() {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    this.isPMUHybrid = this.machineSrv.getGameRoute() == 'PMUHybrid'
     if (!this.isAndroidApp) {
       this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     }
@@ -193,7 +196,7 @@ export class CartComponent implements OnInit {
     else {
       this.IsParoli = false
       this.IsDouble = false
-      if (data.SelectedFixedConfig.IsAllOrder == 0) {
+      if (data.SelectedFixedConfig?.IsAllOrder == 0) {
         this.IsAllOrder = false
       }
       this.betItem = [data]
@@ -201,6 +204,7 @@ export class CartComponent implements OnInit {
     }
     this.calculateCombinations(this.betItem)
     this.showCartButtons = this.listOfBets.length > 0
+    this.showOnClickMobile = this.betItem.length > 0 && this.betItem[0].SelectedFixedConfig
   }
 
   calculateCombinations(betItem: any) {
@@ -435,6 +439,10 @@ export class CartComponent implements OnInit {
 
       this.composePickObject(PickObject, betItem)
     }
+    if (this.isPMUHybrid) {
+      this.issueTicket()
+    }
+
   }
 
   composePickDetails(event: any) {

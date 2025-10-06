@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { ApiService } from './api.service';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class GamesService {
   MachineId = 2338
 
   gameObject: any
+
+  private sportsFilter$ = new Subject();
 
   constructor(
     private gnrcSrv: GenericService,
@@ -81,6 +84,23 @@ export class GamesService {
       events: grouped[key],  // The array of items for that event,
       isOpen: false
     }));
+  }
+
+
+  /**
+   * Function to get the login status subsciber
+   * @returns 
+   */
+  getSportsFilter(): Observable<any> {
+    return this.sportsFilter$;
+  }
+
+  /**
+   * Change the login status subscriber
+   * @param {any} filterObject login status true or false
+   */
+  setSportsFilter(filterObject: any) {
+    this.sportsFilter$.next(filterObject);
   }
 
 

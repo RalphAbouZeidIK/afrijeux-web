@@ -4,7 +4,6 @@ import { SharedModule } from '../shared/shared.module';
 import { routing } from './machine-routing';
 import { MachineCoreComponent } from './machine-core/machine-core.component';
 import { PopupComponent } from "src/app/shared/popup/popup.component";
-import { GamesComponent } from './games/games.component';
 import { HomeComponent } from './home/home.component';
 import { ValidateTicketComponent } from './validate-ticket/validate-ticket.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -13,9 +12,8 @@ import { ReportsComponent } from './reports/reports.component';
 
 @NgModule({
   declarations: [
-    MachineCoreComponent, 
-    GamesComponent, 
-    HomeComponent, 
+    MachineCoreComponent,
+    HomeComponent,
     ValidateTicketComponent,
     ReportsComponent
   ],

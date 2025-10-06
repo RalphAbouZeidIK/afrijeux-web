@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
+import { GamesService } from 'src/app/services/games.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
@@ -17,7 +18,10 @@ export class MatchListComponent implements OnChanges {
 
   cartSubscription: Subscription
 
-  constructor(private apiSrv: ApiService, private storageSrv: LocalStorageService, private cartSrv: CartService) {
+
+  constructor(
+    private storageSrv: LocalStorageService,
+    private cartSrv: CartService) {
 
     this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
 
@@ -40,6 +44,10 @@ export class MatchListComponent implements OnChanges {
         }
       });
     });
+
+
+    
+
 
 
   }

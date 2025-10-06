@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Directive, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { MachineService } from 'src/app/services/machine.service';
 
-@Component({
-  selector: 'app-games',
-  templateUrl: './games.component.html',
-  styleUrl: './games.component.scss',
-  standalone: false,
+@Directive({
+   selector: '[appGames]'
 })
 export class GamesComponent implements OnInit {
 
   constructor(
+    private tpl: TemplateRef<any>, 
+    private vcr: ViewContainerRef,
     private machineSrv: MachineService,
     private router: Router
-  ) { }
+  ) { 
+     this.vcr.createEmbeddedView(this.tpl);
+  }
 
   games: any = []
 

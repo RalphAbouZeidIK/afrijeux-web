@@ -1,5 +1,25 @@
 .btn {
     display: block;
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 48%;
+    font-size: 14px;
+}
+
+.main-btns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.logout-btn {
+    position: fixed;
+    bottom: 20px;
+    margin-bottom: 0;
+    width: calc(100% - 30px);
+    left: 15px;
 }

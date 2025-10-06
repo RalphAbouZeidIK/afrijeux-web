@@ -1,4 +1,4 @@
-<div class="sports-list">
+<div class="sports-list" *ngIf="isDesktop">
     <h2> {{ 'sb.sportsList.title' | translate }}</h2>
     <ul>
         <li *ngFor="let sportItem of filtersList.sports">
@@ -44,4 +44,30 @@
             </div>
         </li>
     </ul>
+</div>
+
+
+<div class=" form-content" *ngIf="!isDesktop && showFilters">
+    <div class="form-group">
+        <select class="form-control" [(ngModel)]="selectedSport" (ngModelChange)="selectedSportChange($event,'sport')">
+            <option [ngValue]="null" disabled selected> Sport </option>
+            <option *ngFor="let sportItem of filtersList.sports" [ngValue]="sportItem">{{sportItem.sportName}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select class="form-control" [(ngModel)]="selectedCategory"
+            (ngModelChange)="selectedSportChange($event,'category')">
+            <option [ngValue]="null" disabled selected> Category </option>
+            <option *ngFor="let categoryItem of dropddownCategories" [ngValue]="categoryItem">
+                {{categoryItem.categoryName}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select class="form-control" [(ngModel)]="selectedTournament"
+            (ngModelChange)="selectedSportChange($event,'tournament')">
+            <option [ngValue]="null" disabled selected> Tournament </option>
+            <option *ngFor="let tournamentItem of dropddownTournaments" [ngValue]="tournamentItem">
+                {{tournamentItem.tournamentName}}</option>
+        </select>
+    </div>
 </div>
