@@ -1,7 +1,7 @@
-<div class="outcome-item" *ngFor="let outcomeItem of outcomesList">
-    <h4>{{outcomeItem.oddsOutcomes[0].market}}</h4>
+<div class="outcome-item" *ngFor="let outcomeItem of OutcomesList">
+    <h4>{{outcomeItem.OddsOutcomes[0].Market}}</h4>
     <ul class="outcomes-list">
-        <li *ngFor="let oddItem of outcomeItem.oddsOutcomes">
+        <li *ngFor="let oddItem of outcomeItem.OddsOutcomes">
             <app-odd-item [oddItem]="oddItem" [isSelected]="oddItem.isSelected"></app-odd-item>
         </li>
     </ul>

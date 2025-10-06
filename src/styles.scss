@@ -279,17 +279,22 @@ mat-form-field {
 
 }
 
-.form-control {
+.form-control,
+.form-control:focus {
     background-color: $lightBg;
     border-color: $lightBg;
     padding: 10px 12px;
     color: $white;
+    box-shadow: none;
 
     &::placeholder {
         color: $lightGrey
     }
 }
 
+select.form-controlو select.form-control:focus {
+    padding: 10px 5px;
+}
 
 
 .form-btns {
@@ -516,6 +521,10 @@ label {
 
 .body-holder {
     margin-top: 75px;
+
+    .body-holder {
+        margin-top: 0;
+    }
 }
 
 header {

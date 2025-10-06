@@ -135,26 +135,26 @@ export class CartService {
 
   setSBBets(betItem: any) {
     console.log(betItem)
-    let existingMatch = this.listOfBets.find((match: any) => match.matchId === betItem.matchId);
+    let existingMatch = this.listOfBets.find((match: any) => match.MatchId === betItem.MatchId);
 
     if (existingMatch) {
-      if (existingMatch.marketId != betItem.marketId) {
+      if (existingMatch.MarketId != betItem.MarketId) {
         this.translate.get('alerts.multipleBetsNoAllowed').subscribe((translatedMsg: string) => {
           alert(translatedMsg);
         });
         return
       }
 
-      else if (existingMatch.outcomeId != betItem.outcomeId || (existingMatch.outcomeId == betItem.outcomeId) && (existingMatch.specifiers != betItem.specifiers)) {
+      else if (existingMatch.OutcomeId != betItem.OutcomeId || (existingMatch.OutcomeId == betItem.OutcomeId) && (existingMatch.Specifiers != betItem.Specifiers)) {
         console.log('same market different odd')
-        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.matchId === betItem.matchId);
+        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
         this.listOfBets.splice(existingMatchIndex, 1)
         console.log(this.listOfBets)
         this.listOfBets.push(betItem)
       }
 
       else {
-        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.matchId === betItem.matchId);
+        const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
         this.listOfBets.splice(existingMatchIndex, 1)
       }
 
@@ -187,11 +187,11 @@ export class CartService {
     let multipliedOdds = 1
     let totalBets = 0
     cartData.forEach((element: any) => {
-      if (element.odd >= minimumOddRequired) {
+      if (element.Odd >= minimumOddRequired) {
         element.hasMinimumOdd = true
       }
       totalBets++
-      multipliedOdds *= element.odd
+      multipliedOdds *= element.Odd
     });
     multipliedOdds = Math.round(multipliedOdds * 100) / 100
 
@@ -209,10 +209,10 @@ export class CartService {
 
   removeBetItem(betItem: any) {
     let storageData = this.storageSrv.getItem('sbCartData')
-    let matchIndex = storageData.findIndex((itemInStorage: any) => itemInStorage.matchId == betItem.matchId)
+    let matchIndex = storageData.findIndex((itemInStorage: any) => itemInStorage.MatchId == betItem.MatchId)
     storageData.splice(matchIndex, 1)
     this.listOfBets.splice(matchIndex, 1)
-    this.removeCartData(betItem.matchId)
+    this.removeCartData(betItem.MatchId)
     this.storageSrv.setItem('sbCartData', storageData)
     this.setSBCartDataListener(storageData)
   }

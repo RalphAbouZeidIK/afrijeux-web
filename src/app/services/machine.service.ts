@@ -173,12 +173,19 @@ export class MachineService {
 
     if (apiResponse?.encryptedResponse) {
       let decryptedResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
-
-      return {
-        ...decryptedResponse,
-        status: apiResponse.status,
-        message: apiResponse.message
-      };
+      if (Array.isArray(decryptedResponse)) {
+        return {
+          data: decryptedResponse,
+          status: apiResponse.status,
+          message: apiResponse.message
+        };
+      } else {
+        return {
+          ...decryptedResponse,
+          status: apiResponse.status,
+          message: apiResponse.message
+        };
+      }
     }
 
     else {
@@ -389,5 +396,29 @@ export class MachineService {
     }
     return cancelTicketResponse
   }
+
+
+  /************SB APIS START************/
+  async getFiltersLists() {
+    let params = {
+      Language: 'en',
+    }
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'POST', params)
+    return apiResponse
+  }
+
+  async getMatches(apiParams: any) {
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetMatchListByName`, 'POST', apiParams)
+    console.log(apiResponse)
+    return apiResponse.data
+  }
+
+  async getOutcomesListByMatchId(apiParams: any) {
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetOutcomesListByMatchId`, 'POST', apiParams)
+    console.log(apiResponse)
+    return apiResponse.data
+  }
+
+  /************SB APIS END************/
 
 }

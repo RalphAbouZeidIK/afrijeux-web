@@ -117,12 +117,4 @@ export class GenericService {
     return apiResponse
   }
 
-  async getFiltersLists() {
-    let params = {
-      Language: 'en',
-    }
-    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'GET', {})
-    return apiResponse
-  }
-
 }

@@ -17,7 +17,7 @@ export class OddItemComponent {
   }
 
   addOdd(oddItem: any) {
-    oddItem.outcomeName = oddItem.outcome
+    oddItem.OutcomeName = oddItem.Outcome
     this.cartSrv.setSBBets(oddItem)
   }
 }

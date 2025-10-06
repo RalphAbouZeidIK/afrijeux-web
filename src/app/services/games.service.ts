@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { ApiService } from './api.service';
 import { Subject, Observable } from 'rxjs';
+import { MachineService } from './machine.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GamesService {
 
-  PersonId = 8746
-
-  MachineId = 2338
-
   gameObject: any
+
+  isAndroidApp = this.gnrcSrv.isMachineApp()
 
   private sportsFilter$ = new Subject();
 
   constructor(
     private gnrcSrv: GenericService,
-    private apiSrv: ApiService
+    private apiSrv: ApiService,
+    private machineSrv: MachineService
   ) {
   }
 
@@ -101,6 +101,48 @@ export class GamesService {
    */
   setSportsFilter(filterObject: any) {
     this.sportsFilter$.next(filterObject);
+  }
+
+
+  async getFiltersLists() {
+    let apiResponse: any
+    if (this.isAndroidApp) {
+      apiResponse = await this.machineSrv.getFiltersLists()
+      return apiResponse
+    }
+    else {
+      apiResponse = await this.apiSrv.makeApi('OnlineMaster', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'GET', {})
+      return apiResponse.Data
+    }
+
+  }
+
+  async getMatches(apiParams: any) {
+    let apiResponse: any = []
+    if (this.isAndroidApp) {
+      apiResponse = await this.machineSrv.getMatches(apiParams)
+    }
+    else {
+      apiParams = {
+        body: apiParams
+      }
+      apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetMatchListByName', 'POST', apiParams)
+    }
+    return apiResponse
+  }
+
+  async getOutcomesListByMatchId(apiParams: any) {
+    let apiResponse: any = []
+    if (this.isAndroidApp) {
+      apiResponse = await this.machineSrv.getOutcomesListByMatchId(apiParams)
+    }
+    else {
+      apiParams = {
+        body: apiParams
+      }
+      apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', apiParams)
+    }
+    return apiResponse
   }
 
 

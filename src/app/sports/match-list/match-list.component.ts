@@ -26,18 +26,18 @@ export class MatchListComponent implements OnChanges {
     this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
 
       // Create a map for matches by MatchId for fast lookup
-      const matchMap = new Map(this.matchesList.map((match: any) => [match.matchId, match]));
+      const matchMap = new Map(this.matchesList.map((match: any) => [match.MatchId, match]));
       // Set all odds outcomes' isSelected to false
       this.matchesList.forEach((matchItem: any) => {
-        matchItem.oddsOutcomes.forEach((oddItem: any) => {
+        matchItem.OddsOutcomes.forEach((oddItem: any) => {
           oddItem.isSelected = false;
         });
       });
       //Now iterate over the data and set isSelected to true for matching odds
       data.forEach((oddItem: any) => {
-        const match: any = matchMap.get(oddItem.matchId);
+        const match: any = matchMap.get(oddItem.MatchId);
         if (match) {
-          const oddOutcome = match.oddsOutcomes.find((odd: any) => odd.outcomeId === oddItem.outcomeId);
+          const oddOutcome = match.OddsOutcomes.find((odd: any) => odd.OutcomeId === oddItem.OutcomeId);
           if (oddOutcome) {
             oddOutcome.isSelected = true;
           }
@@ -66,9 +66,9 @@ export class MatchListComponent implements OnChanges {
   setOddsFromCart(oddsList: any) {
     if (oddsList && oddsList.length > 0) {
       oddsList.forEach((oddItem: any) => {
-        let matchItem = this.matchesList.find((match: any) => match.matchId == oddItem.matchId)
+        let matchItem = this.matchesList.find((match: any) => match.MatchId == oddItem.MatchId)
         if (matchItem) {
-          let foundOdd = matchItem.oddsOutcomes.find((odd: any) => odd.outcomeId == oddItem.outcomeId)
+          let foundOdd = matchItem.OddsOutcomes.find((odd: any) => odd.OutcomeId == oddItem.OutcomeId)
           if (foundOdd) {
             foundOdd.isSelected = true
           }

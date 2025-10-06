@@ -124,7 +124,7 @@ export class CartComponent implements OnInit {
 
     if (this.listOfBets && this.listOfBets.length > 0) {
       this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).forEach((oddItem: any) => {
-        allowedCumulatedOdds *= oddItem.odd
+        allowedCumulatedOdds *= oddItem.Odd
       });
       let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.fromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length) && (selectedBonus.minStackeRequiered <= this.stake))
       console.log(selectedBonus)

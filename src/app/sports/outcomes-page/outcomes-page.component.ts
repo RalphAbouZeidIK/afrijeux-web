@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { GamesService } from 'src/app/services/games.service';
 
 @Component({
   selector: 'app-outcomes-page',
@@ -9,44 +10,45 @@ import { ApiService } from 'src/app/services/api.service';
   standalone: false
 })
 export class OutcomesPageComponent implements OnInit {
-  outcomesList = []
+  OutcomesList = []
 
 
-  matchDetails: any
+  MatchDetails: any
 
-  matchId: any
+  MatchId: any
 
-  constructor(private apiSrv: ApiService, private route: ActivatedRoute) {
+  constructor(
+    private gamesSrv: GamesService,
+    private route: ActivatedRoute
+  ) {
 
   }
 
   ngOnInit(): void {
-    this.matchId = this.route.snapshot.params['matchId']
+    this.MatchId = this.route.snapshot.params['matchId']
     this.getMatchOutcome()
 
   }
 
   async getMatchOutcome() {
     let params = {
-      body: {
-        Language: 'en',
-        MatchId: this.matchId,
-      }
+      Language: 'en',
+      MatchId: this.MatchId,
     }
 
     console.log(params)
 
-    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', params)
+    const apiResponse = await this.gamesSrv.getOutcomesListByMatchId(params)
     console.log(apiResponse)
-    this.matchDetails = {
-      matchName: apiResponse[0].matchName,
-      eventDate: apiResponse[0].eventDate,
-      eventId: this.matchId
+    this.MatchDetails = {
+      MatchName: apiResponse[0].MatchName,
+      EventDate: apiResponse[0].EventDate,
+      EventId: this.MatchId
     }
 
-    this.outcomesList = apiResponse
+    this.OutcomesList = apiResponse
 
-    console.log(this.matchDetails)
+    console.log(this.MatchDetails)
 
 
   }

@@ -1,7 +1,7 @@
 <div class="sports-list" *ngIf="isDesktop">
     <h2> {{ 'sb.sportsList.title' | translate }}</h2>
     <ul>
-        <li *ngFor="let sportItem of filtersList.sports">
+        <li *ngFor="let sportItem of filtersList.Sports">
             <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
                 <div class="img-title" (click)="redirectTo(sportItem)">
                     <!-- <img src="{{sportItem.SportIcon}}" alt="{{sportItem.SportName}}"> -->
@@ -14,11 +14,11 @@
             </a>
             <div class="categories" *ngIf="sportItem.showCategories">
                 <ul>
-                    <li *ngFor="let category of sportItem.categories">
+                    <li *ngFor="let category of sportItem.Categories">
                         <a [ngClass]="{'active':category.isSelected}">
                             <div class="img-title" (click)="redirectTo(category)">
                                 <!-- <img src="{{category.SportIcon}}" alt="{{category.SportName}}"> -->
-                                <span>{{category.categoryName}}</span>
+                                <span>{{category.CategoryName}}</span>
                             </div>
 
                             <div class="arrow" (click)="getTournaments(category)"
@@ -28,11 +28,11 @@
                         </a>
                         <div class="tournaments" *ngIf="category.showTournaments">
                             <ul>
-                                <li *ngFor="let tournament of category.tournaments">
+                                <li *ngFor="let tournament of category.Tournaments">
                                     <a [ngClass]="{'active':tournament.isSelected}">
                                         <div class="img-title" (click)="redirectTo(tournament)">
                                             <!-- <img src="{{tournament.SportIcon}}" alt="{{tournament.SportName}}"> -->
-                                            <span>{{tournament.tournamentName}}</span>
+                                            <span>{{tournament.TournamentName}}</span>
                                         </div>
                                     </a>
                                 </li>
@@ -50,24 +50,23 @@
 <div class=" form-content" *ngIf="!isDesktop && showFilters">
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedSport" (ngModelChange)="selectedSportChange($event,'sport')">
-            <option [ngValue]="null" disabled selected> Sport </option>
-            <option *ngFor="let sportItem of filtersList.sports" [ngValue]="sportItem">{{sportItem.sportName}}</option>
+            <option *ngFor="let sportItem of filtersList.Sports" [ngValue]="sportItem">{{sportItem.SportName}}</option>
         </select>
     </div>
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedCategory"
             (ngModelChange)="selectedSportChange($event,'category')">
-            <option [ngValue]="null" disabled selected> Category </option>
+            <option [ngValue]="null" selected> All Categories </option>
             <option *ngFor="let categoryItem of dropddownCategories" [ngValue]="categoryItem">
-                {{categoryItem.categoryName}}</option>
+                {{categoryItem.CategoryName}}</option>
         </select>
     </div>
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedTournament"
             (ngModelChange)="selectedSportChange($event,'tournament')">
-            <option [ngValue]="null" disabled selected> Tournament </option>
+            <option [ngValue]="null" selected> All Tournaments </option>
             <option *ngFor="let tournamentItem of dropddownTournaments" [ngValue]="tournamentItem">
-                {{tournamentItem.tournamentName}}</option>
+                {{tournamentItem.TournamentName}}</option>
         </select>
     </div>
 </div>
