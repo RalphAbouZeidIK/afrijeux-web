@@ -112,7 +112,7 @@ export class GamesService {
     }
     else {
       apiResponse = await this.apiSrv.makeApi('OnlineMaster', `AfrijeuxSportsBetting/GetFiltersLists?language=en`, 'GET', {})
-      return apiResponse.Data
+      return apiResponse
     }
 
   }
@@ -149,10 +149,12 @@ export class GamesService {
     let apiResponse: any = []
     if (this.isAndroidApp) {
       apiResponse = await this.machineSrv.getBonusRules()
+      apiResponse = apiResponse.data
     }
     else {
       apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetBonusRules', 'GET', {})
     }
+    console.log(apiResponse)
     return apiResponse
   }
 

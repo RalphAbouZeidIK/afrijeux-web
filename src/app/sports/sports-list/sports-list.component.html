@@ -5,7 +5,7 @@
             <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
                 <div class="img-title" (click)="redirectTo(sportItem)">
                     <!-- <img src="{{sportItem.SportIcon}}" alt="{{sportItem.SportName}}"> -->
-                    <span>{{sportItem.sportName}}</span>
+                    <span>{{sportItem.SportName}}</span>
                 </div>
                 <div class="arrow" (click)="getCategories(sportItem)" [ngClass]="{'active':sportItem.showCategories}">
                     <i class="fa fa-angle-right" aria-hidden="true"></i>

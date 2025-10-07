@@ -207,7 +207,7 @@ export class CartService {
   async getBonusRules() {
     const apiResponse = await this.gamesSrv.getBonusRules()
     //console.log(apiResponse)
-    return apiResponse.data
+    return apiResponse
   }
 
   removeBetItem(betItem: any) {

@@ -56,7 +56,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
   async getData() {
     const apiResponse = await this.gamesSrv.getFiltersLists()
     this.filtersList = apiResponse
-
+    console.log(this.filtersList)
     this.setSelectedToFalse()
     this.resetSelected()
 
