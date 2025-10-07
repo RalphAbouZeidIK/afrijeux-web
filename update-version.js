@@ -22,4 +22,4 @@ data.version = newVersion;
 // Write back
 fs.writeFileSync(versionFile, JSON.stringify(data, null, 2));
 
-console.log(`✅ Updated version to ${newVersion}`);
+//console.log(`✅ Updated version to ${newVersion}`);

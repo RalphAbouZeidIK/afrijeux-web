@@ -5,7 +5,7 @@ const distPath = path.join(__dirname, 'dist');
 const keepFiles = ['web.config','version.json']; // files to keep
 
 if (!fs.existsSync(distPath)) {
-    console.log('✅ Dist folder does not exist, nothing to clean.');
+    //console.log('✅ Dist folder does not exist, nothing to clean.');
     process.exit(0);
 }
 
@@ -14,8 +14,8 @@ fs.readdirSync(distPath).forEach((file) => {
     if (!keepFiles.includes(file)) {
         const filePath = path.join(distPath, file);
         fs.rmSync(filePath, { recursive: true, force: true });
-        console.log(`🗑️ Deleted ${file}`);
+        //console.log(`🗑️ Deleted ${file}`);
     }
 });
 
-console.log('✅ Dist folder cleaned (except web.config)');
+//console.log('✅ Dist folder cleaned (except web.config)');

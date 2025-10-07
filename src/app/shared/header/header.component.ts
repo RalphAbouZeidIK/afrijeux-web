@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit, OnChanges {
     private menuSvc: MenuService
   ) {
     this.balanceSubsription = this.usrSrv.getUserBalance().subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.userBalance = data
     });
     this.translate.use(this.selectedLanguage.code)
@@ -87,7 +87,7 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   async getMenu() {
     this.menu = await this.menuSvc.getMenu();
-    console.log(this.menu)
+    //console.log(this.menu)
   }
 
   async getUserBalance() {
@@ -143,7 +143,7 @@ export class HeaderComponent implements OnInit, OnChanges {
     else {
       this.isDesktop = true
     }
-    console.log(this.isDesktop)
+    //console.log(this.isDesktop)
   }
 
   mobileToggleClick = () => {
@@ -170,7 +170,7 @@ export class HeaderComponent implements OnInit, OnChanges {
         title: translations[item.title] || item.title
       }));
     });
-    console.log(this.personNavList)
+    //console.log(this.personNavList)
   }
 
   changeLanguage(language: { code: string, name: string }) {
@@ -180,7 +180,7 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
+    //console.log(changes)
     if (!changes['isLoggedIn']?.firstChange) {
       this.getMenu()
     }

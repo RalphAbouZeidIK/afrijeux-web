@@ -5,6 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from './generic.service';
 import { ApiService } from './api.service';
+import { GamesService } from './games.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class CartService {
   constructor(
     private storageSrv: LocalStorageService,
     private translate: TranslateService,
-    private gnrcSrv: GenericService,
+    private gamesSrv: GamesService,
     private apiSrv: ApiService
   ) { }
   listOfBets: any = this.storageSrv.getItem('sbCartData') || []
@@ -91,7 +92,7 @@ export class CartService {
   //////////////////////////////HPB BETTING METHODS START//////////////////////////////////////////////////
 
   setPmuBets(race: any, eventFromCart?: true) {
-    //console.log(race)
+    ////console.log(race)
     if (eventFromCart) {
       this.eventFromCart$.next(race);
       return
@@ -114,9 +115,9 @@ export class CartService {
   setCartDataListener(cartData: any) {
     let totalBets = 0
     let totalMultiplicator = 0
-    console.log(cartData)
+    //console.log(cartData)
     cartData.forEach((element: any) => {
-      console.log(element.Multiplicator)
+      //console.log(element.Multiplicator)
       if (element.ShowRace) {
         totalBets++
         totalMultiplicator += element.Multiplicator
@@ -134,7 +135,7 @@ export class CartService {
   //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
 
   setSBBets(betItem: any) {
-    console.log(betItem)
+    //console.log(betItem)
     let existingMatch = this.listOfBets.find((match: any) => match.MatchId === betItem.MatchId);
 
     if (existingMatch) {
@@ -146,10 +147,10 @@ export class CartService {
       }
 
       else if (existingMatch.OutcomeId != betItem.OutcomeId || (existingMatch.OutcomeId == betItem.OutcomeId) && (existingMatch.Specifiers != betItem.Specifiers)) {
-        console.log('same market different odd')
+        //console.log('same market different odd')
         const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
         this.listOfBets.splice(existingMatchIndex, 1)
-        console.log(this.listOfBets)
+        //console.log(this.listOfBets)
         this.listOfBets.push(betItem)
       }
 
@@ -164,7 +165,7 @@ export class CartService {
       this.listOfBets.push(betItem)
     }
 
-    console.log(this.listOfBets)
+    //console.log(this.listOfBets)
 
     this.setSBCartDataListener(this.listOfBets)
     this.storageSrv.setItem('sbCartData', this.listOfBets)
@@ -181,14 +182,14 @@ export class CartService {
       this.bonusRules = await this.getBonusRules()
     }
 
-    minimumOddRequired = this.bonusRules[0].minOddRequiered
+    minimumOddRequired = this.bonusRules[0].MinOddRequiered
     //minimumOddRequired = 2
-    console.log(minimumOddRequired)
+    //console.log(minimumOddRequired)
     let multipliedOdds = 1
     let totalBets = 0
     cartData.forEach((element: any) => {
       if (element.Odd >= minimumOddRequired) {
-        element.hasMinimumOdd = true
+        element.HasMinimumOdd = true
       }
       totalBets++
       multipliedOdds *= element.Odd
@@ -197,13 +198,15 @@ export class CartService {
 
     this.storageSrv.setItem('TotaldOdds', multipliedOdds.toString())
     this.storageSrv.setItem('totalBets', totalBets.toString())
+    //console.log('cart data')
+    //console.log(cartData)
     this.addSBCartData$.next(cartData);
   }
 
 
   async getBonusRules() {
-    const apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetBonusRules', 'GET', {})
-    console.log(apiResponse)
+    const apiResponse = await this.gamesSrv.getBonusRules()
+    //console.log(apiResponse)
     return apiResponse.data
   }
 

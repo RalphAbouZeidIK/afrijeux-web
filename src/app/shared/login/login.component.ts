@@ -78,7 +78,7 @@ export class LoginComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.isSignup = (changes['loginObject'].currentValue.type == 'signup');
-    console.log(changes['loginObject'].currentValue)
+    //console.log(changes['loginObject'].currentValue)
   }
 
   preventTyping(event: KeyboardEvent) {
@@ -113,7 +113,7 @@ export class LoginComponent implements OnChanges, OnInit {
 
   async autoLogin() {
     let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
-    console.log(userData)
+    //console.log(userData)
     if (userData?.status == false || !userData) {
       this.showLoginPage = true
       return
@@ -140,12 +140,12 @@ export class LoginComponent implements OnChanges, OnInit {
       else {
         this.router.navigate(['Machine/Home'])
       }
-      console.log(respoonse)
+      //console.log(respoonse)
     }
     else {
       try {
         const loginResponse = await this.login(loginParams)
-        console.log(loginResponse)
+        //console.log(loginResponse)
         if (loginResponse.IsSuccess) {
           this.successfullLogin(loginResponse.UserInfo, loginResponse.UserInfo.Token)
         }
@@ -162,7 +162,7 @@ export class LoginComponent implements OnChanges, OnInit {
   }
 
   async submitSignUp() {
-    console.log(this.signupForm)
+    //console.log(this.signupForm)
     if (this.signupForm.invalid) {
       this.showErrorMessage = true
       return
@@ -174,7 +174,7 @@ export class LoginComponent implements OnChanges, OnInit {
     }
     try {
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
-      console.log(signupResponse)
+      //console.log(signupResponse)
       if (signupResponse.isSuccess) {
       }
 

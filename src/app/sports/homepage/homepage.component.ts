@@ -35,12 +35,12 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private gnrcSrv: GenericService,
   ) {
     this.route.params.subscribe(params => {
-      console.log(params); // Log route params to check if they are correctly captured
+      //console.log(params); // Log route params to check if they are correctly captured
     });
 
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
       if (this.isMobile) {
-        console.log(data)
+        //console.log(data)
         this.getMatches(data)
       }
     })
@@ -74,12 +74,12 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
     this.matchesList = await this.gamesSrv.getMatches(params)
 
-    console.log(this.matchesList)
+    //console.log(this.matchesList)
 
   }
 
   async getMatchOutcome(event: any) {
-    console.log(event)
+    //console.log(event)
     let firstPath = (this.isMobile) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
     this.router.navigate([`${firstPath}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])
   }

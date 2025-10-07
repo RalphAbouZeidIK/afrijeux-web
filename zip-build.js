@@ -9,7 +9,7 @@ const output = fs.createWriteStream(zipPath);
 const archive = archiver('zip', { zlib: { level: 9 } });
 
 output.on('close', () => {
-    console.log(`✅ Zipped ${archive.pointer()} total bytes to afrijeux-web.zip`);
+    //console.log(`✅ Zipped ${archive.pointer()} total bytes to afrijeux-web.zip`);
 });
 
 archive.on('error', (err) => {

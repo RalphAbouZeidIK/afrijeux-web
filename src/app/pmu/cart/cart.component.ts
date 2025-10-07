@@ -104,7 +104,7 @@ export class CartComponent implements OnInit {
   }
 
   removeItemFormSlip(betItem: any) {
-    console.log('removing')
+    //console.log('removing')
     this.listOfBets = this.listOfBets.filter((item: any) => item.id !== betItem.id)
     if (this.listOfBets.length > 0) {
       this.calculateTicketPrice()
@@ -138,7 +138,7 @@ export class CartComponent implements OnInit {
   }
 
   onPriceChange(event: any) {
-    console.log(event)
+    //console.log(event)
   }
 
   orderTypeChange(event: any) {
@@ -146,7 +146,7 @@ export class CartComponent implements OnInit {
   }
 
   onCartEventChange(data: any) {
-    console.log(data)
+    //console.log(data)
     if (data.TypeChanged) {
       this.betItem = []
     }
@@ -190,7 +190,7 @@ export class CartComponent implements OnInit {
           this.cartSrv.setResetOtherEvents(data)
         }
       }
-      console.log(this.betItem)
+      //console.log(this.betItem)
     }
 
     else {
@@ -217,8 +217,8 @@ export class CartComponent implements OnInit {
     }
 
     if (this.IsDouble) {
-      console.log(betItem)
-      console.log(betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses)
+      //console.log(betItem)
+      //console.log(betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses)
       if (betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses) {
         this.combinations = betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses?.length
       }
@@ -230,7 +230,7 @@ export class CartComponent implements OnInit {
 
 
     let betItemVar = this.betItem[0]
-    console.log(betItemVar)
+    //console.log(betItemVar)
     switch (betItemVar.FieldChoice) {
       case 2:
         firstLength = betItemVar.AssociatedHorses.length
@@ -251,7 +251,7 @@ export class CartComponent implements OnInit {
     this.combinations = this.gnrcSrv.calculateCombinations(firstLength, secondLength, betItem[0]?.SelectedFixedConfig?.HorsesNumberTelpo, this.IsAllOrder)
 
 
-    console.log(this.combinations)
+    //console.log(this.combinations)
   }
 
   calculateTicketPrice() {
@@ -397,7 +397,7 @@ export class CartComponent implements OnInit {
                 BaseHorses += '00,'
               }
             }
-            console.log(BaseHorses)
+            //console.log(BaseHorses)
             break
           case 2:
             BaseHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
@@ -446,7 +446,7 @@ export class CartComponent implements OnInit {
   }
 
   composePickDetails(event: any) {
-    console.log(event)
+    //console.log(event)
     let PickDetails = {
       AssociatedHorses: event.AssociatedHorses,
       BaseHorses: event.BaseHorses,
@@ -464,7 +464,7 @@ export class CartComponent implements OnInit {
   }
 
   composePickObject(pickObject: any, betItem: any) {
-    console.log(pickObject)
+    //console.log(pickObject)
     this.listOfBets.TicketPrice = 0
     this.listOfBets.push(pickObject)
     this.calculateTicketPrice()
@@ -473,7 +473,7 @@ export class CartComponent implements OnInit {
     this.pickDetailsArray = []
 
     this.IsAllOrder = false
-    console.log(this.listOfBets)
+    //console.log(this.listOfBets)
     this.storageSrv.setItem('cartData', this.listOfBets)
     this.showCartButtons = this.listOfBets.length > 0
     this.cartSrv.setPmuBets(betItem, true)
@@ -489,7 +489,7 @@ export class CartComponent implements OnInit {
     }
 
     const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     if (apiResponse?.DataToPrint) {
       this.clearBets()
     }

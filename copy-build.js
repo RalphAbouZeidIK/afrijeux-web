@@ -6,4 +6,4 @@ const targetDir = path.join(__dirname, 'dist');
 
 // Copy all files from afrijeux-web into dist
 fs.copySync(sourceDir, targetDir, { overwrite: true });
-console.log('✅ Copied build files to dist/');
+//console.log('✅ Copied build files to dist/');

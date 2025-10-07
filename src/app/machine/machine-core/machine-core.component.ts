@@ -55,7 +55,7 @@ export class MachineCoreComponent implements OnInit {
     
     const apiResponse = await this.machineSrv.registerMachine(params);
 
-    console.log(apiResponse)
+    //console.log(apiResponse)
     if (apiResponse.CommunicationKey) {
       this.isAppRegistered = true
     }

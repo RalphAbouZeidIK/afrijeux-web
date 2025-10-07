@@ -7,6 +7,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LoaderService } from 'src/app/services/loader-service.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { MachineService } from 'src/app/services/machine.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -37,7 +38,7 @@ export class CartComponent implements OnInit {
 
   listOfPicks: any = []
 
-  winAmount: any
+  WinAmount: any
 
   /**
    * Subscribe to login status
@@ -75,7 +76,7 @@ export class CartComponent implements OnInit {
     private usrSrv: UserService,
     private apiSrv: ApiService,
     private gnrcSrv: GenericService,
-    private decimalPipe: DecimalPipe,
+    private machineSrv: MachineService,
     private loaderService: LoaderService
   ) {
 
@@ -92,7 +93,7 @@ export class CartComponent implements OnInit {
   }
 
   async ngOnInit() {
-    
+
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (window.innerWidth < 1200) {
       this.isDesktop = false
@@ -104,7 +105,7 @@ export class CartComponent implements OnInit {
   }
 
   cartInitialize(cartData: any) {
-    console.log(cartData)
+    //console.log(cartData)
     this.listOfBets = cartData
     this.showCartButtons = this.listOfBets?.length > 0;
     this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
@@ -113,25 +114,29 @@ export class CartComponent implements OnInit {
   }
 
   async calculateBonus() {
-    console.log(this.stake)
+
+    //console.log(this.stake)
     let minimumPicks = 0
     this.bonus = 0
     this.BonusId = 0
     let allowedCumulatedOdds = 1
     if (this.bonusRules.length == 0) {
       this.bonusRules = await this.cartSrv.getBonusRules()
+      //console.log(this.bonusRules)
     }
 
     if (this.listOfBets && this.listOfBets.length > 0) {
-      this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).forEach((oddItem: any) => {
+      this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).forEach((oddItem: any) => {
         allowedCumulatedOdds *= oddItem.Odd
+        //console.log(allowedCumulatedOdds)
       });
-      let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.fromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length) && (selectedBonus.minStackeRequiered <= this.stake))
-      console.log(selectedBonus)
+      let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.FromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).length) && (selectedBonus.MinStackeRequiered <= this.stake))
+      //console.log(selectedBonus)
       if (selectedBonus) {
-        this.BonusId = selectedBonus?.bonusRuleId
-        let unitStake = this.stake / this.listOfBets.length
-        this.bonus = (selectedBonus?.percentage / 100) * unitStake * this.listOfBets.filter((betItem: any) => betItem.hasMinimumOdd).length * allowedCumulatedOdds
+        this.BonusId = selectedBonus?.BonusRuleId
+        //console.log(this.listOfBets.length)
+        let unitStake = this.stake / selectedBonus?.FromPickRequiered
+        this.bonus = (selectedBonus?.Percentage / 100) * unitStake * this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).length * allowedCumulatedOdds
         this.bonus = Math.round(this.bonus * 100) / 100;
       }
       else {
@@ -139,13 +144,13 @@ export class CartComponent implements OnInit {
       }
 
     }
-    this.winAmount = this.totalOdds * this.stake + this.bonus
-    this.winAmount = Math.round(this.winAmount * 100) / 100
-    console.log(this.winAmount)
+    this.WinAmount = this.totalOdds * this.stake + this.bonus
+    this.WinAmount = Math.round(this.WinAmount * 100) / 100
+    //console.log(this.WinAmount)
   }
 
   addBetToTicket(betItem: any) {
-    console.log(betItem)
+    //console.log(betItem)
   }
 
   onAmountChange() {
@@ -190,54 +195,31 @@ export class CartComponent implements OnInit {
       return
     }
 
-    this.loaderService.setHttpProgressStatus(true);
-    setTimeout(async () => {
-      let date = new Date()
-      this.listOfPicks = []
-      this.listOfBets.forEach((betItem: any) => {
-        this.listOfPicks.push({
-          Outcome: betItem,
-          Stake: this.stake / this.totalBets
-        })
-      });
+    let date = new Date()
+    this.listOfPicks = []
+    this.listOfBets.forEach((betItem: any) => {
+      this.listOfPicks.push({
+        Outcome: betItem,
+        Stake: this.stake / this.totalBets
+      })
+    });
 
-      let ticketBody = {
-        GameId: this.gameid,
-        IsVoucher: 0,
-        Stake: this.stake,
-        MachineDateIssued: date.toISOString(),
-        GamePick: this.listOfPicks,
-        TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
-        IsBouquet: false,
-        BonusId: this.BonusId,
-        WinAmount: this.winAmount,
-        BonusAmount: this.bonus,
-        LoyalityReferenceId: 0
-      }
+    let ticketBody = {
+      IsVoucher: 0,
+      Stake: this.stake,
+      GamePick: this.listOfPicks,
+      TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
+      IsBouquet: false,
+      BonusId: this.BonusId,
+      WinAmount: this.WinAmount,
+      BonusAmount: this.bonus,
+      LoyalityReferenceId: 0
+    }
+    let apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
+    if (apiResponse.DataToPrint) {
+      this.clearBets()
+    }
 
-      let ticketRequestId = this.MachineId.toString() + this.MachineId.toString() + this.PersonId.toString() + this.gnrcSrv.getFormattedToday() + this.gameid
-      ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
 
-      let params = {
-        GameId: this.gameid,
-        PersonId: this.PersonId,
-        MachineId: this.MachineId,
-        Ticket: ticketBody,
-        TicketRequestId: ticketRequestId,
-        LoyalityReferenceId: 0,
-        TimeStamp: 'string',
-      }
-      console.log(params)
-      this.loaderService.setHttpProgressStatus(false);
-      try {
-        const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', 'AfrijeuxSportsBetting/IssueTicket', 'POST', params)
-        if (apiResponse.status) {
-          this.clearBets()
-        }
-        console.log(apiResponse)
-      } catch (error) {
-        console.log(error)
-      }
-    }, 2000);
   }
 }

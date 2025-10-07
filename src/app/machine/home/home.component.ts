@@ -35,16 +35,16 @@ export class HomeComponent implements OnInit {
         gameItem.ShowGame = true
       }
     });
-    //console.log(games)
+    ////console.log(games)
     this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 
   async getMenu() {
-    console.log(machineMenuRoutes)
+    //console.log(machineMenuRoutes)
     machineMenuRoutes.forEach(async (routeItem: any) => {
       if (routeItem.data.PermissionName) {
         if (await this.machineSrv.getMachinePermission(routeItem.data.PermissionName) && routeItem.data.showLink) {
-          console.log(routeItem)
+          //console.log(routeItem)
           this.machineMenu.push(routeItem)
         }
       }
@@ -52,11 +52,11 @@ export class HomeComponent implements OnInit {
         this.machineMenu.push(routeItem)
       }
     })
-    console.log(this.machineMenu)
+    //console.log(this.machineMenu)
   }
 
   selectGame(game: any) {
-    console.log(game)
+    //console.log(game)
     let url = game.GameApi.split('/')[1]
     this.router.navigate([`/Machine/${url}`])
   }

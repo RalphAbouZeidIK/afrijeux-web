@@ -29,12 +29,12 @@ export class GamesComponent implements OnInit {
         gameItem.ShowGame = true
       }
     });
-    //console.log(games)
+    ////console.log(games)
     this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 
   selectGame(game: any) {
-    console.log(game)
+    //console.log(game)
     let url = game.GameApi.split('/')[1]
     this.router.navigate([`/Machine/${url}`])
   }

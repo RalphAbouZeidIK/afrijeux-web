@@ -39,7 +39,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
     private gamesSrv: GamesService
   ) {
     this.route.params.subscribe(params => {
-      console.log(params); // Log route params to check if they are correctly captured
+      //console.log(params); // Log route params to check if they are correctly captured
     });
   }
 
@@ -69,7 +69,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   resetSelected() {
-    console.log(this.filtersList.Sports)
+    //console.log(this.filtersList.Sports)
     let selectedFilters = this.filtersList.Sports.find((item: any) => item.SportId == this.selectedFilters.SportId)
     if (selectedFilters) {
       selectedFilters.isSelected = true
@@ -87,9 +87,9 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
       this.getTournaments(selectedCategory)
     }
 
-    console.log(this.selectedFilters)
+    //console.log(this.selectedFilters)
     this.selectedSport = this.filtersList.Sports[0]
-    console.log(this.selectedSport)
+    //console.log(this.selectedSport)
     this.selectedSportChange(this.selectedSport, 'sport')
   }
 
@@ -128,13 +128,13 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   redirectTo(listItem: any) {
-    console.log(listItem)
+    //console.log(listItem)
     this.router.navigate([`${this.router.url.split('/')[1]}/${listItem.SportId}${(listItem.CategoryId) ? `/Categories/${listItem.CategoryId}` : ''}${(listItem.TournamentId) ? `/Tournaments/${listItem.TournamentId}` : ''}`])
     listItem.isSelected = true
   }
 
   selectedSportChange(event: any, type: any) {
-    console.log(event)
+    //console.log(event)
     switch (type) {
       case 'sport':
         this.selectedCategory = null
@@ -152,7 +152,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
         break;
     }
 
-    console.log(this.selectedSport)
+    //console.log(this.selectedSport)
     this.gamesSrv.setSportsFilter({
       sportId: (this.selectedSport) ? this.selectedSport.SportId : null,
       categoryId: (this.selectedCategory) ? this.selectedCategory.CategoryId : null,
@@ -163,13 +163,13 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
   ngAfterViewInit(): void {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
-        console.log('Navigation started to:', event.url);
+        //console.log('Navigation started to:', event.url);
         this.showFilters = !event.url.includes('Outcomes')
-        console.log('show filters:', this.showFilters);
+        //console.log('show filters:', this.showFilters);
       }
 
       if (event instanceof NavigationError) {
-        console.log(event.error);
+        //console.log(event.error);
       }
     });
   }

@@ -22,7 +22,7 @@ export class OutcomesListComponent implements OnChanges {
 
     this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
       // Create a map for matches by MatchId for fast lookup
-      console.log(this.OutcomesList)
+      //console.log(this.OutcomesList)
       // Set all odds outcomes' isSelected to false
       this.OutcomesList.forEach((outcomeItem: any) => {
         outcomeItem.OddsOutcomes.forEach((oddItem: any) => {
@@ -34,7 +34,7 @@ export class OutcomesListComponent implements OnChanges {
       data.forEach((oddItem: any) => {
         if (oddItem.MatchId == this.selectedMatchId) {
           const oddMarket = this.OutcomesList.find((odd: any) => odd.MarketId === oddItem.MarketId);
-          console.log(oddMarket.OddsOutcomes.filter((odd: any) => (odd.Specifiers === oddItem.Specifiers) && (odd.OutcomeId === oddItem.OutcomeId)))
+          //console.log(oddMarket.OddsOutcomes.filter((odd: any) => (odd.Specifiers === oddItem.Specifiers) && (odd.OutcomeId === oddItem.OutcomeId)))
           const oddOutcome = oddMarket.OddsOutcomes.find((odd: any) => (odd.Specifiers === oddItem.Specifiers) && (odd.OutcomeId === oddItem.OutcomeId));
           if (oddOutcome) {
             oddOutcome.isSelected = true;
@@ -46,7 +46,7 @@ export class OutcomesListComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
+    //console.log(changes)
 
     if (!changes['MatchDetails'].firstChange) {
       this.selectedMatchId = changes['MatchDetails'].currentValue.EventId

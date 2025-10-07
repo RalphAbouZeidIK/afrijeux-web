@@ -36,10 +36,10 @@ export class OutcomesPageComponent implements OnInit {
       MatchId: this.MatchId,
     }
 
-    console.log(params)
+    //console.log(params)
 
     const apiResponse = await this.gamesSrv.getOutcomesListByMatchId(params)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     this.MatchDetails = {
       MatchName: apiResponse[0].MatchName,
       EventDate: apiResponse[0].EventDate,
@@ -48,7 +48,7 @@ export class OutcomesPageComponent implements OnInit {
 
     this.OutcomesList = apiResponse
 
-    console.log(this.MatchDetails)
+    //console.log(this.MatchDetails)
 
 
   }

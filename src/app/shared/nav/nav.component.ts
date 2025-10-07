@@ -18,7 +18,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    console.log('NavComponent initialized with navList:', this.fullMenu);
+    //console.log('NavComponent initialized with navList:', this.fullMenu);
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {

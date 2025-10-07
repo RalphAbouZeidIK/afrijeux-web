@@ -78,9 +78,9 @@ export class ApiService {
       return;
     }
 
-    //console.log(`${apiRoute} api route from make api` )
+    ////console.log(`${apiRoute} api route from make api` )
     const apiEndPoint = `${environment.BaseUrl}${environment.gcSrv}${subRoute}/${apiRoute}`;
-    //console.log(apiEndPoint);
+    ////console.log(apiEndPoint);
 
     let headers = new HttpHeaders();
 

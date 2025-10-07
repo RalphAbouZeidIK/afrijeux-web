@@ -26,7 +26,7 @@ export class WithdrawComponent {
     private gnrcSrv: GenericService
   ) {
     this.balanceSubsription = this.usrSrv.getUserBalance().subscribe((data) => {
-      console.log(data)
+      //console.log(data)
     });
   }
 
@@ -38,19 +38,19 @@ export class WithdrawComponent {
 
   async getAvailableWithdraw() {
     let balanceResponse = await this.gnrcSrv.getBalance()
-    console.log(balanceResponse)
+    //console.log(balanceResponse)
     this.userBalance = balanceResponse
   }
 
   async getTransactionTypes() {
     this.transactionTypesResponse = await this.gnrcSrv.getTransactionTypes()
-    console.log(this.transactionTypesResponse)
+    //console.log(this.transactionTypesResponse)
   }
 
   async getCurrencies() {
     this.currencies = await this.gnrcSrv.getCurrencies()
     this.currencyId = this.currencies[0].id
-    console.log(this.currencies)
+    //console.log(this.currencies)
   }
 
   async submitWithdraw() {
@@ -66,7 +66,7 @@ export class WithdrawComponent {
         "transactionTypeId": this.transactionTypesResponse.find((x: any) => x.name == 'Withdraw').id
       }
     }
-    console.log(params)
+    //console.log(params)
     let withdrawResponse = await this.gnrcSrv.updateBalance(params)
     this.showAlert = true
     if (!withdrawResponse.isSuccess) {

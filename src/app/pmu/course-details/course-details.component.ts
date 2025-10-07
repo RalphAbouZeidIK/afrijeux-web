@@ -106,7 +106,7 @@ export class CourseDetailsComponent implements OnInit {
         }
       }
 
-      console.log(this.courseDetails)
+      //console.log(this.courseDetails)
       this.setPmuBets(false);
       return
     }
@@ -188,7 +188,7 @@ export class CourseDetailsComponent implements OnInit {
   chooseBetType(parisItem: any) {
     if (this.courseDetails.IsBettingDisabled) {
       this.translate.get('alerts.complete_previous_bet').subscribe((translatedMsg: string) => {
-        console.log(translatedMsg)
+        //console.log(translatedMsg)
         alert(translatedMsg);
       });
       return
@@ -232,7 +232,7 @@ export class CourseDetailsComponent implements OnInit {
 
 
 
-    //console.log(this.courseDetails)
+    ////console.log(this.courseDetails)
     this.courseDetails.TypeChanged = IsTypeChange
     this.cartSrv.setPmuBets(this.courseDetails);
   }
@@ -242,8 +242,8 @@ export class CourseDetailsComponent implements OnInit {
     this.FieldChoice = event
     this.courseDetails.FieldChoice = event
     this.courseDetails.SelectedFormule = this.typesList.find((item: any) => item.id == event)
-    //console.log('here')
-    //console.log(this.courseDetails)
+    ////console.log('here')
+    ////console.log(this.courseDetails)
     if (this.FieldChoice != 1) {
       for (let index = 0; index < this.courseDetails.SelectedFixedConfig.HorsesNumberTelpo; index++) {
         this.courseDetails.BaseHorses.push({

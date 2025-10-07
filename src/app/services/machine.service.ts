@@ -3,11 +3,12 @@ import { ApiService } from './api.service';
 import { NativeBridgeService } from './native-bridge.service';
 import { DatePipe } from '@angular/common';
 import { Buffer } from 'buffer';
-import { Subject, Observable, retry } from 'rxjs';
+import { Subject, Observable, retry, timestamp } from 'rxjs';
 import { GenericService } from './generic.service';
 import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
 import { CacheService } from './cache.service';
+import { Location } from '@angular/common';
 
 declare var require: any;
 (window as any).Buffer = Buffer;
@@ -26,11 +27,12 @@ export class MachineService {
     private gnrcSrv: GenericService,
     private localStorageSrv: LocalStorageService,
     private router: Router,
-    private cacheSrv: CacheService
+    private cacheSrv: CacheService,
+    private location: Location
   ) {
     (window as any).handleNativeBack = () => {
-      console.log("🔙 Native back pressed");
-      this.router.navigate(['Machine/Home']); // redirect to your chosen route
+      //console.log("🔙 Native back pressed");
+      this.location.back(); // redirect to your chosen route
     };
   }
 
@@ -71,7 +73,7 @@ export class MachineService {
         machineData = await this.getMachineData();
       }
       let encryptionPass = machineData?.CommunicationKey || 'default';
-      ////console.log(`Encryption Pass ${encryptionPass}`)
+      //////console.log(`Encryption Pass ${encryptionPass}`)
       encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(encryptionPass));
 
 
@@ -102,7 +104,7 @@ export class MachineService {
       amount: amount
     }
 
-    //console.log(body)
+    ////console.log(body)
 
     return {
       body
@@ -153,7 +155,7 @@ export class MachineService {
       TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       MachineId: machineData.MachineId,
     }
-    console.log(params)
+    //console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
@@ -161,7 +163,7 @@ export class MachineService {
 
     if (navigator.onLine) {
       // Save full API response exactly
-      //console.log(`${apiRoute} api route from navigator online`)
+      ////console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
     }
@@ -200,15 +202,15 @@ export class MachineService {
 
   async getMachinePermission(permissionName: any, gameId: any = null) {
     let userData = await this.getUserData()
-    console.log(
-      userData.UserSettings.map((usrSet: any) => {
-        return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
-      })
-    )
+    // console.log(
+    //   userData.UserSettings.map((usrSet: any) => {
+    //     return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
+    //   })
+    // )
 
     let hasPermission = userData.UserSettings.find((setting: any) => (setting.Name == permissionName) && (setting.GameId == gameId))?.BitValue
 
-    console.log(permissionName + '  ' + hasPermission)
+    //console.log(permissionName + '  ' + hasPermission)
     return hasPermission
   }
 
@@ -232,7 +234,7 @@ export class MachineService {
 
   getGameRoute() {
     let route = this.router.url.split('/')[2]
-    console.log(this.router.url)
+    //console.log(this.router.url)
     return route
   }
 
@@ -283,7 +285,7 @@ export class MachineService {
   async issueTicket(ticketObject: any) {
     let userData = await this.getUserData()
     let machineData = await this.getMachineData();
-    //console.log(userData)
+    ////console.log(userData)
 
     let date = new Date()
     let ticketRequestId = Math.floor(Math.random() * 1e12).toString() + this.gnrcSrv.getFormattedToday() + 28
@@ -317,7 +319,7 @@ export class MachineService {
 
     try {
       const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-      //console.log(apiResponse)
+      ////console.log(apiResponse)
       if (apiResponse.DataToPrint) {
         this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
         return apiResponse
@@ -326,9 +328,9 @@ export class MachineService {
         this.setModalData(true, false, apiResponse.message)
         return apiResponse
       }
-      //console.log(apiResponse)
+      ////console.log(apiResponse)
     } catch (error) {
-      //console.log(error)
+      ////console.log(error)
     }
   }
 
@@ -340,7 +342,7 @@ export class MachineService {
     }
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
-    console.log(validateTicketResponse)
+    //console.log(validateTicketResponse)
 
     if (validateTicketResponse.status == false) {
       this.setModalData(true, false, validateTicketResponse.message)
@@ -390,7 +392,7 @@ export class MachineService {
   async cancelTicket(params: any) {
 
     let cancelTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/FlagToCancelTicket`, 'POST', params)
-    console.log(cancelTicketResponse)
+    //console.log(cancelTicketResponse)
     if (cancelTicketResponse) {
       this.setModalData(true, cancelTicketResponse.status, cancelTicketResponse.message)
     }
@@ -409,16 +411,50 @@ export class MachineService {
 
   async getMatches(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetMatchListByName`, 'POST', apiParams)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse.data
   }
 
   async getOutcomesListByMatchId(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetOutcomesListByMatchId`, 'POST', apiParams)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse.data
   }
 
-  /************SB APIS END************/
+  async getBonusRules() {
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetBonusRules`, 'POST', {})
+    //console.log(apiResponse)
+    return apiResponse
+  }
 
+  async issueSBTicket(ticketObject: any) {
+    let userData = await this.getUserData()
+    let machineData = await this.getMachineData();
+    let gameId = await this.getGameId()
+
+    ticketObject.GameId = gameId
+    ticketObject.MachineDateIssued = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
+    console.log(ticketObject)
+
+    let ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userData.PersonId.toString() + this.gnrcSrv.getFormattedToday() + gameId
+    ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
+
+    let params = {
+      GameId: gameId,
+      Ticket: ticketObject,
+      TicketRequestId: ticketRequestId,
+      LoyalityReferenceId: 0,
+    }
+
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/IssueTicket`, 'POST', params)
+    if (apiResponse.status == false) {
+      this.setModalData(true, false, apiResponse.message)
+    }
+    else if (apiResponse.DataToPrint) {
+      this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
+    }
+    return apiResponse
+  }
+
+  /************SB APIS END************/
 }

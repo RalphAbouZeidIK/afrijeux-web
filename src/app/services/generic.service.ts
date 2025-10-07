@@ -43,13 +43,13 @@ export class GenericService {
   async getGame(apiRout: any) {
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetOnlineGames', 'GET', {});
     const game = apiResponse.find((item: any) => item.APIRout == apiRout);
-    console.log(game)
+    //console.log(game)
     return game
   }
 
   async getBalance() {
     let balance = await this.apiSrv.makeApi(`OnlineMaster`, `UserInfo/GetBalance`, 'GET', {})
-    console.log(balance)
+    //console.log(balance)
     return balance
   }
 

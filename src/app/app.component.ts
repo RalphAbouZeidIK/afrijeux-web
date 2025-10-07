@@ -75,10 +75,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 
       this.loginPopupStatusSubscription = this.usrSrv.getLoginPopupStatus().subscribe((data) => {
-        console.log(data)
+        //console.log(data)
         this.loginObject = data
       });
-      console.log(this.isLoggedIn)
+      //console.log(this.isLoggedIn)
 
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
@@ -132,7 +132,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * Set loading flag after the view init
    */
   ngAfterViewInit() {
-    //window.console.log = () => { }
+    //window.//console.log = () => { }
     setTimeout(() => {
       this.setLoader()
     }, 1);
@@ -155,7 +155,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       if (event instanceof NavigationError) {
-        console.log(event.error);
+        //console.log(event.error);
       }
     });
   }
@@ -188,7 +188,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.navList = this.router.config.filter((item: any) => item.data.showLink);
 
-    //console.log(this.navList);
+    ////console.log(this.navList);
 
   }
 

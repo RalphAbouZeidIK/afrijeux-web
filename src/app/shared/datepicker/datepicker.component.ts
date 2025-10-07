@@ -30,7 +30,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   dateChange(event: any) {
-    console.log(event)
+    //console.log(event)
     this.dateChangeEvent.emit(event.format('YYYY-MM-DDTHH:mm:ss'))
   }
 }

@@ -38,7 +38,7 @@ export class NativeBridgeService {
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
       this.ngZone.run(() => {
-        console.log("Received from Flutter:", result);
+        //console.log("Received from Flutter:", result);
         this.scanResultSource.next(result); // ✅ makes it reactive
       });
     };
@@ -46,7 +46,7 @@ export class NativeBridgeService {
     // // Optional: expose global print trigger (if Flutter calls it)
     // window['triggerPrint'] = () => {
     //   this.ngZone.run(() => {
-    //     console.log("Print requested from Flutter");
+    //     //console.log("Print requested from Flutter");
     //     this.print();
     //   });
     // };
@@ -120,7 +120,7 @@ export class NativeBridgeService {
     const message = JSON.stringify({ type, value, sender, fullTicketId });
 
     if (window.PrintChannel?.postMessage) {
-      console.log(message)
+      //console.log(message)
       window.PrintChannel.postMessage(message);
     } else {
       alert("PrintChannel is not available.");
