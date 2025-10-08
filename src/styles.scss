@@ -275,6 +275,10 @@ mat-form-field {
 
     .form-control {
         background-color: $darkBg;
+
+        &:focus {
+            background-color: $darkBg;
+        }
     }
 
 }
@@ -499,6 +503,7 @@ aside {
     main {
         flex: 1 0 calc(100% - 600px);
         max-width: calc(100% - 600px);
+        padding-bottom: 80px;
     }
 }
 
@@ -555,6 +560,23 @@ header {
     margin-bottom: 15px;
     max-height: 200px;
     overflow: auto;
+}
+
+.pagination {
+    a.page-link {
+        background-color: $darkBg;
+        color: $yellow;
+        border-color: $white;
+        padding-bottom: 9px;
+    }
+
+    .page-link.active,
+    .active>.page-link {
+        background-color: $yellow;
+        color: $darkBg;
+        font-weight: bold;
+        box-shadow: none;
+    }
 }
 
 

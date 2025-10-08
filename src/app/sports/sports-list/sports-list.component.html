@@ -50,13 +50,14 @@
 <div class=" form-content" *ngIf="!isDesktop && showFilters">
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedSport" (ngModelChange)="selectedSportChange($event,'sport')">
+            <option [ngValue]="null" disabled selected> Sports </option>
             <option *ngFor="let sportItem of filtersList.Sports" [ngValue]="sportItem">{{sportItem.SportName}}</option>
         </select>
     </div>
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedCategory"
             (ngModelChange)="selectedSportChange($event,'category')">
-            <option [ngValue]="null" selected> All Categories </option>
+            <option [ngValue]="null" selected> Categories </option>
             <option *ngFor="let categoryItem of dropddownCategories" [ngValue]="categoryItem">
                 {{categoryItem.CategoryName}}</option>
         </select>
@@ -64,7 +65,7 @@
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedTournament"
             (ngModelChange)="selectedSportChange($event,'tournament')">
-            <option [ngValue]="null" selected> All Tournaments </option>
+            <option [ngValue]="null" selected> Tournaments </option>
             <option *ngFor="let tournamentItem of dropddownTournaments" [ngValue]="tournamentItem">
                 {{tournamentItem.TournamentName}}</option>
         </select>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 
-import { NgbDropdownModule, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModal, NgbModalConfig, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderInterceptor } from '../loader-inerceptor';
@@ -62,7 +62,8 @@ export const MY_FORMATS = {
     NotificationsPopupComponent,
     TranslateModule,
     PrintComponent,
-    ModalComponent
+    ModalComponent,
+    NgbPaginationModule
   ],
   imports: [CommonModule,
     ReactiveFormsModule,
@@ -73,7 +74,8 @@ export const MY_FORMATS = {
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    TranslateModule
+    TranslateModule,
+    NgbPaginationModule
   ],
   providers: [
     NgbModalConfig, NgbModal,

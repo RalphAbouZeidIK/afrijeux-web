@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
-import { GamesService } from 'src/app/services/games.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
@@ -44,11 +42,6 @@ export class MatchListComponent implements OnChanges {
         }
       });
     });
-
-
-    
-
-
 
   }
 

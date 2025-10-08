@@ -12,7 +12,7 @@ import { GenericService } from 'src/app/services/generic.service';
   standalone: false
 })
 export class HomepageComponent implements OnInit, OnDestroy {
-  matchesList = []
+  matchesList: any = []
 
 
   sportId = 1
@@ -26,6 +26,16 @@ export class HomepageComponent implements OnInit, OnDestroy {
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
   filtersSubscription: Subscription
+
+  page = 1;
+
+  pageSize = 10;
+
+  SportId: any = null
+
+  TournamentId: any = null
+
+  CategoryId: any = null
 
   constructor(
     private apiSrv: ApiService,
@@ -51,13 +61,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
       this.isMobile = true
     }
     this.routeSub = this.route.params.subscribe(params => {
-      let SportId = params['sportId']; // Update matchId when params change
-      let TournamentId = params['tournamentId']; // Update matchId when params change
-      let CategoryId = params['categoryId']; // Update matchId when params change
+      this.SportId = params['sportId']; // Update matchId when params change
+      this.TournamentId = params['tournamentId']; // Update matchId when params change
+      this.CategoryId = params['categoryId']; // Update matchId when params change
       let apiParams = {
-        SportId: SportId,
-        TournamentId: TournamentId,
-        CategoryId: CategoryId
+        SportId: this.SportId,
+        TournamentId: this.TournamentId,
+        CategoryId: this.CategoryId
       }
       this.getMatches(apiParams)
     });
@@ -68,13 +78,12 @@ export class HomepageComponent implements OnInit, OnDestroy {
       Language: 'en',
       MatchName: null,
       ...apiParams,
-      PageSize: 100,
-      PageNumber: 1,
+      PageSize: this.pageSize,
+      PageNumber: this.page,
     };
 
     this.matchesList = await this.gamesSrv.getMatches(params)
-
-    //console.log(this.matchesList)
+    console.log(this.matchesList)
 
   }
 
