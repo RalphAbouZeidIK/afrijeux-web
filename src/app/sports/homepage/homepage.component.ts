@@ -38,7 +38,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   CategoryId: any = null
 
   constructor(
-    private apiSrv: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     private gamesSrv: GamesService,
@@ -49,8 +48,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
     });
 
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
+
       if (this.isMobile) {
-        //console.log(data)
         this.getMatches(data)
       }
     })
@@ -60,30 +59,33 @@ export class HomepageComponent implements OnInit, OnDestroy {
     if (window.innerWidth < 1200) {
       this.isMobile = true
     }
-    this.routeSub = this.route.params.subscribe(params => {
-      this.SportId = params['sportId']; // Update matchId when params change
-      this.TournamentId = params['tournamentId']; // Update matchId when params change
-      this.CategoryId = params['categoryId']; // Update matchId when params change
-      let apiParams = {
-        SportId: this.SportId,
-        TournamentId: this.TournamentId,
-        CategoryId: this.CategoryId
-      }
-      this.getMatches(apiParams)
-    });
+
+    else {
+      this.routeSub = this.route.params.subscribe(params => {
+        this.SportId = params['sportId']; // Update matchId when params change
+        this.TournamentId = params['tournamentId']; // Update matchId when params change
+        this.CategoryId = params['categoryId']; // Update matchId when params change
+        let apiParams = {
+          SportId: this.SportId,
+          TournamentId: this.TournamentId,
+          CategoryId: this.CategoryId,
+          MatchName: null
+        }
+        this.getMatches(apiParams)
+      });
+    }
+
   }
 
   async getMatches(apiParams: any) {
     let params = {
       Language: 'en',
-      MatchName: null,
       ...apiParams,
       PageSize: this.pageSize,
       PageNumber: this.page,
     };
-
+    console.log(params)
     this.matchesList = await this.gamesSrv.getMatches(params)
-    console.log(this.matchesList)
 
   }
 

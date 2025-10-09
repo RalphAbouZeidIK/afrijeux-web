@@ -1,4 +1,4 @@
-<ng-container *ngIf="matchesList.length>0;else templateName">
+<ng-container *ngIf="matchesList?.length>0;else templateName">
     <span class="market-name">{{ 'sb.matchList.market' | translate }}: {{matchesList[0].OddsOutcomes[0].Market}}</span>
     <div *ngFor="let matchItem of matchesList" class="match-item">
         <div class="date-title">
@@ -9,10 +9,14 @@
             <h3 (click)="getOutcomes(matchItem)">
                 <span class="tournament-name">{{matchItem.TournamentName}}</span>
                 {{matchItem.MatchName}}
+                <span class="tournament-name match-code">
+                    {{matchItem.EventCode}}
+                </span>
             </h3>
+
         </div>
 
-        <div class="odds-list" [ngClass]="{'three-odds': matchItem.OddsOutcomes.length == 3}">
+        <div class="odds-list">
 
             <!-- <span class="market-name">Market: {{matchItem.OddsOutcomes[0].Market}}</span> -->
             <ng-container *ngFor="let oddItem of matchItem.OddsOutcomes">

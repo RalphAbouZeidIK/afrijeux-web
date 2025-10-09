@@ -258,9 +258,18 @@
             "cancel": "Annuler",
             "gameName": "Nom du jeu",
             "amount": "Montant",
-            "status": "Statut"
+            "status": "Statut",
+            "search": "Rechercher",
+            "favoriteBets": "Paris favoris",
+            "allBets": "Tous les paris",
+            "eventCode": "Code de l’événement"
         },
         "fullTicketId": "Numéro complet du billet",
-        "chooseGames": "Choisir des jeux"
+        "chooseGames": "Choisir des jeux",
+        "searchComponent": {
+            "searchByEventCode": "Recherche par code d'événement",
+            "searchByGameName": "Recherche par nom d'événement",
+            "searchByTicket": "Recherche par code de billet"
+        }
     }
 }

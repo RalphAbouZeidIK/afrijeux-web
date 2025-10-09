@@ -14,6 +14,7 @@ import { SportsListComponent } from './sports-list/sports-list.component';
 import { routing } from './sports-routing';
 import { TicketsComponent } from './tickets/tickets.component';
 import { CartComponent } from './cart/cart.component';
+import { SearchComponent } from './search/search.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { CartComponent } from './cart/cart.component';
     LeftMenuComponent,
     TicketsComponent,
     CanceledBetsComponent,
-    CartComponent
+    CartComponent,
+    SearchComponent
   ],
   imports: [
     routing,

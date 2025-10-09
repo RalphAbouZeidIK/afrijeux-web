@@ -1,0 +1,46 @@
+<div class="search-btns">
+    <button class="form-control" (click)="showSearchBox('gameName')">
+        {{'machine.searchComponent.searchByGameName' | translate}}
+    </button>
+    <button class="form-control" (click)="showSearchBox('eventCode')">
+        {{'machine.searchComponent.searchByEventCode' | translate}}
+    </button>
+    <button class="form-control">
+        {{'machine.searchComponent.searchByTicket' | translate}}
+    </button>
+</div>
+
+<div class="form-holder machine-layout" *ngIf="showSearchBoxBool">
+    <div class="form-bg">
+        <h2>
+            <div [ngSwitch]="searchBoxType">
+                <div *ngSwitchCase="'gameName'"> {{'machine.searchComponent.searchByGameName' |
+                    translate}}</div>
+                <div *ngSwitchCase="'eventCode'"> {{'machine.searchComponent.searchByEventCode' |
+                    translate}}</div>
+            </div>
+
+        </h2>
+        <div class=" form-content">
+            <div class="form-group" *ngIf="searchBoxType === 'gameName' || searchBoxType === 'eventCode'">
+                <label class="title-label">
+                    <div [ngSwitch]="searchBoxType">
+                        <div *ngSwitchCase="'gameName'"> {{'machine.generic.gameName' | translate}}</div>
+                        <div *ngSwitchCase="'eventCode'"> {{'machine.generic.eventCode' | translate}}</div>
+                    </div>
+
+                </label>
+                <input [type]="(searchBoxType === 'gameName')?'text':'number'" class="form-control" [(ngModel)]="searchValue" />
+            </div>
+
+            <div class="form-btns d-flex">
+                <button class="btn btn-primary" (click)="submitSearch()">
+                    {{'machine.generic.search' | translate}}
+                </button>
+                <button class="btn btn-primary" (click)="showSearchBoxBool = false">
+                    {{'machine.generic.back' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

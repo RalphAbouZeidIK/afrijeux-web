@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ApiService } from 'src/app/services/api.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GamesService } from 'src/app/services/games.service';
 
 @Component({
@@ -15,41 +14,68 @@ export class OutcomesPageComponent implements OnInit {
 
   MatchDetails: any
 
-  MatchId: any
+  MatchId: any = null
+
+  isFavorite = true
 
   constructor(
     private gamesSrv: GamesService,
+    private router: Router,
     private route: ActivatedRoute
   ) {
 
   }
 
   ngOnInit(): void {
-    this.MatchId = this.route.snapshot.params['matchId']
-    this.getMatchOutcome()
-
+    console.log(this.router.url)
+    if (this.router.url.includes('EventCodeSearch')) {
+      this.getMatchOutcomeFromCode()
+    }
+    else {
+      this.getMatchOutcome()
+    }
   }
 
   async getMatchOutcome() {
+    (this.MatchId) ? this.MatchId : this.MatchId = this.route.snapshot.params['matchId']
     let params = {
       Language: 'en',
       MatchId: this.MatchId,
+      IsFavorite: this.isFavorite
     }
 
     //console.log(params)
 
     const apiResponse = await this.gamesSrv.getOutcomesListByMatchId(params)
-    //console.log(apiResponse)
-    this.MatchDetails = {
-      MatchName: apiResponse[0].MatchName,
-      EventDate: apiResponse[0].EventDate,
-      EventId: this.MatchId
+    console.log(apiResponse)
+    if (apiResponse) {
+      this.MatchDetails = {
+        MatchName: apiResponse[0].MatchName,
+        EventDate: apiResponse[0].EventDate,
+        EventId: this.MatchId
+      }
+
+      this.OutcomesList = apiResponse
     }
+  }
 
-    this.OutcomesList = apiResponse
+  async getMatchOutcomeFromCode() {
+    let params = {
+      Language: 'en',
+      IsFavorite: true,
+      EventCode: parseInt(this.route.snapshot.params['eventCode'])
+    }
+    let apiResponse: any = await this.gamesSrv.getOutcomesListByMatchCode(params)
+    console.log(apiResponse)
+    if (apiResponse) {
+      this.MatchId = apiResponse[0].MatchId
+      this.MatchDetails = {
+        MatchName: apiResponse[0].MatchName,
+        EventDate: apiResponse[0].EventDate,
+        EventId: this.MatchId
+      }
 
-    //console.log(this.MatchDetails)
-
-
+      this.OutcomesList = apiResponse
+    }
   }
 }

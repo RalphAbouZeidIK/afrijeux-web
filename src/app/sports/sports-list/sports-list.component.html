@@ -1,73 +1,78 @@
-<div class="sports-list" *ngIf="isDesktop">
-    <h2> {{ 'sb.sportsList.title' | translate }}</h2>
-    <ul>
-        <li *ngFor="let sportItem of filtersList.Sports">
-            <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
-                <div class="img-title" (click)="redirectTo(sportItem)">
-                    <!-- <img src="{{sportItem.SportIcon}}" alt="{{sportItem.SportName}}"> -->
-                    <span>{{sportItem.SportName}}</span>
-                </div>
-                <div class="arrow" (click)="getCategories(sportItem)" [ngClass]="{'active':sportItem.showCategories}">
-                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </div>
+<div class="sports-list-section" (window:resize)="onResize($event)">
+    <div class="sports-list" *ngIf="isDesktop">
+        <h2> {{ 'sb.sportsList.title' | translate }}</h2>
+        <ul>
+            <li *ngFor="let sportItem of filtersList.Sports">
+                <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
+                    <div class="img-title" (click)="redirectTo(sportItem)">
+                        <!-- <img src="{{sportItem.SportIcon}}" alt="{{sportItem.SportName}}"> -->
+                        <span>{{sportItem.SportName}}</span>
+                    </div>
+                    <div class="arrow" (click)="getCategories(sportItem)"
+                        [ngClass]="{'active':sportItem.showCategories}">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </div>
 
-            </a>
-            <div class="categories" *ngIf="sportItem.showCategories">
-                <ul>
-                    <li *ngFor="let category of sportItem.Categories">
-                        <a [ngClass]="{'active':category.isSelected}">
-                            <div class="img-title" (click)="redirectTo(category)">
-                                <!-- <img src="{{category.SportIcon}}" alt="{{category.SportName}}"> -->
-                                <span>{{category.CategoryName}}</span>
+                </a>
+                <div class="categories" *ngIf="sportItem.showCategories">
+                    <ul>
+                        <li *ngFor="let category of sportItem.Categories">
+                            <a [ngClass]="{'active':category.isSelected}">
+                                <div class="img-title" (click)="redirectTo(category)">
+                                    <!-- <img src="{{category.SportIcon}}" alt="{{category.SportName}}"> -->
+                                    <span>{{category.CategoryName}}</span>
+                                </div>
+
+                                <div class="arrow" (click)="getTournaments(category)"
+                                    [ngClass]="{'active':category.showTournaments}">
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </div>
+                            </a>
+                            <div class="tournaments" *ngIf="category.showTournaments">
+                                <ul>
+                                    <li *ngFor="let tournament of category.Tournaments">
+                                        <a [ngClass]="{'active':tournament.isSelected}">
+                                            <div class="img-title" (click)="redirectTo(tournament)">
+                                                <!-- <img src="{{tournament.SportIcon}}" alt="{{tournament.SportName}}"> -->
+                                                <span>{{tournament.TournamentName}}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
+                        </li>
 
-                            <div class="arrow" (click)="getTournaments(category)"
-                                [ngClass]="{'active':category.showTournaments}">
-                                <i class="fa fa-angle-right" aria-hidden="true"></i>
-                            </div>
-                        </a>
-                        <div class="tournaments" *ngIf="category.showTournaments">
-                            <ul>
-                                <li *ngFor="let tournament of category.Tournaments">
-                                    <a [ngClass]="{'active':tournament.isSelected}">
-                                        <div class="img-title" (click)="redirectTo(tournament)">
-                                            <!-- <img src="{{tournament.SportIcon}}" alt="{{tournament.SportName}}"> -->
-                                            <span>{{tournament.TournamentName}}</span>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                </ul>
-            </div>
-        </li>
-    </ul>
-</div>
-
-
-<div class=" form-content" *ngIf="!isDesktop && showFilters">
-    <div class="form-group">
-        <select class="form-control" [(ngModel)]="selectedSport" (ngModelChange)="selectedSportChange($event,'sport')">
-            <option [ngValue]="null" disabled selected> Sports </option>
-            <option *ngFor="let sportItem of filtersList.Sports" [ngValue]="sportItem">{{sportItem.SportName}}</option>
-        </select>
+                    </ul>
+                </div>
+            </li>
+        </ul>
     </div>
-    <div class="form-group">
-        <select class="form-control" [(ngModel)]="selectedCategory"
-            (ngModelChange)="selectedSportChange($event,'category')">
-            <option [ngValue]="null" selected> Categories </option>
-            <option *ngFor="let categoryItem of dropddownCategories" [ngValue]="categoryItem">
-                {{categoryItem.CategoryName}}</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <select class="form-control" [(ngModel)]="selectedTournament"
-            (ngModelChange)="selectedSportChange($event,'tournament')">
-            <option [ngValue]="null" selected> Tournaments </option>
-            <option *ngFor="let tournamentItem of dropddownTournaments" [ngValue]="tournamentItem">
-                {{tournamentItem.TournamentName}}</option>
-        </select>
+
+    <app-search *ngIf="isAndroidApp && showFilters"></app-search>
+    <div class=" form-content" *ngIf="!isDesktop && showFilters">
+        <div class="form-group">
+            <select class="form-control" [(ngModel)]="selectedSport"
+                (ngModelChange)="selectedSportChange($event,'sport')">
+                <option [ngValue]="null" disabled selected> Sports </option>
+                <option *ngFor="let sportItem of filtersList.Sports" [ngValue]="sportItem">{{sportItem.SportName}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control" [(ngModel)]="selectedCategory"
+                (ngModelChange)="selectedSportChange($event,'category')">
+                <option [ngValue]="null" selected> Categories </option>
+                <option *ngFor="let categoryItem of dropddownCategories" [ngValue]="categoryItem">
+                    {{categoryItem.CategoryName}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control" [(ngModel)]="selectedTournament"
+                (ngModelChange)="selectedSportChange($event,'tournament')">
+                <option [ngValue]="null" selected> Tournaments </option>
+                <option *ngFor="let tournamentItem of dropddownTournaments" [ngValue]="tournamentItem">
+                    {{tournamentItem.TournamentName}}</option>
+            </select>
+        </div>
     </div>
 </div>

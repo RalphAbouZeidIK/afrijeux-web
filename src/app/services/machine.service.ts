@@ -155,7 +155,7 @@ export class MachineService {
       TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       MachineId: machineData.MachineId,
     }
-    //console.log(params)
+    console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
@@ -175,6 +175,7 @@ export class MachineService {
 
     if (apiResponse?.encryptedResponse) {
       let decryptedResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
+      //console.log(decryptedResponse)
       if (Array.isArray(decryptedResponse)) {
         return {
           data: decryptedResponse,
@@ -411,12 +412,21 @@ export class MachineService {
 
   async getMatches(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetMatchListByName`, 'POST', apiParams)
-    //console.log(apiResponse)
+    console.log(apiResponse)
+    if (apiResponse.status == false) {
+      this.setModalData(true, apiResponse.status, apiResponse.message)
+    }
     return apiResponse.data
   }
 
   async getOutcomesListByMatchId(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetOutcomesListByMatchId`, 'POST', apiParams)
+    console.log(apiResponse)
+    return apiResponse.data
+  }
+
+  async getOutcomesListByMatchCode(apiParams: any) {
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetOutcomesListByEventCode`, 'POST', apiParams)
     //console.log(apiResponse)
     return apiResponse.data
   }

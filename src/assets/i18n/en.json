@@ -254,13 +254,22 @@
             "submit": "Submit",
             "print": "Print",
             "eventId": "Event Id",
-            "pay":"Pay",
-            "cancel":"Cancel",
-            "gameName":"Game Name",
-            "amount":"Amount",
-            "status":"Status"
+            "pay": "Pay",
+            "cancel": "Cancel",
+            "gameName": "Game Name",
+            "amount": "Amount",
+            "status": "Status",
+            "search": "Search",
+            "favoriteBets": "Favorite Bets",
+            "allBets": "All Bets",
+            "eventCode": "Event Code"
         },
         "fullTicketId": "Full Ticket Id",
-        "chooseGames": "Choose Games"
+        "chooseGames": "Choose Games",
+        "searchComponent": {
+            "searchByEventCode": "Event Code Search",
+            "searchByGameName": "Game Name Search",
+            "searchByTicket": "Ticket Code Search"
+        }
     }
 }

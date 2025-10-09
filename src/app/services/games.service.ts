@@ -15,6 +15,8 @@ export class GamesService {
 
   private sportsFilter$ = new Subject();
 
+  outcomesFromCodeSearch: any
+
   constructor(
     private gnrcSrv: GenericService,
     private apiSrv: ApiService,
@@ -145,6 +147,21 @@ export class GamesService {
     return apiResponse
   }
 
+  async getOutcomesListByMatchCode(apiParams: any) {
+    let apiResponse: any = []
+    if (this.isAndroidApp) {
+      apiResponse = await this.machineSrv.getOutcomesListByMatchCode(apiParams)
+    }
+    else {
+      apiParams = {
+        body: apiParams
+      }
+      apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetOutcomesListByMatchId', 'POST', apiParams)
+    }
+    this.outcomesFromCodeSearch = apiResponse
+    return apiResponse
+  }
+
   async getBonusRules() {
     let apiResponse: any = []
     if (this.isAndroidApp) {
@@ -154,9 +171,10 @@ export class GamesService {
     else {
       apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetBonusRules', 'GET', {})
     }
-    console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse
   }
+
 
 
 }

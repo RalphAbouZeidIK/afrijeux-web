@@ -11,6 +11,7 @@
     justify-content: center;
     cursor: pointer;
     min-height: 100%;
+    overflow: hidden;
 
     &.isSelected {
         background-color: $yellow;

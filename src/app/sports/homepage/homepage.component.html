@@ -3,7 +3,7 @@
     <div class="paging-holder">
         <ngb-pagination [collectionSize]="matchesList[0].TotalCount" [(page)]="page" [maxSize]="5" [rotate]="true"
             [ellipses]="false" (pageChange)="getMatches({SportId,TournamentId,CategoryId})" [boundaryLinks]="false"
-            *ngIf="matchesList.length > 0" />
+            *ngIf="matchesList?.length > 0" />
     </div>
 
 </div>

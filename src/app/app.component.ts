@@ -62,8 +62,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {
 
 
-    translate.setDefaultLang('en');
-    translate.use('en');
+    translate.setDefaultLang('fr');
+    translate.use('fr');
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {

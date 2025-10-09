@@ -1,4 +1,20 @@
 <div class="outcomes-page">
+    <div class="radio-holder">
+        <div class="form-group">
+            <input type="checkbox" id="favorites" [value]="isFavorite" [checked]="isFavorite"
+                (change)="isFavorite = !isFavorite;getMatchOutcome()" />
+            <label class="title-label" for="favorites">{{'machine.generic.favoriteBets' | translate}} </label>
+
+        </div>
+
+        <div class="form-group">
+            <input type="checkbox" id="all" [value]="!isFavorite" [checked]="!isFavorite"
+                (change)="isFavorite = !isFavorite;getMatchOutcome()" />
+            <label class="title-label" for="all">{{'machine.generic.allBets' | translate}}</label>
+
+        </div>
+    </div>
+
     <app-match-details [matchDetails]="MatchDetails" *ngIf="MatchDetails"></app-match-details>
     <app-outcomes-list [OutcomesList]="OutcomesList" [MatchDetails]="MatchDetails"></app-outcomes-list>
 </div>

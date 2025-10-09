@@ -1,5 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, NavigationError, NavigationStart, Router, Event } from '@angular/router';
+import { ActivatedRoute, NavigationError, NavigationStart, Router, Event, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
@@ -28,6 +29,9 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   isDesktop = true
 
+  // filtersSubscription: Subscription
+
+  // filterObject: any = {}
 
   showFilters = true
 
@@ -41,10 +45,22 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
     this.route.params.subscribe(params => {
       //console.log(params); // Log route params to check if they are correctly captured
     });
+
+
+    // this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
+    //   this.filterObject = data
+    // })
   }
 
   ngOnInit(): void {
-    this.showFilters = !this.router.url.includes('Outcomes')
+    this.checkIfOutcomesPage()
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.checkIfOutcomesPage()
+      }
+    });
+
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     if (window.innerWidth < 1200) {
       this.isDesktop = false
@@ -52,14 +68,28 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
     this.getData()
   }
 
+  onResize(event: any) {
+    if (event.target.innerWidth < 1200) {
+      this.isDesktop = false
+    }
+    else {
+      this.isDesktop = true
+    }
+  }
+
+  checkIfOutcomesPage() {
+    let isOutcomesPage = this.router.url.includes('Outcomes') || this.router.url.includes('EventCodeSearch')
+    this.showFilters = !isOutcomesPage
+  }
+
 
   async getData() {
-    const apiResponse = await this.gamesSrv.getFiltersLists()
-    this.filtersList = apiResponse
-    console.log(this.filtersList)
-    this.setSelectedToFalse()
-    this.resetSelected()
-
+    if (this.showFilters) {
+      const apiResponse = await this.gamesSrv.getFiltersLists()
+      this.filtersList = apiResponse
+      this.setSelectedToFalse()
+      this.resetSelected()
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -154,9 +184,10 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
 
     //console.log(this.selectedSport)
     this.gamesSrv.setSportsFilter({
-      sportId: (this.selectedSport) ? this.selectedSport.SportId : null,
-      categoryId: (this.selectedCategory) ? this.selectedCategory.CategoryId : null,
-      tournamentId: (this.selectedTournament) ? this.selectedTournament?.TournamentId : null
+      SportId: (this.selectedSport) ? this.selectedSport.SportId : null,
+      CategoryId: (this.selectedCategory) ? this.selectedCategory.CategoryId : null,
+      TournamentId: (this.selectedTournament) ? this.selectedTournament?.TournamentId : null,
+      MatchName: null
     });
   }
 

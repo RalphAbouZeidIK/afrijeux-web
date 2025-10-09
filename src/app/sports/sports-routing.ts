@@ -21,11 +21,13 @@ const routes: Routes = [
     children: [
       { path: 'Tickets', component: TicketsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.Sports.viewTickets' }, canActivate: [SharedGuard] },
       { path: 'Canceled-Bets', component: CanceledBetsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.Sports.canceledBets' }, canActivate: [SharedGuard] },
+      { path: 'EventCodeSearch/:eventCode', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Categories/:categoryId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
+
     ]
   }
 
