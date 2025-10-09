@@ -99,7 +99,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   resetSelected() {
-    //console.log(this.filtersList.Sports)
+    console.log(this.selectedFilters)
     let selectedFilters = this.filtersList.Sports.find((item: any) => item.SportId == this.selectedFilters.SportId)
     if (selectedFilters) {
       selectedFilters.isSelected = true
@@ -136,6 +136,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
       ...obj,
       isSelected: false
     }));
+    console.log(this.filtersList)
   }
 
   getCategories(sportItem: any) {

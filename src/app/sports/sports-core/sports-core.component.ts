@@ -39,9 +39,9 @@ export class SportsCoreComponent {
   getSportsId() {
     this.route.firstChild?.paramMap.subscribe(params => {
       let selectedFilters = {
-        sportId: params.get('sportId'),
-        tournamentId: params.get('tournamentId'),
-        categoryId: params.get('categoryId'),
+        SportId: params.get('sportId'),
+        TournamentId: params.get('tournamentId'),
+        CategoryId: params.get('categoryId'),
       }
       this.selectedFilters = selectedFilters // Logs sportId for the child route
     });

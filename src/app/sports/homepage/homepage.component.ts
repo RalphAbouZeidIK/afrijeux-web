@@ -21,7 +21,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   routeSub!: Subscription;
 
-  isMobile = false
+  isMobile = window.innerWidth < 1200
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
@@ -56,11 +56,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (window.innerWidth < 1200) {
-      this.isMobile = true
-    }
-
-    else {
+    if (!this.isMobile) {
       this.routeSub = this.route.params.subscribe(params => {
         this.SportId = params['sportId']; // Update matchId when params change
         this.TournamentId = params['tournamentId']; // Update matchId when params change
@@ -74,6 +70,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
         this.getMatches(apiParams)
       });
     }
+
 
   }
 
