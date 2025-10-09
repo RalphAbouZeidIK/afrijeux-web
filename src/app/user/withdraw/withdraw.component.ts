@@ -12,7 +12,6 @@ import { UserService } from 'src/app/services/user.service';
 export class WithdrawComponent {
 
   userBalance: any = 0;
-  balanceSubsription: Subscription;
   transactionTypesResponse: any = [];
   withdrawAmount: number = 0;
   showError: boolean = false;
@@ -25,9 +24,6 @@ export class WithdrawComponent {
     private usrSrv: UserService,
     private gnrcSrv: GenericService
   ) {
-    this.balanceSubsription = this.usrSrv.getUserBalance().subscribe((data) => {
-      //console.log(data)
-    });
   }
 
   ngOnInit(): void {

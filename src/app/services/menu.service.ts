@@ -35,7 +35,7 @@ export class MenuService {
       .loadChildren(this.injector, route)
       .toPromise();  // or lastValueFrom(...)
 
-    return moduleConfig.routes ?? [];  // Return actual Route[] array
+    return moduleConfig?.routes ?? [];  // Return actual Route[] array
   }
 
   private getCurrentGameFromUrl(): string | null {

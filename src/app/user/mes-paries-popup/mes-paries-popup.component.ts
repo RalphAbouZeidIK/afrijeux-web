@@ -1,13 +1,15 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Route, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
-    selector: 'app-mes-paries-popup',
-    templateUrl: './mes-paries-popup.component.html',
-    styleUrls: ['./mes-paries-popup.component.scss'],
-    standalone: false
+  selector: 'app-mes-paries-popup',
+  templateUrl: './mes-paries-popup.component.html',
+  styleUrls: ['./mes-paries-popup.component.scss'],
+  standalone: false
 })
-export class MesPariesPopupComponent implements OnInit {
+export class MesPariesPopupComponent implements OnDestroy {
 
 
   fullDataInfo: any = [
@@ -50,12 +52,21 @@ export class MesPariesPopupComponent implements OnInit {
   ]
 
   isFullPage = true
+
   filteredDataInfo: any;
+
   activeFilter: string = 'all';
 
   @Output() hidePopupO = new EventEmitter<any>();
-  isDesktop: any
-  constructor(private route: Router) {
+
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
+
+  isDesktopSubscription: Subscription
+
+  constructor(
+    private route: Router,
+    private gnrcSrv: GenericService
+  ) {
     this.filterData(null, 'all')
     this.route.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -64,17 +75,12 @@ export class MesPariesPopupComponent implements OnInit {
         }
       }
     });
+
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
   }
 
-
-  ngOnInit(): void {
-    if (window.innerWidth < 767) {
-      this.isDesktop = false
-    }
-    else {
-      this.isDesktop = true
-    }
-  }
 
   hidePopup() {
     if (this.isDesktop) {
@@ -95,13 +101,10 @@ export class MesPariesPopupComponent implements OnInit {
       this.filteredDataInfo = this.fullDataInfo.filter((item: any) => item.isGagnant === isGagnant);
     }
   }
-  onResize(event: any) {
-    if (event.target.innerWidth < 767) {
-      this.isDesktop = false
-    }
-    else {
-      this.isDesktop = true
-    }
+
+
+  ngOnDestroy(): void {
+    this.isDesktopSubscription.unsubscribe;
   }
 
 }

@@ -1,5 +1,4 @@
-<div class="cart-container" (window:resize)="onResize($event)"
-    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0}">
+<div class="cart-container" [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0}">
     <!-- <div class="overlay" (click)="hideMenus()"></div> -->
     <div class="cart-header" (click)="OnclickIsMobile()">
         <span class="mobileOnly rect-bar"></span>

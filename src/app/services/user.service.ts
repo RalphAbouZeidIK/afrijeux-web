@@ -52,7 +52,7 @@ export class UserService {
    * Function to get the login status subsciber
    * @returns 
    */
-  getLoginStatus(): Observable<any> {
+  getLoginStatus() {
     return this.loginStatus$;
   }
 
@@ -85,7 +85,7 @@ export class UserService {
     this.userBalance$.next(balance);
   }
 
-  getUserBalance(): Observable<any> {
+  getUserBalance() {
     return this.userBalance$;
   }
 
@@ -178,7 +178,7 @@ export class UserService {
    * Function to call when notifications need to be updated
    * @returns 
    */
-  $notifyUsers(): Observable<any> {
+  $notifyUsers() {
     return this.$notificationSb
   }
 

@@ -308,9 +308,7 @@
         font-size: 18px;
         font-weight: 700;
     }
-}
 
-@media all and (max-width:1200px) {
     .overlay {
         content: '';
         height: calc(100vh - 330px);
@@ -353,4 +351,5 @@
         border-color: $darkBg;
         color: $darkBg
     }
+
 }

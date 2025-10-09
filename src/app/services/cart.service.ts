@@ -52,7 +52,7 @@ export class CartService {
    * Function to get the cart data
    * @returns 
    */
-  getCartData(): Observable<any> {
+  getCartData() {
     return this.addCartData$;
   }
 
@@ -60,7 +60,7 @@ export class CartService {
    * Function to get the cart data
    * @returns 
    */
-  getSBCartData(): Observable<any> {
+  getSBCartData() {
     return this.addSBCartData$;
   }
 
@@ -68,7 +68,7 @@ export class CartService {
    * Function to get the cart data
    * @returns 
    */
-  getEventFromCart(): Observable<any> {
+  getEventFromCart() {
     return this.eventFromCart$;
   }
 

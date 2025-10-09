@@ -1,23 +1,24 @@
+<div class="app-holder">
+  <ng-container *ngIf="!isAndroidApp">
+    <app-header [isLoggedIn]="isLoggedIn" [navList]="navList"></app-header>
+    <app-login *ngIf="loginObject.show" [loginObject]="loginObject"></app-login>
 
-<ng-container *ngIf="!isAndroidApp">
-  <app-header [isLoggedIn]="isLoggedIn" [navList]="navList"></app-header>
-  <app-login *ngIf="loginObject.show" [loginObject]="loginObject"></app-login>
-
-  <div class="body-holder">
-    <router-outlet></router-outlet>
-  </div>
+    <div class="body-holder">
+      <router-outlet></router-outlet>
+    </div>
 
 
-  
 
-  <app-notifications-popup [list]="notificationsList" *ngIf="isLoggedIn"
-    (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
-</ng-container>
 
-<ng-container *ngIf="isAndroidApp">
-  <div class="body-holder android-app">
-    <router-outlet></router-outlet>
-  </div>
-</ng-container>
+    <app-notifications-popup [list]="notificationsList" *ngIf="isLoggedIn"
+      (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
+  </ng-container>
 
-<app-loader *ngIf="isLoading"></app-loader>
+  <ng-container *ngIf="isAndroidApp">
+    <div class="body-holder android-app">
+      <router-outlet></router-outlet>
+    </div>
+  </ng-container>
+
+  <app-loader *ngIf="isLoading"></app-loader>
+</div>

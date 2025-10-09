@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -7,9 +7,9 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
   selector: 'app-outcomes-list',
   templateUrl: './outcomes-list.component.html',
   styleUrls: ['./outcomes-list.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class OutcomesListComponent implements OnChanges {
+export class OutcomesListComponent implements OnChanges, OnDestroy {
   @Input() OutcomesList: any
 
   @Input() MatchDetails: any
@@ -20,7 +20,7 @@ export class OutcomesListComponent implements OnChanges {
 
   constructor(private cartSrv: CartService, private storageSrv: LocalStorageService) {
 
-    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
+    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data: any) => {
       // Create a map for matches by MatchId for fast lookup
       //console.log(this.OutcomesList)
       // Set all odds outcomes' isSelected to false
@@ -70,5 +70,10 @@ export class OutcomesListComponent implements OnChanges {
       });
     }
   }
+
+  ngOnDestroy(): void {
+    this.cartSubscription.unsubscribe;
+  }
+
 
 }

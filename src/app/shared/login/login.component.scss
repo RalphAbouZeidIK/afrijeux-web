@@ -3,7 +3,7 @@
 @use '/src/variables' as *;
 
 
-@media all and (max-width:767px) {
+@media all and (max-width:1200px) {
     .header-container {
         justify-content: center;
         align-items: center;

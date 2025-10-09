@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { race, Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
@@ -12,7 +12,7 @@ import { MachineService } from 'src/app/services/machine.service';
   styleUrls: ['./courses.component.scss'],
   standalone: false
 })
-export class CoursesComponent implements OnInit, AfterViewInit {
+export class CoursesComponent implements OnInit, OnDestroy {
 
   dataArray: any = [];
 
@@ -92,14 +92,6 @@ export class CoursesComponent implements OnInit, AfterViewInit {
     this.getGameEvents()
   };
 
-
-  ngAfterViewInit() {
-    if (window.innerWidth < 767 && !this.isFullPage) {
-      // setTimeout(() => {
-      //   this.clickFirstLevelItem()
-      // }, 500);
-    }
-  }
 
   async getRaceById(reunionId: any, raceId: any) {
 
@@ -355,4 +347,8 @@ export class CoursesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.cartSrv.getEventFromCart().unsubscribe
+    this.cartSrv.getResetOtherEvents().unsubscribe
+  }
 }

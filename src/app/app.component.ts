@@ -1,8 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserService } from './services/user.service';
 import { NavigationEnd, NavigationError, NavigationStart, Router, Event } from '@angular/router';
-import { LocalStorageService } from './services/local-storage.service';
 import { LoaderService } from './services/loader-service.service';
 import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,7 +13,7 @@ import { PageTitleService } from './services/page-title.service';
   styleUrls: ['./app.component.scss'],
   standalone: false
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'PMU';
   isFullwidth = false
   /**
@@ -50,6 +49,17 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   isAndroidApp = false
 
+
+  private resizeTimeout: any;
+
+  @HostListener('window:resize', ['$event'])
+
+  onResize() {
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(() => {
+      this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200);
+    }, 300);
+  }
 
   constructor(
     private translate: TranslateService,
@@ -118,6 +128,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async ngOnInit(): Promise<void> {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200)
     this.getMenuItems()
 
     if (!this.isAndroidApp) {
@@ -209,12 +220,18 @@ export class AppComponent implements OnInit, AfterViewInit {
       let notificationIndex = this.notificationsList.findIndex((item: any) => item.id == notification.id)
       this.notificationsList.splice(notificationIndex, 1)
     }, 400);
-
   }
 
   changeLanguage() {
     this.translate.setDefaultLang('fr');
     this.translate.use('fr');
+  }
+
+
+  ngOnDestroy(): void {
+    this.usrSrv.getLoginStatus().unsubscribe;
+    this.usrSrv.$notifyUsers().unsubscribe;
+    this.gnrcSrv.getIsDesktopViewListener().unsubscribe;
   }
 
 }

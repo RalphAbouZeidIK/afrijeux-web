@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GamesService } from 'src/app/services/games.service';
@@ -9,7 +9,7 @@ import { GamesService } from 'src/app/services/games.service';
   styleUrl: './search.component.scss',
   standalone: false
 })
-export class SearchComponent {
+export class SearchComponent implements OnDestroy {
   showSearchBoxBool = false
 
   searchBoxType = ''
@@ -52,4 +52,10 @@ export class SearchComponent {
     this.searchValue = ''
 
   }
+
+
+  ngOnDestroy(): void {
+    this.filtersSubscription.unsubscribe;
+  }
+  
 }

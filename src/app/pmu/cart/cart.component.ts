@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./cart.component.scss'],
   standalone: false
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
 
   listOfBets: any = []
 
@@ -28,7 +28,7 @@ export class CartComponent implements OnInit {
 
   totalBets: any
 
-  isDesktop = true
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
 
   FieldChoice: any
 
@@ -40,6 +40,8 @@ export class CartComponent implements OnInit {
    * Subscribe to login status
    */
   loginStatusSubscription: Subscription;
+
+  isDesktopSubscription: Subscription
 
   /**
    * Flag to check if user is logged in
@@ -75,17 +77,20 @@ export class CartComponent implements OnInit {
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
+
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
   }
 
   async ngOnInit() {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.isPMUHybrid = this.machineSrv.getGameRoute() == 'PMUHybrid'
+
     if (!this.isAndroidApp) {
       this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     }
-    if (window.innerWidth < 1200) {
-      this.isDesktop = false
-    }
+
     if (this.storageSrv.getItem('cartData') && this.storageSrv.getItem('cartData').length > 0) {
       this.listOfBets = this.storageSrv.getItem('cartData')
       this.calculateTicketPrice()
@@ -119,17 +124,6 @@ export class CartComponent implements OnInit {
   OnclickIsMobile() {
     if (!this.isDesktop) {
       this.showOnClickMobile = !this.showOnClickMobile
-    }
-
-  }
-
-
-  onResize(event: any) {
-    if (event.target.innerWidth < 1200) {
-      this.isDesktop = false
-    }
-    else {
-      this.isDesktop = true
     }
   }
 
@@ -495,6 +489,11 @@ export class CartComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.usrSrv.getLoginStatus().unsubscribe;
+    this.cartSrv.getCartData().unsubscribe;
+    this.gnrcSrv.getIsDesktopViewListener().unsubscribe;
+  }
 
 
 }

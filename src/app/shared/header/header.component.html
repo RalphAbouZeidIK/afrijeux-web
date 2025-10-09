@@ -1,8 +1,8 @@
-<header (window:resize)="onResize($event)" [ngClass]="{'is-mobile':!isDesktop}" class="header-main">
+<header [ngClass]="{'is-mobile':!isDesktop}" class="header-main">
   <div class="overlay" (click)="hideMenus()"></div>
   <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()"></a>
   <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/']" />
-  
+
   <div class="container-fluid header-container">
 
     <img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />

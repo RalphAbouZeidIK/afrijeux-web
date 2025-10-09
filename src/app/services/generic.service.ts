@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,24 @@ export class GenericService {
     const currentUrl: any = window.location.href;
     return currentUrl.includes('Machine') || (!navigator.onLine)
   }
+
+  /**
+   * login status subscriber
+   */
+  private isDesktop$ = new Subject();
+
+  getIsDesktopView() {
+    return window.innerWidth > 1200;
+  }
+
+  getIsDesktopViewListener() {
+    return this.isDesktop$;
+  }
+
+  setIsDesktopView(value: boolean) {
+    this.isDesktop$.next(value);
+  }
+
 
   /**
    * Get url's first path

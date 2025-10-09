@@ -21,8 +21,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   routeSub!: Subscription;
 
-  isMobile = window.innerWidth < 1200
-
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
   filtersSubscription: Subscription
@@ -37,26 +35,35 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   CategoryId: any = null
 
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
+
+  isDesktopSubscription: Subscription
+
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private gamesSrv: GamesService,
     private gnrcSrv: GenericService,
   ) {
+
     this.route.params.subscribe(params => {
       //console.log(params); // Log route params to check if they are correctly captured
     });
 
-    this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
 
-      if (this.isMobile) {
+    this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
+      if (!this.isDesktop) {
         this.getMatches(data)
       }
     })
   }
 
   ngOnInit(): void {
-    if (!this.isMobile) {
+    if (this.isDesktop) {
       this.routeSub = this.route.params.subscribe(params => {
         this.SportId = params['sportId']; // Update matchId when params change
         this.TournamentId = params['tournamentId']; // Update matchId when params change
@@ -88,14 +95,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async getMatchOutcome(event: any) {
     //console.log(event)
-    let firstPath = (this.isMobile) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
+    let firstPath = (!this.isDesktop) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
     this.router.navigate([`${firstPath}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])
   }
 
   ngOnDestroy(): void {
-    // Don't forget to unsubscribe to avoid memory leaks
-    if (this.routeSub) {
-      this.routeSub.unsubscribe();
-    }
+    this.isDesktopSubscription.unsubscribe;
+    this.filtersSubscription.unsubscribe;
+    this.routeSub.unsubscribe();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -9,7 +9,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
   styleUrls: ['./match-list.component.scss'],
   standalone: false
 })
-export class MatchListComponent implements OnChanges {
+export class MatchListComponent implements OnChanges, OnDestroy {
   @Output() matchForOutcome = new EventEmitter<any>();
 
   @Input() matchesList: any = []
@@ -21,7 +21,7 @@ export class MatchListComponent implements OnChanges {
     private storageSrv: LocalStorageService,
     private cartSrv: CartService) {
 
-    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
+    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data: any) => {
 
       // Create a map for matches by MatchId for fast lookup
       const matchMap = new Map(this.matchesList.map((match: any) => [match.MatchId, match]));
@@ -70,6 +70,11 @@ export class MatchListComponent implements OnChanges {
       });
     }
 
+  }
+
+
+  ngOnDestroy(): void {
+    this.cartSubscription.unsubscribe;
   }
 
 }

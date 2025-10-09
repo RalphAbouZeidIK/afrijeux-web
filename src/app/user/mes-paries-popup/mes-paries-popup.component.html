@@ -1,4 +1,4 @@
-<div class="form-holder" (window:resize)="onResize($event)" [ngClass]="{'full-page': isFullPage}">
+<div class="form-holder" [ngClass]="{'full-page': isFullPage}">
     <div class="form-bg">
         <h2>{{ 'user.myBets.title' | translate }}</h2>
         <a class="close-icon" (click)="hidePopup()">
@@ -18,7 +18,8 @@
                 </li>
             </ul>
             <span class="right-text">
-                <span class="text">{{ 'user.myBets.filterBy' | translate }}</span>30 {{ 'user.myBets.lastDays' | translate }}
+                <span class="text">{{ 'user.myBets.filterBy' | translate }}</span>30 {{ 'user.myBets.lastDays' |
+                translate }}
             </span>
         </div>
 

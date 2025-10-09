@@ -22,7 +22,9 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   @Input() isLoggedIn: any = false
 
-  isDesktop = true
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
+
+  isDesktopSubscription: Subscription
 
   mobileMenuHidden = false
 
@@ -54,6 +56,11 @@ export class HeaderComponent implements OnInit, OnChanges {
     private translate: TranslateService,
     private menuSvc: MenuService
   ) {
+
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
+
     this.balanceSubsription = this.usrSrv.getUserBalance().subscribe((data) => {
       //console.log(data)
       this.userBalance = data
@@ -69,9 +76,7 @@ export class HeaderComponent implements OnInit, OnChanges {
       });
 
     this.getMenu()
-    if (window.innerWidth < 767) {
-      this.isDesktop = false
-    }
+
     if (await this.usrSrv.isUserLoggedIn()) {
       this.getUserBalance()
     }
@@ -135,17 +140,6 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.showMesParis = false
   }
 
-
-  onResize(event: any) {
-    if (event.target.innerWidth < 767) {
-      this.isDesktop = false
-    }
-    else {
-      this.isDesktop = true
-    }
-    //console.log(this.isDesktop)
-  }
-
   mobileToggleClick = () => {
     document.querySelector('.header-main')?.classList.toggle("active-mobile-menu");
     document.querySelector('.dropdown-header')?.classList.remove("active");
@@ -189,6 +183,8 @@ export class HeaderComponent implements OnInit, OnChanges {
   ngOnDestroy() {
     // Cleanup subscription to avoid memory leaks
     this.langChangeSub?.unsubscribe();
+    this.gnrcSrv.getIsDesktopViewListener().unsubscribe()
+    this.usrSrv.getUserBalance().unsubscribe()
   }
 
 

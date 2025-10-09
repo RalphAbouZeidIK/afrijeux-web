@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -18,7 +18,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./cart.component.scss'],
   standalone: false
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
 
   @Input() listOfBets: any = []
 
@@ -31,8 +31,6 @@ export class CartComponent implements OnInit {
   totalBets: any
 
   totalOdds: any
-
-  isDesktop = true
 
   bonus: any = 0
 
@@ -48,7 +46,7 @@ export class CartComponent implements OnInit {
   /**
    * Flag to check if user is logged in
    */
-  isLoggedIn = false
+  isLoggedIn: any = false
 
   showOnClickMobile = false
 
@@ -70,6 +68,10 @@ export class CartComponent implements OnInit {
 
   betItem: any
 
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
+
+  isDesktopSubscription: Subscription
+
   constructor(
     private cartSrv: CartService,
     private storageSrv: LocalStorageService,
@@ -80,6 +82,9 @@ export class CartComponent implements OnInit {
     private loaderService: LoaderService
   ) {
 
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
 
     this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
       this.cartInitialize(data)
@@ -95,9 +100,6 @@ export class CartComponent implements OnInit {
   async ngOnInit() {
 
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
-    if (window.innerWidth < 1200) {
-      this.isDesktop = false
-    }
 
     this.cartInitialize(this.storageSrv.getItem('sbCartData'))
 
@@ -170,16 +172,6 @@ export class CartComponent implements OnInit {
     if (!this.isDesktop) {
       this.showOnClickMobile = !this.showOnClickMobile
     }
-
-  }
-
-  onResize(event: any) {
-    if (event.target.innerWidth < 1200) {
-      this.isDesktop = false
-    }
-    else {
-      this.isDesktop = true
-    }
   }
 
   hideMenus() {
@@ -221,5 +213,11 @@ export class CartComponent implements OnInit {
     }
 
 
+  }
+
+  ngOnDestroy(): void {
+    this.isDesktopSubscription.unsubscribe;
+    this.cartSubscription.unsubscribe;
+    this.loginStatusSubscription.unsubscribe;
   }
 }

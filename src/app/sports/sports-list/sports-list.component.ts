@@ -1,7 +1,6 @@
-import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, NavigationError, NavigationStart, Router, Event, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ApiService } from 'src/app/services/api.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 
@@ -11,7 +10,7 @@ import { GenericService } from 'src/app/services/generic.service';
   styleUrls: ['./sports-list.component.scss'],
   standalone: false
 })
-export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
+export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   filtersList: any = []
 
@@ -27,11 +26,10 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   dropddownTournaments: any = []
 
-  isDesktop = true
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
 
-  // filtersSubscription: Subscription
+  isDesktopSubscription: Subscription
 
-  // filterObject: any = {}
 
   showFilters = true
 
@@ -46,10 +44,9 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
       //console.log(params); // Log route params to check if they are correctly captured
     });
 
-
-    // this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
-    //   this.filterObject = data
-    // })
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
   }
 
   ngOnInit(): void {
@@ -62,19 +59,8 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
     });
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
-    if (window.innerWidth < 1200) {
-      this.isDesktop = false
-    }
-    this.getData()
-  }
 
-  onResize(event: any) {
-    if (event.target.innerWidth < 1200) {
-      this.isDesktop = false
-    }
-    else {
-      this.isDesktop = true
-    }
+    this.getData()
   }
 
   checkIfOutcomesPage() {
@@ -205,5 +191,8 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit {
       }
     });
   }
-
+  
+  ngOnDestroy(): void {
+    this.isDesktopSubscription.unsubscribe;
+  }
 }
