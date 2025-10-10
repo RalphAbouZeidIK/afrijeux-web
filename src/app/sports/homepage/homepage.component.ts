@@ -94,18 +94,17 @@ export class HomepageComponent implements OnInit, OnDestroy {
     };
     //console.log(params)
     this.matchesList = await this.gamesSrv.getMatches(params)
-    // if (this.matchesList.length == 0 && apiParams.MatchName != null) {
-    //   let message = ''
-    //   this.translate.get('machine.errorMessages.noMatchesAvailable').subscribe((msg: string) => {
-    //     message = msg
-    //   });
-    //   this.machineSrv.setModalData(true, false, message)
-    //   setTimeout(async () => {
-    //     params.MatchName = null
-    //     console.log('refreshing page')
-    //     this.matchesList = await this.gamesSrv.getMatches(params)
-    //   }, 4000);
-    // }
+    if (this.matchesList.length == 0 && apiParams.MatchName != null) {
+      let message = ''
+      this.translate.get('machine.errorMessages.noMatchesAvailable').subscribe((msg: string) => {
+        message = msg
+      });
+      this.machineSrv.setModalData(true, false, message)
+      setTimeout(async () => {
+        params.MatchName = null
+        this.matchesList = await this.gamesSrv.getMatches(params)
+      }, 4000);
+    }
     console.log(this.matchesList)
   }
 
