@@ -229,9 +229,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.usrSrv.getLoginStatus().unsubscribe;
-    this.usrSrv.$notifyUsers().unsubscribe;
-    this.gnrcSrv.getIsDesktopViewListener().unsubscribe;
+    this.loginStatusSubscription.unsubscribe();
+    this.usrSrv.$notifyUsers().unsubscribe();
   }
 
 }

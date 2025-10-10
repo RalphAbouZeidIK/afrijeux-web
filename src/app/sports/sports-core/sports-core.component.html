@@ -1,6 +1,6 @@
 <div class="body-holder sports-betting">
     <div class="container-fluid page-holder">
-        <aside>
+        <aside *ngIf="isDesktop">
             <app-sports-list [selectedFilters]="selectedFilters"></app-sports-list>
         </aside>
         <main>
@@ -9,6 +9,6 @@
         <aside class="cart">
             <app-sbcart></app-sbcart>
         </aside>
-    
+
     </div>
 </div>

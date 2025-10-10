@@ -74,7 +74,7 @@ export class MatchListComponent implements OnChanges, OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.cartSubscription.unsubscribe;
+    this.cartSubscription.unsubscribe();
   }
 
 }

@@ -73,20 +73,27 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
     if (this.showFilters) {
       const apiResponse = await this.gamesSrv.getFiltersLists()
       this.filtersList = apiResponse
-      this.setSelectedToFalse()
-      this.resetSelected()
+      console.log(this.filtersList)
+      if (this.isDesktop) {
+        this.setSelectedToFalse()
+        this.resetSelected()
+      }
+      else {
+        this.selectedSport = this.filtersList.Sports[0]
+        this.selectedSportChange(this.selectedSport, 'sport')
+      }
+
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['selectedFilters'].firstChange) {
 
-      this.getData()
+      //this.getData()
     }
   }
 
   resetSelected() {
-    console.log(this.selectedFilters)
     let selectedFilters = this.filtersList.Sports.find((item: any) => item.SportId == this.selectedFilters.SportId)
     if (selectedFilters) {
       selectedFilters.isSelected = true
@@ -107,7 +114,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
     //console.log(this.selectedFilters)
     this.selectedSport = this.filtersList.Sports[0]
     //console.log(this.selectedSport)
-    this.selectedSportChange(this.selectedSport, 'sport')
+
   }
 
   setSelectedToFalse() {
@@ -194,6 +201,6 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
   }
 
   ngOnDestroy(): void {
-    this.isDesktopSubscription.unsubscribe;
+    this.isDesktopSubscription.unsubscribe();
   }
 }

@@ -104,7 +104,7 @@ export class MesPariesPopupComponent implements OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.isDesktopSubscription.unsubscribe;
+    this.isDesktopSubscription.unsubscribe();
   }
 
 }

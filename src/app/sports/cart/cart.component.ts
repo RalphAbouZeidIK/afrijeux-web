@@ -213,8 +213,8 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.isDesktopSubscription.unsubscribe;
-    this.cartSubscription.unsubscribe;
-    this.loginStatusSubscription.unsubscribe;
+    this.isDesktopSubscription.unsubscribe();
+    this.cartSubscription.unsubscribe();
+    this.loginStatusSubscription.unsubscribe();
   }
 }

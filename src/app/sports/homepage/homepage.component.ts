@@ -60,7 +60,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
       if (!this.isDesktop) {
-        console.log('getting data')
         this.getMatches(data)
       }
     })
@@ -117,7 +116,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.isDesktopSubscription.unsubscribe;
-    this.filtersSubscription.unsubscribe;
+    this.isDesktopSubscription.unsubscribe();
+    this.filtersSubscription.unsubscribe();
   }
 }

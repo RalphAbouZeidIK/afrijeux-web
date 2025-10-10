@@ -92,7 +92,7 @@ export class SearchComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.filtersSubscription.unsubscribe;
+    this.filtersSubscription.unsubscribe();
   }
 
 }

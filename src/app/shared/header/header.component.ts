@@ -183,8 +183,8 @@ export class HeaderComponent implements OnInit, OnChanges {
   ngOnDestroy() {
     // Cleanup subscription to avoid memory leaks
     this.langChangeSub?.unsubscribe();
-    this.gnrcSrv.getIsDesktopViewListener().unsubscribe()
-    this.usrSrv.getUserBalance().unsubscribe()
+    this.isDesktopSubscription.unsubscribe()
+    this.balanceSubsription.unsubscribe()
   }
 
 

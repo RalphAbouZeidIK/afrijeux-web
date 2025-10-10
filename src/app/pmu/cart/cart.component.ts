@@ -490,9 +490,9 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.usrSrv.getLoginStatus().unsubscribe;
-    this.cartSrv.getCartData().unsubscribe;
-    this.gnrcSrv.getIsDesktopViewListener().unsubscribe;
+    this.loginStatusSubscription.unsubscribe();
+    this.cartSubscription.unsubscribe();
+    this.isDesktopSubscription.unsubscribe();
   }
 
 
