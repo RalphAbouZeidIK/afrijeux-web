@@ -3,8 +3,7 @@
     <app-match-list [matchesList]="matchesList" (matchForOutcome)="getMatchOutcome($event)"></app-match-list>
     <div class="paging-holder">
         <ngb-pagination [collectionSize]="matchesList[0].TotalCount" [(page)]="page" [maxSize]="5" [rotate]="true"
-            [ellipses]="false" (pageChange)="getMatches({SportId,TournamentId,CategoryId})" [boundaryLinks]="false"
-            *ngIf="matchesList?.length > 0" />
+            [ellipses]="false" (pageChange)="getMatches()" [boundaryLinks]="false" *ngIf="matchesList?.length > 0" />
     </div>
 
 </div>

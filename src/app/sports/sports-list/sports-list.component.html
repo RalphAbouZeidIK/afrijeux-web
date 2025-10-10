@@ -46,8 +46,8 @@
     </ul>
 </div>
 
-<app-search *ngIf="isAndroidApp && showFilters"></app-search>
-<div class=" form-content" *ngIf="!isDesktop && showFilters">
+<app-search *ngIf="isAndroidApp"></app-search>
+<div class=" form-content" *ngIf="!isDesktop">
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedSport" (ngModelChange)="selectedSportChange($event,'sport')">
             <option [ngValue]="null" disabled selected> Sports </option>

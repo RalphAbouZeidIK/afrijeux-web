@@ -40,6 +40,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   isDesktopSubscription: Subscription
 
+  getMatchesParams: any
 
   constructor(
     private router: Router,
@@ -60,7 +61,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
       if (!this.isDesktop) {
-        this.getMatches(data)
+        this.getMatchesParams = data
+        this.getMatches()
       }
     })
   }
@@ -77,24 +79,25 @@ export class HomepageComponent implements OnInit, OnDestroy {
           CategoryId: this.CategoryId,
           MatchName: null
         }
-        this.getMatches(apiParams)
+        this.getMatchesParams = apiParams
+        this.getMatches()
       });
     }
 
 
   }
 
-  async getMatches(apiParams: any) {
+  async getMatches() {
     //console.trace()
     let params = {
       Language: 'en',
-      ...apiParams,
+      ...this.getMatchesParams,
       PageSize: this.pageSize,
       PageNumber: this.page,
     };
-    //console.log(params)
+    console.log(params)
     this.matchesList = await this.gamesSrv.getMatches(params)
-    if (this.matchesList.length == 0 && apiParams.MatchName != null) {
+    if (this.matchesList.length == 0 && this.getMatchesParams.MatchName != null) {
       let message = ''
       this.translate.get('machine.errorMessages.noMatchesAvailable').subscribe((msg: string) => {
         message = msg

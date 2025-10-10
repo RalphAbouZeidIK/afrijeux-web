@@ -10,7 +10,7 @@ import { GenericService } from 'src/app/services/generic.service';
   styleUrls: ['./sports-list.component.scss'],
   standalone: false
 })
-export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
 
   filtersList: any = []
 
@@ -30,9 +30,6 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
 
   isDesktopSubscription: Subscription
 
-
-  showFilters = true
-
   @Input() selectedFilters: any
   constructor(
     private router: Router,
@@ -50,39 +47,22 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
   }
 
   ngOnInit(): void {
-    this.checkIfOutcomesPage()
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.checkIfOutcomesPage()
-      }
-    });
-
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
 
     this.getData()
   }
 
-  checkIfOutcomesPage() {
-    let isOutcomesPage = this.router.url.includes('Outcomes') || this.router.url.includes('EventCodeSearch')
-    this.showFilters = !isOutcomesPage
-  }
-
-
   async getData() {
-    if (this.showFilters) {
-      const apiResponse = await this.gamesSrv.getFiltersLists()
-      this.filtersList = apiResponse
-      console.log(this.filtersList)
-      if (this.isDesktop) {
-        this.setSelectedToFalse()
-        this.resetSelected()
-      }
-      else {
-        this.selectedSport = this.filtersList.Sports[0]
-        this.selectedSportChange(this.selectedSport, 'sport')
-      }
-
+    const apiResponse = await this.gamesSrv.getFiltersLists()
+    this.filtersList = apiResponse
+    console.log(this.filtersList)
+    if (this.isDesktop) {
+      this.setSelectedToFalse()
+      this.resetSelected()
+    }
+    else {
+      this.selectedSport = this.filtersList.Sports[0]
+      this.selectedSportChange(this.selectedSport, 'sport')
     }
   }
 
@@ -183,20 +163,6 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
       CategoryId: (this.selectedCategory) ? this.selectedCategory.CategoryId : null,
       TournamentId: (this.selectedTournament) ? this.selectedTournament?.TournamentId : null,
       MatchName: null
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationStart) {
-        //console.log('Navigation started to:', event.url);
-        this.showFilters = !event.url.includes('Outcomes')
-        //console.log('show filters:', this.showFilters);
-      }
-
-      if (event instanceof NavigationError) {
-        //console.log(event.error);
-      }
     });
   }
 
