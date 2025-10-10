@@ -59,7 +59,7 @@ export class MatchListComponent implements OnChanges, OnDestroy {
   setOddsFromCart(oddsList: any) {
     if (oddsList && oddsList.length > 0) {
       oddsList.forEach((oddItem: any) => {
-        let matchItem = this.matchesList.find((match: any) => match.MatchId == oddItem.MatchId)
+        let matchItem = this.matchesList?.find((match: any) => match.MatchId == oddItem.MatchId)
         if (matchItem) {
           let foundOdd = matchItem.OddsOutcomes.find((odd: any) => odd.OutcomeId == oddItem.OutcomeId)
           if (foundOdd) {

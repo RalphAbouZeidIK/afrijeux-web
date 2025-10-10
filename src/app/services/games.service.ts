@@ -93,7 +93,7 @@ export class GamesService {
    * Function to get the login status subsciber
    * @returns 
    */
-  getSportsFilter() {
+  getSportsFilter(): Observable<any> {
     return this.sportsFilter$;
   }
 

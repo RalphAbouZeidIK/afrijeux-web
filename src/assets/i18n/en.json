@@ -270,6 +270,10 @@
             "searchByEventCode": "Event Code Search",
             "searchByGameName": "Game Name Search",
             "searchByTicket": "Ticket Code Search"
+        },
+        "errorMessages": {
+            "noOutcomesAvailable": "No Outcomes Available",
+            "noMatchesAvailable": "No matches available"
         }
     }
 }

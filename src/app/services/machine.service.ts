@@ -9,6 +9,7 @@ import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
 import { CacheService } from './cache.service';
 import { Location } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var require: any;
 (window as any).Buffer = Buffer;
@@ -28,7 +29,8 @@ export class MachineService {
     private localStorageSrv: LocalStorageService,
     private router: Router,
     private cacheSrv: CacheService,
-    private location: Location
+    private location: Location,
+    private translate: TranslateService
   ) {
     (window as any).handleNativeBack = () => {
       //console.log("🔙 Native back pressed");
@@ -155,7 +157,7 @@ export class MachineService {
       TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       MachineId: machineData.MachineId,
     }
-    console.log(params)
+    //console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
@@ -427,12 +429,34 @@ export class MachineService {
 
   async getOutcomesListByMatchCode(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetOutcomesListByEventCode`, 'POST', apiParams)
-    //console.log(apiResponse)
-    return apiResponse.data
+    if (apiResponse.status == false) {
+      this.setModalData(true, apiResponse.status, apiResponse.message)
+    }
+    else if (apiResponse.data.length == 0) {
+      let message = ''
+      this.translate.get('machine.errorMessages.noOutcomesAvailable').subscribe((msg: string) => {
+        message = msg
+      });
+      this.setModalData(true, false, message)
+    }
+    else {
+      return apiResponse.data
+    }
+
   }
 
   async getBonusRules() {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetBonusRules`, 'POST', {})
+    //console.log(apiResponse)
+    return apiResponse
+  }
+
+  async getTicketByCode(apiParams: any) {
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetTicketByCode`, 'POST', apiParams)
+    if (apiResponse.status == false) {
+      this.setModalData(true, false, apiResponse.message)
+      return null
+    }
     //console.log(apiResponse)
     return apiResponse
   }

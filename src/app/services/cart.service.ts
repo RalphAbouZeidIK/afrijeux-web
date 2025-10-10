@@ -134,8 +134,11 @@ export class CartService {
 
   //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
 
-  setSBBets(betItem: any) {
+  setSBBets(betItem: any, StakeFromSearch: any = 0, clearBets: any = false) {
     //console.log(betItem)
+    if (clearBets) {
+      this.clearBets()
+    }
     let existingMatch = this.listOfBets.find((match: any) => match.MatchId === betItem.MatchId);
 
     if (existingMatch) {
@@ -151,6 +154,7 @@ export class CartService {
         const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
         this.listOfBets.splice(existingMatchIndex, 1)
         //console.log(this.listOfBets)
+        betItem.StakeFromSearch = StakeFromSearch
         this.listOfBets.push(betItem)
       }
 
@@ -162,6 +166,7 @@ export class CartService {
     }
 
     else {
+      betItem.StakeFromSearch = StakeFromSearch
       this.listOfBets.push(betItem)
     }
 

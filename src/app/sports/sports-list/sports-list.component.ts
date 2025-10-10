@@ -80,6 +80,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['selectedFilters'].firstChange) {
+
       this.getData()
     }
   }
@@ -151,7 +152,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
   }
 
   selectedSportChange(event: any, type: any) {
-    //console.log(event)
+    console.log(event)
     switch (type) {
       case 'sport':
         this.selectedCategory = null
@@ -191,7 +192,7 @@ export class SportsListComponent implements OnInit, OnChanges, AfterViewInit, On
       }
     });
   }
-  
+
   ngOnDestroy(): void {
     this.isDesktopSubscription.unsubscribe;
   }

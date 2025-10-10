@@ -270,6 +270,10 @@
             "searchByEventCode": "Recherche par code d'événement",
             "searchByGameName": "Recherche par nom d'événement",
             "searchByTicket": "Recherche par code de billet"
+        },
+        "errorMessages": {
+            "noOutcomesAvailable": "Aucun résultat disponible",
+            "noMatchesAvailable": "Aucun match disponible"
         }
     }
 }

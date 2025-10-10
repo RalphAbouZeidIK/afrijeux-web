@@ -52,12 +52,6 @@ export class CartComponent implements OnInit, OnDestroy {
 
   stake = 0
 
-  gameid = 5
-
-  PersonId = 8746
-
-  MachineId = 2338
-
   bonusRules: any = []
 
   BonusId = 0
@@ -72,14 +66,14 @@ export class CartComponent implements OnInit, OnDestroy {
 
   isDesktopSubscription: Subscription
 
+  //stakeSubscription: Subscription
+
   constructor(
     private cartSrv: CartService,
     private storageSrv: LocalStorageService,
     private usrSrv: UserService,
-    private apiSrv: ApiService,
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService,
-    private loaderService: LoaderService
+    private machineSrv: MachineService
   ) {
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
@@ -90,8 +84,6 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartInitialize(data)
     });
 
-
-
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
@@ -101,17 +93,22 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
 
-    this.cartInitialize(this.storageSrv.getItem('sbCartData'))
+    let sbCartData = this.storageSrv.getItem('sbCartData')
+    if (sbCartData) {
+      this.cartInitialize(sbCartData)
+    }
+
 
 
   }
 
   cartInitialize(cartData: any) {
-    //console.log(cartData)
+    console.log(cartData)
     this.listOfBets = cartData
     this.showCartButtons = this.listOfBets?.length > 0;
     this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
     this.totalOdds = this.storageSrv.getItem('TotaldOdds')
+    this.stake = (cartData.length > 0) ? this.listOfBets[0].StakeFromSearch : 0
     this.calculateBonus()
   }
 

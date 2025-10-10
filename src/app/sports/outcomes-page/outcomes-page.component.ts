@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GamesService } from 'src/app/services/games.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-outcomes-page',
@@ -21,7 +22,8 @@ export class OutcomesPageComponent implements OnInit {
   constructor(
     private gamesSrv: GamesService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
 
   }
@@ -67,15 +69,19 @@ export class OutcomesPageComponent implements OnInit {
     }
     let apiResponse: any = await this.gamesSrv.getOutcomesListByMatchCode(params)
     console.log(apiResponse)
-    if (apiResponse) {
+    if (apiResponse && apiResponse.length > 0) {
       this.MatchId = apiResponse[0].MatchId
       this.MatchDetails = {
         MatchName: apiResponse[0].MatchName,
         EventDate: apiResponse[0].EventDate,
         EventId: this.MatchId
       }
-
       this.OutcomesList = apiResponse
+    }
+    else {
+      setTimeout(() => {
+        this.location.back()
+      }, 4000);
     }
   }
 }

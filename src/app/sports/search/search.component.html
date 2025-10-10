@@ -5,12 +5,11 @@
     <button class="form-control" (click)="showSearchBox('eventCode')">
         {{'machine.searchComponent.searchByEventCode' | translate}}
     </button>
-    <button class="form-control">
-        {{'machine.searchComponent.searchByTicket' | translate}}
+    <button class="form-control" (click)="scanCode()"> {{'machine.searchComponent.searchByTicket' | translate}}
     </button>
 </div>
 
-<div class="form-holder machine-layout" *ngIf="showSearchBoxBool">
+<div class=" form-holder machine-layout" *ngIf="showSearchBoxBool">
     <div class="form-bg">
         <h2>
             <div [ngSwitch]="searchBoxType">
@@ -30,7 +29,8 @@
                     </div>
 
                 </label>
-                <input [type]="(searchBoxType === 'gameName')?'text':'number'" class="form-control" [(ngModel)]="searchValue" />
+                <input [type]="(searchBoxType === 'gameName')?'text':'number'" class="form-control"
+                    [(ngModel)]="searchValue" />
             </div>
 
             <div class="form-btns d-flex">

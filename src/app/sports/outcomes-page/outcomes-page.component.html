@@ -1,4 +1,4 @@
-<div class="outcomes-page">
+<div class="outcomes-page" *ngIf="OutcomesList.length > 0">
     <div class="radio-holder">
         <div class="form-group">
             <input type="checkbox" id="favorites" [value]="isFavorite" [checked]="isFavorite"
