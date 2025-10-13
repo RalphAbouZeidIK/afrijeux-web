@@ -6,6 +6,7 @@ import { LoaderService } from './services/loader-service.service';
 import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PageTitleService } from './services/page-title.service';
+import { CacheService } from './services/cache.service';
 
 @Component({
   selector: 'app-root',
@@ -68,7 +69,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private loaderService: LoaderService,
     private changeDetectorRef: ChangeDetectorRef,
     private gnrcSrv: GenericService,
-    private pageTitleService: PageTitleService
+    private pageTitleService: PageTitleService,
+    private cacheSrv:CacheService
   ) {
 
 
@@ -225,6 +227,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   changeLanguage() {
     this.translate.setDefaultLang('fr');
     this.translate.use('fr');
+  }
+
+  clearFlutterOfflineCache(){
+    this.cacheSrv.clearFlutterOfflineCache()
   }
 
 

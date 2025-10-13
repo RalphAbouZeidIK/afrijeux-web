@@ -24,15 +24,7 @@ export class MachineCoreComponent implements OnInit {
     private bridge: NativeBridgeService,
     private machineSrv: MachineService
   ) { }
-
-
-  showPopup() {
-    this.machineSrv.setModalData(true, false, this.description)
-    // setTimeout(() => {
-    //   this.machineSrv.setModalData(false, false, 'ErrorSuccessMessages.Unothorized')
-    // }, 5000);
-  }
-
+  
   closePopup() {
     this.popup.close();
   }
@@ -52,18 +44,12 @@ export class MachineCoreComponent implements OnInit {
       Machine: await this.bridge.getSerial(),
       VersionCode: '1.0.0'
     }
-    
+
     const apiResponse = await this.machineSrv.registerMachine(params);
 
     //console.log(apiResponse)
-    if (apiResponse.CommunicationKey) {
+    if (apiResponse?.CommunicationKey) {
       this.isAppRegistered = true
-    }
-    else {
-      this.title = 'Error'
-      this.description = 'Machine not registered. Please contact the administrator.'
-      this.showPopup()
-      this.isAppRegistered = false
     }
 
   }
