@@ -177,7 +177,7 @@
         }
 
         .clear-btn {
-            width: 58px;
+            width: 50px;
 
         }
 
@@ -204,7 +204,7 @@
 
     .list-of-bets {
         overflow: auto;
-        max-height: 200px;
+        max-height: 150px;
     }
 
     .cart-container {
@@ -213,7 +213,7 @@
 
         .cart-header {
             cursor: pointer;
-            padding: 15px;
+            padding: 8px 15px;
             border-color: $offWhite;
 
             .rect-bar {
@@ -228,14 +228,14 @@
 
             .yellow-circle {
                 background-color: $yellow;
-                width: 25px;
-                height: 25px;
+                width: 17px;
+                height: 17px;
                 border-radius: 50%;
                 color: $darkBg;
                 text-align: center;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 600;
-                padding-top: 3px;
+                padding-top: 1px;
                 margin-left: auto;
 
                 &.mobileOnly {
@@ -272,11 +272,11 @@
         }
 
         .btn {
-            padding: 15px 20px;
+            padding: 8px 20px;
         }
 
         .clear-btn {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
         }
 
@@ -289,8 +289,9 @@
         }
 
         .close-icon {
-            margin-right: 0;
-            width: 12px;
+            margin-right: 5px;
+            width: 10px;
+            display: flex;
 
             img {
                 width: 100%;
@@ -301,11 +302,34 @@
             padding: 10px 20px 15px;
             color: $darkBg;
         }
+
+        .bet-item {
+            padding: 8px 15px;
+        }
+
+        .title-odd {
+            font-size: 12px;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+
+        .outcomeName {
+            font-size: 12px
+        }
+
+        .info-item {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .ticket-infos {
+            padding: 8px 15px;
+        }
     }
 
     .cart-title {
         color: $darkBg;
-        font-size: 18px;
+        font-size: 14px;
         font-weight: 700;
     }
 

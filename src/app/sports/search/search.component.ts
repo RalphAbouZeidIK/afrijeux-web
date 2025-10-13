@@ -22,6 +22,8 @@ export class SearchComponent implements OnDestroy {
 
   filtersSubscription: Subscription
 
+  scanResultSubscription: Subscription
+
   filterObject: any = {}
 
   fullTicketId: any = null
@@ -37,7 +39,8 @@ export class SearchComponent implements OnDestroy {
       this.filterObject = data
     })
 
-    this.nativeBridge.scanResult$.subscribe(result => {
+    this.scanResultSubscription = this.nativeBridge.getScanResult().subscribe(result => {
+      console.log(result)
       if (result) {
         this.fullTicketId = result;
         this.searchByTicket()
@@ -93,6 +96,7 @@ export class SearchComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.filtersSubscription.unsubscribe();
+    this.scanResultSubscription.unsubscribe();
   }
 
 }

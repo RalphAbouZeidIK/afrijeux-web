@@ -157,7 +157,7 @@ export class MachineService {
       TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       MachineId: machineData.MachineId,
     }
-    //console.log(params)
+    console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
@@ -167,7 +167,12 @@ export class MachineService {
       // Save full API response exactly
       ////console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
-      this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
+      console.log(subRoute)
+      if (subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth') {
+        console.log('saving')
+        this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
+      }
+
     }
 
     else {
@@ -205,11 +210,11 @@ export class MachineService {
 
   async getMachinePermission(permissionName: any, gameId: any = null) {
     let userData = await this.getUserData()
-    // console.log(
-    //   userData.UserSettings.map((usrSet: any) => {
-    //     return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
-    //   })
-    // )
+    console.log(
+      userData.UserSettings.map((usrSet: any) => {
+        return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
+      })
+    )
 
     let hasPermission = userData.UserSettings.find((setting: any) => (setting.Name == permissionName) && (setting.GameId == gameId))?.BitValue
 
@@ -458,6 +463,14 @@ export class MachineService {
       return null
     }
     //console.log(apiResponse)
+    return apiResponse
+  }
+
+  async getSbFixedConfig() {
+    let params = {
+      FixedConfigurationId: '1'
+    }
+    let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetFixedConfiguration`, 'POST', params)
     return apiResponse
   }
 

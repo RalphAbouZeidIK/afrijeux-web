@@ -84,7 +84,15 @@ export class HomepageComponent implements OnInit, OnDestroy {
       });
     }
 
+    else {
+      //this.getFixedConfig()
+    }
 
+  }
+
+  async getFixedConfig() {
+    const apiResponse = await this.machineSrv.getSbFixedConfig()
+    console.log(apiResponse)
   }
 
   async getMatches() {

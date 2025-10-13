@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 declare global {
   interface Window {
@@ -28,7 +28,7 @@ declare global {
   providedIn: 'root'
 })
 export class NativeBridgeService {
-  private scanResultSource = new BehaviorSubject<string | null>(null);
+  private scanResultSource = new Subject<string>();
   scanResult$ = this.scanResultSource.asObservable();
 
   private getSerialSource = new BehaviorSubject<string | null>(null);
