@@ -5,7 +5,8 @@
     <button class="form-control" (click)="showSearchBox('eventCode')">
         {{'machine.searchComponent.searchByEventCode' | translate}}
     </button>
-    <button class="form-control" (click)="scanCode()"> {{'machine.searchComponent.searchByTicket' | translate}}
+    <button class="form-control" (click)="scanCode()" *ngIf="canSearchByTicketId">
+        {{'machine.searchComponent.searchByTicket' | translate}}
     </button>
 </div>
 

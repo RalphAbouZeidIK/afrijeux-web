@@ -66,6 +66,9 @@ export class CartComponent implements OnInit, OnDestroy {
 
   isDesktopSubscription: Subscription
 
+
+  canIssueTicket = false
+
   //stakeSubscription: Subscription
 
   constructor(
@@ -93,17 +96,16 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
 
+    this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
+    console.log(this.canIssueTicket)
+
     let sbCartData = this.storageSrv.getItem('sbCartData')
     if (sbCartData) {
       this.cartInitialize(sbCartData)
     }
-
-
-
   }
 
   cartInitialize(cartData: any) {
-    console.log(cartData)
     this.listOfBets = cartData
     this.showCartButtons = this.listOfBets?.length > 0;
     this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))

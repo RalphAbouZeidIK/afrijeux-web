@@ -59,5 +59,9 @@
 }
 
 .form-group {
-    flex: 0 0 32%
+    flex: 1;
+
+    &:not(:last-of-type) {
+        margin-right: 7px
+    }
 }

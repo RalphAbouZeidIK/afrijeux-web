@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
@@ -12,7 +12,7 @@ import { NativeBridgeService } from 'src/app/services/native-bridge.service';
   styleUrl: './search.component.scss',
   standalone: false
 })
-export class SearchComponent implements OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy {
 
   showSearchBoxBool = false
 
@@ -27,6 +27,8 @@ export class SearchComponent implements OnDestroy {
   filterObject: any = {}
 
   fullTicketId: any = null
+
+  canSearchByTicketId = false
 
   constructor(
     private gamesSrv: GamesService,
@@ -47,6 +49,11 @@ export class SearchComponent implements OnDestroy {
       }
 
     });
+  }
+
+  async ngOnInit() {
+    this.canSearchByTicketId = await this.machineSrv.getMachinePermission('TerminalGetTicketByCode', await this.machineSrv.getGameId())
+    console.log(this.canSearchByTicketId)
   }
 
   showSearchBox(searchBoxType: string) {

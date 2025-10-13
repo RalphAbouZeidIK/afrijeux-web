@@ -19,6 +19,8 @@ export class ReportsComponent implements OnInit {
   EventId: any
   genericDate: any
 
+  canPrintReport = false
+
   constructor(
     private machineSrv: MachineService,
     public datepipe: DatePipe
@@ -26,7 +28,8 @@ export class ReportsComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', await this.machineSrv.getGameId())
     this.getGames()
     this.genericDate = this.datepipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS');
   }

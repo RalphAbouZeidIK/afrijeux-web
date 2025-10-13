@@ -42,7 +42,8 @@
                 <button class="btn btn-primary" (click)="getReports()" [disabled]="isCheckResults && !EventId">
                     {{'machine.generic.submit' | translate}}
                 </button>
-                <button class="btn btn-primary" (click)="getReports(true)" [disabled]="isCheckResults && !EventId">
+                <button class="btn btn-primary" (click)="getReports(true)" [disabled]="isCheckResults && !EventId"
+                    *ngIf="canPrintReport">
                     {{'machine.generic.print' | translate}}
                 </button>
                 <button class="btn btn-primary" routerLink="/Machine/Home">

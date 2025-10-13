@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
 import { LocalStorageService } from './local-storage.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GenericService } from './generic.service';
-import { ApiService } from './api.service';
 import { GamesService } from './games.service';
 
 @Injectable({
@@ -12,19 +9,12 @@ import { GamesService } from './games.service';
 })
 export class CartService {
 
-
-
   constructor(
     private storageSrv: LocalStorageService,
     private translate: TranslateService,
-    private gamesSrv: GamesService,
-    private apiSrv: ApiService
+    private gamesSrv: GamesService
   ) { }
   listOfBets: any = this.storageSrv.getItem('sbCartData') || []
-
-  gameid = 5
-
-  PersonId = 8746
 
   bonusRules: any = []
 

@@ -168,7 +168,7 @@
         <div class="total-holder" *ngIf="showCartButtons">
             {{'hpb.cart.ticketPrice' | translate}}: <span>{{(listOfBets.TicketPrice) | number}} KL </span>
         </div>
-        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons"
+        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket"
             (click)="issueTicket()">{{'hpb.cart.placeBet' | translate}}</button>
     </div>
 </div>
