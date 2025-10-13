@@ -167,9 +167,8 @@ export class MachineService {
       // Save full API response exactly
       ////console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
-      console.log(subRoute)
       if (subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth') {
-        console.log('saving')
+        console.log('saving', apiRoute)
         this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
       }
 
@@ -177,6 +176,7 @@ export class MachineService {
 
     else {
       console.warn('⚡ Offline mode: loading from Flutter cache');
+      console.log(apiRoute)
       apiResponse = await this.cacheSrv.getFromFlutterOfflineCache(cacheKey);
     }
 

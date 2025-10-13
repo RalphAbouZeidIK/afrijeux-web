@@ -42,15 +42,18 @@ export class HomeComponent implements OnInit {
   async getMenu() {
     //console.log(machineMenuRoutes)
     machineMenuRoutes.forEach(async (routeItem: any) => {
-      if (routeItem.data.PermissionName) {
-        if (await this.machineSrv.getMachinePermission(routeItem.data.PermissionName) && routeItem.data.showLink) {
-          //console.log(routeItem)
+      if ((this.isOnline) || (!this.isOnline && routeItem.AllowHybrid)) {
+        if (routeItem.data.PermissionName) {
+          if (await this.machineSrv.getMachinePermission(routeItem.data.PermissionName) && routeItem.data.showLink) {
+            //console.log(routeItem)
+            this.machineMenu.push(routeItem)
+          }
+        }
+        else if (routeItem.data.showLink) {
           this.machineMenu.push(routeItem)
         }
       }
-      else if (routeItem.data.showLink) {
-        this.machineMenu.push(routeItem)
-      }
+
     })
     //console.log(this.machineMenu)
   }

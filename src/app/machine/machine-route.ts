@@ -27,7 +27,8 @@ export const machineMenuRoutes: Route[] = [
         data: {
             showLink: true,
             title: 'machine.routerLinks.validateTicketTitle',
-            PermissionName: 'TerminalCanValidateTicket'
+            PermissionName: 'TerminalCanValidateTicket',
+            AllowHybrid: false
         },
         canActivate: [SharedGuard]
     },
@@ -37,7 +38,8 @@ export const machineMenuRoutes: Route[] = [
         data: {
             showLink: true,
             title: 'machine.routerLinks.reports',
-            PermissionName: 'TerminalCanViewReport'
+            PermissionName: 'TerminalCanViewReport',
+            AllowHybrid: false
         },
         canActivate: [SharedGuard]
     },
@@ -47,7 +49,8 @@ export const machineMenuRoutes: Route[] = [
         data: {
             showLink: true,
             title: 'machine.routerLinks.checkResults',
-            PermissionName: 'TerminalCanViewResult'
+            PermissionName: 'TerminalCanViewResult',
+            AllowHybrid: false
         },
         canActivate: [SharedGuard]
     }

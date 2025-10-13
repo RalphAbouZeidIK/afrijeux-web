@@ -40,7 +40,7 @@ export class LoginComponent implements OnChanges, OnInit {
     private gnrcSrv: GenericService,
     private fb: FormBuilder,
     private machineSrv: MachineService,
-    private cacheSrv:CacheService
+    private cacheSrv: CacheService
   ) {
 
   }
@@ -113,13 +113,14 @@ export class LoginComponent implements OnChanges, OnInit {
 
   async autoLogin() {
     let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
-    //console.log(userData)
+    console.log(userData)
     if (userData?.status == false || !userData) {
       this.showLoginPage = true
       return
     }
     this.loginForm.controls['UserName'].setValue(userData?.UserName)
     this.loginForm.controls['Password'].setValue(userData?.UserPassword)
+    console.log(this.loginForm.value)
     this.submitLogin()
   }
 
