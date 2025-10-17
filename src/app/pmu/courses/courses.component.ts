@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { race, Subscription } from 'rxjs';
@@ -61,12 +62,15 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   isAndroidApp = false
 
+  timeStamp = this.datePipe.transform(new Date(), 'HH:mm')
+
   constructor(
     private router: Router,
     private gamesSrv: GamesService,
     private cartSrv: CartService,
     private gnrcSrv: GenericService,
     private machineSrv: MachineService,
+    public datePipe: DatePipe
   ) {
     this.cartSubscription = this.cartSrv.getEventFromCart().subscribe((data) => {
       this.getGameEvents()
@@ -110,7 +114,15 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGameEvents()
-      const groupedRaces = this.groupByCategory(gameEventsResponse.GameConfiguration.EventConfiguration);
+
+      const now = new Date();
+      const upcoming = gameEventsResponse.GameConfiguration.EventConfiguration.filter((event: any) => {
+        return new Date(event.CloseSales) > now;
+      });
+
+      console.log(upcoming)
+
+      const groupedRaces = this.groupByCategory(upcoming);
       this.dataArray = Object.values(groupedRaces)
 
       if (this.dataArray) {
@@ -121,6 +133,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
         });
 
       }
+      console.log(this.dataArray)
     }
 
     else {

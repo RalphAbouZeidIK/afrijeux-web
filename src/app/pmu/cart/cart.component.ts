@@ -260,6 +260,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
   addBetToTicket(betItem: any) {
+    console.log(betItem)
     let AssociatedHorses = ''
     let BaseHorses = ''
 
@@ -304,9 +305,9 @@ export class CartComponent implements OnInit, OnDestroy {
             TicketTypeId: betItem[0].SelectedFixedConfig.TicketTypeId,
             FormuleId: (this.IsAllOrder) ? 2 : 1,
             PickDetails: this.pickDetailsArray,
-            TicketPrice: betItem[0].price,
-            Stake: betItem[0].price,
-            id: Date.now()
+            TicketPrice: betItem[0].Price,
+            Stake: betItem[0].Price,
+            id: Date.now(),
           }
 
           this.composePickObject(PickObject, betItem)
@@ -429,29 +430,29 @@ export class CartComponent implements OnInit, OnDestroy {
         TicketTypeId: betItem[0].SelectedFixedConfig.TicketTypeId,
         FormuleId: (this.IsAllOrder) ? 2 : 1,
         PickDetails: this.pickDetailsArray,
-        TicketPrice: betItem[0].price * this.combinations,
-        Stake: betItem[0].price * this.combinations,
+        TicketPrice: betItem[0].Price * this.combinations,
+        Stake: betItem[0].Price * this.combinations,
         id: Date.now()
       }
 
       this.composePickObject(PickObject, betItem)
     }
-    if (this.isPMUHybrid) {
-      this.issueTicket()
-    }
+    // if (this.isPMUHybrid) {
+    //   this.issueTicket()
+    // }
 
   }
 
   composePickDetails(event: any) {
-    //console.log(event)
+    console.log(event)
     let PickDetails = {
       AssociatedHorses: event.AssociatedHorses,
       BaseHorses: event.BaseHorses,
       BaseHorsesDisplay: event.BaseHorsesDisplay,
       FormuleId: (this.IsAllOrder) ? 2 : 1,
-      gameEventId: event.GameEventId,
-      name: event.name,
-      SinglePrice: event.price,
+      GameEventId: event.GameEventId,
+      Name: event.EventName,
+      SinglePrice: event.Price,
       BetType: event.SelectedFixedConfig.details,
       FormuleType: event.FormuleType,
       showAssociatedHorses: event.ShowAssociatedHorses || false
@@ -461,7 +462,8 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   composePickObject(pickObject: any, betItem: any) {
-    //console.log(pickObject)
+    console.log(pickObject)
+    pickObject.GameEventId = pickObject.PickDetails[0].GameEventId
     this.listOfBets.TicketPrice = 0
     this.listOfBets.push(pickObject)
     this.calculateTicketPrice()
@@ -484,7 +486,6 @@ export class CartComponent implements OnInit, OnDestroy {
       })
       return
     }
-
     const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
     //console.log(apiResponse)
     if (apiResponse?.DataToPrint) {

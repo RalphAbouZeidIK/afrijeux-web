@@ -186,12 +186,12 @@ export class CartComponent implements OnInit, OnDestroy {
       return
     }
 
-    let date = new Date()
     this.listOfPicks = []
     this.listOfBets.forEach((betItem: any) => {
       this.listOfPicks.push({
         Outcome: betItem,
-        Stake: this.stake / this.totalBets
+        Stake: this.stake / this.totalBets,
+        GameEventId: betItem.MatchId
       })
     });
 

@@ -34,6 +34,10 @@ export class NativeBridgeService {
   private getSerialSource = new BehaviorSubject<string | null>(null);
   getSerialSource$ = this.getSerialSource.asObservable();
 
+  // ✅ NEW printer error observable
+  private printerErrorSource = new BehaviorSubject<string | null>(null);
+  printerError$ = this.printerErrorSource.asObservable();
+
   constructor(private ngZone: NgZone) {
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
@@ -55,6 +59,13 @@ export class NativeBridgeService {
     (window as any).handleGetSerialResult = (result: string) => {
       this.ngZone.run(() => {
         this.getSerialSource.next(result);
+      });
+    };
+
+    (window as any).handlePrinterError = (error: string) => {
+      this.ngZone.run(() => {
+        console.error('🔥 Printer Error from Flutter:', error);
+        this.printerErrorSource.next(error);
       });
     };
   }

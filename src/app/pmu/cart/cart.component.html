@@ -93,13 +93,13 @@
                 <div class="type-list type-multi">
                     <span class="type">{{'hpb.cart.singlePrice' | translate}}</span>
                     <span class="choose-quantity">
-                        <input type="number" [(ngModel)]="betItem[0].price" (ngModelChange)="onPriceChange($event)">
+                        <input type="number" [(ngModel)]="betItem[0].Price" (ngModelChange)="onPriceChange($event)">
                     </span>
                 </div>
                 <div class="type-list type-multi">
                     <span class="type">{{'hpb.cart.pickPrice' | translate}}</span>
                     <span class="choose-quantity">
-                        <input type="number" disabled [value]="betItem[0].price * combinations">
+                        <input type="number" disabled [value]="betItem[0].Price * combinations">
                     </span>
                 </div>
             </div>
@@ -156,7 +156,7 @@
 
                 <div class="type-list price-holder">
                     <span class="type">
-                        {{'hpb.cart.price' | translate}}
+                        {{'hpb.cart.Price' | translate}}
                     </span>
                     <span class="list-of-horses">
                         {{betItem.TicketPrice}} KL

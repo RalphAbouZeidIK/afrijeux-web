@@ -93,7 +93,7 @@ export class MachineService {
     const body: any = {
       machine: (isRegisterMachineApi) ? registerMachineId : machineData.MachineId.toString(),  //("3359")
       timeStamp: timeStamp,
-      encryptedRequestDTO: base64String,
+      EncryptedRequestDTO: base64String,
       geolocation: {
         latitude: "0",
         longitude: "0",
@@ -157,7 +157,8 @@ export class MachineService {
       TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
       MachineId: (machineData) ? machineData.MachineId : null
     }
-    console.log(params)
+    let paramsBeforeEncryption = params
+    //console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false);
 
@@ -168,7 +169,6 @@ export class MachineService {
       ////console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       if (subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth') {
-        console.log('saving', apiRoute)
         this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
       }
 
@@ -180,8 +180,14 @@ export class MachineService {
       apiResponse = await this.cacheSrv.getFromFlutterOfflineCache(cacheKey);
     }
 
+
+
     if (apiResponse?.encryptedResponse) {
       let decryptedResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
+      if (apiRoute.includes('IssueTicket')) {
+        console.log(apiResponse)
+        this.cacheSrv.saveTicketToDb(decryptedResponse, params.body, paramsBeforeEncryption);
+      }
       //console.log(decryptedResponse)
       if (Array.isArray(decryptedResponse)) {
         return {
@@ -210,11 +216,11 @@ export class MachineService {
 
   async getMachinePermission(permissionName: any, gameId: any = null) {
     let userData = await this.getUserData()
-    console.log(
-      userData.UserSettings.map((usrSet: any) => {
-        return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
-      })
-    )
+    // console.log(
+    //   userData.UserSettings.map((usrSet: any) => {
+    //     return { Name: usrSet.Name, SettingId: usrSet.SettingId, GameId: usrSet.GameId, ...usrSet }
+    //   })
+    // )
 
     let hasPermission = userData.UserSettings.find((setting: any) => (setting.Name == permissionName) && (setting.GameId == gameId))?.BitValue
 

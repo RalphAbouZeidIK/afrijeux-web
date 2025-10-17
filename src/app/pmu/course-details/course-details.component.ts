@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Host, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -219,8 +220,8 @@ export class CourseDetailsComponent implements OnInit {
 
   setPmuBets(IsTypeChange: boolean) {
 
-    if (!this.courseDetails.price || IsTypeChange) {
-      this.courseDetails.price = this.courseDetails.SelectedFixedConfig?.SinglePrice
+    if (!this.courseDetails.Price || IsTypeChange) {
+      this.courseDetails.Price = this.courseDetails.SelectedFixedConfig?.SinglePrice
     }
     if ((this.courseDetails.BaseHorses.find((horse: any) => horse.IsSelected == true) == undefined) || (this.courseDetails.FixedConfigs.find((item: any) => item.IsSelected == true) == undefined)) {
       this.courseDetails.ShowRace = false
