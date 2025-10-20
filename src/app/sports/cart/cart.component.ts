@@ -50,7 +50,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   showOnClickMobile = false
 
-  stake = 0
+  stake = 200
 
   bonusRules: any = []
 
@@ -93,7 +93,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
+    console.log(this.stake)
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
 
     this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
@@ -110,7 +110,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.showCartButtons = this.listOfBets?.length > 0;
     this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
     this.totalOdds = this.storageSrv.getItem('TotaldOdds')
-    this.stake = (cartData.length > 0) ? this.listOfBets[0].StakeFromSearch : 0
+    this.stake = (cartData.length > 0) ? this.listOfBets[0].StakeFromSearch : 200
     this.calculateBonus()
   }
 

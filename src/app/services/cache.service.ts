@@ -38,7 +38,7 @@ export class CacheService {
           value: JSON.stringify(data) // send raw API response as JSON string
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        ////console.log(`💾 Saved to OfflineCache with key: ${key}`);
+        console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
         console.warn('⚠️ OfflineCache channel not found');
       }
@@ -59,8 +59,12 @@ export class CacheService {
     }
     setTimeout(() => {
       let isPrintedFlag = 1;
+      let isOfflineFlag = 1
       if (this.printerError) {
         isPrintedFlag = 0; // failed printing
+      }
+      if (navigator.onLine) {
+        isOfflineFlag = 0
       }
       console.log(isPrintedFlag)
       try {
@@ -71,10 +75,10 @@ export class CacheService {
             EncryptedRequest: params.EncryptedRequestDTO,
             Amount: params.amount,
             GameId: paramsBeforeEncryption.GameId,
-            IsOffline: 0,
+            IsOffline: isOfflineFlag,
             IssueDate: paramsBeforeEncryption.TimeStamp, // send raw API response as JSON string
             IsPrinted: isPrintedFlag,
-            IsCorrupted: 0,
+            IsCorrupted: !isPrintedFlag,
             PersonId: paramsBeforeEncryption.PersonId,
             GameEventId: paramsBeforeEncryption.Ticket.GamePick[0].GameEventId,
             GameEventIds: paramsBeforeEncryption.Ticket.GamePick.map((pickItem: any) => pickItem.GameEventId).join(","),

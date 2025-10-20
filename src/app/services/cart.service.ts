@@ -124,7 +124,7 @@ export class CartService {
 
   //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
 
-  setSBBets(betItem: any, StakeFromSearch: any = 0, clearBets: any = false) {
+  setSBBets(betItem: any, StakeFromSearch: any = 200, clearBets: any = false) {
     //console.log(betItem)
     if (clearBets) {
       this.clearBets()
