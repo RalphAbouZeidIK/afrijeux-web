@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, filter, firstValueFrom, Subject } from 'rxjs';
 
 declare global {
   interface Window {
@@ -38,22 +38,22 @@ export class NativeBridgeService {
   private printerErrorSource = new BehaviorSubject<string | null>(null);
   printerError$ = this.printerErrorSource.asObservable();
 
+  // Device info observable for getDeviceInfos handler
+  private deviceInfoSource = new BehaviorSubject<{ hasSim: boolean; airplaneMode: boolean } | null>(null);
+  deviceInfo$ = this.deviceInfoSource.asObservable();
+
+
+  private todaySumSource = new BehaviorSubject<string | null>(null);
+  todaySumSource$ = this.todaySumSource.asObservable();
+
   constructor(private ngZone: NgZone) {
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
       this.ngZone.run(() => {
-        //console.log("Received from Flutter:", result);
+        ////console.log("Received from Flutter:", result);
         this.scanResultSource.next(result); // ✅ makes it reactive
       });
     };
-
-    // // Optional: expose global print trigger (if Flutter calls it)
-    // window['triggerPrint'] = () => {
-    //   this.ngZone.run(() => {
-    //     //console.log("Print requested from Flutter");
-    //     this.print();
-    //   });
-    // };
 
     // Optional: expose global print trigger (if Flutter calls it)
     (window as any).handleGetSerialResult = (result: string) => {
@@ -64,11 +64,24 @@ export class NativeBridgeService {
 
     (window as any).handlePrinterError = (error: string) => {
       this.ngZone.run(() => {
-        console.error('🔥 Printer Error from Flutter:', error);
+        //console.error('🔥 Printer Error from Flutter:', error);
         this.printerErrorSource.next(error);
       });
     };
+
+    (window as any).handleDeviceInfo = (info: { hasSim: boolean; airplaneMode: boolean }) => {
+      this.ngZone.run(() => {
+        //console.log('Device info received from Flutter:', info);
+        this.deviceInfoSource.next(info); // emit value
+      });
+    };
+
+    (window as any).handleTodaySum = (sum: any) => {
+      //console.log('✅ Today printed sum:', sum);
+      this.todaySumSource.next(sum); // Optional BehaviorSubject
+    };
   }
+
 
   /** Trigger scan from Angular (calls Flutter) */
   requestScan(): void {
@@ -115,16 +128,26 @@ export class NativeBridgeService {
     });
   }
 
+  async getDeviceInfo(): Promise<{ hasSim: boolean; airplaneMode: boolean }> {
+    const info = await firstValueFrom(
+      this.deviceInfo$.pipe(filter(i => i !== null))
+    );
+    return info as { hasSim: boolean; airplaneMode: boolean };
+  }
+
+  getTodayPrintedSum(gameId: string | number): Promise<number> {
+    return new Promise(resolve => {
+      (window as any).handleTodaySum = (sum: any) => {
+        resolve(sum);
+      };
+
+      (window as any).DBChannel.postMessage(
+        JSON.stringify({ action: 'getTodaySum', gameId: String(gameId) })
+      );
+    });
+  }
 
 
-  // /** Trigger print from Angular (calls Flutter) */
-  // print(): void {
-  //   if (window.PrintChannel?.postMessage) {
-  //     window.PrintChannel.postMessage("print");
-  //   } else {
-  //     alert("Print not supported");
-  //   }
-  // }
 
   /** Send structured print command to Flutter */
   sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[], sender = 'IssueTicket', fullTicketId = ''): void {
@@ -166,7 +189,7 @@ export class NativeBridgeService {
         alert("ImageChannel is not available.");
       }
     } catch (error) {
-      console.error("Error sending image to Flutter:", error);
+      //console.error("Error sending image to Flutter:", error);
       alert("Failed to print image.");
     }
   }

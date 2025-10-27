@@ -432,14 +432,16 @@ export class CartComponent implements OnInit, OnDestroy {
         PickDetails: this.pickDetailsArray,
         TicketPrice: betItem[0].Price * this.combinations,
         Stake: betItem[0].Price * this.combinations,
-        id: Date.now()
+        id: Date.now(),
+        closeSales: betItem[0].CloseSales
       }
 
       this.composePickObject(PickObject, betItem)
     }
-    // if (this.isPMUHybrid) {
-    //   this.issueTicket()
-    // }
+
+    if (this.isPMUHybrid) {
+      this.issueTicket()
+    }
 
   }
 
@@ -487,8 +489,8 @@ export class CartComponent implements OnInit, OnDestroy {
       return
     }
     const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
-    //console.log(apiResponse)
-    if (apiResponse?.DataToPrint) {
+    console.log(apiResponse)
+    if (apiResponse?.DataToPrint || apiResponse.success) {
       this.clearBets()
     }
   }

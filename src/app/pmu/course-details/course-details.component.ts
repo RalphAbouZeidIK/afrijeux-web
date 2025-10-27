@@ -33,16 +33,16 @@ export class CourseDetailsComponent implements OnInit {
 
   typesList = [{
     "id": 1,
-    "name": "Champ Simple"
+    "name": "Simple"
   },
   {
     "id": 2,
-    "name": "Champ Reduit",
+    "name": "Reduit",
     "description": "Champ Reduit"
   },
   {
     "id": 3,
-    "name": "Champ Total",
+    "name": "Total",
     "description": "Champ Total"
   },
   ]

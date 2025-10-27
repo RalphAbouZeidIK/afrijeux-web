@@ -3,7 +3,7 @@ import { ApiService } from './api.service';
 import { NativeBridgeService } from './native-bridge.service';
 import { DatePipe } from '@angular/common';
 import { Buffer } from 'buffer';
-import { Subject, Observable, retry, timestamp } from 'rxjs';
+import { Subject, Observable, retry, timestamp, max } from 'rxjs';
 import { GenericService } from './generic.service';
 import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
@@ -20,6 +20,10 @@ export class MachineService {
 
   /** modal status subscriber */
   private openModal$ = new Subject();
+
+  isOnline = navigator.onLine
+
+  gameEventsList: any
 
   constructor(
     private apiSrv: ApiService,
@@ -168,7 +172,7 @@ export class MachineService {
       // Save full API response exactly
       ////console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
-      if (subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth') {
+      if ((subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth') && (!apiRoute.includes('IssueTicket'))) {
         this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
       }
 
@@ -177,15 +181,21 @@ export class MachineService {
     else {
       console.warn('⚡ Offline mode: loading from Flutter cache');
       console.log(apiRoute)
-      apiResponse = await this.cacheSrv.getFromFlutterOfflineCache(cacheKey);
+      if ((subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth')) {
+        apiResponse = await this.cacheSrv.getFromFlutterOfflineCache(cacheKey);
+      }
+
+    }
+
+    if (!this.isOnline && apiRoute.includes('IssueTicket')) {
+      console.log(paramsBeforeEncryption.Ticket)
+      this.cacheSrv.saveTicketToDb(paramsBeforeEncryption.Ticket, params.body, paramsBeforeEncryption);
     }
 
 
-
-    if (apiResponse?.encryptedResponse) {
+    else if (apiResponse?.encryptedResponse) {
       let decryptedResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
       if (apiRoute.includes('IssueTicket')) {
-        console.log(apiResponse)
         this.cacheSrv.saveTicketToDb(decryptedResponse, params.body, paramsBeforeEncryption);
       }
       //console.log(decryptedResponse)
@@ -214,7 +224,7 @@ export class MachineService {
     }
   }
 
-  async getMachinePermission(permissionName: any, gameId: any = null) {
+  async getMachinePermission(permissionName: any, gameId: any = null, filterProperty = 'BitValue') {
     let userData = await this.getUserData()
     // console.log(
     //   userData.UserSettings.map((usrSet: any) => {
@@ -222,10 +232,12 @@ export class MachineService {
     //   })
     // )
 
-    let hasPermission = userData.UserSettings.find((setting: any) => (setting.Name == permissionName) && (setting.GameId == gameId))?.BitValue
+    const setting = userData.UserSettings.find(
+      (setting: any) => (setting.Name == permissionName) && (setting.GameId == gameId)
+    );
 
-    //console.log(permissionName + '  ' + hasPermission)
-    return hasPermission
+    const hasPermission = setting ? setting[filterProperty] : undefined;
+    return hasPermission;
   }
 
   async registerMachine(params: any) {
@@ -255,10 +267,11 @@ export class MachineService {
     return route
   }
 
-  async getGameId() {
+  async getGameId(gameIdOnly = true) {
     let machineData: any = await this.getMachineData()
-    let gameId = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())?.GameId
-    return gameId
+    let game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
+    console.log(game)
+    return (gameIdOnly) ? game.GameId : game
   }
 
   async loginMachine(loginParams: any) {
@@ -276,14 +289,17 @@ export class MachineService {
   }
 
   async getGameEvents() {
-
+    let gameId = await this.getGameId()
     let params: any = {
-      GameId: await this.getGameId(),
+      GameId: gameId,
       GameConfiguration: [],
       UserOnlineStatus: true
     }
 
     let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetEventConfiguration`, 'POST', params)
+    this.gameEventsList = gameEventsResponse.GameConfiguration
+    this.updateMachineTicketId(gameId, gameEventsResponse.GameConfiguration.MachineTicketId);
+    this.getGameSettings(gameEventsResponse.GameConfiguration.PmuGameSettings)
     return gameEventsResponse
   }
 
@@ -300,17 +316,22 @@ export class MachineService {
   }
 
   async issueTicket(ticketObject: any) {
+    console.log(ticketObject)
+    let fullTicketId: any = ''
+
+    console.log('continuing issue ticket')
     let userData = await this.getUserData()
     let machineData = await this.getMachineData();
-    ////console.log(userData)
+    let gameId = await this.getGameId()
 
     let date = new Date()
-    let ticketRequestId = Math.floor(Math.random() * 1e12).toString() + this.gnrcSrv.getFormattedToday() + 28
+
+    let ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userData.PersonId.toString() + this.gnrcSrv.getFormattedToday() + gameId
     ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
 
     let ticketBody = {
       GameId: await this.getGameId(),
-      FullTicketId: '',
+      FullTicketId: fullTicketId,
       EncryptedTicketKey: '',
       IsVoucher: 0,
       Stake: ticketObject.TicketPrice,
@@ -334,9 +355,27 @@ export class MachineService {
       LoyalityReferenceId: 0,
     }
 
+    if (!this.isOnline) {
+      const canPrint = await this.checksBeforePrinting(ticketObject);
+
+      if (!canPrint) {
+        return; // Stop execution
+      }
+      fullTicketId = await this.generateFullTicketId()
+      params.Ticket.FullTicketId = fullTicketId
+      let issueTicketReponse = await this.issueTicketData(ticketBody)
+      const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
+      this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId);
+      let printResponse = {
+        success: true
+      }
+      return printResponse
+    }
+
+
     try {
       const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-      ////console.log(apiResponse)
+      console.log(apiResponse)
       if (apiResponse.DataToPrint) {
         this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
         return apiResponse
@@ -513,4 +552,299 @@ export class MachineService {
   }
 
   /************SB APIS END************/
+
+
+  /************Offline Methods Start************/
+  async getDeviceInfos() {
+    const info = await this.bridge.getDeviceInfo();
+    let printError = !info.hasSim || info.airplaneMode
+    return printError
+  }
+
+  async checkCloseSales(fullTicketObject: any) {
+    let printError = false
+    const now = new Date();
+
+    fullTicketObject.forEach((element: any) => {
+      if (!printError) {
+        printError = (new Date(element.closeSales) < now);
+      }
+    });
+
+    return printError
+  }
+
+  async checkMaxSales(ticketPrice: any) {
+    let gameId = await this.getGameId()
+    let todaysSales = await this.bridge.getTodayPrintedSum(gameId)
+    let maxSales = await this.getMachinePermission('SalesMaximum', gameId, 'RealValue')
+    let maxSalesError = (todaysSales + ticketPrice) > maxSales
+    return maxSalesError
+  }
+
+  async checkMaxStake(ticketPrice: any) {
+    let gameId = await this.getGameId()
+    let maxStake = await this.getMachinePermission('MaxStakeLimit', gameId, 'RealValue')
+    let maxStakeError = ticketPrice > maxStake
+    console.log(maxStake)
+    return maxStakeError
+  }
+
+  async checksBeforePrinting(fullTicketObject: any) {
+    let canPrint = false
+    let permissionError = !await this.getMachinePermission('AllowOfflinePMU')
+    let simAirplaneError = await this.getDeviceInfos()
+    let dateError = await this.checkCloseSales(fullTicketObject)
+    let maxSalesError = await this.checkMaxSales(fullTicketObject.TicketPrice)
+    let maxStakeError = await this.checkMaxStake(fullTicketObject.TicketPrice)
+
+    console.log(`Offline PMU Permission Error : ${permissionError}`)
+    console.log(`Device Info Error:  ${simAirplaneError}`)
+    console.log(`Date Error:  ${dateError}`)
+    console.log(`Max Sales Error:  ${maxSalesError}`)
+    console.log(`Max Stake Error:  ${maxStakeError}`)
+
+    let onlinePrintError = dateError || maxSalesError || maxStakeError
+    let offlinePrintError = permissionError || dateError || maxSalesError || maxStakeError
+
+    if (!navigator.onLine && offlinePrintError) {
+      this.setModalData(true, false, 'Printing Error')
+      return
+    }
+
+    canPrint = true
+    return canPrint
+  }
+
+  async generateFullTicketId() {
+    let machineData = await this.getMachineData();
+    let gameId = await this.getGameId()
+    let fullTicketId = '0';
+
+    // Get current date details
+    const now = new Date();
+    const dayOfYear = Math.floor(
+      (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) /
+      (1000 * 60 * 60 * 24)
+    );
+    const formattedYear = now.getFullYear().toString().slice(-2); // "yy"
+
+    // Random 4-digit security key
+    const randomInt = Math.floor(Math.random() * 9999) + 1;
+
+    // ✅ Simulated global settings (replace with real storage)
+    const globalSettings = await this.getMachineTicketId(gameId);
+    let machineTicketId = globalSettings ?? 1;
+
+    if (machineTicketId === 9999) {
+      machineTicketId = 1;
+    } else {
+      machineTicketId++;
+    }
+
+    // Retrieve operation & machine IDs (replace with your real data source)
+    const operationId = machineData.OperationId; // e.g., from session/user data
+    const machineId = machineData.MachineId; // e.g., from local storage / config
+
+    // Construct full ticket ID (matches Java formatting exactly)
+    const fullTicketIdBuilder =
+      this.pad(gameId, 3) +
+      this.pad(operationId, 3) +
+      this.pad(machineId, 4) +
+      this.pad(dayOfYear, 3) +
+      this.pad(Number(formattedYear), 2) +
+      '1' +
+      this.pad(machineTicketId, 4) +
+      this.pad(randomInt, 4);
+
+    fullTicketId = fullTicketIdBuilder;
+
+    // Save new machine ticket ID
+    this.updateMachineTicketId(gameId, machineTicketId);
+    console.log(fullTicketId)
+    return fullTicketId;
+  }
+
+  // Helper to pad with leading zeros
+  private pad(num: number, size: number): string {
+    let s = num.toString();
+    while (s.length < size) s = '0' + s;
+    return s;
+  }
+
+  private async getMachineTicketId(gameId: number): Promise<number | null> {
+    const machineTicketData = await this.cacheSrv.getFromFlutterOfflineCache('machine_ticket_data');
+
+    if (!machineTicketData || !machineTicketData.MachineTicketIds) return null;
+
+    const val = machineTicketData.MachineTicketIds[gameId];
+    return val ? parseInt(val, 10) : null;
+  }
+
+  private async updateMachineTicketId(gameId: number, value: number): Promise<void> {
+    let machineTicketData = await this.cacheSrv.getFromFlutterOfflineCache('machine_ticket_data');
+
+    // Initialize if not existing
+    if (!machineTicketData) {
+      machineTicketData = { MachineTicketIds: {} };
+    } else if (!machineTicketData.MachineTicketIds) {
+      machineTicketData.MachineTicketIds = {};
+    }
+
+    machineTicketData.MachineTicketIds[gameId] = value;
+
+    // Save updated data back to its own cache key
+    this.cacheSrv.saveToFlutterOfflineCache('machine_ticket_data', machineTicketData);
+
+    // Optionally mirror in local storage (if needed for UI or quick access)
+    this.localStorageSrv.setItem('machine_ticket_data', machineTicketData, true);
+  }
+
+  async getStringSettingValue(settingName: any, gameId = null, filterProperty = 'TextValue') {
+    let gameSettings = await this.cacheSrv.getFromFlutterOfflineCache('game_settings');
+    console.log(gameSettings)
+    const setting = gameSettings.find(
+      (setting: any) => (setting.Name == settingName) && (setting.GameId == gameId)
+    );
+    const stringValue = setting ? setting[filterProperty] : undefined;
+    return stringValue;
+  }
+
+  async getGameSettings(SettingVersion: any) {
+    let gameId = await this.getGameId()
+    let params: any = {
+      GameId: gameId,
+      SettingVersion: SettingVersion
+    }
+    let apiResponse: any = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetSettings`, 'POST', params)
+    this.cacheSrv.saveToFlutterOfflineCache('game_settings', apiResponse.data);
+    this.localStorageSrv.setItem('game_settings', apiResponse.data, true);
+    console.log(apiResponse.data)
+  }
+
+  public async issueTicketData(ticket: any, isPromotion = false) {
+    let game: any = await this.getGameId(false)
+    let userData = await this.getUserData()
+    let machineData: any = await this.getMachineData()
+    const formatTime = new Intl.DateTimeFormat('en-US', {
+      month: '2-digit', day: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+
+    const newLine = '\n';
+    const dataToPrint: string[] = [];
+
+    const separator = await this.getStringSettingValue('PrintTicketSeparator', null);
+    let header = await this.getStringSettingValue('PrintTicketHeader', null);
+    let footer = await this.getStringSettingValue('PrintTicketFooter', null);
+    const onTicketMessage = await this.getStringSettingValue('OnTicketMessage', game.GameId);
+    const ticketDaysToExpire = await this.getStringSettingValue('TicketDaysToExpier', null, 'IntValue');
+
+
+    header = header
+      .replace('[GameName]', game.Name)
+      .replace('[Separator]', separator)
+      .replace(/\[\\n\]/g, newLine);
+
+    dataToPrint.push(header);
+    dataToPrint.push('#indicator#');
+    console.log(dataToPrint)
+
+    let body = '';
+    console.log(ticket)
+    console.log(this.gameEventsList)
+    for (const pick of ticket.GamePick) {
+      for (const pickDetails of pick.PickDetails) {
+        let bodyTemplate = await this.getStringSettingValue('PrintTicketBody', null);
+
+        const config = this.gameEventsList.EventConfiguration.find((eventItem: any) => eventItem.GameEventId == pick.GameEventId);
+        console.log(config)
+        const countNonPartant = config.NonPartant.split(',').length - 1;
+        const gameEventIdIndex = config.EventNumber;
+
+        bodyTemplate = bodyTemplate
+          .replace('[EventId]', `${config.ReunionCode} ${config.GameEventId}`)
+          .replace('[EventName]', `${config.EventName}`)
+          .replace('[NumberofHorses]', (config.HorseNumber - countNonPartant).toString())
+          .replace('[EventDate]', config.EventDate)
+          .replace('[Separator]', separator)
+          .replace(/\[\\n\]/g, newLine);
+
+
+
+
+        // 🐴 Handle horses
+        const baseHorses = pickDetails.BaseHorses.split(',').filter((h: any) => h !== '0' && h !== '00');
+        const associatedHorses = pickDetails.AssociatedHorses.split(',');
+
+
+        let stringPicks = '';
+        const champString = `${pickDetails.BetType}${baseHorses.length > 0 ? '/Champ' : ''}${pick.TicketTypeId > 1 ? '/' + pickDetails.FormuleType : ''}`;
+        stringPicks += champString;
+
+        if (pick.Multiplier < 1) {
+          stringPicks += `, Flexi ${(pick.Multiplier * 100)}%`;
+        }
+
+        stringPicks += newLine;
+
+        const horseIds = associatedHorses.map((h: string) => (parseInt(h.trim(), 10) + gameEventIdIndex * 100).toString());
+
+        if (baseHorses.length > 0) {
+          stringPicks += `CH.BASE: ${pickDetails.BaseHorses.replace('00', 'XX')}${newLine}`;
+          stringPicks += `CH.ASS: ${pickDetails.AssociatedHorses}${newLine}`;
+        } else {
+          stringPicks += `CH.JOUÉ: ${pickDetails.AssociatedHorses}${newLine}`;
+        }
+
+        stringPicks += `Totale: ${pick.Stake}${newLine}`
+
+        let numberOfCombinations = pick.NumberOfCombinations;
+
+
+
+        if (pick.Multiplier > 1) {
+          stringPicks += `Multiplier: ${pick.Multiplier}${newLine}`;
+        }
+
+        //stringPicks += `Total: ${pick.stake.toLocaleString('en-US', { minimumFractionDigits: 2 })} ${this.localLogin.getCurrency()}`;
+        stringPicks += newLine + separator + newLine + newLine;
+        bodyTemplate += `${newLine}${newLine}${stringPicks}`;
+        body += bodyTemplate;
+        console.log(bodyTemplate)
+      }
+    }
+
+    let ticketExpiry = new Date(
+      new Date(ticket.MachineDateIssued).setDate(
+        new Date(ticket.MachineDateIssued).getDate() + ticketDaysToExpire
+      )
+    )
+
+    // 🧾 Footer replacement
+    footer = footer
+      .replace('[TotalStake]', ticket.Stake.toLocaleString('en-US'))
+      .replace('[Currency]', userData.Currency)
+      .replace('[DateIssued]', formatTime.format(new Date(ticket.MachineDateIssued)))
+      .replace('[AgentName]', userData.PersonName)
+      .replace('[MachineCode]', machineData.MachineCode)
+      .replace('[ExpierdDate]', formatTime.format(ticketExpiry))
+      .replace('[TicketCode]', '---')
+      .replace('[Separator]', separator)
+      .replace('[Message]', onTicketMessage)
+      .replace(/\[\\n\]/g, newLine);
+
+    if (ticket.referenceId) {
+      footer += `Reference ID: ${ticket.ReferenceId}`;
+    }
+
+    body += footer;
+    dataToPrint.push(body);
+    console.log(dataToPrint)
+    return dataToPrint;
+  }
+
+
+  /************Offline Methods End************/
+
 }

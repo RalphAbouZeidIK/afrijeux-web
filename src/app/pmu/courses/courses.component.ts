@@ -114,13 +114,13 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGameEvents()
-
+      //console.log(gameEventsResponse)
       const now = new Date();
       const upcoming = gameEventsResponse.GameConfiguration.EventConfiguration.filter((event: any) => {
         return new Date(event.CloseSales) > now;
       });
 
-      console.log(upcoming)
+      //console.log(upcoming)
 
       const groupedRaces = this.groupByCategory(upcoming);
       this.dataArray = Object.values(groupedRaces)
@@ -133,7 +133,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
         });
 
       }
-      console.log(this.dataArray)
+      //console.log(this.dataArray)
     }
 
     else {
@@ -148,7 +148,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
       }
     }
-    ////console.log(this.dataArray)
+    //////console.log(this.dataArray)
 
   }
 
@@ -196,11 +196,11 @@ export class CoursesComponent implements OnInit, OnDestroy {
     });
 
     raceItem.IsExpanded = false
-    ////console.log(raceItem)
+    //////console.log(raceItem)
   }
 
   resetOnEventChange(data: any) {
-    ////console.log(data)
+    //////console.log(data)
     if (data.SelectedFixedConfig.IsForTicketTypeEvent == 1) {
       let sameReunion = this.dataArray.find((item: any) => item.reunionCode == data.reunionCode)
       if (sameReunion) {
@@ -220,7 +220,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
 
   eventBetSet(event: any) {
-    ////console.log(event)
+    //////console.log(event)
     this.dataArray.forEach((reunionItem: any) => {
       reunionItem.Events.forEach((raceItem: any) => {
         if ((raceItem.GameEventId != event.GameEventId) || (event.SelectedFixedConfig == null)) {
@@ -232,7 +232,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
       });
     });
-    ////console.log(event)
+    //////console.log(event)
     if (event.SelectedFixedConfig) {
       let selectedTypeId = event.SelectedFixedConfig.TicketTypeId
       this.dataArray.forEach((reunionItem: any) => {
@@ -293,19 +293,19 @@ export class CoursesComponent implements OnInit, OnDestroy {
     }
 
 
-    ////console.log(this.dataArray)
+    //////console.log(this.dataArray)
   }
 
   async composeEventDetails(raceItem: any) {
     let fixedConfig = await this.machineSrv.getFixedConfiguration(raceItem.FixedConfigurationVersion)
-    ////console.log(fixedConfig)
+    //////console.log(fixedConfig)
 
     // Build a lookup from array a
     const idsInA = new Set(raceItem.GameEventTicketTypeConfiguration.map((item: any) => item.TicketTypeId));
 
     // Filter b to keep only items that exist in a
     const filteredB = fixedConfig.filter((item: any) => idsInA.has(item.TicketTypeId));
-    ////console.log(filteredB)
+    //////console.log(filteredB)
 
     raceItem.FixedConfigs = filteredB
     raceItem.FixedConfigs.forEach((fixedConfigItem: any) => {
@@ -335,7 +335,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
     }
 
     raceItem.Multiplicator = 1
-    ////console.log(raceItem)
+    //////console.log(raceItem)
   }
 
   resetEventData(raceItem: any, resetConfig: boolean) {
