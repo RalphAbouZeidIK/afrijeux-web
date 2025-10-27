@@ -24,7 +24,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   showContainer: any
 
-  totalMultiplicator: any
+  totalMultiplier: any
 
   totalBets: any
 
@@ -72,7 +72,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
       this.onCartEventChange(data)
-      // this.totalMultiplicator = parseInt(this.storageSrv.getItem('totalMultiplicator'))
+      // this.totalMultiplier = parseInt(this.storageSrv.getItem('totalMultiplier'))
       // this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
     });
 
@@ -101,7 +101,7 @@ export class CartComponent implements OnInit, OnDestroy {
     }
 
 
-    // this.totalMultiplicator = parseInt(this.storageSrv.getItem('totalMultiplicator'))
+    // this.totalMultiplier = parseInt(this.storageSrv.getItem('totalMultiplier'))
     // this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
   }
 
@@ -143,7 +143,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   onCartEventChange(data: any) {
-    //console.log(data)
+    console.log(data)
     if (data.TypeChanged) {
       this.betItem = []
     }
@@ -258,6 +258,23 @@ export class CartComponent implements OnInit, OnDestroy {
     })
   }
 
+
+  onAddQtty(betItem: any) {
+    console.log(betItem)
+    betItem.Multiplier++
+    //this.cartSrv.updateMultiplier(betItem, true)
+    console.log(betItem)
+
+  }
+
+  onRemoveQtty(betItem: any) {
+    console.log(betItem)
+    if (betItem.Multiplier == 1) {
+      return
+    }
+    betItem.Multiplier--
+    console.log(betItem)
+  }
 
   addBetToTicket(betItem: any) {
     console.log(betItem)
@@ -426,12 +443,12 @@ export class CartComponent implements OnInit, OnDestroy {
 
       let PickObject = {
         NumberOfCombinations: this.combinations,
-        Multiplier: 1,
+        Multiplier: betItem[0].Multiplier,
         TicketTypeId: betItem[0].SelectedFixedConfig.TicketTypeId,
         FormuleId: (this.IsAllOrder) ? 2 : 1,
         PickDetails: this.pickDetailsArray,
-        TicketPrice: betItem[0].Price * this.combinations,
-        Stake: betItem[0].Price * this.combinations,
+        TicketPrice: betItem[0].Price * this.combinations * betItem[0].Multiplier,
+        Stake: betItem[0].Price * this.combinations * betItem[0].Multiplier,
         id: Date.now(),
         closeSales: betItem[0].CloseSales
       }
@@ -488,6 +505,7 @@ export class CartComponent implements OnInit, OnDestroy {
       })
       return
     }
+    console.log(this.listOfBets)
     const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
     console.log(apiResponse)
     if (apiResponse?.DataToPrint || apiResponse.success) {

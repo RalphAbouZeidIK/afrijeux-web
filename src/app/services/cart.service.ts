@@ -14,7 +14,10 @@ export class CartService {
     private translate: TranslateService,
     private gamesSrv: GamesService
   ) { }
+
   listOfBets: any = this.storageSrv.getItem('sbCartData') || []
+
+  listOfPMUBets: any = this.storageSrv.getItem('cartData') || []
 
   bonusRules: any = []
 
@@ -104,19 +107,36 @@ export class CartService {
      */
   setCartDataListener(cartData: any) {
     let totalBets = 0
-    let totalMultiplicator = 0
+    let totalMultiplier = 0
     //console.log(cartData)
     cartData.forEach((element: any) => {
-      //console.log(element.Multiplicator)
+      //console.log(element.Multiplier)
       if (element.ShowRace) {
         totalBets++
-        totalMultiplicator += element.Multiplicator
+        totalMultiplier += element.Multiplier
       }
     });
     this.storageSrv.setItem('totalBets', totalBets.toString())
-    this.storageSrv.setItem('totalMultiplicator', totalMultiplicator.toString())
+    this.storageSrv.setItem('totalMultiplier', totalMultiplier.toString())
     this.addCartData$.next(cartData);
   }
+
+
+  // updateMultiplier(betItem: any, isAdd: any) {
+  //   let fullData = this.listOfPMUBets
+  //   console.log(fullData)
+  //   console.log(betItem)
+  //   let race = fullData.find((itemInStorage: any) => itemInStorage.raceId == betItem.raceId)
+  //   if (isAdd) {
+  //     race.Multiplier++
+  //     this.storageSrv.setItem('cartData', fullData)
+  //     this.setCartDataListener(fullData)
+  //     return
+  //   }
+  //   race.Multiplier--
+  //   this.storageSrv.setItem('cartData', fullData)
+  //   this.setCartDataListener(fullData)
+  // }
 
   //////////////////////////////HPB BETTING METHODS END//////////////////////////////////////////////////
 

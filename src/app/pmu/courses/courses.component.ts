@@ -220,7 +220,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
 
   eventBetSet(event: any) {
-    //////console.log(event)
+    console.log(event)
     this.dataArray.forEach((reunionItem: any) => {
       reunionItem.Events.forEach((raceItem: any) => {
         if ((raceItem.GameEventId != event.GameEventId) || (event.SelectedFixedConfig == null)) {
@@ -334,7 +334,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
       });
     }
 
-    raceItem.Multiplicator = 1
+    raceItem.Multiplier = 1
     //////console.log(raceItem)
   }
 

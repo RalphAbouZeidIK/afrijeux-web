@@ -235,6 +235,7 @@ export class CourseDetailsComponent implements OnInit {
 
     ////console.log(this.courseDetails)
     this.courseDetails.TypeChanged = IsTypeChange
+    console.log(this.courseDetails)
     this.cartSrv.setPmuBets(this.courseDetails);
   }
 

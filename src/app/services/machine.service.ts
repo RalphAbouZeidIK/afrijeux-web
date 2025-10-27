@@ -269,6 +269,7 @@ export class MachineService {
 
   async getGameId(gameIdOnly = true) {
     let machineData: any = await this.getMachineData()
+    console.log(machineData)
     let game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
     console.log(game)
     return (gameIdOnly) ? game.GameId : game

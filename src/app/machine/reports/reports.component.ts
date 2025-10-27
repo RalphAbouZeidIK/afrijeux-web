@@ -29,7 +29,7 @@ export class ReportsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', await this.machineSrv.getGameId())
+    this.canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', null)
     this.getGames()
     this.genericDate = this.datepipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS');
   }

@@ -82,8 +82,7 @@
     }
 
     .choose-quantity {
-        border-radius: 5px;
-        background-color: $countryBg;
+        background-color: $darkBg;
         padding: 0;
         width: 80px;
         display: flex;
@@ -102,6 +101,8 @@
             font-size: 18px;
             text-decoration: none;
             cursor: pointer;
+            color: $white;
+            padding: 0 0 4px;
         }
     }
 }
@@ -310,11 +311,7 @@ input[type="number"]::-webkit-inner-spin-button {
         .choose-quantity {
             width: 100px;
             height: auto;
-            background-color: $offWhite;
 
-            >span {
-                color: $darkBg;
-            }
         }
 
         .total-holder {

@@ -91,6 +91,14 @@
             </div>
             <div class="inputs-block">
                 <div class="type-list type-multi">
+                    <span class="type"> Multiplicateur</span>
+                    <span class="choose-quantity">
+                        <span (click)="onRemoveQtty(betItem[0])" class="minus">-</span>
+                        <span class="quantity">{{betItem[0].Multiplier}}</span>
+                        <span (click)="onAddQtty(betItem[0])" class="plus">+</span>
+                    </span>
+                </div>
+                <div class="type-list type-multi">
                     <span class="type">{{'hpb.cart.singlePrice' | translate}}</span>
                     <span class="choose-quantity">
                         <input type="number" [(ngModel)]="betItem[0].Price" (ngModelChange)="onPriceChange($event)">
@@ -99,7 +107,7 @@
                 <div class="type-list type-multi">
                     <span class="type">{{'hpb.cart.pickPrice' | translate}}</span>
                     <span class="choose-quantity">
-                        <input type="number" disabled [value]="betItem[0].Price * combinations">
+                        <input type="number" disabled [value]="betItem[0].Price * combinations * betItem[0].Multiplier">
                     </span>
                 </div>
             </div>
@@ -156,7 +164,7 @@
 
                 <div class="type-list price-holder">
                     <span class="type">
-                        {{'hpb.cart.Price' | translate}}
+                        {{'hpb.cart.price' | translate}}
                     </span>
                     <span class="list-of-horses">
                         {{betItem.TicketPrice}} KL
