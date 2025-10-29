@@ -16,9 +16,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   matchesList: any = []
 
 
-  sportId = 1
-  tournamentId = null
-  categoryId = null
 
   routeSub!: Subscription;
 
@@ -30,7 +27,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   pageSize = 10;
 
-  SportId: any = null
+  SportId: any = 1
 
   TournamentId: any = null
 
@@ -123,6 +120,15 @@ export class HomepageComponent implements OnInit, OnDestroy {
     //console.log(event)
     let firstPath = (!this.isDesktop) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
     this.router.navigate([`${firstPath}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])
+  }
+
+  refreshMatches() {
+    this.gamesSrv.setSportsFilter({
+      SportId: this.SportId,
+      CategoryId: null,
+      TournamentId: null,
+      MatchName: null
+    });
   }
 
   ngOnDestroy(): void {

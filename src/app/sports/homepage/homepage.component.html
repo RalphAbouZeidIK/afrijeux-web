@@ -5,5 +5,7 @@
         <ngb-pagination [collectionSize]="matchesList[0].TotalCount" [(page)]="page" [maxSize]="5" [rotate]="true"
             [ellipses]="false" (pageChange)="getMatches()" [boundaryLinks]="false" *ngIf="matchesList?.length > 0" />
     </div>
-
+    <a class="refresher">
+        <img src="assets/images/refresher.svg" alt="refresher" (click)="refreshMatches()" />
+    </a>
 </div>

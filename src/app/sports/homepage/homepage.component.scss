@@ -1,6 +1,26 @@
+@import '/src/variables.scss';
+
 .paging-holder {
     display: flex;
     justify-content: center;
     position: relative;
     z-index: 1;
+}
+
+.refresher {
+    position: fixed;
+    bottom: 40px;
+    right: 16px;
+    height: 50px;
+    width: 50px;
+    background: $yellow;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        display: block;
+        max-width: 40px;
+    }
 }

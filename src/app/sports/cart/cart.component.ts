@@ -174,7 +174,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   hideMenus() {
-    document.querySelector('.cart-container')?.classList.remove("show-cart");
+    this.showOnClickMobile = false
   }
 
   async issueTicket() {
