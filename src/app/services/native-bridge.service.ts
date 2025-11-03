@@ -35,7 +35,7 @@ export class NativeBridgeService {
   getSerialSource$ = this.getSerialSource.asObservable();
 
   // ✅ NEW printer error observable
-  private printerErrorSource = new BehaviorSubject<string | null>(null);
+  printerStatusSource = new Subject<any>();
 
   // Device info observable for getDeviceInfos handler
   private deviceInfoSource = new BehaviorSubject<{ hasSim: boolean; airplaneMode: boolean } | null>(null);
@@ -71,14 +71,18 @@ export class NativeBridgeService {
       });
     };
 
+
     (window as any).handlePrinterError = (error: string) => {
       this.ngZone.run(() => {
-        console.log("🔥 Printer Error handler triggered with:", error);
+        console.error('🔥 Printer Error from Flutter:', error);
+        this.printerStatusSource.next(false);
+      });
+    };
 
-        if (this.printerErrorResolver) {
-          this.printerErrorResolver(error);
-          this.printerErrorResolver = null;
-        }
+    (window as any).handlePrinterSuccess = () => {
+      this.ngZone.run(() => {
+        console.log('✅ Printer completed successfully');
+        this.printerStatusSource.next(true);
       });
     };
 
@@ -107,13 +111,6 @@ export class NativeBridgeService {
       });
     };
 
-  }
-
-  async waitForPrinterError(): Promise<string> {
-    console.log("🕓 Waiting for printer error...");
-    return new Promise<string>((resolve) => {
-      this.printerErrorResolver = resolve;
-    });
   }
 
   /** Trigger scan from Angular (calls Flutter) */

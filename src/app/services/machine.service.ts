@@ -27,6 +27,12 @@ export class MachineService {
 
   encryptionKey: string = 'G@meC0oks@2023'
 
+  valuesToPrint: any = {
+    firstValue: '',
+    secondValue: '',
+    thirdValue: ''
+  }
+
 
   constructor(
     private apiSrv: ApiService,
@@ -43,6 +49,16 @@ export class MachineService {
       ////console.log("🔙 Native back pressed");
       this.location.back(); // redirect to your chosen route
     };
+
+    this.bridge.printerStatusSource.subscribe((error) => {
+      console.log("⚠️ can print:", error);
+      console.log(this.valuesToPrint)
+      this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
+      this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
+
+      this.cacheSrv.saveTicketToDb(this.valuesToPrint.firstValue, this.valuesToPrint.secondValue, this.valuesToPrint.thirdValue);
+      // Example: save to DB or update UI
+    });
   }
 
 
@@ -199,14 +215,20 @@ export class MachineService {
 
     if (!this.isOnline && apiRoute.includes('IssueTicket')) {
       //console.log(paramsBeforeEncryption.Ticket)
-      this.cacheSrv.saveTicketToDb(paramsBeforeEncryption.Ticket, params.body, paramsBeforeEncryption);
+      this.valuesToPrint.firstValue = paramsBeforeEncryption.Ticket
+      this.valuesToPrint.secondValue = params.body
+      this.valuesToPrint.thirdValue = paramsBeforeEncryption
     }
 
 
     else if (apiResponse?.encryptedResponse) {
       let decryptedResponse = await this.decrypt(apiResponse.encryptedResponse, (apiRoute === 'RegisterMachine') ? true : false)
       if (apiRoute.includes('IssueTicket')) {
-        this.cacheSrv.saveTicketToDb(decryptedResponse, params.body, paramsBeforeEncryption);
+
+        this.valuesToPrint.firstValue = decryptedResponse
+        this.valuesToPrint.secondValue = params.body
+        this.valuesToPrint.thirdValue = paramsBeforeEncryption
+
       }
       ////console.log(decryptedResponse)
       if (Array.isArray(decryptedResponse)) {
