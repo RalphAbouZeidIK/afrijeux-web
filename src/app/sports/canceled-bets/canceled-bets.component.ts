@@ -21,7 +21,7 @@ export class CanceledBetsComponent implements OnInit {
     try {
       const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', "AfrijeuxSportsBetting/BetsCanceled", "GET", {}, true);
       this.betsList = apiResponse
-      //console.log(this.betsList)
+      ////console.log(this.betsList)
 
     } catch (error) {
       console.warn(error)

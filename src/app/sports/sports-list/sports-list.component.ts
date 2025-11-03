@@ -30,6 +30,8 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
 
   isDesktopSubscription: Subscription
 
+  @Input() shouldResetFilters: boolean = false
+
   @Input() selectedFilters: any
   constructor(
     private router: Router,
@@ -38,12 +40,13 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
     private gamesSrv: GamesService
   ) {
     this.route.params.subscribe(params => {
-      //console.log(params); // Log route params to check if they are correctly captured
+      ////console.log(params); // Log route params to check if they are correctly captured
     });
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
       this.isDesktop = isDesktop;
     });
+
   }
 
   ngOnInit(): void {
@@ -55,7 +58,7 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
   async getData() {
     const apiResponse = await this.gamesSrv.getFiltersLists()
     this.filtersList = apiResponse
-    console.log(this.filtersList)
+    //console.log(this.filtersList)
     if (this.isDesktop) {
       this.setSelectedToFalse()
       this.resetSelected()
@@ -67,9 +70,14 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['selectedFilters'].firstChange) {
-
-      //this.getData()
+    if (changes['shouldResetFilters']) {
+      //console.log(changes['shouldResetFilters'])
+      //console.log('Current value:', changes['shouldResetFilters'].currentValue);
+    }
+    if (!changes['shouldResetFilters'].currentValue) {
+      //console.log('Changes detected in shouldResetFilters:', changes['shouldResetFilters'].currentValue);
+      this.selectedSport = this.filtersList.Sports[0]
+      this.selectedSportChange(this.selectedSport, 'sport')
     }
   }
 
@@ -91,9 +99,9 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
       this.getTournaments(selectedCategory)
     }
 
-    //console.log(this.selectedFilters)
+    ////console.log(this.selectedFilters)
     this.selectedSport = this.filtersList.Sports[0]
-    //console.log(this.selectedSport)
+    ////console.log(this.selectedSport)
 
   }
 
@@ -110,7 +118,7 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
       ...obj,
       isSelected: false
     }));
-    console.log(this.filtersList)
+    //console.log(this.filtersList)
   }
 
   getCategories(sportItem: any) {
@@ -133,13 +141,13 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   redirectTo(listItem: any) {
-    //console.log(listItem)
+    ////console.log(listItem)
     this.router.navigate([`${this.router.url.split('/')[1]}/${listItem.SportId}${(listItem.CategoryId) ? `/Categories/${listItem.CategoryId}` : ''}${(listItem.TournamentId) ? `/Tournaments/${listItem.TournamentId}` : ''}`])
     listItem.isSelected = true
   }
 
   selectedSportChange(event: any, type: any) {
-    console.log(event)
+    //console.log(event)
     switch (type) {
       case 'sport':
         this.selectedCategory = null
@@ -157,12 +165,13 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
         break;
     }
 
-    //console.log(this.selectedSport)
+    ////console.log(this.selectedSport)
     this.gamesSrv.setSportsFilter({
       SportId: (this.selectedSport) ? this.selectedSport.SportId : null,
       CategoryId: (this.selectedCategory) ? this.selectedCategory.CategoryId : null,
       TournamentId: (this.selectedTournament) ? this.selectedTournament?.TournamentId : null,
-      MatchName: null
+      MatchName: null,
+      IsRefresh: false
     });
   }
 

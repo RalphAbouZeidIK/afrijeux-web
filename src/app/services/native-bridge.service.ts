@@ -36,7 +36,6 @@ export class NativeBridgeService {
 
   // ✅ NEW printer error observable
   private printerErrorSource = new BehaviorSubject<string | null>(null);
-  printerError$ = this.printerErrorSource.asObservable();
 
   // Device info observable for getDeviceInfos handler
   private deviceInfoSource = new BehaviorSubject<{ hasSim: boolean; airplaneMode: boolean } | null>(null);
@@ -46,11 +45,21 @@ export class NativeBridgeService {
   private todaySumSource = new BehaviorSubject<string | null>(null);
   todaySumSource$ = this.todaySumSource.asObservable();
 
+  private ticketsSource = new BehaviorSubject<any[]>([]);
+  tickets$ = this.ticketsSource.asObservable();
+
+  lastError: string | null = null;
+
+  public printerError$ = new Subject<string>();
+
+  private printerErrorResolver: ((error: string) => void) | null = null;
+
   constructor(private ngZone: NgZone) {
+    console.log("🧩 BridgeService initialized:", this);
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
       this.ngZone.run(() => {
-        ////console.log("Received from Flutter:", result);
+        //////console.log("Received from Flutter:", result);
         this.scanResultSource.next(result); // ✅ makes it reactive
       });
     };
@@ -64,24 +73,48 @@ export class NativeBridgeService {
 
     (window as any).handlePrinterError = (error: string) => {
       this.ngZone.run(() => {
-        //console.error('🔥 Printer Error from Flutter:', error);
-        this.printerErrorSource.next(error);
+        console.log("🔥 Printer Error handler triggered with:", error);
+
+        if (this.printerErrorResolver) {
+          this.printerErrorResolver(error);
+          this.printerErrorResolver = null;
+        }
       });
     };
 
+
     (window as any).handleDeviceInfo = (info: { hasSim: boolean; airplaneMode: boolean }) => {
       this.ngZone.run(() => {
-        //console.log('Device info received from Flutter:', info);
+        ////console.log('Device info received from Flutter:', info);
         this.deviceInfoSource.next(info); // emit value
       });
     };
 
     (window as any).handleTodaySum = (sum: any) => {
-      //console.log('✅ Today printed sum:', sum);
+      ////console.log('✅ Today printed sum:', sum);
       this.todaySumSource.next(sum); // Optional BehaviorSubject
     };
+
+    (window as any).onTicketsLoaded = (ticketsJson: string) => {
+      this.ngZone.run(() => {
+        try {
+          const tickets = JSON.parse(ticketsJson);
+          //console.log("🎟️ Tickets received from Flutter:", tickets);
+          this.ticketsSource.next(tickets);
+        } catch (err) {
+          console.error("❌ Failed to parse tickets JSON:", err);
+        }
+      });
+    };
+
   }
 
+  async waitForPrinterError(): Promise<string> {
+    console.log("🕓 Waiting for printer error...");
+    return new Promise<string>((resolve) => {
+      this.printerErrorResolver = resolve;
+    });
+  }
 
   /** Trigger scan from Angular (calls Flutter) */
   requestScan(): void {
@@ -154,7 +187,7 @@ export class NativeBridgeService {
     const message = JSON.stringify({ type, value, sender, fullTicketId });
 
     if (window.PrintChannel?.postMessage) {
-      //console.log(message)
+      ////console.log(message)
       window.PrintChannel.postMessage(message);
     } else {
       alert("PrintChannel is not available.");

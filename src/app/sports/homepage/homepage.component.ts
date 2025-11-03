@@ -39,6 +39,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   getMatchesParams: any
 
+  shouldResetFilters = false
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -49,7 +51,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {
 
     this.route.params.subscribe(params => {
-      //console.log(params); // Log route params to check if they are correctly captured
+      ////console.log(params); // Log route params to check if they are correctly captured
     });
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
@@ -89,7 +91,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async getFixedConfig() {
     const apiResponse = await this.machineSrv.getSbFixedConfig()
-    console.log(apiResponse)
+    //console.log(apiResponse)
   }
 
   async getMatches() {
@@ -100,7 +102,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
       PageSize: this.pageSize,
       PageNumber: this.page,
     };
-    console.log(params)
+    //console.log(params)
     this.matchesList = await this.gamesSrv.getMatches(params)
     if (this.matchesList.length == 0 && this.getMatchesParams.MatchName != null) {
       let message = ''
@@ -113,22 +115,20 @@ export class HomepageComponent implements OnInit, OnDestroy {
         this.matchesList = await this.gamesSrv.getMatches(params)
       }, 4000);
     }
-    console.log(this.matchesList)
+    //console.log(this.matchesList)
   }
 
   async getMatchOutcome(event: any) {
-    //console.log(event)
+    ////console.log(event)
     let firstPath = (!this.isDesktop) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
     this.router.navigate([`${firstPath}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])
   }
 
   refreshMatches() {
-    this.gamesSrv.setSportsFilter({
-      SportId: this.SportId,
-      CategoryId: null,
-      TournamentId: null,
-      MatchName: null
-    });
+    this.shouldResetFilters = true
+    setTimeout(() => {
+      this.shouldResetFilters = false
+    }, 100);
   }
 
   ngOnDestroy(): void {

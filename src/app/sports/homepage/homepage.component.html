@@ -1,5 +1,5 @@
 <div class="homepage">
-    <app-sports-list *ngIf="!isDesktop"></app-sports-list>
+    <app-sports-list *ngIf="!isDesktop" [shouldResetFilters]="shouldResetFilters"></app-sports-list>
     <app-match-list [matchesList]="matchesList" (matchForOutcome)="getMatchOutcome($event)"></app-match-list>
     <div class="paging-holder">
         <ngb-pagination [collectionSize]="matchesList[0].TotalCount" [(page)]="page" [maxSize]="5" [rotate]="true"

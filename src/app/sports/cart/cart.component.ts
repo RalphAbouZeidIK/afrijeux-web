@@ -93,11 +93,11 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    console.log(this.stake)
+    //console.log(this.stake)
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
 
     this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
-    console.log(this.canIssueTicket)
+    //console.log(this.canIssueTicket)
 
     let sbCartData = this.storageSrv.getItem('sbCartData')
     if (sbCartData) {
@@ -116,26 +116,26 @@ export class CartComponent implements OnInit, OnDestroy {
 
   async calculateBonus() {
 
-    //console.log(this.stake)
+    ////console.log(this.stake)
     let minimumPicks = 0
     this.bonus = 0
     this.BonusId = 0
     let allowedCumulatedOdds = 1
     if (this.bonusRules.length == 0) {
       this.bonusRules = await this.cartSrv.getBonusRules()
-      //console.log(this.bonusRules)
+      ////console.log(this.bonusRules)
     }
 
     if (this.listOfBets && this.listOfBets.length > 0) {
       this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).forEach((oddItem: any) => {
         allowedCumulatedOdds *= oddItem.Odd
-        //console.log(allowedCumulatedOdds)
+        ////console.log(allowedCumulatedOdds)
       });
       let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.FromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).length) && (selectedBonus.MinStackeRequiered <= this.stake))
-      //console.log(selectedBonus)
+      ////console.log(selectedBonus)
       if (selectedBonus) {
         this.BonusId = selectedBonus?.BonusRuleId
-        //console.log(this.listOfBets.length)
+        ////console.log(this.listOfBets.length)
         let unitStake = this.stake / selectedBonus?.FromPickRequiered
         this.bonus = (selectedBonus?.Percentage / 100) * unitStake * this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).length * allowedCumulatedOdds
         this.bonus = Math.round(this.bonus * 100) / 100;
@@ -147,11 +147,11 @@ export class CartComponent implements OnInit, OnDestroy {
     }
     this.WinAmount = this.totalOdds * this.stake + this.bonus
     this.WinAmount = Math.round(this.WinAmount * 100) / 100
-    //console.log(this.WinAmount)
+    ////console.log(this.WinAmount)
   }
 
   addBetToTicket(betItem: any) {
-    //console.log(betItem)
+    ////console.log(betItem)
   }
 
   onAmountChange() {

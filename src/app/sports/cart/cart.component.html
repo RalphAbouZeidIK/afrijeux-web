@@ -1,4 +1,4 @@
-<div class="overlay" (click)="hideMenus()" [ngClass]="{'show-cart':showOnClickMobile}"></div>
+<div class="overlay" (click)="hideMenus()" [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
 
 <div class="cart-container" [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0}">
     <div class="cart-header" (click)="OnclickIsMobile()">

@@ -26,7 +26,7 @@ export class PageTitleService {
       mergeMap(route => route.data)
     ).subscribe(data => {
       const titleKey = data['title'];
-      //console.log(titleKey)
+      ////console.log(titleKey)
       if (titleKey) {
         this.translate.get(titleKey).subscribe(translatedTitle => {
           setTimeout(() => {
@@ -40,7 +40,7 @@ export class PageTitleService {
     this.translate.onLangChange.subscribe(() => {
       const route = this.getDeepestChild(this.activatedRoute);
       const titleKey = route?.snapshot?.data?.['title'];
-      //console.log(titleKey)
+      ////console.log(titleKey)
       if (titleKey) {
         this.translate.get(titleKey).subscribe(translatedTitle => {
           this.title.setTitle(translatedTitle);

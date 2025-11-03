@@ -38,11 +38,11 @@ export class ReportsComponent implements OnInit {
     let machineData = await this.machineSrv.getMachineData()
     this.gamesList = machineData?.Games
     this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
-    //console.log(this.gamesList)
+    ////console.log(this.gamesList)
   }
 
   selectedGamesChange(event: any) {
-    //console.log(event)
+    ////console.log(event)
   }
 
   onDateChange(event: any, field: keyof ReportsComponent) {
@@ -59,12 +59,12 @@ export class ReportsComponent implements OnInit {
     }
 
     (this as any)[field] = this.datepipe.transform(received, 'yyyy-MM-ddTHH:mm:ss.SSS');
-    //console.log((this as any)[field]);
+    ////console.log((this as any)[field]);
   }
 
 
   async getReports(shouldPrint = false) {
-    //console.log(this.selectedGames)
+    ////console.log(this.selectedGames)
     let ids = (this.isCheckResults) ? this.selectedGames[0].GameId : this.selectedGames.map((item: any) => item.GameId);
     let reportParams = {
       FromDate: this.FromDate,

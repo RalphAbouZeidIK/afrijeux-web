@@ -34,10 +34,10 @@ export class LanguageService {
     if (!pageRoute || !Array.isArray(pageRoute._loadedRoutes)) return [];
 
     const routeWithChildren = pageRoute._loadedRoutes.find((r: any) => Array.isArray(r.children));
-    //console.log(routeWithChildren)
+    ////console.log(routeWithChildren)
     if (!routeWithChildren) return [];
     let navList = routeWithChildren.children.filter((route: any) => route?.data.showLink);
-    //console.log(navList)
+    ////console.log(navList)
     const keys = navList.map((route: any) => route?.data.title);
 
     this.translate.get(keys).subscribe(translations => {
@@ -46,7 +46,7 @@ export class LanguageService {
         title: translations[route.data.title] || route.data.title
       }));
     });
-    //console.log(navList)
+    ////console.log(navList)
     return navList;
   }
 

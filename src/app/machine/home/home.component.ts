@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CacheService } from 'src/app/services/cache.service';
 import { machineMenuRoutes } from '../machine-route';
 import { MachineService } from 'src/app/services/machine.service';
+import { NativeBridgeService } from 'src/app/services/native-bridge.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +22,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private cacheSrv: CacheService,
     private router: Router,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private nativeBridge: NativeBridgeService,
+    private cacheService: CacheService
   ) {
     this.getMenu()
 
@@ -35,17 +39,17 @@ export class HomeComponent implements OnInit {
         gameItem.ShowGame = true
       }
     });
-    ////console.log(games)
+    //////console.log(games)
     this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 
   async getMenu() {
-    //console.log(machineMenuRoutes)
+    ////console.log(machineMenuRoutes)
     machineMenuRoutes.forEach(async (routeItem: any) => {
       if ((this.isOnline) || (!this.isOnline && routeItem.AllowHybrid)) {
         if (routeItem.data.PermissionName) {
           if (await this.machineSrv.getMachinePermission(routeItem.data.PermissionName) && routeItem.data.showLink) {
-            //console.log(routeItem)
+            ////console.log(routeItem)
             this.machineMenu.push(routeItem)
           }
         }
@@ -55,14 +59,23 @@ export class HomeComponent implements OnInit {
       }
 
     })
-    //console.log(this.machineMenu)
+    ////console.log(this.machineMenu)
   }
 
   selectGame(game: any) {
-    //console.log(game)
+    ////console.log(game)
     let url = game.GameApi.split('/')[1]
     this.router.navigate([`/Machine/${url}`])
   }
+
+  async loadTickets() {
+    const tickets = await this.cacheService.getTicketsFromFlutter();
+
+    //console.log('🎟️ Tickets from DB:', tickets);
+    this.machineSrv.syncOfflineTickets(tickets);
+
+  }
+
 
   async logout() {
     await this.cacheSrv.removeFromFlutterOfflineCache("user_data");

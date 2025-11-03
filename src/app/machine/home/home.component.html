@@ -6,6 +6,7 @@
         <ng-container *ngFor="let game of games">
             <a class="btn btn-primary" (click)="selectGame(game)">{{game.Name.toLowerCase()}}</a>
         </ng-container>
+        <a class="btn btn-primary" (click)="loadTickets()">Sync Data</a>
     </div>
 
     <a class="btn btn-primary logout-btn" (click)="logout();">Logout</a>

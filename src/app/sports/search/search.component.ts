@@ -39,10 +39,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
       this.filterObject = data
+      this.filterObject.IsRefresh = false
     })
 
     this.scanResultSubscription = this.nativeBridge.getScanResult().subscribe(result => {
-      console.log(result)
+      //console.log(result)
       if (result) {
         this.fullTicketId = result;
         this.searchByTicket()
@@ -53,7 +54,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.canSearchByTicketId = await this.machineSrv.getMachinePermission('TerminalGetTicketByCode', await this.machineSrv.getGameId())
-    console.log(this.canSearchByTicketId)
+    //console.log(this.canSearchByTicketId)
   }
 
   showSearchBox(searchBoxType: string) {
@@ -87,7 +88,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       TicketCode: null
     }
     let apiResponse = await this.machineSrv.getTicketByCode(params)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     if (apiResponse) {
       apiResponse.TerminalPick.forEach((element: any, index: any) => {
         this.cartSrv.setSBBets(element, apiResponse.Stake, index == 0)

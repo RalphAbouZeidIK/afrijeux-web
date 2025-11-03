@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NativeBridgeService } from './native-bridge.service';
+import { filter, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,6 @@ import { NativeBridgeService } from './native-bridge.service';
 
 export class CacheService {
 
-  printerError: any = null
 
   constructor(private bridge: NativeBridgeService) {
     (window as any).onCacheLoaded = (key: string, cachedValue: any) => {
@@ -18,15 +18,6 @@ export class CacheService {
         delete this.cacheCallbacks[key]; // clean up all after calling
       }
     };
-
-    this.bridge.printerError$.subscribe(error => {
-      console.log('🔥 Printer error detected:', error);
-      this.printerError = error
-      setTimeout(() => {
-        this.printerError = null
-      }, 1000);
-    });
-
   }
 
   saveToFlutterOfflineCache(key: string, data: any) {
@@ -38,7 +29,7 @@ export class CacheService {
           value: JSON.stringify(data) // send raw API response as JSON string
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        console.log(`💾 Saved to OfflineCache with key: ${key}`);
+        //console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
         console.warn('⚠️ OfflineCache channel not found');
       }
@@ -48,60 +39,66 @@ export class CacheService {
   }
 
   saveTicketToDb(response: any, params: any, paramsBeforeEncryption: any) {
+    console.log('💾 Saving ticket to OfflineCache DB...', response, params, paramsBeforeEncryption);
 
-    // const sub = this.bridge.printerError$.subscribe(error => {
-    //   console.error('🔥 Printer error detected:', error);
-    //   printerError = error;
-    // });
-
-    let IssueTicketRequestObject = {
-      "EncryptedRequestDTO": params.EncryptedRequestDTO
+    let isOfflineFlag = 1
+    if (navigator.onLine) {
+      isOfflineFlag = 0
     }
-    setTimeout(() => {
-      let isPrintedFlag = 1;
-      let isOfflineFlag = 1
-      if (this.printerError) {
-        isPrintedFlag = 0; // failed printing
+    //console.log(isPrintedFlag)
+    try {
+      if ((window as any).OfflineCache) {
+        const message = {
+          action: 'save_ticket',
+          FullTicketId: response.FullTicketId,
+          EncryptedRequest: params.EncryptedRequestDTO,
+          Amount: params.amount,
+          GameId: paramsBeforeEncryption.GameId,
+          IsOffline: isOfflineFlag,
+          IssueDate: paramsBeforeEncryption.TimeStamp, // send raw API response as JSON string
+          IsPrinted: paramsBeforeEncryption.Ticket.IsPrinted,
+          IsCorrupted: !paramsBeforeEncryption.Ticket.IsPrinted,
+          PersonId: paramsBeforeEncryption.PersonId,
+          GameEventId: paramsBeforeEncryption.Ticket.GamePick[0].GameEventId,
+          GameEventIds: paramsBeforeEncryption.Ticket.GamePick.map((pickItem: any) => pickItem.GameEventId).join(","),
+          TicketRequestId: paramsBeforeEncryption.TicketRequestId,
+          PromotionRequestId: '0',
+          IsCanceled: 0,
+          IsSync: 0,
+          IsCancelSync: 0,
+          isCancelLatest: 0,
+          IssueTicketRequestObject: JSON.stringify(params),
+          CancelTicketRequestObject: '',
+        };
+        (window as any).OfflineCache.postMessage(JSON.stringify(message));
+        //sub.unsubscribe();
+        //////console.log(`💾 Saved to OfflineCache with key: ${key}`);
+      } else {
+        console.warn('⚠️ OfflineCache channel not found');
       }
-      if (navigator.onLine) {
-        isOfflineFlag = 0
-      }
-      console.log(isPrintedFlag)
-      try {
-        if ((window as any).OfflineCache) {
-          const message = {
-            action: 'save_ticket',
-            FullTicketId: response.FullTicketId,
-            EncryptedRequest: params.EncryptedRequestDTO,
-            Amount: params.amount,
-            GameId: paramsBeforeEncryption.GameId,
-            IsOffline: isOfflineFlag,
-            IssueDate: paramsBeforeEncryption.TimeStamp, // send raw API response as JSON string
-            IsPrinted: isPrintedFlag,
-            IsCorrupted: !isPrintedFlag,
-            PersonId: paramsBeforeEncryption.PersonId,
-            GameEventId: paramsBeforeEncryption.Ticket.GamePick[0].GameEventId,
-            GameEventIds: paramsBeforeEncryption.Ticket.GamePick.map((pickItem: any) => pickItem.GameEventId).join(","),
-            TicketRequestId: paramsBeforeEncryption.TicketRequestId,
-            PromotionRequestId: '0',
-            IsCanceled: 0,
-            IsSync: 0,
-            IsCancelSync: 0,
-            isCancelLatest: 0,
-            IssueTicketRequestObject: JSON.stringify(IssueTicketRequestObject),
-            CancelTicketRequestObject: '',
-          };
-          (window as any).OfflineCache.postMessage(JSON.stringify(message));
-          //sub.unsubscribe();
-          ////console.log(`💾 Saved to OfflineCache with key: ${key}`);
-        } else {
-          console.warn('⚠️ OfflineCache channel not found');
-        }
-      } catch (err) {
-        console.error('❌ Error sending to OfflineCache', err);
-      }
-    }, 2000);
+    } catch (err) {
+      console.error('❌ Error sending to OfflineCache', err);
+    }
 
+
+  }
+
+  getTicketsFromFlutter(): Promise<any[]> {
+    if ((window as any).OfflineCache?.postMessage) {
+      // Send message to native layer
+      const message = JSON.stringify({ action: 'get_tickets' });
+      (window as any).OfflineCache.postMessage(message);
+
+      // Wait for tickets$ to emit non-empty data
+      return firstValueFrom(
+        this.bridge.tickets$.pipe(
+          filter(tickets => Array.isArray(tickets) && tickets.length > 0)
+        )
+      );
+    } else {
+      console.warn("⚠️ OfflineCache channel not available");
+      return Promise.resolve([]); // fallback
+    }
   }
 
   generateCacheKey(subRoute: string, apiRoute: string, method: string, params: any) {
@@ -167,7 +164,7 @@ export class CacheService {
           key: key
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        ////console.log(`🗑️ Requested delete for key: ${key}`);
+        //////console.log(`🗑️ Requested delete for key: ${key}`);
         resolve();
       } else {
         console.warn("⚠️ OfflineCache channel not found");

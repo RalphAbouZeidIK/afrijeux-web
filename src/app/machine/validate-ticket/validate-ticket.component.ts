@@ -57,7 +57,7 @@ export class ValidateTicketComponent {
 
     }
 
-    //console.log(validateTicketReponse)
+    ////console.log(validateTicketReponse)
   }
 
   async payTicket() {
@@ -66,7 +66,7 @@ export class ValidateTicketComponent {
       this.fullTicketId = ''
       this.isPaying = false
     }
-    //console.log(payTicketReponse)
+    ////console.log(payTicketReponse)
   }
 
   async getCancelPermission() {

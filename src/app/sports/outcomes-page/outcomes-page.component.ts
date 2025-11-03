@@ -29,7 +29,7 @@ export class OutcomesPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.router.url)
+    //console.log(this.router.url)
     if (this.router.url.includes('EventCodeSearch')) {
       this.getMatchOutcomeFromCode()
     }
@@ -46,10 +46,10 @@ export class OutcomesPageComponent implements OnInit {
       IsFavorite: this.isFavorite
     }
 
-    //console.log(params)
+    ////console.log(params)
 
     const apiResponse = await this.gamesSrv.getOutcomesListByMatchId(params)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     if (apiResponse) {
       this.MatchDetails = {
         MatchName: apiResponse[0].MatchName,
@@ -68,7 +68,7 @@ export class OutcomesPageComponent implements OnInit {
       EventCode: parseInt(this.route.snapshot.params['eventCode'])
     }
     let apiResponse: any = await this.gamesSrv.getOutcomesListByMatchCode(params)
-    console.log(apiResponse)
+    //console.log(apiResponse)
     if (apiResponse && apiResponse.length > 0) {
       this.MatchId = apiResponse[0].MatchId
       this.MatchDetails = {

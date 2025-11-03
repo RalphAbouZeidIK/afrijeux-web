@@ -38,7 +38,7 @@ export class GamesService {
         "reunion": country
       }
     }
-    //console.log(params)
+    ////console.log(params)
 
     let gameEventsResponse = await this.apiSrv.makeApi(`OnlineMaster`, `HPBPMU/GetEventConfiguration`, 'POST', params)
     return gameEventsResponse
@@ -53,10 +53,10 @@ export class GamesService {
         "gameId": this.gameObject.GameId,
       }
     }
-    //console.log(params)
+    ////console.log(params)
 
     let resultsResponse = await this.apiSrv.makeApi(`OnlineMaster`, `HPBPMU/GetEventResult`, 'POST', params)
-    //console.log(resultsResponse)
+    ////console.log(resultsResponse)
     resultsResponse.forEach((eventItem: any) => {
       eventItem.horsesArray = eventItem.horsesResults.map((resultItem: any) => Object.values(resultItem))
     })
@@ -171,7 +171,7 @@ export class GamesService {
     else {
       apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetBonusRules', 'GET', {})
     }
-    //console.log(apiResponse)
+    ////console.log(apiResponse)
     return apiResponse
   }
 

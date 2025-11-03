@@ -34,7 +34,7 @@ export class TicketsComponent implements OnInit {
     try {
       const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', "tickets/getTickets", "POST", params, true);
       this.ticketsList = apiResponse.data
-      //console.log(this.ticketsList)
+      ////console.log(this.ticketsList)
 
     } catch (error) {
       console.warn(error)
@@ -52,8 +52,8 @@ export class TicketsComponent implements OnInit {
     if (this.ticketsList[index].isVisible == undefined) {
       ticketPick = await this.apiSrv.makeApi(`AfrijeuxSportsBetting`, `tickets/getPicks/${id}`, "GET", {}, true);
       this.ticketsList[index].picks = ticketPick
-      //console.log(ticketPick)
-      //console.log(this.ticketsList[index])
+      ////console.log(ticketPick)
+      ////console.log(this.ticketsList[index])
       this.ticketsList[index].isVisible = true
     }
     else if (this.ticketsList[index].isVisible) {
@@ -85,7 +85,7 @@ export class TicketsComponent implements OnInit {
       }
       try {
         const apiResponse = await this.apiSrv.makeApi('AfrijeuxSportsBetting', "tickets/cancelticket", "POST", params, true);
-        //console.log(apiResponse)
+        ////console.log(apiResponse)
         this.getTickets()
 
       } catch (error) {
