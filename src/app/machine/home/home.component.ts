@@ -69,12 +69,15 @@ export class HomeComponent implements OnInit {
   }
 
   async loadTickets() {
+    console.log('syncing offline tickets from DB...');
     const tickets = await this.cacheService.getTicketsFromFlutter();
-
-    //console.log('🎟️ Tickets from DB:', tickets);
-    this.machineSrv.syncOfflineTickets(tickets);
-
+    if (tickets.length === 0) {
+      this.machineSrv.setModalData(true, true, 'All Tickets are already synced.');
+      return;
+    }
+    await this.machineSrv.syncOfflineTickets(tickets);
   }
+
 
 
   async logout() {

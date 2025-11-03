@@ -45,14 +45,18 @@ export class NativeBridgeService {
   private todaySumSource = new BehaviorSubject<string | null>(null);
   todaySumSource$ = this.todaySumSource.asObservable();
 
-  private ticketsSource = new BehaviorSubject<any[]>([]);
+
+  ticketsSource = new BehaviorSubject<any[]>([]);
   tickets$ = this.ticketsSource.asObservable();
+
 
   lastError: string | null = null;
 
   public printerError$ = new Subject<string>();
 
-  private printerErrorResolver: ((error: string) => void) | null = null;
+  private ticketUpdatedSource = new Subject<any>();
+  ticketUpdated$ = this.ticketUpdatedSource.asObservable();
+
 
   constructor(private ngZone: NgZone) {
     console.log("🧩 BridgeService initialized:", this);
@@ -103,11 +107,18 @@ export class NativeBridgeService {
       this.ngZone.run(() => {
         try {
           const tickets = JSON.parse(ticketsJson);
-          //console.log("🎟️ Tickets received from Flutter:", tickets);
+          console.log("🎟️ Tickets received from Flutter:", tickets);
           this.ticketsSource.next(tickets);
         } catch (err) {
-          console.error("❌ Failed to parse tickets JSON:", err);
+          console.error("❌ Failed to parse tickets:", err);
         }
+      });
+    };
+
+    (window as any).onTicketUpdated = (id: string) => {
+      this.ngZone.run(() => {
+        console.log("✅ Ticket updated in DB:", id);
+        this.ticketUpdatedSource.next({ FullTicketId: id });
       });
     };
 

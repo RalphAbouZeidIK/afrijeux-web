@@ -3,7 +3,7 @@ import { ApiService } from './api.service';
 import { NativeBridgeService } from './native-bridge.service';
 import { DatePipe } from '@angular/common';
 import { Buffer } from 'buffer';
-import { Subject, Observable, retry, timestamp, max } from 'rxjs';
+import { Subject, Observable, retry, timestamp, max, filter } from 'rxjs';
 import { GenericService } from './generic.service';
 import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
@@ -940,8 +940,52 @@ export class MachineService {
     }
 
     let apiResponse = await this.handleApiResponse('PMUHybrid', 'PMUHybrid/ProcessTickets', 'POST', params)
+    await this.updateTicketsInDb(apiResponse.data)
+    this.setModalData(true, true, 'All Tickets are  synced.');
     console.log(apiResponse)
   }
+
+  async updateTicketsInDb(tickets: any[]): Promise<void> {
+    if (!tickets?.length) return;
+
+    if (!(window as any).OfflineCache?.postMessage) {
+      console.warn("⚠️ OfflineCache not available");
+      return;
+    }
+
+    console.log("📤 Sending update_ticket messages for", tickets.length, "tickets...");
+
+    return new Promise<void>((resolve) => {
+      const totalTickets = tickets.length;
+      let updatedCount = 0;
+
+      const subscription = this.bridge.ticketUpdated$
+        .pipe(filter(update => !!update?.FullTicketId))
+        .subscribe((update: any) => {
+          updatedCount++;
+          console.log(`✅ Ticket updated: ${update.FullTicketId} (${updatedCount}/${totalTickets})`);
+
+          if (updatedCount >= totalTickets) {
+            console.log("🎉 All tickets updated successfully!");
+            subscription.unsubscribe();
+            resolve();
+          }
+        });
+
+      tickets.forEach(ticket => {
+        const message = JSON.stringify({
+          action: 'update_ticket',
+          data: { FullTicketId: ticket.FullTicketId }
+        });
+        (window as any).OfflineCache.postMessage(message);
+        console.log("📨 Sent update_ticket:", message);
+      });
+    });
+  }
+
+
+
+
 
 
   /************Offline Methods End************/

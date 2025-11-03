@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NativeBridgeService } from './native-bridge.service';
-import { filter, firstValueFrom } from 'rxjs';
+import { catchError, filter, firstValueFrom, of, timeout } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -83,23 +83,51 @@ export class CacheService {
 
   }
 
-  getTicketsFromFlutter(): Promise<any[]> {
-    if ((window as any).OfflineCache?.postMessage) {
-      // Send message to native layer
+  async getTicketsFromFlutter(): Promise<any[]> {
+    if (!(window as any).OfflineCache?.postMessage) {
+      console.warn("⚠️ OfflineCache channel not available");
+      return [];
+    }
+
+    return new Promise<any[]>((resolve) => {
+      let resolved = false;
+      let subscription: any;
+
+      // Reset previous emissions so we don’t reuse stale data
+      this.bridge.ticketsSource.next([]);
+
+      // Subscribe *before* sending message
+      subscription = this.bridge.tickets$.subscribe({
+        next: (tickets) => {
+          // ignore empty initial emission
+          if (!resolved && Array.isArray(tickets) && tickets.length > 0) {
+            resolved = true;
+            console.log(`📦 Received ${tickets.length} pending tickets`);
+            resolve(tickets);
+            subscription.unsubscribe();
+          }
+        },
+      });
+
+      // Send the request *after* subscription is active
       const message = JSON.stringify({ action: 'get_tickets' });
       (window as any).OfflineCache.postMessage(message);
+      console.log("📨 Sent get_tickets to Flutter");
 
-      // Wait for tickets$ to emit non-empty data
-      return firstValueFrom(
-        this.bridge.tickets$.pipe(
-          filter(tickets => Array.isArray(tickets) && tickets.length > 0)
-        )
-      );
-    } else {
-      console.warn("⚠️ OfflineCache channel not available");
-      return Promise.resolve([]); // fallback
-    }
+      // Timeout fallback
+      setTimeout(() => {
+        if (!resolved) {
+          console.warn("⏰ No response from Flutter — assuming no pending tickets");
+          resolved = true;
+          resolve([]);
+          if (subscription) subscription.unsubscribe();
+        }
+      }, 2000);
+    });
   }
+
+
+
 
   generateCacheKey(subRoute: string, apiRoute: string, method: string, params: any) {
     const normalizedParams = { ...params };
