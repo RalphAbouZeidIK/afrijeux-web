@@ -273,6 +273,15 @@ export class MachineService {
   }
 
   async registerMachine(params: any) {
+    let machineData = await this.getMachineData();
+    if (machineData) {
+      machineData.Games = machineData.Games.map((gameItem: any) => ({
+        ...gameItem,
+        RouteName: gameItem.GameApi.split('/')[1]
+      }));
+      return machineData;
+    }
+
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
     if (apiResponse.status == false) {
       this.setModalData(true, apiResponse.status, apiResponse.message)
@@ -308,7 +317,14 @@ export class MachineService {
   }
 
   async loginMachine(loginParams: any) {
-
+    let userData: any = await this.getUserData()
+    if (userData && userData.UserName == loginParams.UserName && userData.UserPassword == loginParams.Password) {
+      return {
+        status: true,
+        message: 'Login successful'
+      }
+    }
+    
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', loginParams)
     this.cacheSrv.saveToFlutterOfflineCache('user_data', apiResponse);
     this.localStorageSrv.setItem('user_data', apiResponse, true)

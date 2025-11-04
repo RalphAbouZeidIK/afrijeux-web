@@ -4,7 +4,6 @@ import { CacheService } from 'src/app/services/cache.service';
 import { machineMenuRoutes } from '../machine-route';
 import { MachineService } from 'src/app/services/machine.service';
 import { NativeBridgeService } from 'src/app/services/native-bridge.service';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +17,8 @@ export class HomeComponent implements OnInit {
   games: any = []
 
   isOnline = navigator.onLine
+
+  isLoading = false
 
   constructor(
     private cacheSrv: CacheService,
@@ -69,13 +70,16 @@ export class HomeComponent implements OnInit {
   }
 
   async loadTickets() {
+    this.isLoading = true;
     console.log('syncing offline tickets from DB...');
     const tickets = await this.cacheService.getTicketsFromFlutter();
     if (tickets.length === 0) {
+      this.isLoading = false;
       this.machineSrv.setModalData(true, true, 'All Tickets are already synced.');
       return;
     }
     await this.machineSrv.syncOfflineTickets(tickets);
+    this.isLoading = false;
   }
 
 
