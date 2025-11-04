@@ -7,6 +7,7 @@
             <a class="btn btn-primary" (click)="selectGame(game)">{{game.Name.toLowerCase()}}</a>
         </ng-container>
         <a class="btn btn-primary" (click)="loadTickets()" *ngIf="isOnline">Sync Data</a>
+        <button class="btn btn-primary" (click)="triggerAppUpdate()" *ngIf="isOnline">Force App Update</button>
     </div>
 
     <a class="btn btn-primary logout-btn" (click)="logout();">Logout</a>

@@ -83,48 +83,39 @@ export class CacheService {
 
   }
 
-  async getTicketsFromFlutter(): Promise<any[]> {
-    if (!(window as any).OfflineCache?.postMessage) {
-      console.warn("⚠️ OfflineCache channel not available");
-      return [];
-    }
+  // cache.service.ts
+  getTicketsFromFlutter(filters?: any): Promise<any[]> {
+    return new Promise((resolve) => {
+      // Send request to Flutter
+      if ((window as any).OfflineCache?.postMessage) {
+        const message = JSON.stringify({ action: 'get_tickets', filters });
+        console.log("📨 Sent get_tickets to Flutter with filters:", filters);
+        (window as any).OfflineCache.postMessage(message);
+      } else {
+        console.warn("⚠️ OfflineCache channel not available");
+        resolve([]);
+        return;
+      }
 
-    return new Promise<any[]>((resolve) => {
-      let resolved = false;
-      let subscription: any;
-
-      // Reset previous emissions so we don’t reuse stale data
-      this.bridge.ticketsSource.next([]);
-
-      // Subscribe *before* sending message
-      subscription = this.bridge.tickets$.subscribe({
-        next: (tickets) => {
-          // ignore empty initial emission
-          if (!resolved && Array.isArray(tickets) && tickets.length > 0) {
-            resolved = true;
-            console.log(`📦 Received ${tickets.length} pending tickets`);
-            resolve(tickets);
-            subscription.unsubscribe();
-          }
-        },
+      // Wait for tickets once
+      const sub = this.bridge.tickets$.subscribe((tickets: any) => {
+        if (tickets && tickets.length > 0) {
+          resolve(tickets);
+          setTimeout(() => sub.unsubscribe(), 0); // stop listening
+        }
       });
 
-      // Send the request *after* subscription is active
-      const message = JSON.stringify({ action: 'get_tickets' });
-      (window as any).OfflineCache.postMessage(message);
-      console.log("📨 Sent get_tickets to Flutter");
-
-      // Timeout fallback
+      // Optional timeout safeguard
       setTimeout(() => {
-        if (!resolved) {
-          console.warn("⏰ No response from Flutter — assuming no pending tickets");
-          resolved = true;
-          resolve([]);
-          if (subscription) subscription.unsubscribe();
-        }
+        sub.unsubscribe();
+        resolve([]); // no tickets received in time
       }, 2000);
     });
   }
+
+
+
+
 
 
 

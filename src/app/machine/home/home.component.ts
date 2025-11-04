@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
   async loadTickets() {
     this.isLoading = true;
     console.log('syncing offline tickets from DB...');
-    const tickets = await this.cacheService.getTicketsFromFlutter();
+    const tickets = await this.cacheService.getTicketsFromFlutter({ IsSync: 0, IsOffline: 1 });
     if (tickets.length === 0) {
       this.isLoading = false;
       this.machineSrv.setModalData(true, true, 'All Tickets are already synced.');
@@ -80,6 +80,21 @@ export class HomeComponent implements OnInit {
     }
     await this.machineSrv.syncOfflineTickets(tickets);
     this.isLoading = false;
+  }
+
+  triggerAppUpdate() {
+    try {
+      if ((window as any).OfflineCache?.postMessage) {
+        const message = JSON.stringify({ action: 'force_update' });
+        (window as any).OfflineCache.postMessage(message);
+        console.log('🚀 Requested Flutter to update Angular app');
+      } else {
+        console.warn('⚠️ OfflineCache bridge not found');
+        alert('OfflineCache bridge not available.');
+      }
+    } catch (err) {
+      console.error('❌ Error sending update request:', err);
+    }
   }
 
 
