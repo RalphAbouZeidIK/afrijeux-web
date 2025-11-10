@@ -52,6 +52,11 @@ export class MachineCoreComponent implements OnInit {
       this.isAppRegistered = true
     }
 
+    const ip = await this.bridge.getDeviceIpFromFlutter();
+    this.machineSrv.setDeviceIp(ip);
+    console.log("Device IP:", ip);
+
+
   }
 
 

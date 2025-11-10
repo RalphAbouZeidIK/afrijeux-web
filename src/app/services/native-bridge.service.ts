@@ -235,4 +235,27 @@ export class NativeBridgeService {
     }
   }
 
+  async getDeviceIpFromFlutter(): Promise<string> {``
+    return new Promise<string>((resolve) => {
+      // Prepare a one-time listener for the callback
+      (window as any).onDeviceIp = (ip: string) => {
+        console.log("📡 Received device IP:", ip);
+        resolve(ip);
+        delete (window as any).onDeviceIp; // Clean up after resolving
+      };
+
+      // Send message to Flutter asking for the IP
+      const message = JSON.stringify({ action: "get_ip" });
+      if ((window as any).OfflineCache?.postMessage) {
+        console.log("📨 Sent get_ip to Flutter");
+        (window as any).OfflineCache.postMessage(message);
+      } else {
+        console.warn("⚠️ OfflineCache bridge not available");
+        resolve("unknown");
+      }
+
+    });
+  }
+
+
 }

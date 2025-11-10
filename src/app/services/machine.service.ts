@@ -33,6 +33,8 @@ export class MachineService {
     thirdValue: ''
   }
 
+  deviceIp: any = null
+
 
   constructor(
     private apiSrv: ApiService,
@@ -55,7 +57,9 @@ export class MachineService {
       console.log(this.valuesToPrint)
       this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
       this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
-
+      if (!error && this.valuesToPrint.thirdValue.IsOffline == 0) {
+        this.issueCorruptedTicket()
+      }
       this.cacheSrv.saveTicketToDb(this.valuesToPrint.firstValue, this.valuesToPrint.secondValue, this.valuesToPrint.thirdValue);
       // Example: save to DB or update UI
     });
@@ -77,6 +81,10 @@ export class MachineService {
 
   setModalStatus(status: any) {
     this.openModal$.next(status);
+  }
+
+  setDeviceIp(ip: any) {
+    this.deviceIp = ip;
   }
 
   async encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false, isSyncApi: boolean = false) {
@@ -129,14 +137,14 @@ export class MachineService {
         longitude: "0",
         timeStamp: timeStamp
       },
-      ip: null,
+      ip: this.deviceIp,
       culture: null,
       machineCode: (isRegisterMachineApi) ? null : machineData.MachineCode,   //("6821")
       currency: null,
       amount: amount
     }
 
-    //console.log(body)
+    console.log(body)
 
     return {
       body
@@ -188,7 +196,6 @@ export class MachineService {
       MachineId: (machineData) ? machineData.MachineId : null
     }
     let paramsBeforeEncryption = params
-    //console.log(params)
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false, (apiRoute.includes('ProcessTickets')) ? true : false);
 
@@ -324,7 +331,7 @@ export class MachineService {
         message: 'Login successful'
       }
     }
-    
+
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', loginParams)
     this.cacheSrv.saveToFlutterOfflineCache('user_data', apiResponse);
     this.localStorageSrv.setItem('user_data', apiResponse, true)
@@ -413,6 +420,7 @@ export class MachineService {
       Ticket: ticketBody,
       TicketRequestId: ticketRequestId,
       LoyalityReferenceId: 0,
+      IsOffline: this.isOnline ? 0 : 1
     }
 
     if (!this.isOnline) {
@@ -746,8 +754,8 @@ export class MachineService {
 
   private async updateMachineTicketId(gameId: number, value: number): Promise<void> {
     let machineTicketData = await this.cacheSrv.getFromFlutterOfflineCache('machine_ticket_data');
-    console.log('fetched machine data')
-    console.log(machineTicketData)
+    // console.log('fetched machine data')
+    // console.log(machineTicketData)
     // Initialize if not existing
     if (!machineTicketData) {
       machineTicketData = { MachineTicketIds: {} };
@@ -999,7 +1007,17 @@ export class MachineService {
     });
   }
 
+  async issueCorruptedTicket() {
 
+    console.log(this.valuesToPrint)
+    let params = {
+      TicketRequestId: this.valuesToPrint.thirdValue.TicketRequestId,
+      EncryptedIssueTicketRequest: this.valuesToPrint.secondValue.EncryptedRequestDTO,
+      GameId: this.valuesToPrint.thirdValue.GameId,
+    }
+    const apiResponse = await this.handleApiResponse('CommonApi', `CommonApi/CorruptedTicket`, 'POST', params)
+    console.log(apiResponse)
+  }
 
 
 
