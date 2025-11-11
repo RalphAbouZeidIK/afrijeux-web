@@ -126,7 +126,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   OnclickIsMobile() {
     if (!this.isDesktop) {
-      this.showOnClickMobile = !this.showOnClickMobile
+      this.showOnClickMobile = !this.showOnClickMobile;
+      (this.showOnClickMobile) ? document.body.classList.add('cart-active') : document.body.classList.remove('cart-active');
     }
   }
 
@@ -201,7 +202,9 @@ export class CartComponent implements OnInit, OnDestroy {
     }
     this.calculateCombinations(this.betItem)
     this.showCartButtons = this.listOfBets.length > 0
-    this.showOnClickMobile = this.betItem.length > 0 && this.betItem[0].SelectedFixedConfig
+    this.showOnClickMobile = this.betItem.length > 0 && this.betItem[0].SelectedFixedConfig;
+    (this.showOnClickMobile) ? document.body.classList.add('cart-active') : document.body.classList.remove('cart-active');
+
   }
 
   calculateCombinations(betItem: any) {
