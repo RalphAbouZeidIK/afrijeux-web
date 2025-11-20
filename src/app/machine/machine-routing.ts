@@ -18,7 +18,7 @@ const routes: Routes = [
         path: '',
         component: MachineCoreComponent,
         children: [
-            
+
             ...machineMenuRoutes,
             {
                 path: 'HPBPMU',
@@ -38,6 +38,16 @@ const routes: Routes = [
                 loadChildren: () => import('../pmu/pmu.module').then(m => m.PmuModule),
                 data: { breadcrumb: 'HPB PMU (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
             },
+            {
+                path: 'AfrijeuxFiveNinetyV2',
+                loadChildren: () => import('../khamsa/khamsa.module').then(m => m.KhamsaModule),
+                data: {
+                    breadcrumb: 'Five Ninety',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.Khamsa',
+                }
+            }
 
         ]
     }

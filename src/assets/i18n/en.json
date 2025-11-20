@@ -10,7 +10,8 @@
             "User": "My profile",
             "Sports": "Sports",
             "pmu": "PMU",
-            "Machine": "Machine"
+            "Machine": "Machine",
+            "Khamsa": "Five Ninety"
         },
         "HPBTitles": {
             "mesParies": "My Bets",
@@ -275,5 +276,8 @@
             "noOutcomesAvailable": "No Outcomes Available",
             "noMatchesAvailable": "No matches available"
         }
+    },
+    "khamsa": {
+      "title":"Afrijeux Khamsa"
     }
 }

@@ -1,0 +1,71 @@
+<ng-container *ngIf="!showEventDetails">
+    <h2 class="center">
+        {{ 'khamsa.title' | translate }}
+    </h2>
+    <div class="events-list" *ngIf="eventsList.length>0">
+        <a *ngFor="let event of eventsList" class="event-item btn btn-primary" (click)="composeEventDetails(event)">
+            {{ event.EventName }}
+        </a>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="showEventDetails">
+    <h5>
+        {{selectedEvent.EventName}} / {{selectedEvent.EventDate}}
+    </h5>
+    <div class="form-group d-flex">
+        <select class="form-control" [(ngModel)]="selectedNap" (ngModelChange)="onNapChange($event)">
+            <option [ngValue]="null" selected> Choose Nap </option>
+            <ng-container *ngFor="let categoryItem of selectedEvent.fixedConfig.Nap">
+                <option *ngIf="categoryItem.IsAllowed" [ngValue]="categoryItem">
+                    {{ categoryItem.Id }}
+                </option>
+            </ng-container>
+        </select>
+        <input type="text" disabled class="form-control"
+            value="Nb of Balls{{(selectedNap?.balls)?`: ${selectedNap?.balls}`:``}}">
+    </div>
+    <div class="form-group d-flex" *ngIf="selectedNap">
+        <a class="btn btn-primary" (click)="quickPick()">Quick Pick</a>
+
+        <a class="btn btn-primary" (click)="onChooseNumbers()">Choose Numbers</a>
+
+    </div>
+    <div class="form-group" *ngIf="selectedBalls.length > 0">
+        <input type="text" disabled class="form-control" [value]="getSelectedBallsText()" />
+    </div>
+
+    <div class="balls-list-holder" *ngIf="showBallPicker">
+        <div class="ball-list">
+            <div *ngFor="let ball of listOfBalls" class="ball" [class.selected]="isBallSelected(ball)"
+                (click)="selectBall(ball)">
+                {{ ball.number }}
+            </div>
+
+        </div>
+        <div class="form-group d-flex" *ngIf="selectedNap">
+            <a class="btn btn-primary" (click)="showBallPicker = false">Confirm</a>
+
+            <a class="btn btn-secondary" (click)="showBallPicker = false">Close</a>
+
+        </div>
+    </div>
+
+    <ng-container *ngIf="selectedBalls.length == selectedNap?.balls">
+        <div class="form-group stake-block">
+            <label class="title-label">Stake</label>
+
+            <div class="form-group d-flex">
+                <a class="btn btn-primary" (click)="updateMultiplier(false)">-</a>
+                <input type="number" class="form-control" [(ngModel)]="Stake" />
+                <a class="btn btn-primary" (click)="updateMultiplier(true)">+</a>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <a class="btn btn-success" (click)="addToBet()">Place Bet</a>
+        </div>
+    </ng-container>
+
+
+</ng-container>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { GenericService } from 'src/app/services/generic.service';
 import { LanguageService } from 'src/app/services/language.service';
 
@@ -14,17 +15,23 @@ export class SportsCoreComponent {
   selectedFilters: any;
   navList: any
   isDesktop: any = this.gnrcSrv.getIsDesktopView()
+  
+  isDesktopSubscription: Subscription
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private languageSrv: LanguageService,
     private translate: TranslateService,
-    private gnrcSrv:GenericService
+    private gnrcSrv: GenericService
 
   ) {
     translate.onLangChange.subscribe(() => {
       this.composeRoutes()
+    });
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      console.log('isDesktopView', isDesktop);
+      this.isDesktop = isDesktop;
     });
   }
 
@@ -50,7 +57,7 @@ export class SportsCoreComponent {
       this.selectedFilters = selectedFilters // Logs sportId for the child route
     });
   }
-  
+
   composeRoutes() {
     this.navList = this.languageSrv.composeRoutes()
   }

@@ -53,11 +53,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private resizeTimeout: any;
 
-  @HostListener('window:resize', ['$event'])
-
+  @HostListener('window:resize')
   onResize() {
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
+      console.log('resize')
+
       this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200);
     }, 300);
   }
@@ -70,7 +71,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private gnrcSrv: GenericService,
     private pageTitleService: PageTitleService,
-    private cacheSrv:CacheService
+    private cacheSrv: CacheService
   ) {
 
 
@@ -229,9 +230,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.translate.use('fr');
   }
 
-  clearFlutterOfflineCache(){
-    this.cacheSrv.clearFlutterOfflineCache()
-  }
 
 
   ngOnDestroy(): void {

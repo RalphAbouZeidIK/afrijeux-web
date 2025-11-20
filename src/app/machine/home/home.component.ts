@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate([`/Machine/${url}`])
   }
 
-  async loadTickets() {
+  async syncTickets() {
     this.isLoading = true;
     console.log('syncing offline tickets from DB...');
     const tickets = await this.cacheService.getTicketsFromFlutter({ IsSync: 0, IsOffline: 1 });
@@ -81,6 +81,52 @@ export class HomeComponent implements OnInit {
     await this.machineSrv.syncOfflineTickets(tickets);
     this.isLoading = false;
   }
+
+  async offlineReport() {
+    let offlineGames = this.games.filter((gameItem: any) => gameItem.AllowHybrid)
+    console.log(offlineGames)
+    offlineGames.forEach(async (gameItem: any) => {
+      let tickets = await this.cacheService.getTicketsFromFlutter({
+        GameId: gameItem.GameId,
+        IsOffline: 1,
+        columns: ['FullTicketId', 'GameEventId', 'IsCanceled', 'IsSync']
+      });
+
+      let reportParamsArray = await this.groupByGameEvent(tickets, gameItem)
+      console.log(reportParamsArray)
+      await this.machineSrv.sendOfflineReport(reportParamsArray)
+    })
+    // this.isLoading = true;
+    // 
+  }
+
+  async groupByGameEvent(tickets: any[], gameItem: any): Promise<any[]> {
+    // Group by GameEventId
+    const groupedTickets = tickets.reduce((groups: any, ticket: any) => {
+      const gameEventId = ticket.GameEventId;
+      if (!groups[gameEventId]) {
+        groups[gameEventId] = [];
+      }
+      groups[gameEventId].push(ticket);
+      return groups;
+    }, {});
+
+    const groupedArray = Object.entries(groupedTickets).map(([gameEventId, groupTickets]) => ({
+      gameEventId,
+      tickets: groupTickets
+    }));
+
+    const reportParamsArray = groupedArray.map((group: any) => ({
+      TotalTickets: group.tickets.length,
+      TicketsToCancel: group.tickets.filter((t: any) => t.IsCanceled == 1).length,
+      GameId: gameItem.GameId,
+      GameEventId: group.gameEventId,
+      GameRoute: gameItem.RouteName
+    }));
+
+    return reportParamsArray;
+  }
+
 
   triggerAppUpdate() {
     try {
@@ -95,6 +141,11 @@ export class HomeComponent implements OnInit {
     } catch (err) {
       console.error('❌ Error sending update request:', err);
     }
+  }
+
+
+  clearFlutterOfflineCache() {
+    this.cacheSrv.clearFlutterOfflineCache()
   }
 
 

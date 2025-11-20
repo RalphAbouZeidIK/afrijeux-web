@@ -185,16 +185,19 @@ export class MachineService {
   }
 
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
-    let userData = await this.getUserData()
-    let machineData = await this.getMachineData();
+    if (!apiRoute.includes('SendReports')) {
+      let userData = await this.getUserData()
+      let machineData = await this.getMachineData();
 
-    params = {
-      ...params,
-      PersonId: (userData) ? userData.PersonId : null,
-      GameOperationId: (machineData) ? machineData.OperationId : null,
-      TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
-      MachineId: (machineData) ? machineData.MachineId : null
+      params = {
+        ...params,
+        PersonId: (userData) ? userData.PersonId : null,
+        GameOperationId: (machineData) ? machineData.OperationId : null,
+        TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
+        MachineId: (machineData) ? machineData.MachineId : null
+      }
     }
+
     let paramsBeforeEncryption = params
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false, (apiRoute.includes('ProcessTickets')) ? true : false);
@@ -1019,9 +1022,25 @@ export class MachineService {
     console.log(apiResponse)
   }
 
-
-
+  async sendOfflineReport(params: any) {
+    params.forEach(async (paramItem: any) => {
+      paramItem.ReportDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+      paramItem.MachineId = (await this.getMachineData())?.MachineId || null
+    });
+    console.log(params)
+    const apiResponse = await this.handleApiResponse(params[0].GameRoute, `${params[0].GameRoute}/SendReports`, 'POST', params)
+  }
 
   /************Offline Methods End************/
+
+  async getKhamsaEvents() {
+    let params: any = {
+      GameId: await this.getGameId(),
+      GameConfiguration: [],
+      UserOnlineStatus: true,
+    }
+    let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetEventConfiguration`, 'POST', params)
+    return gameEventsResponse
+  }
 
 }

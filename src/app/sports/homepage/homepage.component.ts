@@ -55,12 +55,14 @@ export class HomepageComponent implements OnInit, OnDestroy {
     });
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      console.log('isDesktopView', isDesktop);
       this.isDesktop = isDesktop;
     });
 
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
       if (!this.isDesktop) {
         this.getMatchesParams = data
+        this.page = 1
         this.getMatches()
       }
     })

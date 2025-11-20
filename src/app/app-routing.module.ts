@@ -39,6 +39,16 @@ const routes: Routes = [
     }
   },
   {
+    path: 'AfrijeuxFiveNinetyV2',
+    loadChildren: () => import('./khamsa/khamsa.module').then(m => m.KhamsaModule),
+    data: {
+      breadcrumb: 'Five Ninety',
+      shouldBeLoggedIn: false,
+      showLink: true,
+      title: 'routerLinks.appTitle.Khamsa',
+    }
+  },
+  {
     path: 'User',
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
     canActivate: [SharedGuard],
