@@ -516,6 +516,12 @@ export class CartComponent implements OnInit, OnDestroy {
     const apiResponse = await this.machineSrv.issueTicket(this.listOfBets)
     //console.log(apiResponse)
     if (apiResponse?.DataToPrint || apiResponse.success) {
+      let message = ''
+      this.translate.get('machine.Messages.issueTicketSuccess').subscribe((msg: string) => {
+        message = msg
+        console.log(message)
+      });
+      this.machineSrv.setModalData(true, true, message)
       this.clearBets()
     }
   }

@@ -1,5 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -76,7 +77,8 @@ export class CartComponent implements OnInit, OnDestroy {
     private storageSrv: LocalStorageService,
     private usrSrv: UserService,
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private translate: TranslateService
   ) {
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
@@ -208,6 +210,12 @@ export class CartComponent implements OnInit, OnDestroy {
     }
     let apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
     if (apiResponse.DataToPrint) {
+      let message = ''
+      this.translate.get('machine.Messages.issueTicketSuccess').subscribe((msg: string) => {
+        message = msg
+        console.log(message)
+      });
+      this.machineSrv.setModalData(true, true, message)
       this.clearBets()
     }
 

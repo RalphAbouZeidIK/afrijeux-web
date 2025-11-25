@@ -272,9 +272,10 @@
             "searchByGameName": "Game Name Search",
             "searchByTicket": "Ticket Code Search"
         },
-        "errorMessages": {
+        "Messages": {
             "noOutcomesAvailable": "No Outcomes Available",
-            "noMatchesAvailable": "No matches available"
+            "noMatchesAvailable": "No matches available",
+            "issueTicketSuccess":"Ticket Issued Successfully"
         }
     },
     "khamsa": {

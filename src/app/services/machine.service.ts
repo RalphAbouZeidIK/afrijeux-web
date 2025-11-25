@@ -558,7 +558,7 @@ export class MachineService {
     }
     else if (apiResponse.data.length == 0) {
       let message = ''
-      this.translate.get('machine.errorMessages.noOutcomesAvailable').subscribe((msg: string) => {
+      this.translate.get('machine.Messages.noOutcomesAvailable').subscribe((msg: string) => {
         message = msg
       });
       this.setModalData(true, false, message)

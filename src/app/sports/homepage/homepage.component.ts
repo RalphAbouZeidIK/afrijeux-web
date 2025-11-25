@@ -108,7 +108,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.matchesList = await this.gamesSrv.getMatches(params)
     if (this.matchesList.length == 0 && this.getMatchesParams.MatchName != null) {
       let message = ''
-      this.translate.get('machine.errorMessages.noMatchesAvailable').subscribe((msg: string) => {
+      this.translate.get('machine.Messages.noMatchesAvailable').subscribe((msg: string) => {
         message = msg
       });
       this.machineSrv.setModalData(true, false, message)

@@ -272,9 +272,10 @@
             "searchByGameName": "Recherche par nom d'événement",
             "searchByTicket": "Recherche par code de billet"
         },
-        "errorMessages": {
+        "Messages": {
             "noOutcomesAvailable": "Aucun résultat disponible",
-            "noMatchesAvailable": "Aucun match disponible"
+            "noMatchesAvailable": "Aucun match disponible",
+            "issueTicketSuccess": "Émission du billet réussie"
         }
     },
     "khamsa": {
