@@ -114,7 +114,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGameEvents()
-      ////console.log(gameEventsResponse)
+      console.log(gameEventsResponse)
       const now = new Date();
       const upcoming = gameEventsResponse.GameConfiguration.EventConfiguration.filter((event: any) => {
         return new Date(event.CloseSales) > now;

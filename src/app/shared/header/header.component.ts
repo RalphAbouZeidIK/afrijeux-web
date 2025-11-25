@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.getMenu()
 
     if (await this.usrSrv.isUserLoggedIn()) {
-      this.getUserBalance()
+      //this.getUserBalance()
     }
 
     this.composeRoutes(); // Initial translation
@@ -91,8 +91,8 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   async getMenu() {
-    this.menu = await this.menuSvc.getMenu();
-    ////console.log(this.menu)
+    this.menu = this.navList;
+    console.log(this.navList)
   }
 
   async getUserBalance() {
@@ -174,8 +174,11 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    ////console.log(changes)
+    console.log(changes)
     if (!changes['isLoggedIn']?.firstChange) {
+      this.getMenu()
+    }
+    if (!changes['navList']?.firstChange) {
       this.getMenu()
     }
   }

@@ -16,10 +16,11 @@
 
   <ng-container *ngIf="isAndroidApp">
     <div class="body-holder android-app">
+
+      <app-header [navList]="navList"></app-header>
       <router-outlet></router-outlet>
     </div>
   </ng-container>
 
   <app-loader *ngIf="isLoading"></app-loader>
 </div>
-

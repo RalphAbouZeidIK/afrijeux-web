@@ -135,11 +135,12 @@ export class LoginComponent implements OnChanges, OnInit {
     let loginParams = this.loginForm.value
     if (this.isAndroidApp) {
       let respoonse = await this.machineSrv.loginMachine(loginParams)
+      console.log(respoonse)
       if (respoonse.status == false) {
         this.machineSrv.setModalData(true, false, respoonse.message)
       }
       else {
-        this.router.navigate(['Machine/Home'])
+        this.router.navigate(['Machine/PMUHybrid/courses'])
       }
       ////console.log(respoonse)
     }

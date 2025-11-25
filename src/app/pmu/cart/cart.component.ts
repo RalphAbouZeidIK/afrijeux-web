@@ -88,10 +88,13 @@ export class CartComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.isPMUHybrid = this.machineSrv.getGameRoute() == 'PMUHybrid'
-    this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
 
     if (!this.isAndroidApp) {
       this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
+    }
+
+    else {
+      this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
     }
 
     if (this.storageSrv.getItem('cartData') && this.storageSrv.getItem('cartData').length > 0) {

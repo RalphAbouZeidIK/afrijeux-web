@@ -31,7 +31,7 @@ export class CacheService {
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
         //console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
-        console.warn('⚠️ OfflineCache channel not found');
+        //console.warn('⚠️ OfflineCache channel not found');
       }
     } catch (err) {
       console.error('❌ Error sending to OfflineCache', err);
@@ -74,7 +74,7 @@ export class CacheService {
         //sub.unsubscribe();
         //////console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
-        console.warn('⚠️ OfflineCache channel not found');
+        //console.warn('⚠️ OfflineCache channel not found');
       }
     } catch (err) {
       console.error('❌ Error sending to OfflineCache', err);
@@ -159,7 +159,7 @@ export class CacheService {
           JSON.stringify({ action: "get", key })
         );
       } else {
-        console.warn("⚠️ OfflineCache channel not found");
+        //console.warn("⚠️ OfflineCache channel not found");
         resolve(null);
       }
 
@@ -203,7 +203,7 @@ export class CacheService {
         );
         resolve();
       } else {
-        console.warn('⚠️ OfflineCache channel not found');
+        //console.warn('⚠️ OfflineCache channel not found');
         resolve();
       }
     });

@@ -59,14 +59,16 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
     const apiResponse = await this.gamesSrv.getFiltersLists()
     this.filtersList = apiResponse
     //console.log(this.filtersList)
-    if (this.isDesktop) {
-      this.setSelectedToFalse()
-      this.resetSelected()
-    }
-    else {
-      this.selectedSport = this.filtersList.Sports[0]
-      this.selectedSportChange(this.selectedSport, 'sport')
-    }
+    // if (this.isDesktop) {
+    //   this.setSelectedToFalse()
+    //   this.resetSelected()
+    // }
+    // else {
+    //   this.selectedSport = this.filtersList.Sports[0]
+    //   this.selectedSportChange(this.selectedSport, 'sport')
+    // }
+    this.selectedSport = this.filtersList.Sports[0]
+    this.selectedSportChange(this.selectedSport, 'sport')
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -76,7 +78,7 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (!changes['shouldResetFilters'].currentValue) {
       //console.log('Changes detected in shouldResetFilters:', changes['shouldResetFilters'].currentValue);
-      this.selectedSport = this.filtersList.Sports[0]
+      this.selectedSport = this.filtersList?.Sports[0]
       this.selectedSportChange(this.selectedSport, 'sport')
     }
   }
