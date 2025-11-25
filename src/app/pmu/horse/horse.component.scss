@@ -149,6 +149,10 @@
     }
 }
 
+.table-row.no-partant {
+    background: #595959
+}
+
 @media all and (max-width:1200px) {
 
     .hidden-infos {
@@ -202,9 +206,7 @@
         padding-bottom: 0;
     }
 
-    .table-row.no-partant {
-        background: #595959
-    }
+
 
     .mobile-right-table-item {
         font-weight: 400;

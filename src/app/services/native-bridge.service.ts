@@ -198,7 +198,7 @@ export class NativeBridgeService {
       ////console.log(message)
       window.PrintChannel.postMessage(message);
     } else {
-      alert("PrintChannel is not available.");
+      //alert("PrintChannel is not available.");
     }
   }
 
@@ -250,7 +250,7 @@ export class NativeBridgeService {
         console.log("📨 Sent get_ip to Flutter");
         (window as any).OfflineCache.postMessage(message);
       } else {
-        console.warn("⚠️ OfflineCache bridge not available");
+        //console.warn("⚠️ OfflineCache bridge not available");
         resolve("unknown");
       }
 

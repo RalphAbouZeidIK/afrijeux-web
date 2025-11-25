@@ -60,11 +60,11 @@ export class HomepageComponent implements OnInit, OnDestroy {
     });
 
     this.filtersSubscription = this.gamesSrv.getSportsFilter().subscribe((data) => {
-      if (!this.isDesktop) {
-        this.getMatchesParams = data
-        this.page = 1
-        this.getMatches()
-      }
+
+      this.getMatchesParams = data
+      this.page = 1
+      this.getMatches()
+
     })
   }
 
@@ -122,7 +122,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async getMatchOutcome(event: any) {
     ////console.log(event)
-    let firstPath = (!this.isDesktop) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
+    // let firstPath = (!this.isDesktop) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
+    let firstPath = `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}`
     this.router.navigate([`${firstPath}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])
   }
 

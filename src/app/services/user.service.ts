@@ -147,7 +147,7 @@ export class UserService {
 
     if (this.isAndroidApp) {
       let userData: any
-      userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
+      userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data') || this.localStorageSrv.getItem('user_data', true)
       userToken = (userData) ? userData.jwtToken : ''
     }
 

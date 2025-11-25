@@ -384,9 +384,7 @@
     @include transition(0.5s);
 }
 
-::ng-deep .cart-active .courses-main {
-    padding-bottom: 230px !important;
-}
+
 
 .d-flex {
     margin: 0 -10px;
@@ -410,4 +408,5 @@
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
+
 }

@@ -1,10 +1,9 @@
-<div class="sports-list" *ngIf="isDesktop">
+<!-- <div class="sports-list" *ngIf="!isDesktop">
     <h2> {{ 'sb.sportsList.title' | translate }}</h2>
     <ul>
         <li *ngFor="let sportItem of filtersList.Sports">
             <a class="sport-holder" [ngClass]="{'active':sportItem.isSelected}">
                 <div class="img-title" (click)="redirectTo(sportItem)">
-                    <!-- <img src="{{sportItem.SportIcon}}" alt="{{sportItem.SportName}}"> -->
                     <span>{{sportItem.SportName}}</span>
                 </div>
                 <div class="arrow" (click)="getCategories(sportItem)" [ngClass]="{'active':sportItem.showCategories}">
@@ -17,7 +16,7 @@
                     <li *ngFor="let category of sportItem.Categories">
                         <a [ngClass]="{'active':category.isSelected}">
                             <div class="img-title" (click)="redirectTo(category)">
-                                <!-- <img src="{{category.SportIcon}}" alt="{{category.SportName}}"> -->
+                                
                                 <span>{{category.CategoryName}}</span>
                             </div>
 
@@ -31,7 +30,7 @@
                                 <li *ngFor="let tournament of category.Tournaments">
                                     <a [ngClass]="{'active':tournament.isSelected}">
                                         <div class="img-title" (click)="redirectTo(tournament)">
-                                            <!-- <img src="{{tournament.SportIcon}}" alt="{{tournament.SportName}}"> -->
+                                           
                                             <span>{{tournament.TournamentName}}</span>
                                         </div>
                                     </a>
@@ -44,10 +43,10 @@
             </div>
         </li>
     </ul>
-</div>
+</div> -->
 
 <app-search *ngIf="isAndroidApp"></app-search>
-<div class=" form-content" *ngIf="!isDesktop">
+<div class=" form-content">
     <div class="form-group">
         <select class="form-control" [(ngModel)]="selectedSport" (ngModelChange)="selectedSportChange($event,'sport')">
             <option [ngValue]="null" disabled selected> Sports </option>
