@@ -85,6 +85,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isLoggedIn = loggedIn;
       this.getMenuItems()
     });
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
+      }
+    });
     if (!this.isAndroidApp) {
       // this.isLoggedIn will be set in ngOnInit asynchronously
 
@@ -96,6 +102,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       ////console.log(this.isLoggedIn)
 
       this.router.events.subscribe(event => {
+        console.log('Router Event:', event.constructor.name);
         if (event instanceof NavigationEnd) {
           document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
           if ((event.url == '/resultat') || (event.url == '/comment-parier')) {

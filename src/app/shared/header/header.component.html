@@ -1,6 +1,6 @@
 <header [ngClass]="{'is-mobile':!isDesktop}" class="header-main">
   <div class="overlay" (click)="hideMenus()"></div>
-  <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()"></a>
+  <a class="mobile-toggle" (click)="mobileToggleClick()"></a>
   <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/Machine/PMUHybrid/courses']" />
 
   <div class="container-fluid header-container">
