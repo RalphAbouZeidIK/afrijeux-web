@@ -172,7 +172,7 @@ export class MachineService {
   async decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
     const xxtea = require('xxtea-node');
     let decrypted: any;
-    let machineSerial = await this.bridge.getSerial()
+    let machineSerial = 'B42M001K02400065'
     if (isRegisterMachineApi) {
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(machineSerial))))
     }
@@ -308,7 +308,7 @@ export class MachineService {
   }
 
   async getMachineData() {
-    let machineData: any = await this.cacheSrv.getFromFlutterOfflineCache('machine_data')
+    let machineData: any = await this.cacheSrv.getFromFlutterOfflineCache('machine_data') || this.localStorageSrv.getItem('machine_data', true)
     return machineData;
   }
 
@@ -343,7 +343,7 @@ export class MachineService {
 
 
   async getUserData() {
-    let machineData: any = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
+    let machineData: any = await this.cacheSrv.getFromFlutterOfflineCache('user_data') || this.localStorageSrv.getItem('user_data', true)
     return machineData;
   }
 

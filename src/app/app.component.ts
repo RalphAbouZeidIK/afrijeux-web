@@ -7,6 +7,8 @@ import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PageTitleService } from './services/page-title.service';
 import { CacheService } from './services/cache.service';
+import { machineMenuRoutes } from './machine/machine-route';
+import { MachineService } from './services/machine.service';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     */
   isLoading = false
   routes: any;
-  navList: any;
+  navList: any = [];
 
   /**
    * Array to store notifications list 
@@ -71,7 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private gnrcSrv: GenericService,
     private pageTitleService: PageTitleService,
-    private cacheSrv: CacheService
+    private machineSrv: MachineService
   ) {
 
 
@@ -189,20 +191,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  getMenuItems() {
-    this.routes = this.router.config;
+  async getMenuItems() {
 
-    const shouldShowLinks = this.isLoggedIn;
+    if (this.isAndroidApp) {
+      let machineData = await this.machineSrv.getMachineData()
+      console.log(machineData)
+      let games = machineData?.Games
+      console.log(games)
+      games.forEach((gameItem: any) => {
+        this.navList.push(gameItem)
 
-    this.router.config.forEach((menuItem: any) => {
-      if (menuItem.data.shouldBeLoggedIn) {
-        menuItem.data.showLink = shouldShowLinks;
-      }
-    });
+      });
+    }
+    else {
+      this.routes = this.router.config;
 
-    this.navList = this.router.config.filter((item: any) => item.data.showLink);
+      const shouldShowLinks = this.isLoggedIn;
 
-    //////console.log(this.navList);
+      this.router.config.forEach((menuItem: any) => {
+        if (menuItem.data.shouldBeLoggedIn) {
+          menuItem.data.showLink = shouldShowLinks;
+        }
+      });
+
+      this.navList = this.router.config.filter((item: any) => item.data.showLink);
+    }
+
+
+    console.log(this.navList);
 
   }
 

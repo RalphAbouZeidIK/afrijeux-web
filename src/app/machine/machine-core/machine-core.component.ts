@@ -24,7 +24,7 @@ export class MachineCoreComponent implements OnInit {
     private bridge: NativeBridgeService,
     private machineSrv: MachineService
   ) { }
-  
+
   closePopup() {
     this.popup.close();
   }
@@ -34,19 +34,19 @@ export class MachineCoreComponent implements OnInit {
   }
 
   async getMachineData() {
-    this.bridge.scanResult$.subscribe((result) => {
-      if (result) {
-        this.scanned = result;
-      }
-    });
+    // this.bridge.scanResult$.subscribe((result) => {
+    //   if (result) {
+    //     this.scanned = result;
+    //   }
+    // });
 
     let params = {
-      Machine: await this.bridge.getSerial(),
+      Machine: 'B42M001K02400065',
       VersionCode: '1.0.0'
     }
 
     const apiResponse = await this.machineSrv.registerMachine(params);
-
+    console.log("API Response:", apiResponse);
     ////console.log(apiResponse)
     if (apiResponse?.CommunicationKey) {
       this.isAppRegistered = true
