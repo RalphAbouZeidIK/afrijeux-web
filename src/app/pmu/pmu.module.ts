@@ -10,7 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { routing } from './pmu-routing';
 import { ResultatComponent } from './resultat/resultat.component';
 import { CartComponent } from './cart/cart.component';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -27,8 +27,8 @@ import { CartComponent } from './cart/cart.component';
   imports: [
     routing,
     CommonModule,
-
-    SharedModule
+    SharedModule,
+    DragDropModule
   ]
 })
 export class PmuModule { }
