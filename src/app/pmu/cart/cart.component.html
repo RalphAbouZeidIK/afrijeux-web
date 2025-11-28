@@ -27,7 +27,7 @@
 
                 <div class="title-order" *ngIf="!IsParoli && !IsDouble">
                     <span class="race-title">
-                        <span>{{betItem[0].name}}</span>
+                        <span>{{betItem[0].EventName}}</span>
                     </span>
                     <div class="bet-options" *ngIf="betItem[0].SelectedFixedConfig.IsAllOrder == 1">
                         <div class="checkbox-apple">
@@ -42,7 +42,7 @@
                 <ng-container *ngIf="IsParoli || IsDouble; else elseBlock">
                     <div class="type-container paroli-item" *ngFor="let pickItem of betItem">
                         <span class="race-title">
-                            <span>{{pickItem.name}}</span>
+                            <span>{{pickItem.EventName}}</span>
                         </span>
 
                         <div class="type-list" *ngIf="pickItem.BaseHorses.length > 0">
@@ -52,7 +52,6 @@
                             <span class="list-of-horses">
                                 <ng-container *ngFor="let horse of pickItem.BaseHorses;let i = index">
                                     <span>
-                                        <span class="dash">-</span>
                                         {{horse.HorseName}}
                                     </span>
                                 </ng-container>
@@ -61,32 +60,39 @@
                     </div>
                 </ng-container>
                 <ng-template #elseBlock>
+
                     <div class="type-list" *ngIf="betItem[0].BaseHorses.length > 0">
-                        <span class="type">
-                            {{'hpb.cart.baseHorses' | translate}}
-                        </span>
-                        <span class="list-of-horses">
-                            <ng-container *ngFor="let horse of betItem[0].BaseHorses;let i = index">
-                                <span>
-                                    <span class="dash">-</span>
-                                    {{(horse.IsDummy)?horse.HorseNameDisplay:horse.HorseName}}
-                                </span>
+                        <span class="type">{{ 'hpb.cart.baseHorses' | translate }}</span>
+
+
+                        <div class="list-of-horses" cdkDropList cdkDropListOrientation="horizontal"
+                            [cdkDropListData]="betItem[0].BaseHorses" (cdkDropListDropped)="drop($event, 'base')">
+
+                            <ng-container *ngFor="let horse of betItem[0].BaseHorses; let i = index">
+                                <div class="horse-item" cdkDrag>
+                                    {{ horse.IsDummy ? horse.HorseNameDisplay : horse.HorseName }}
+                                </div>
                             </ng-container>
-                        </span>
+
+                        </div>
                     </div>
 
+
+
                     <div class="type-list" *ngIf="betItem[0].AssociatedHorses.length > 0">
-                        <span class="type">
-                            {{'hpb.cart.associatedHorses' | translate}}
-                        </span>
-                        <span class="list-of-horses">
-                            <ng-container *ngFor="let horse of betItem[0].AssociatedHorses;let i = index">
-                                <span>
-                                    <span class="dash">-</span>
-                                    {{(horse.IsDummy)?horse.HorseNameDisplay:horse.HorseName}}
-                                </span>
+                        <span class="type">{{ 'hpb.cart.associatedHorses' | translate }}</span>
+
+
+                        <span class="list-of-horses" cdkDropList cdkDropListOrientation="horizontal"
+                            [cdkDropListData]="betItem[0].AssociatedHorses"
+                            (cdkDropListDropped)="drop($event, 'associated')">
+                            <ng-container *ngFor="let horse of betItem[0].AssociatedHorses; let i = index">
+                                <div class="horse-item" cdkDrag>
+                                    {{ horse.IsDummy ? horse.HorseNameDisplay : horse.HorseName }}
+                                </div>
                             </ng-container>
                         </span>
+
                     </div>
                 </ng-template>
             </div>
@@ -141,7 +147,7 @@
                             </span>
                         </div>
                         <span class="race-title">
-                            <span>{{pickItem.name}}</span>
+                            <span>{{pickItem.EventName}}</span>
                         </span>
                         <div class="type-list">
                             <span class="type">

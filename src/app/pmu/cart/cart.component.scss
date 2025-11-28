@@ -60,6 +60,11 @@
         padding: 5px 20px;
         flex-wrap: wrap;
 
+        .type {
+            display: block;
+            margin-bottom: 5px;
+        }
+
         &.ticket-type {
             margin-bottom: 20px;
             justify-content: unset;
@@ -108,7 +113,7 @@
 }
 
 .bet-item {
-    background: $darkBg;
+    background: $lightBg;
     border-bottom: 1px solid $yellow;
     padding-bottom: 15px;
 
@@ -141,8 +146,36 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-.list-of-horses span:first-of-type .dash {
-    display: none;
+
+
+.list-of-horses span {
+    display: inline-block;
+    border: 1px solid $white;
+    margin-right: 0;
+    border-radius: 5px;
+    padding-bottom: 8px;
+    cursor: pointer;
+    min-width: 35px;
+    text-align: center;
+}
+
+.list-of-horses {
+    display: flex;
+    /* horizontal */
+    gap: 8px;
+    /* spacing */
+}
+
+.horse-item {
+    border: 1px solid $white;
+    margin-right: 0;
+    border-radius: 5px;
+    padding: 5px;
+
+    padding-bottom: 8px;
+    cursor: pointer;
+    min-width: 35px;
+    text-align: center;
 }
 
 
@@ -169,6 +202,7 @@ input[type="number"]::-webkit-inner-spin-button {
     color: $lightGrey;
     font-size: 12px;
     padding: 0 20px;
+    margin-bottom: 10px;
 
     .race-title {
         padding: 0;

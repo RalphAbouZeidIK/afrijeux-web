@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -72,6 +73,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
       this.onCartEventChange(data)
+      console.log(data)
       // this.totalMultiplier = parseInt(this.storageSrv.getItem('totalMultiplier'))
       // this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
     });
@@ -88,10 +90,13 @@ export class CartComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.isPMUHybrid = this.machineSrv.getGameRoute() == 'PMUHybrid'
-    this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
 
     if (!this.isAndroidApp) {
       this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
+    }
+
+    else {
+      this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
     }
 
     if (this.storageSrv.getItem('cartData') && this.storageSrv.getItem('cartData').length > 0) {
@@ -142,6 +147,24 @@ export class CartComponent implements OnInit, OnDestroy {
   orderTypeChange(event: any) {
     this.calculateCombinations(this.betItem)
   }
+
+
+  drop(event: CdkDragDrop<any[]>, type: 'base' | 'associated') {
+    // Only handle same-container drops
+    if (event.previousContainer !== event.container) return;
+
+    const arr = event.container.data;
+    const prev = event.previousIndex;
+    const curr = event.currentIndex;
+
+    if (prev === curr) return;
+
+    // Swap prev <-> curr
+    const tmp = arr[prev];
+    arr[prev] = arr[curr];
+    arr[curr] = tmp;
+  }
+
 
   onCartEventChange(data: any) {
     //console.log(data)
