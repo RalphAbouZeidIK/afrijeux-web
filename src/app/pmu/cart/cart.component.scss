@@ -209,6 +209,33 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 }
 
+/* The floating clone while dragging */
+.cdk-drag-preview {
+    background: #fffbe7;
+    border: 2px solid #f4c542;
+    color: #333;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 6px 12px;
+}
+
+/* The placeholder that stays in the list */
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+/* The actual item becomes semi-transparent when dragging */
+.cdk-drag-dragging {
+    opacity: 0.4;
+    border: 2px dashed #f4c542;
+}
+
+.cdk-drop-list-dragging .horse-item:not(.cdk-drag-placeholder) {
+  transition: transform 200ms ease;
+}
+
+
+
 @media all and (max-width:1400px) {
 
     .cart-container .cart-header,
@@ -383,6 +410,10 @@ input[type="number"]::-webkit-inner-spin-button {
             &.price-holder {
                 padding: 0px 20px 10px;
                 background: $offWhite;
+            }
+
+            .horse-item {
+                border-color: $darkBg;
             }
         }
 
