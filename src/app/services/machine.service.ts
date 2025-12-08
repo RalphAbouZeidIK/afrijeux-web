@@ -172,7 +172,7 @@ export class MachineService {
   async decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
     const xxtea = require('xxtea-node');
     let decrypted: any;
-    let machineSerial = 'B42M001K02400065'
+    let machineSerial = await this.bridge.getSerial()
     if (isRegisterMachineApi) {
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(machineSerial))))
     }

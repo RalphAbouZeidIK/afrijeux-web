@@ -228,6 +228,7 @@ export class CourseDetailsComponent implements OnInit {
     }
 
     else {
+      this.courseDetails.Multiplier = 1
       this.courseDetails.ShowRace = true
     }
 

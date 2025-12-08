@@ -41,7 +41,7 @@ export class MachineCoreComponent implements OnInit {
     // });
 
     let params = {
-      Machine: 'B42M001K02400065',
+      Machine: await this.bridge.getSerial(),
       VersionCode: '1.0.0'
     }
 

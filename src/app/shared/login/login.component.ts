@@ -140,7 +140,7 @@ export class LoginComponent implements OnChanges, OnInit {
         this.machineSrv.setModalData(true, false, respoonse.message)
       }
       else {
-        this.router.navigate(['Machine/PMUHybrid/courses'])
+        this.router.navigate(['Machine/Home'])
       }
       ////console.log(respoonse)
     }

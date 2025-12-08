@@ -1,11 +1,11 @@
 <header [ngClass]="{'is-mobile':!isDesktop}" class="header-main">
   <div class="overlay" (click)="hideMenus()"></div>
   <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()"></a>
-  <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/Machine/PMUHybrid/courses']" />
+  <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/']" />
 
   <div class="container-fluid header-container">
 
-    <img class="logo" src="assets/images/logo.svg" [routerLink]="['/Machine/PMUHybrid/courses']" />
+    <img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />
 
     <app-nav parentClass="header-nav" [fullMenu]="menu"></app-nav>
 
@@ -30,13 +30,13 @@
           </div>
         </div>
       </div>
-      <!-- <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="logout()">{{ 'generic.logout' | translate
+      <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="logout()">{{ 'generic.logout' | translate
         }}</button>
       <div class="header-btns" *ngIf="!isLoggedIn">
         <button class="btn btn-primary" (click)="togglePopupFn('login')">{{ 'generic.login' | translate }}</button>
         <button class="btn btn-default" (click)="togglePopupFn('signup')">{{ 'generic.register' | translate
           }}</button>
-      </div> -->
+      </div>
     </div>
 
 

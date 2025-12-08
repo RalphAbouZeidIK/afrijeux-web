@@ -73,7 +73,6 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
       this.onCartEventChange(data)
-      console.log(data)
       // this.totalMultiplier = parseInt(this.storageSrv.getItem('totalMultiplier'))
       // this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
     });
@@ -462,7 +461,7 @@ export class CartComponent implements OnInit, OnDestroy {
           BaseHorses: BaseHorses,
           BaseHorsesDisplay: BaseHorsesDisplay,
           FormuleType: betItem[0].SelectedFormule?.name || null,
-          showAssociatedHorses: (betItem[0].SelectedFormule.id == 2) ? true : false
+          ShowAssociatedHorses: (betItem[0].SelectedFormule.id == 2) ? true : false
         }
         this.composePickDetails(betItem[0])
       }
@@ -501,7 +500,7 @@ export class CartComponent implements OnInit, OnDestroy {
       SinglePrice: event.Price,
       BetType: event.SelectedFixedConfig.details,
       FormuleType: event.FormuleType,
-      showAssociatedHorses: event.ShowAssociatedHorses || false
+      ShowAssociatedHorses: event.ShowAssociatedHorses || false
     }
 
     this.pickDetailsArray.push(PickDetails)
