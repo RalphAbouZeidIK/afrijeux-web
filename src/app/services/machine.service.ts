@@ -181,6 +181,7 @@ export class MachineService {
       let encryptionPass = machineData?.CommunicationKey || 'default';
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(encryptionPass)));
     }
+    console.log(JSON.parse(decrypted))
     return JSON.parse(decrypted);
   }
 
@@ -197,7 +198,7 @@ export class MachineService {
         MachineId: (machineData) ? machineData.MachineId : null
       }
     }
-
+    console.log(params)
     let paramsBeforeEncryption = params
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false, (apiRoute.includes('ProcessTickets')) ? true : false);
@@ -357,6 +358,7 @@ export class MachineService {
     }
 
     let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/${canUseOffline ? 'GetOfflineEventConfiguration' : 'GetEventConfiguration'}`, 'POST', params)
+    console.log(gameEventsResponse)
     this.gameEventsList = gameEventsResponse.GameConfiguration
     if (this.isOnline) {
       this.updateMachineTicketId(gameId, gameEventsResponse.GameConfiguration.MachineTicketId);

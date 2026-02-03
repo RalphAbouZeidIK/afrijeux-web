@@ -78,6 +78,9 @@ export class SportsListComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (!changes['shouldResetFilters'].currentValue) {
       //console.log('Changes detected in shouldResetFilters:', changes['shouldResetFilters'].currentValue);
+      if (this.filtersList.length === 0) {
+        return
+      }
       this.selectedSport = this.filtersList?.Sports[0]
       this.selectedSportChange(this.selectedSport, 'sport')
     }

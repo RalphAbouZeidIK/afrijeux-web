@@ -482,9 +482,9 @@ export class CartComponent implements OnInit, OnDestroy {
       this.composePickObject(PickObject, betItem)
     }
 
-    if (this.isPMUHybrid) {
-      this.issueTicket()
-    }
+    // if (this.isPMUHybrid) {
+    //   this.issueTicket()
+    // }
 
   }
 

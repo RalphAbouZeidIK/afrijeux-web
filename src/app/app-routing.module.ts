@@ -4,10 +4,13 @@ import { SharedGuard } from './shared.guard';
 import { DatePipe } from '@angular/common';
 import { LoginComponent } from './shared/login/login.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { UofComponent } from './sports/uof/uof.component';
 
 const routes: Routes = [
   // Main entry routes
   { path: '', redirectTo: 'HPBPMU', pathMatch: 'full', data: { showLink: false } },
+  { path: 'Uof', component: UofComponent, data: { showLink: false, title: 'routerLinks.Sports.uof' } },
+
   {
     path: 'HPBPMU',
     loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),

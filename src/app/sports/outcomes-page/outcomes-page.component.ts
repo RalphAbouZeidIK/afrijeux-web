@@ -58,6 +58,7 @@ export class OutcomesPageComponent implements OnInit {
       }
 
       this.OutcomesList = apiResponse
+      console.log(this.OutcomesList)
     }
   }
 
@@ -77,6 +78,7 @@ export class OutcomesPageComponent implements OnInit {
         EventId: this.MatchId
       }
       this.OutcomesList = apiResponse
+      console.log(this.OutcomesList)
     }
     else {
       setTimeout(() => {

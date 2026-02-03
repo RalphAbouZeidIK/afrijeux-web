@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   async getMenu() {
-    this.menu = this.navList;
+    this.menu = await this.menuSvc.getMenu();
     console.log(this.navList)
   }
 

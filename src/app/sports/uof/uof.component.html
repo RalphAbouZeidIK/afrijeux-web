@@ -1,0 +1,11 @@
+<div class="uof-messages">
+    <h3>Live events</h3>
+    <ul>
+        <li *ngFor="let m of messages">
+            <strong>{{ m.msgType }}</strong><br>
+            <span>event: {{ m.eventId }}</span><br>
+            <span>producer: {{ m.producerInfo }}</span><br>
+            <span *ngIf="m.RequestId !== undefined">request: {{ m.RequestId }}</span>
+        </li>
+    </ul>
+</div>

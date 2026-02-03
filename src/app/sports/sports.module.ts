@@ -15,6 +15,7 @@ import { routing } from './sports-routing';
 import { TicketsComponent } from './tickets/tickets.component';
 import { CartComponent } from './cart/cart.component';
 import { SearchComponent } from './search/search.component';
+import { UofComponent } from './uof/uof.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { SearchComponent } from './search/search.component';
     TicketsComponent,
     CanceledBetsComponent,
     CartComponent,
-    SearchComponent
+    SearchComponent,
+    UofComponent
   ],
   imports: [
     routing,

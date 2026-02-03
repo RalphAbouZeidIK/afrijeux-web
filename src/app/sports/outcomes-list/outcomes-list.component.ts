@@ -25,6 +25,7 @@ export class OutcomesListComponent implements OnChanges, OnInit, OnDestroy {
       ////console.log(this.OutcomesList)
       // Set all odds outcomes' isSelected to false
       //console.log(data)
+      console.log(this.OutcomesList)
       this.OutcomesList.forEach((outcomeItem: any) => {
         outcomeItem.OddsOutcomes.forEach((oddItem: any) => {
           oddItem.isSelected = false;

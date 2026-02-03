@@ -7,6 +7,7 @@ import { SportsCoreComponent } from "./sports-core/sports-core.component";
 import { TicketsComponent } from "./tickets/tickets.component";
 import { CanceledBetsComponent } from "./canceled-bets/canceled-bets.component";
 import { SharedGuard } from "../shared.guard";
+import { UofComponent } from "./uof/uof.component";
 
 
 const routes: Routes = [
@@ -27,7 +28,6 @@ const routes: Routes = [
       { path: ':sportId/Categories/:categoryId/Tournaments/:tournamentId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId/Outcomes/:matchId', component: OutcomesPageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
       { path: ':sportId', component: HomepageComponent, data: { showLink: false, title: 'routerLinks.Sports.matchList' } },
-
     ]
   }
 
