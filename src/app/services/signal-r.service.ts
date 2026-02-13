@@ -18,7 +18,7 @@ export class SignalRService {
   public events$: Observable<SportEventMessage | null> = this.eventSubject.asObservable();
 
   // Change this URL to your backend endpoint if different (http://localhost:5000/uofHub or https://localhost:5001/uofHub)
-  private hubUrl = 'https://localhost:52289/uofHub';
+  private hubUrl = 'http://10.1.3.73:5000/hubs/odds';
 
   public start(): void {
     if (this.hubConnection) {

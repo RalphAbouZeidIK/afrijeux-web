@@ -15,16 +15,8 @@ export class UofComponent implements OnInit, OnDestroy {
 
   constructor(private signalR: SignalRService, private apiSrv: ApiService, private http: HttpClient) { }
 
-  async getData() {
-    let data = await this.http
-      .get('https://pre-88o-sp.websbkt.com/cache/88/en/lb/Asia-Beirut/init/2/welcome-popular.json?filters=6,222')
-      .toPromise();
-    return data
-
-  }
 
   ngOnInit(): void {
-    let apiResponse = this.getData()
     this.signalR.start();
     this.sub = this.signalR.events$.subscribe(msg => {
       if (msg) {
