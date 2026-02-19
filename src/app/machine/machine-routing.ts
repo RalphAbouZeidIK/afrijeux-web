@@ -47,6 +47,16 @@ const routes: Routes = [
                     showLink: true,
                     title: 'routerLinks.appTitle.Khamsa',
                 }
+            },
+            {
+                path: 'PickX',
+                loadChildren: () => import('../pickx/pickx.module').then(m => m.PickxModule),
+                data: {
+                    breadcrumb: 'PickX',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.Pickx',
+                }
             }
 
         ]

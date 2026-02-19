@@ -11,7 +11,8 @@
             "Sports": "Sports",
             "pmu": "PMU",
             "Machine": "Machine",
-            "Khamsa": "Five Ninety"
+            "Khamsa": "Five Ninety",
+            "Pickx": "PickX"
         },
         "HPBTitles": {
             "mesParies": "Mes Paris",
@@ -279,5 +280,8 @@
     },
     "khamsa": {
         "title": "Afrijeux Khamsa"
+    },
+    "pickx": {
+        "title": "PickX"
     }
 }

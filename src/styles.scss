@@ -660,6 +660,121 @@ app-odd-item:nth-of-type(3n) {
     margin-bottom: 15px;
 }
 
+.loto-game-container {
+    width: 500px;
+    max-width: 100%;
+    margin: 0 auto;
+
+    h2 {
+        text-align: center;
+        font-size: 24px;
+        text-transform: uppercase;
+    }
+
+    .event-item {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    h5 {
+        text-align: center;
+    }
+
+    .form-control,
+    .form-control:focus {
+        background-color: $lightBg;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 13px 10px;
+    }
+
+    .ball-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        max-height: calc(100vh - 95px);
+        overflow: auto;
+        margin-bottom: 20px;
+    }
+
+    .selected-balls {
+        justify-content: space-between;
+
+        .ball {
+            width: 55px;
+            height: 55px;
+            font-size: 28px;
+        }
+    }
+
+    .ball {
+        width: 40px;
+        height: 40px;
+        background-color: $lightBg;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid $lightBg;
+        font-size: 14px;
+        color: $white;
+        font-weight: bold;
+    }
+
+    .ball.selected {
+        background: $yellow;
+        color: $darkBg;
+    }
+
+    .balls-list-holder {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 15px;
+        background: rgba(24, 25, 28, 0.98);
+        z-index: 2;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .title-label {
+        font-size: 14px;
+        color: $white;
+        padding-bottom: 10px;
+        text-align: center;
+        display: block;
+        font-weight: bold;
+        margin-top: 20px
+    }
+
+    .stake-block {
+        input {
+            text-align: center;
+        }
+
+        .btn {
+            min-width: 55px;
+            font-size: 30px;
+            line-height: 17px;
+        }
+    }
+
+    .form-group {
+        text-align: center;
+    }
+
+}
+
 @media all and (max-width:1200px) {
 
     .page-holder {

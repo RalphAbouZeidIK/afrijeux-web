@@ -62,7 +62,17 @@ const routes: Routes = [
       title: 'routerLinks.appTitle.User',
     }
   },
-
+  {
+    path: 'PickX',
+    loadChildren: () => import('./pickx/pickx.module').then(m => m.PickxModule),
+    canActivate: [SharedGuard],
+    data: {
+      breadcrumb: 'PickX',
+      shouldBeLoggedIn: true,
+      showLink: true,
+      title: 'routerLinks.appTitle.Pickx',
+    }
+  },
   // Machine-prefixed versions
   {
     path: 'Machine',

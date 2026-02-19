@@ -41,10 +41,13 @@ export class MachineCoreComponent implements OnInit {
     // });
 
     let params = {
-      Machine: await this.bridge.getSerial(),
+      //CHANGE HERE TO GET OLD MACHINE CODE
+      //Machine: await this.bridge.getSerial(),
+      Machine: 'B42M001K02400073',
       VersionCode: '1.0.0'
     }
 
+    console.log("Params:", params)
     const apiResponse = await this.machineSrv.registerMachine(params);
     console.log("API Response:", apiResponse);
     ////console.log(apiResponse)

@@ -172,7 +172,9 @@ export class MachineService {
   async decrypt(base64String: any, isRegisterMachineApi: boolean = false) {
     const xxtea = require('xxtea-node');
     let decrypted: any;
-    let machineSerial = await this.bridge.getSerial()
+    //CHANGE HERE TO GET OLD MACHINE CODE
+    //let machineSerial = await this.bridge.getSerial()
+    let machineSerial = 'B42M001K02400073'
     if (isRegisterMachineApi) {
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(machineSerial))))
     }
@@ -379,7 +381,7 @@ export class MachineService {
     return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
   }
 
-  async issueTicket(ticketObject: any) {
+  async issueTicket(ticketObject: any, shouldHaveGameEventId = false) {
     //const printerErrorPromise = this.bridge.waitForPrinterError();
     // const printerError = await this.bridge.waitForPrinterError();
     // console.log(printerError)
@@ -417,7 +419,8 @@ export class MachineService {
       IsPromotion: false,
       PromotionRuleId: 0,
       IsPrinted: isPrintedFlag,
-      Printed: isPrintedFlag
+      Printed: isPrintedFlag,
+      GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null
     }
     console.log(ticketBody)
     let params = {
@@ -1035,7 +1038,7 @@ export class MachineService {
 
   /************Offline Methods End************/
 
-  async getKhamsaEvents() {
+  async getGamesEvents() {
     let params: any = {
       GameId: await this.getGameId(),
       GameConfiguration: [],
@@ -1044,5 +1047,6 @@ export class MachineService {
     let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetEventConfiguration`, 'POST', params)
     return gameEventsResponse
   }
+
 
 }
