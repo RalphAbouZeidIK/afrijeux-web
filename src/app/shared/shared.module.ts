@@ -21,6 +21,7 @@ import { NotificationsPopupComponent } from './notifications-popup/notifications
 import { TranslateModule } from '@ngx-translate/core';
 import { PrintComponent } from './print/print.component';
 import { ModalComponent } from './modal/modal.component';
+import { CartComponent } from './cart/cart.component';
 
 
 // Custom date formats
@@ -46,7 +47,8 @@ export const MY_FORMATS = {
     DatepickerComponent,
     NotificationsPopupComponent,
     PrintComponent,
-    ModalComponent
+    ModalComponent,
+    CartComponent
   ],
   exports: [
     HeaderComponent,
@@ -63,7 +65,8 @@ export const MY_FORMATS = {
     TranslateModule,
     PrintComponent,
     ModalComponent,
-    NgbPaginationModule
+    NgbPaginationModule,
+    CartComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,

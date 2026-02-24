@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { race } from 'rxjs';
+import { CartService } from 'src/app/services/cart.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
 
@@ -40,7 +41,8 @@ export class HomepageComponent {
 
   constructor(
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private cartSrv: CartService
   ) { }
 
   ngOnInit(): void {
@@ -170,40 +172,20 @@ export class HomepageComponent {
       IsQuickPick: this.isQuickPick,
       gameEventId: this.selectedEvent.GameEventId,
       eventName: this.selectedEvent.EventName,
+      displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
       Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
-      stake: this.Stake
+      stake: this.Stake,
+      id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
     }
-    this.ticketItem.push(pickItem)
+    this.cartSrv.updateLotoList(pickItem)
     this.selectedBalls = []
-
+    this.selectedType = null
+    this.showConfirmation = false
     this.isQuickPick = false
     this.selectedBalls = this.generateDrawBalls(this.selectedEvent.ConfigurationVersionId)
     console.log(this.ticketItem)
     console.log(pickItem)
   }
 
-  async issueTicket() {
-    console.log(this.selectedBalls)
-    if (this.ticketItem.length === 0) {
-      this.addToBet()
-    }
-    this.ticketItem.GameEventId = this.selectedEvent.GameEventId
-    this.ticketItem.TicketPrice = 0
-    this.ticketItem.forEach((ticketItem: any) => {
-      this.ticketItem.TicketPrice += ticketItem.stake
-    })
-    console.log(this.ticketItem)
-    const apiResponse = await this.machineSrv.issueTicket(this.ticketItem, true)
-    if (apiResponse.DataToPrint) {
-      this.machineSrv.setModalData(true, apiResponse.status, apiResponse.message)
-      this.showEventDetails = false
-      this.selectedEvent = null
-      this.selectedType = null
-      this.listOfBalls = []
-      this.selectedBalls = []
-      this.Stake = 0
-      this.ticketItem = []
-    }
-  }
 }
 

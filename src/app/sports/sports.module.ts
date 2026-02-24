@@ -13,7 +13,6 @@ import { SportsCoreComponent } from './sports-core/sports-core.component';
 import { SportsListComponent } from './sports-list/sports-list.component';
 import { routing } from './sports-routing';
 import { TicketsComponent } from './tickets/tickets.component';
-import { CartComponent } from './cart/cart.component';
 import { SearchComponent } from './search/search.component';
 import { UofComponent } from './uof/uof.component';
 
@@ -31,7 +30,6 @@ import { UofComponent } from './uof/uof.component';
     LeftMenuComponent,
     TicketsComponent,
     CanceledBetsComponent,
-    CartComponent,
     SearchComponent,
     UofComponent
   ],

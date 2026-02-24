@@ -19,6 +19,8 @@ export class CartService {
 
   listOfPMUBets: any = this.storageSrv.getItem('cartData') || []
 
+  listOfLotoBets: any = this.storageSrv.getItem('lotoCartData') || []
+
   bonusRules: any = []
 
   /**
@@ -39,6 +41,8 @@ export class CartService {
   private removeCartData$ = new Subject();
 
   private resetOtherEvents$ = new Subject();
+
+
 
 
   /**
@@ -236,6 +240,18 @@ export class CartService {
   }
 
   //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
+
+  ////////////////////////////////LOTO METHODS START//////////////////////////////////////////////////
+  updateLotoList(pickItem: any) {
+    this.listOfLotoBets = this.storageSrv.getItem('lotoCartData') || []
+    this.listOfLotoBets.push(pickItem)
+    this.storageSrv.setItem('lotoCartData', this.listOfLotoBets)
+    this.addSBCartData$.next(this.listOfLotoBets);
+    console.log(this.listOfLotoBets)
+  }
+
+
+  ///////////////////////////////LOTO METHODS END//////////////////////////////////////////////////
 
   clearBets() {
     this.listOfBets = []

@@ -661,7 +661,7 @@ app-odd-item:nth-of-type(3n) {
 }
 
 .loto-game-container {
-    width: 500px;
+    width: 600px;
     max-width: 100%;
     margin: 0 auto;
 
@@ -706,16 +706,13 @@ app-odd-item:nth-of-type(3n) {
     .selected-balls {
         justify-content: space-between;
 
-        .ball {
-            width: 55px;
-            height: 55px;
-            font-size: 28px;
-        }
+
     }
 
     .ball {
-        width: 40px;
-        height: 40px;
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
         background-color: $lightBg;
         border-radius: 50%;
         display: flex;
@@ -723,7 +720,6 @@ app-odd-item:nth-of-type(3n) {
         align-items: center;
         cursor: pointer;
         border: 1px solid $lightBg;
-        font-size: 14px;
         color: $white;
         font-weight: bold;
     }
