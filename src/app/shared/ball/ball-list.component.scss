@@ -1,0 +1,121 @@
+@use '/src/variables' as *;
+
+.flexbox-container {
+    display: flex;
+
+}
+
+.flexbox-container.wrap {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.box {
+    width: 55px;
+    height: 55px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    background-image: none !important;
+    border-radius: 50%;
+
+    &.clickable {
+        cursor: pointer;
+    }
+}
+
+.allBalls {
+    .box {
+        cursor: pointer;
+    }
+}
+
+.ballnbr {
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    height: 60%;
+    width: 60%;
+    background-color: $lightBg;
+    color: $white;
+    border-radius: 50%;
+}
+
+.redBox {
+    background-image: url("/assets/images/ball-1.png");
+    background-color: red
+}
+
+.purpleBox {
+    background-image: url("/assets/images/ball-2.png");
+    background-color: purple
+}
+
+.yellowBox {
+    background-image: url("/assets/images/ball-3.png");
+    background-color: $yellow
+}
+
+.greenBox {
+    background-image: url("/assets/images/ball-4.png");
+    background-color: green
+}
+
+.blueBox {
+    background-image: url("/assets/images/ball-5.png");
+    background-color: blue
+}
+
+.orangeBox {
+    background-image: url("/assets/images/ball-6.png");
+    background-color: orange
+}
+
+.darkBlueBox {
+    background-image: url("/assets/images/ball-7.png");
+    background-color: darkblue
+}
+
+.marronBox {
+    background-image: url("/assets/images/ball-8.png");
+    background-color: maroon
+}
+
+.purpleBox {
+    background-image: url("/assets/images/ball-9.png");
+    background-color: purple
+}
+
+.emptyBox {
+    background-image: url("/assets/images/empty-ball.png");
+    background-color: $lightBg;
+}
+
+.highlight {
+    box-shadow: 0 0 15px 5px rgb(43 126 214 / 60%);
+    border-radius: 84px;
+}
+
+.hasExtraBall {
+    .box:last-of-type {
+        margin-left: 120px
+    }
+}
+
+@media (max-width:898px) {
+    .box {
+        width: 45px;
+        height: 45px;
+        margin: 6px;
+    }
+
+    .ballnbr {
+        font-size: 12px;
+    }
+}

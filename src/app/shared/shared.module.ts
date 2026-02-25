@@ -22,6 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PrintComponent } from './print/print.component';
 import { ModalComponent } from './modal/modal.component';
 import { CartComponent } from './cart/cart.component';
+import { BallListComponent } from './ball/ball-list.component';
 
 
 // Custom date formats
@@ -48,7 +49,8 @@ export const MY_FORMATS = {
     NotificationsPopupComponent,
     PrintComponent,
     ModalComponent,
-    CartComponent
+    CartComponent,
+    BallListComponent
   ],
   exports: [
     HeaderComponent,
@@ -66,7 +68,8 @@ export const MY_FORMATS = {
     PrintComponent,
     ModalComponent,
     NgbPaginationModule,
-    CartComponent
+    CartComponent,
+    BallListComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,

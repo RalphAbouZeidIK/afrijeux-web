@@ -209,6 +209,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       const shouldShowLinks = this.isLoggedIn;
 
       this.router.config.forEach((menuItem: any) => {
+        console.log(this.router.config)
         if (menuItem.data.shouldBeLoggedIn) {
           menuItem.data.showLink = shouldShowLinks;
         }

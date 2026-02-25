@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PickxCoreComponent } from './pickx-core.component';
+import { BallListComponent } from './ball-list.component';
 
-describe('PickxCoreComponent', () => {
-  let component: PickxCoreComponent;
-  let fixture: ComponentFixture<PickxCoreComponent>;
+describe('BallListComponent', () => {
+  let component: BallListComponent;
+  let fixture: ComponentFixture<BallListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PickxCoreComponent]
+      imports: [BallListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PickxCoreComponent);
+    fixture = TestBed.createComponent(BallListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,15 +8,28 @@ import { UofComponent } from './sports/uof/uof.component';
 
 const routes: Routes = [
   // Main entry routes
-  { path: '', redirectTo: 'HPBPMU', pathMatch: 'full', data: { showLink: false } },
-  { path: 'Uof', component: UofComponent, data: { showLink: false, title: 'routerLinks.Sports.uof' } },
+  {
+    path: '',
+    loadChildren: () => import('./static-pages/static-pages.module').then(m => m.StaticPagesModule),
+    data: {
+      breadcrumb: 'UAE Lottery',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'routerLinks.appTitle.hpb',
+    }
+  },
+  {
+    path: 'Uof',
+    component: UofComponent,
+    data: { showLink: false, title: 'routerLinks.Sports.uof' }
+  },
 
   {
     path: 'HPBPMU',
     loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
     data: {
       breadcrumb: 'HPB PMU',
-      shouldBeLoggedIn: false,
+      shouldBeLoggedIn: true,
       showLink: true,
       title: 'routerLinks.appTitle.hpb',
     }
@@ -26,7 +39,7 @@ const routes: Routes = [
     loadChildren: () => import('./pmu/pmu.module').then(m => m.PmuModule),
     data: {
       breadcrumb: 'PMU Hybrid',
-      shouldBeLoggedIn: false,
+      shouldBeLoggedIn: true,
       showLink: true,
       title: 'routerLinks.appTitle.pmu',
     }
@@ -36,7 +49,7 @@ const routes: Routes = [
     loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
     data: {
       breadcrumb: 'Sports Betting',
-      shouldBeLoggedIn: false,
+      shouldBeLoggedIn: true,
       showLink: true,
       title: 'routerLinks.appTitle.Sports',
     }
@@ -46,7 +59,7 @@ const routes: Routes = [
     loadChildren: () => import('./khamsa/khamsa.module').then(m => m.KhamsaModule),
     data: {
       breadcrumb: 'Five Ninety',
-      shouldBeLoggedIn: false,
+      shouldBeLoggedIn: true,
       showLink: true,
       title: 'routerLinks.appTitle.Khamsa',
     }
@@ -64,13 +77,24 @@ const routes: Routes = [
   },
   {
     path: 'PickX',
-    loadChildren: () => import('./pickx/pickx.module').then(m => m.PickxModule),
+    loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
     canActivate: [SharedGuard],
     data: {
       breadcrumb: 'PickX',
       shouldBeLoggedIn: true,
       showLink: true,
       title: 'routerLinks.appTitle.Pickx',
+    }
+  },
+  {
+    path: 'Jackpot',
+    loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
+    canActivate: [SharedGuard],
+    data: {
+      breadcrumb: 'Jackpot',
+      shouldBeLoggedIn: true,
+      showLink: true,
+      title: 'routerLinks.appTitle.Jackpot',
     }
   },
   // Machine-prefixed versions

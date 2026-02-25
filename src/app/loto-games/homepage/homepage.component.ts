@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { race } from 'rxjs';
+import { CartService } from 'src/app/services/cart.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
 
 @Component({
   selector: 'app-homepage',
+  standalone: false,
   templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.scss',
-  standalone: false
+  styleUrl: './homepage.component.scss'
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent {
   isAndroidApp = false
 
   eventsList: any = []
@@ -18,11 +19,16 @@ export class HomepageComponent implements OnInit {
 
   selectedEvent: any = null
 
-  selectedNap: any = null
+  selectedType: any = null
 
-  listOfBalls: any = []
+  maxBalls = 9;              // absolute maximum allowed
+  initialBallCount = 6;      // comes from configVersionId
 
-  selectedBalls: any = []
+  selectedNumbers: number[] = [];
+
+  selectedBalls: any[] = [];
+
+  listOfBalls: any[] = [];   // your available numbers
 
   showBallPicker: boolean = false;
 
@@ -30,14 +36,54 @@ export class HomepageComponent implements OnInit {
 
   multiplier = 1
 
+  ballToChangeId = null
+
+  showConfirmation = false
+
+  isQuickPick = false
+
+  ticketItem: any = []
+
+  isPickXGame = false
+
   constructor(
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private cartSrv: CartService
   ) { }
 
   ngOnInit(): void {
+    this.generateDisplayBalls();
+    this.isPickXGame = window.location.href.includes("PickX")
+    console.log(this.isPickXGame)
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
+  }
+
+  generateDisplayBalls() {
+
+    this.selectedBalls = [];
+
+    // Add selected numbers
+    for (let i = 0; i < this.selectedNumbers.length; i++) {
+      this.selectedBalls.push({
+        number: this.selectedNumbers[i],
+        isSelected: true
+      });
+    }
+
+    // Fill remaining slots up to current visible size
+    const visibleSlots = Math.max(
+      this.initialBallCount,
+      this.selectedNumbers.length
+    );
+
+    for (let i = this.selectedBalls.length; i < visibleSlots; i++) {
+      this.selectedBalls.push({
+        number: 'X',
+        isSelected: false
+      });
+    }
   }
 
   async getEvents() {
@@ -54,99 +100,60 @@ export class HomepageComponent implements OnInit {
         });
       }
     }
+    console.log(this.eventsList)
   }
 
   async composeEventDetails(raceItem: any) {
-    let fixedConfig = await this.machineSrv.getFixedConfiguration(raceItem.FixedConfigurationId)
-    let groupedFixedConfig = this.groupGameSettings(fixedConfig)
-    raceItem.fixedConfig = groupedFixedConfig
+    let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
+    let fixedConfig = await this.machineSrv.getFixedConfiguration(configId)
+    let numberOfSelectedBalls = (this.isPickXGame) ? fixedConfig[0].NumberOfBalls : 6
+    let numberOfBalls = (this.isPickXGame) ? 10 : fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
+    console.log(raceItem)
+    console.log(fixedConfig)
+
+    raceItem.fixedConfig = fixedConfig
     this.selectedEvent = raceItem
     this.showEventDetails = true
+    this.selectedBalls = this.generateDrawBalls(numberOfSelectedBalls)
     this.listOfBalls = this.generateBallObjects(90)
     console.log(this.listOfBalls)
-  }
 
-  groupGameSettings(settings: any) {
-    const grouped: any = {};
-
-    Object.keys(settings).forEach(key => {
-      // Match: IsNap1Allowed  OR  Nap1MinimumStake
-      const match = key.match(/^(Is)?(Nap|Perm|Banker|Turbo)(\d+)(.*)$/);
-      if (!match) return;
-
-      const [, isPrefix, category, number, property] = match;
-
-      if (!grouped[category]) grouped[category] = {};
-      if (!grouped[category][number]) grouped[category][number] = {};
-
-      // Set unique Id: Nap1
-      grouped[category][number]["Id"] = `${category}${number}`;
-
-      // balls value
-      grouped[category][number]["balls"] = Number(number);
-
-      // Allowed handler
-      if (property === "Allowed" && isPrefix === "Is") {
-        grouped[category][number]["IsAllowed"] = settings[key];
-        return;
-      }
-
-      // Normal property
-      if (!isPrefix) {
-        grouped[category][number][property] = settings[key];
-      }
-    });
-
-    // 🔥 Convert each category object → array
-    const finalResult: any = {};
-    Object.keys(grouped).forEach(category => {
-      finalResult[category] = Object.keys(grouped[category])
-        .sort((a, b) => Number(a) - Number(b)) // ensure order 1,2,3,4...
-        .map(number => grouped[category][number]);
-    });
-
-    return finalResult;
-  }
-
-  onNapChange(napItem: any) {
-    this.selectedNap = napItem
-    this.selectedBalls = []
-    this.Stake = this.selectedNap.MinimumStake
-    this.multiplier = 1
-    console.log(this.selectedNap)
   }
 
   generateBallObjects(x: number) {
     return Array.from({ length: x }, (_, i) => ({
-      number: i + 1,
-      selected: false
+      number: (this.isPickXGame) ? i : i + 1,
+      selected: false,
+      id: (this.isPickXGame) ? i : i + 1
     }));
   }
 
-  generateUniqueRandomBalls(totalBalls: number, pickCount: number): number[] {
-    const numbers = Array.from({ length: totalBalls }, (_, i) => i + 1);
-
-    // Shuffle using Fisher–Yates
-    for (let i = numbers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+  generateDrawBalls(configVersionId: any) {
+    let drawBalls: any = []
+    for (let i = 0; i < configVersionId; i++) {
+      drawBalls.push({
+        number: 'X',
+        id: i,
+        isSelected: false
+      })
     }
+    return drawBalls;
+  }
 
-    return numbers.slice(0, pickCount);
+  onTypeChanged(event: any) {
+    console.log(event);
+    this.selectedType = event
+    this.Stake = event.MinStake
+
   }
 
   quickPick() {
-    if (!this.selectedNap) return;
+    this.selectedBalls = this.selectedBalls.map((ball: any) => {
+      return { number: Math.floor(Math.random() * 10), id: ball.id, isSelected: true }
+    })
+    this.showConfirmation = true
+    this.isQuickPick = true
 
-    const count = this.selectedNap.balls;
-    const totalBalls = this.listOfBalls.length; // Automatically uses your real balls
-
-    // Step 1: generate random numbers
-    const randomNumbers = this.generateUniqueRandomBalls(totalBalls, count);
-
-    // Step 2: map numbers to ball objects
-    this.selectedBalls = this.listOfBalls
-      .filter((ball: any) => randomNumbers.includes(ball.number));
     console.log(this.selectedBalls)
   }
 
@@ -159,51 +166,95 @@ export class HomepageComponent implements OnInit {
     return 'Selected Balls: ' + this.selectedBalls.map((b: any) => b.number).join(', ');
   }
 
-
-  onChooseNumbers() {
-    this.showBallPicker = true;     // show the ball list
+  chooseNumber(ball: any) {
+    console.log(ball)
+    this.ballToChangeId = ball.id
+    this.showBallPicker = true
   }
 
-  selectBall(ball: number) {
-    const maxBalls = this.selectedNap?.balls ?? 0;
+  selectBall(ball: any) {
+    this.isQuickPick = false
 
-    // If ball is already selected → deselect it
-    if (this.selectedBalls.includes(ball)) {
-      this.selectedBalls = this.selectedBalls.filter((b: any) => b !== ball);
-      return;
+    if (this.isPickXGame) {
+      this.selectPickXBall(ball)
+    }
+    else {
+      this.selectLotoBall(ball)
+    }
+    console.log(this.selectedBalls)
+  }
+
+  selectPickXBall(ball: any) {
+    const index = this.selectedBalls.findIndex((b: any) => b.id === this.ballToChangeId);
+    this.selectedBalls[index] = { ...ball, isSelected: true, id: this.ballToChangeId };
+    this.showConfirmation = this.selectedBalls.every((b: any) => b.isSelected);
+    this.showBallPicker = false;    // hide the ball list after selection
+  }
+
+  selectLotoBall(ball: any) {
+
+    const index = this.selectedNumbers.indexOf(ball.number);
+
+    // ✅ REMOVE if already selected
+    if (index !== -1) {
+      this.selectedNumbers.splice(index, 1);
+      ball.isSelected = false;
     }
 
-    // If user already selected the maximum number of balls → do nothing
-    if (this.selectedBalls.length >= maxBalls) {
-      return; // or show a toast if you want
+    // ❌ ADD if not selected
+    else if (this.selectedNumbers.length < this.maxBalls) {
+      this.selectedNumbers.push(ball.number);
+      ball.isSelected = true;
     }
 
-    // Otherwise, select the ball
-    this.selectedBalls.push(ball);
+    this.generateDisplayBalls();
   }
 
   updateMultiplier(isAdd: boolean) {
-    if (this.Stake >= this.selectedNap.MaximumStake && isAdd) {
-      alert('Maximum stake reached')
-      return
-    }
     if (isAdd) {
-      this.multiplier += 1
-    }
-    else {
-      if (this.multiplier > 1) {
-        this.multiplier -= 1
+      if (this.Stake >= this.selectedType.MaxStake) {
+        alert('Maximum stake reached')
+        return
+      }
+      else {
+        this.Stake += 1
       }
     }
-    this.Stake = this.selectedNap.MinimumStake * this.multiplier
+
+    else {
+      if (this.Stake <= this.selectedType.MinStake) {
+        alert('Minimum stake reached')
+        return
+      }
+      else {
+        this.Stake -= 1
+      }
+    }
   }
 
-  addToBet(){
-    console.log(this.selectedNap)
-    console.log(this.selectedBalls)
+  addToBet() {
     let pickItem = {
-      BallNumber :this.selectedNap.balls
+      pickTypeId: this.selectedType.PickTypeId,
+      pickTypeName: this.selectedType.PickTypeName,
+      ticketTypeId: this.selectedType.TicketTypeId,
+      ticketTypeName: this.selectedType.TicketTypeName,
+      IsQuickPick: this.isQuickPick,
+      gameEventId: this.selectedEvent.GameEventId,
+      eventName: this.selectedEvent.EventName,
+      displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
+      Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
+      stake: this.Stake,
+      id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
     }
+    this.cartSrv.updateLotoList(pickItem)
+    this.selectedBalls = []
+    this.selectedType = null
+    this.showConfirmation = false
+    this.isQuickPick = false
+    this.selectedBalls = this.generateDrawBalls(this.selectedEvent.ConfigurationVersionId)
+    console.log(this.ticketItem)
+    console.log(pickItem)
   }
 
 }
+

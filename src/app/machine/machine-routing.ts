@@ -50,10 +50,20 @@ const routes: Routes = [
             },
             {
                 path: 'PickX',
-                loadChildren: () => import('../pickx/pickx.module').then(m => m.PickxModule),
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
                 data: {
                     breadcrumb: 'PickX',
                     shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.Pickx',
+                }
+            }, {
+                path: 'Jackpot',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                canActivate: [SharedGuard],
+                data: {
+                    breadcrumb: 'PickX',
+                    shouldBeLoggedIn: true,
                     showLink: true,
                     title: 'routerLinks.appTitle.Pickx',
                 }
