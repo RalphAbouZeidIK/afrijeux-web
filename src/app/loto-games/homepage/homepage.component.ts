@@ -115,7 +115,7 @@ export class HomepageComponent {
     this.selectedEvent = raceItem
     this.showEventDetails = true
     this.selectedBalls = this.generateDrawBalls(numberOfSelectedBalls)
-    this.listOfBalls = this.generateBallObjects(90)
+    this.listOfBalls = this.generateBallObjects(numberOfBalls)
     console.log(this.listOfBalls)
 
   }

@@ -102,7 +102,7 @@ export class CartComponent implements OnInit, OnDestroy {
     const currentUrl: any = window.location.href;
     this.isJackpotGame = currentUrl.includes("Jackpot")
     this.isPickXGame = currentUrl.includes("PickX")
-    this.isSportsBetting = currentUrl.includes("SportsBetting")
+    this.isSportsBetting = currentUrl.includes("Sports")
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
 
     this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')

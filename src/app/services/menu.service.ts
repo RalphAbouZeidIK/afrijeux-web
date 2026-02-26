@@ -54,7 +54,7 @@ export class MenuService {
   async getMenu(): Promise<MenuItem[]> {
     const menuItems: MenuItem[] = [];
     const isLoggedIn = this.userService.isUserLoggedIn(); // assume synchronous check
-
+    console.log(this.router.config)
     for (const r of this.router.config) {
       const data = r.data || {};
 
@@ -99,7 +99,7 @@ export class MenuService {
 
       menuItems.push(item);
     }
-    
+    console.log(menuItems)
     // Translate titles in bulk
     if (menuItems.length === 0) return [];
     const keys = menuItems.flatMap(i => [

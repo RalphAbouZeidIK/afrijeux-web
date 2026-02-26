@@ -82,6 +82,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
+      console.log('Login status changed:', loggedIn);
       this.isLoggedIn = loggedIn;
       this.getMenuItems()
     });
@@ -203,13 +204,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       });
     }
+
     else {
       this.routes = this.router.config;
 
-      const shouldShowLinks = this.isLoggedIn;
+      this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
 
+      const shouldShowLinks = this.isLoggedIn;
+      console.log(shouldShowLinks)
       this.router.config.forEach((menuItem: any) => {
-        console.log(this.router.config)
+
         if (menuItem.data.shouldBeLoggedIn) {
           menuItem.data.showLink = shouldShowLinks;
         }

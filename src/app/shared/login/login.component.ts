@@ -31,6 +31,8 @@ export class LoginComponent implements OnChanges, OnInit {
 
   showLoginPage = false
 
+  userId: any;
+
 
   constructor(
     private router: Router,
@@ -60,9 +62,8 @@ export class LoginComponent implements OnChanges, OnInit {
   otpFields = Array(5).fill(0);
 
   loginForm = new FormGroup({
-    UserName: new FormControl('', [Validators.required]),
-    Password: new FormControl('', [Validators.required]),
-    Ip: new FormControl('10.1.3.254', Validators.required),
+    Username: new FormControl('', [Validators.required]),
+    Password: new FormControl('', [Validators.required])
   });
 
   ngOnInit(): void {
@@ -160,7 +161,7 @@ export class LoginComponent implements OnChanges, OnInit {
       this.showLoginPage = true
       return
     }
-    this.loginForm.controls['UserName'].setValue(userData?.UserName)
+    this.loginForm.controls['Username'].setValue(userData?.UserName)
     this.loginForm.controls['Password'].setValue(userData?.UserPassword)
     //console.log(this.loginForm.value)
     this.submitLogin()
@@ -174,6 +175,7 @@ export class LoginComponent implements OnChanges, OnInit {
       this.showErrorMessage = true
       return
     }
+
     let loginParams = this.loginForm.value
     if (this.isAndroidApp) {
       let respoonse = await this.machineSrv.loginMachine(loginParams)
@@ -186,16 +188,26 @@ export class LoginComponent implements OnChanges, OnInit {
       }
       ////console.log(respoonse)
     }
+
     else {
       try {
         const loginResponse = await this.login(loginParams)
-        ////console.log(loginResponse)
         if (loginResponse.IsSuccess) {
           this.successfullLogin(loginResponse.UserInfo, loginResponse.UserInfo.Token)
         }
         else {
           this.errorMsg = loginResponse?.Message || 'Login failed. Please try again.'
           this.showErrorMessage = true
+
+          if (loginResponse?.ReasonId == 4) {
+            let otpResponse: any = await this.requestOtp(loginResponse.UserId);
+            if (otpResponse == true) {
+              this.showOtpForm = true
+            }
+            return
+          }
+
+
         }
       } catch (error: any) {
         if (error.error.status != undefined && error.error.status == 401) {
@@ -232,6 +244,7 @@ export class LoginComponent implements OnChanges, OnInit {
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
       ////console.log(signupResponse)
       if (signupResponse.IsSuccess) {
+        this.userId = signupResponse.UserId
         this.showOtpForm = true
       }
 
@@ -321,12 +334,21 @@ export class LoginComponent implements OnChanges, OnInit {
     this.otpForm['otp'] = otp;
   }
 
-  verifyOtp() {
+  async verifyOtp() {
 
     if (this.otpForm.invalid) return;
 
     const otpValue = Object.values(this.otpForm.value).join('');
     console.log('Entered OTP:', otpValue);
+
+    let params = {
+      body: {
+        UserId: this.userId,
+        OTP: otpValue
+      }
+    }
+
+    let otpResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/ConfirmOTP', 'POST', params);
     // Call backend verification here
     // this.authService.verifyOtp(otpValue).subscribe(() => {
 
@@ -335,6 +357,10 @@ export class LoginComponent implements OnChanges, OnInit {
     this.showLoginPage = true;
 
     // });
+  }
+
+  async requestOtp(userId: any) {
+    const otpResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Authenticate/RequestOtp?userId=${userId}`, 'GET', {});
   }
 
   /**
