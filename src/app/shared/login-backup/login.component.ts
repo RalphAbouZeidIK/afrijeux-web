@@ -17,7 +17,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./login.component.scss'],
   standalone: false
 })
-export class LoginComponent implements OnChanges, OnInit {
+export class LoginBackupComponent implements OnChanges, OnInit {
 
 
   isSignup: any;
@@ -44,20 +44,8 @@ export class LoginComponent implements OnChanges, OnInit {
   ) {
 
   }
-  errorMsg = ''
+  msg = ''
   showErrorMessage = false
-
-  showOtpForm = false;
-
-  otpForm: any = this.fb.group({
-    otp0: [''],
-    otp1: [''],
-    otp2: [''],
-    otp3: [''],
-    otp4: ['']
-  });
-
-  otpFields = Array(5).fill(0);
 
   loginForm = new FormGroup({
     UserName: new FormControl('', [Validators.required]),
@@ -66,7 +54,6 @@ export class LoginComponent implements OnChanges, OnInit {
   });
 
   ngOnInit(): void {
-
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     if (this.isAndroidApp) {
       this.autoLogin()
@@ -75,21 +62,13 @@ export class LoginComponent implements OnChanges, OnInit {
       this.showLoginPage = true
     }
 
-    // this.signupForm = this.fb.group({
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   email: ['', [Validators.required, Validators.email]],
-    //   phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]], // Simple phone validation
-    //   dateOfBirth: ['', [Validators.required, ageValidator()]],
-    //   username: ['', [Validators.required, Validators.minLength(3)]],
-    //   password: ['', [Validators.required, Validators.minLength(6)]],
-    //   confirmPassword: ['', Validators.required]
-    // }, {
-    //   validator: this.passwordMatchValidator // Custom validator for matching passwords
-    // });
-
     this.signupForm = this.fb.group({
-      username: ['', [Validators.required, this.emailOrPhoneValidator]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]], // Simple phone validation
+      dateOfBirth: ['', [Validators.required, ageValidator()]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, {
@@ -104,27 +83,6 @@ export class LoginComponent implements OnChanges, OnInit {
 
   preventTyping(event: KeyboardEvent) {
     event.preventDefault(); // Prevents any typing input
-  }
-
-  emailOrPhoneValidator(control: any) {
-
-    const value = control.value;
-
-    if (!value) return null;
-
-    // Email regex
-    const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    // UAE mobile regex
-    const uaePhoneRegex =
-      /^(?:\+971|971|0)?5[024568]\d{7}$/;
-
-    if (emailRegex.test(value) || uaePhoneRegex.test(value)) {
-      return null;
-    }
-
-    return { invalidUsername: true };
   }
 
   passwordMatchValidator(form: FormGroup) {
@@ -194,7 +152,6 @@ export class LoginComponent implements OnChanges, OnInit {
           this.successfullLogin(loginResponse.UserInfo, loginResponse.UserInfo.Token)
         }
         else {
-          this.errorMsg = loginResponse?.Message || 'Login failed. Please try again.'
           this.showErrorMessage = true
         }
       } catch (error: any) {
@@ -212,27 +169,15 @@ export class LoginComponent implements OnChanges, OnInit {
       this.showErrorMessage = true
       return
     }
-    const value = this.signupForm.value.username;
-
-    const isEmail = value.includes('@');
-
-    const payload = {
-      email: isEmail ? value : null,
-      phone: !isEmail ? value : null,
-      password: this.signupForm.value.password
-    };
-
-    // let signupParams = this.signupForm.value
+    let signupParams = this.signupForm.value
     const params = {
-      body: payload
+      body: signupParams
 
     }
-
     try {
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
       ////console.log(signupResponse)
-      if (signupResponse.IsSuccess) {
-        this.showOtpForm = true
+      if (signupResponse.isSuccess) {
       }
 
       else {
@@ -251,90 +196,6 @@ export class LoginComponent implements OnChanges, OnInit {
 
     }
     return this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Login', 'POST', params);
-  }
-
-  onOtpInput(event: any, index: number) {
-
-    const input = event.target;
-    const value = input.value;
-
-    // Allow only numbers
-    if (!/^[0-9]?$/.test(value)) {
-      input.value = '';
-      return;
-    }
-
-    // Auto move forward
-    if (value && index < 4) {
-      const next = document.querySelectorAll('.otp-box')[index + 1] as HTMLInputElement;
-      next?.focus();
-    }
-
-    this.updateOtpValue();
-  }
-
-  onOtpKeyDown(event: any, index: number) {
-
-    if (event.key === 'Backspace' && !event.target.value && index > 0) {
-
-      const prev = document.querySelectorAll('.otp-box')[index - 1] as HTMLInputElement;
-      prev?.focus();
-    }
-  }
-
-  onOtpPaste(event: ClipboardEvent) {
-
-    event.preventDefault();
-
-    const clipboardData = event.clipboardData;
-    if (!clipboardData) return;
-
-    const pastedText = clipboardData.getData('text').trim();
-
-    if (!pastedText) return;
-
-    // Keep only digits and limit to 5 characters
-    const digits = pastedText.replace(/\D/g, '').slice(0, 5);
-
-    digits.split('').forEach((digit, index) => {
-
-      const control = this.otpForm.get('otp' + index);
-
-      if (control) {
-        control.setValue(digit);
-      }
-
-    });
-
-    this.updateOtpValue();
-  }
-
-  updateOtpValue() {
-
-    const otp =
-      this.otpFields
-        .map((_, i) => this.otpForm.get('otp' + i)?.value || '')
-        .join('');
-
-    this.otpForm.patchValue({}, { emitEvent: false });
-
-    this.otpForm['otp'] = otp;
-  }
-
-  verifyOtp() {
-
-    if (this.otpForm.invalid) return;
-
-    const otpValue = Object.values(this.otpForm.value).join('');
-    console.log('Entered OTP:', otpValue);
-    // Call backend verification here
-    // this.authService.verifyOtp(otpValue).subscribe(() => {
-
-    this.showOtpForm = false;
-    this.isSignup = false; // go back to login
-    this.showLoginPage = true;
-
-    // });
   }
 
   /**

@@ -78,7 +78,10 @@
             "noAccount": "Vous n'avez pas de compte ?",
             "registerHere": "Inscrivez-vous ici",
             "alreadyRegistered": "Déjà inscrit ?",
-            "loginHere": "Connectez-vous ici"
+            "loginHere": "Connectez-vous ici",
+            "emailOrPhone": "Email ou Téléphone",
+            "emailOrPhoneInvalid": "Veuillez entrer un email ou numéro de téléphone valide",
+            "emailOrPhoneRequired": "L'email ou le numéro de téléphone est requis"
         }
     },
     "user": {

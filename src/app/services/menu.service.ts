@@ -101,6 +101,7 @@ export class MenuService {
     }
     
     // Translate titles in bulk
+    if (menuItems.length === 0) return [];
     const keys = menuItems.flatMap(i => [
       i.title,
       ...(i.children?.map(c => c.title) || [])

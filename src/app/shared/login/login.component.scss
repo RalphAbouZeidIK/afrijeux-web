@@ -2,6 +2,23 @@
 
 @use '/src/variables' as *;
 
+.otp-container {
+    text-align: center;
+}
+
+.otp-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.otp-box {
+    width: 45px;
+    height: 50px;
+    text-align: center;
+    font-size: 22px;
+    border-radius: 8px;
+}
 
 @media all and (max-width:1200px) {
     .header-container {

@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   userBalance: any
 
-  selectedLanguage = { code: 'fr', name: 'Français' }; // Default language
+  selectedLanguage = { code: 'en', name: 'English' }; // Default language
 
   languages = [
     { code: 'fr', name: 'Français' },

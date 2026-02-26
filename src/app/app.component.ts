@@ -77,8 +77,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
 
 
-    translate.setDefaultLang('fr');
-    translate.use('fr');
+    translate.setDefaultLang('en');
+    translate.use('en');
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
@@ -243,8 +243,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   changeLanguage() {
-    this.translate.setDefaultLang('fr');
-    this.translate.use('fr');
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
   }
 
 
