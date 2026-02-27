@@ -1,8 +1,9 @@
 $yellow: #F7D955;
-$darkBg: #18191C;
+$darkBg: #0b1705;
+$darkerBg: #070906;
 $lightGrey: #909090;
 $white: #FFF;
-$lightBg: #1E2328;
+$lightBg: #2b3422;
 $countryBg: #252B31;
 $offWhite : #F5f5f5;
 $red: #E12D4B;
@@ -10,6 +11,12 @@ $green: #3F8E3C;
 $lightBlue: #929393;
 $right: right;
 $left: left;
+$lightGreen: #a4f675;
+$black: #000;
+
+// Typography
+$font-bold: 'Switzer', sans-serif;
+$font-regular: 'SF UI', sans-serif;
 
 @mixin transition($duration) {
     -webkit-transition: all $duration;

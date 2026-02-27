@@ -8,7 +8,7 @@
 
     .date {
         display: block;
-        color: $yellow;
+        color: $lightGreen;
         font-size: 14px;
         font-weight: 400;
         display: block;
@@ -72,9 +72,9 @@
         cursor: pointer;
 
         &.isSelected {
-            background-color: $yellow;
+            background-color: $lightGreen;
             color: $darkBg;
-            border-color: $yellow;
+            border-color: $lightGreen;
         }
     }
 }

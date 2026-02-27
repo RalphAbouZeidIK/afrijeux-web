@@ -1,6 +1,6 @@
 {
     "generic": {
-        "login": "Login",
+        "login": "Sign in",
         "logout": "Logout",
         "register": "Register"
     },
@@ -13,7 +13,8 @@
             "Machine": "Machine",
             "Khamsa": "Five Ninety",
             "Pickx": "PickX",
-            "Jackpot": "Jackpot"
+            "Jackpot": "Jackpot",
+            "mainTitle": "Wingbig"
         },
         "HPBTitles": {
             "mesParies": "My Bets",

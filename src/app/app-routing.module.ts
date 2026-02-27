@@ -15,7 +15,7 @@ const routes: Routes = [
       breadcrumb: 'UAE Lottery',
       shouldBeLoggedIn: false,
       showLink: false,
-      title: 'routerLinks.appTitle.hpb',
+      title: 'routerLinks.appTitle.mainTitle',
     }
   },
   {
@@ -30,7 +30,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'HPB PMU',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.hpb',
     }
   },
@@ -40,7 +40,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'PMU Hybrid',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.pmu',
     }
   },
@@ -50,7 +50,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Sports Betting',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Sports',
     }
   },
@@ -60,7 +60,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Five Ninety',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Khamsa',
     }
   },

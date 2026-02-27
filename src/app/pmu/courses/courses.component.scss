@@ -114,8 +114,8 @@
         border: 1px solid $lightBg;
 
         &.selected-race {
-            border-color: $yellow;
-            color: $yellow;
+            border-color: $lightGreen;
+            color: $lightGreen;
         }
 
         &:first-of-type {
@@ -167,7 +167,7 @@
     }
 
     .type-label {
-        color: $yellow;
+        color: $lightGreen;
     }
 
     .type-label:before {
@@ -197,7 +197,7 @@
 
     .date {
         display: block;
-        color: $yellow;
+        color: $lightGreen;
         font-size: 14px;
         font-weight: 400;
         display: block;

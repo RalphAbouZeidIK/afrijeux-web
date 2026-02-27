@@ -223,7 +223,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    console.log(this.navList);
 
   }
 

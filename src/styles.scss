@@ -1,17 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'variables' as *;
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;600;700&display=swap');
 
+@font-face {
+    font-family: 'Switzer';
+    src: url('assets/fonts/Switzer-Bold.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+}
+
+
+
+@font-face {
+    font-family: 'SF UI';
+    font-style: normal;
+    font-weight: 300;
+    src: local('SF UI Display Light'), url('assets/fonts/sf-ui-display-light-58646b33e0551.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'SF UI';
+    font-style: normal;
+    font-weight: 500;
+    src: local('SF UI Display Medium'), url('assets/fonts/sf-ui-display-medium-58646be638f96.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'SF UI';
+    font-style: normal;
+    font-weight: 700;
+    src: local('SF UI Display Bold'), url('assets/fonts/sf-ui-display-bold-58646a511e3d9.woff') format('woff');
+}
+
+
+.container-fluid {
+    --bs-gutter-x: 6.5rem;
+}
 
 
 body {
     background-color: $darkBg;
     color: $white;
-    font-family: "Lato", sans-serif;
+    font-family: "SF UI", sans-serif !important;
     font-size: 16px;
     line-height: normal;
     font-weight: 400;
     padding: 0;
+
+    * {
+        font-family: "SF UI", sans-serif
+    }
 }
 
 ul {
@@ -33,26 +72,35 @@ h2 {
 .btn:first-child:active,
 .btn.active,
 .btn.show {
-    background-color: $yellow;
+    background-color: $lightGreen;
     color: $darkBg;
 }
 
 .btn {
-    font-weight: 700;
-    border-radius: 5px;
-    padding: 10px 20px 12px;
+    font-weight: 500;
+    border-radius: 30px;
+    padding: 10px 20px;
     line-height: normal;
+    border: none;
 
     &.btn-primary {
-        background-color: $yellow;
-        color: $darkBg;
-        border: 0;
+        background-color: $lightGreen;
+        color: $black;
+
+        &:hover {
+            background-color: $darkBg;
+            color: $white;
+        }
     }
 
-    &.btn-default {
+    &.btn-secondary {
+        background-color: $darkBg;
         color: $white;
-        border: 1px solid $yellow;
-        margin-left: 10px;
+
+        &:hover {
+            background-color: $lightGreen;
+            color: $black;
+        }
     }
 }
 
@@ -119,7 +167,7 @@ h2 {
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: $yellow;
+        background: $lightGreen;
         border-radius: 10px;
     }
 }
@@ -397,7 +445,7 @@ select.form-controlو select.form-control:focus {
 
     /* Specify the background color to be shown when checkbox is checked */
     input:checked~.geekmark {
-        background-color: $yellow;
+        background-color: $lightGreen;
     }
 
     /* Display checkmark when checked */
@@ -408,7 +456,7 @@ select.form-controlو select.form-control:focus {
 
 .underline-word {
     text-decoration: underline;
-    color: $yellow;
+    color: $lightGreen;
 }
 
 .resulats-page {
@@ -470,7 +518,7 @@ aside {
         cursor: pointer;
 
         &.active {
-            color: $yellow
+            color: $lightGreen
         }
     }
 
@@ -535,7 +583,7 @@ label {
 }
 
 .body-holder {
-    margin-top: 75px;
+    margin-top: 110px;
 
     .body-holder {
         margin-top: 0;
@@ -565,14 +613,14 @@ header {
 .pagination {
     a.page-link {
         background-color: $darkBg;
-        color: $yellow;
+        color: $lightGreen;
         border-color: $white;
         padding-bottom: 9px;
     }
 
     .page-link.active,
     .active>.page-link {
-        background-color: $yellow;
+        background-color: $lightGreen;
         color: $darkBg;
         font-weight: bold;
         box-shadow: none;
@@ -628,7 +676,7 @@ app-odd-item:nth-of-type(3n) {
     }
 
     input[type="checkbox"]:checked+label {
-        background: $yellow
+        background: $lightGreen
     }
 
     input[type="checkbox"]:checked+label:after {
@@ -725,7 +773,7 @@ app-odd-item:nth-of-type(3n) {
     }
 
     .ball.selected {
-        background: $yellow;
+        background: $lightGreen;
         color: $darkBg;
     }
 

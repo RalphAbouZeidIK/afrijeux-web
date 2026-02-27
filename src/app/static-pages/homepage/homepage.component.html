@@ -1,1 +1,108 @@
-<p>homepage works!</p>
+<div class="homepage-container">
+    <!-- Hero Banner Section -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    We help you reach<br>your dreams faster!
+                </h1>
+                <div class="hero-subtitle-group">
+                    <p class="hero-subtitle">
+                        <span class="highlight">Millions in prizes,</span><br>
+                        <span class="text-white">just one ticket away.</span>
+                    </p>
+                    <div class="game-buttons">
+                        <button class="game-btn">Pick 2</button>
+                        <button class="game-btn">Pick 3</button>
+                        <button class="game-btn">Pick 4</button>
+                        <button class="game-btn">Jackpot</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="assets/images/lottery-machine.png" alt="Lottery Machine" />
+            </div>
+        </div>
+        <div class="hero-background"></div>
+    </section>
+
+    <!-- All Games Section -->
+    <section class="all-games-section">
+        <div class="section-header">
+            <h2>All Games</h2>
+            <p>Each game offers unique chances to win. Choose your favorite, play, and let the winning begin!</p>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card" *ngFor="let game of games">
+                <div class="game-card-content">
+                    <div class="game-label">Today</div>
+                    <div class="countdown-badge">Closes in {{ game.timeRemaining }}</div>
+                    <div class="game-info">
+                        <h3>{{ game.name }}</h3>
+                        <div class="prize-display">
+                            <span class="prize-amount">{{ game.prize }}</span>
+                        </div>
+                    </div>
+                    <button class="play-now-btn" (click)="startGameSelection()">Play Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Previous Draw Results Section -->
+    <section class="previous-results-section">
+        <div class="section-header">
+            <h2>Previous Draw Results</h2>
+            <p>Check the latest draw results to see if you're a winner! Stay informed about past numbers and more.</p>
+        </div>
+
+        <div class="results-grid">
+            <div class="result-card" *ngFor="let result of previousDrawResults">
+                <div class="result-content">
+                    <h3>{{ result.name }}</h3>
+                    <div class="result-numbers">
+                        <span class="result-ball" *ngFor="let num of result.results">{{ num }}</span>
+                    </div>
+                    <p class="result-prize">{{ result.prize }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-nav">
+            <button class="search-btn">
+                <span>🔍</span>
+                <span>Search Results</span>
+            </button>
+            <a href="#" class="view-results-link">View Previous Results</a>
+        </div>
+    </section>
+
+    <!-- How to Play Section -->
+    <section class="how-to-play-section">
+        <div class="section-header">
+            <h2>How to Play</h2>
+            <p>Ready to win? Here's how you can play with confidence. Games are exciting by chance.</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card" *ngFor="let step of howToPlaySteps">
+                <div class="step-icon">
+                    <div class="icon-placeholder">🎯</div>
+                </div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Responsible Gaming Section -->
+    <section class="responsible-gaming-section">
+        <div class="responsible-content">
+            <h2>Always remember to</h2>
+            <h3>PLAY RESPONSIBLY</h3>
+            <p>Play responsibly and stay within budgets to maximize the potential of fun & entertainment experience. If you can't control your impulse to play, reach out to us!</p>
+            <button class="reach-out-btn">Reach out</button>
+        </div>
+    </section>
+</div>

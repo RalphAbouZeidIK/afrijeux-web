@@ -14,7 +14,7 @@
     overflow: hidden;
 
     &.isSelected {
-        background-color: $yellow;
+        background-color: $lightGreen;
         color: $darkBg;
 
         .odd {
@@ -24,7 +24,7 @@
 }
 
 .odd {
-    color: $yellow;
+    color: $lightGreen;
     font-weight: bold;
     display: block;
     text-align: center;

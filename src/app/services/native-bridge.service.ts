@@ -59,7 +59,7 @@ export class NativeBridgeService {
 
 
   constructor(private ngZone: NgZone) {
-    console.log("🧩 BridgeService initialized:", this);
+    //console.log("🧩 BridgeService initialized:", this);
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
       this.ngZone.run(() => {

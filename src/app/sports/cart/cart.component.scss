@@ -19,11 +19,11 @@
         justify-content: space-between;
         align-items: center;
         padding: 15px;
-        border-bottom: 3px solid $yellow;
+        border-bottom: 3px solid $lightGreen;
     }
 
     .clear-btn {
-        color: $yellow;
+        color: $lightGreen;
         font-size: 12px;
         font-weight: 300;
         text-decoration-line: underline;
@@ -91,7 +91,7 @@
 
     .bet-item {
         padding: 15px;
-        border-bottom: 1px solid $yellow;
+        border-bottom: 1px solid $lightGreen;
 
         font-weight: bold;
     }
@@ -103,13 +103,13 @@
 
     .odd {
         font-weight: bold;
-        color: $yellow;
+        color: $lightGreen;
         margin-left: auto
     }
 
     .ticket-infos {
         padding: 15px;
-        border-top: 3px solid $yellow;
+        border-top: 3px solid $lightGreen;
     }
 
     .info-item {
@@ -139,7 +139,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: $yellow;
+    background-color: $lightGreen;
     color: $darkBg;
     border-bottom: 1px solid $darkBg;
     font-weight: bold;
@@ -227,7 +227,7 @@
             }
 
             .yellow-circle {
-                background-color: $yellow;
+                background-color: $lightGreen;
                 width: 17px;
                 height: 17px;
                 border-radius: 50%;

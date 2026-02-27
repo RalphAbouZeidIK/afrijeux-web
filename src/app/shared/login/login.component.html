@@ -123,8 +123,13 @@
                 </div>
 
                 <div class="form-btns">
-                    <button class="btn btn-primary" (click)="verifyOtp()" [disabled]="otpForm.invalid">
+                    <button class="btn btn-primary" (click)="verifyOtp()" [disabled]="otpForm.invalid"
+                        *ngIf="!showRequestOtp">
                         Verify OTP
+                    </button>
+                    <button class="btn btn-primary" (click)="requestNewOtp()" [disabled]="otpForm.invalid"
+                        *ngIf="showRequestOtp">
+                        Request New OTP
                     </button>
                 </div>
 

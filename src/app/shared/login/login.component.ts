@@ -51,6 +51,8 @@ export class LoginComponent implements OnChanges, OnInit {
 
   showOtpForm = false;
 
+  showRequestOtp = false
+
   otpForm: any = this.fb.group({
     otp0: [''],
     otp1: [''],
@@ -200,10 +202,8 @@ export class LoginComponent implements OnChanges, OnInit {
           this.showErrorMessage = true
 
           if (loginResponse?.ReasonId == 4) {
-            let otpResponse: any = await this.requestOtp(loginResponse.UserId);
-            if (otpResponse == true) {
-              this.showOtpForm = true
-            }
+            this.userId = loginResponse.UserId
+            this.showOtpForm = true
             return
           }
 
@@ -349,18 +349,37 @@ export class LoginComponent implements OnChanges, OnInit {
     }
 
     let otpResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/ConfirmOTP', 'POST', params);
+
+    if (otpResponse.IsSuccess) {
+      this.showOtpForm = false;
+      this.isSignup = false;
+      this.showLoginPage = false;
+      this.successfullLogin(otpResponse.UserInfo, otpResponse.UserInfo.Token)
+    }
+
+    else {
+      this.errorMsg = 'Invalid OTP.'
+      this.showRequestOtp = true
+    }
     // Call backend verification here
     // this.authService.verifyOtp(otpValue).subscribe(() => {
 
-    this.showOtpForm = false;
-    this.isSignup = false; // go back to login
-    this.showLoginPage = true;
+    // this.showOtpForm = false;
+    // this.isSignup = false; // go back to login
+    // this.showLoginPage = true;
 
     // });
   }
 
-  async requestOtp(userId: any) {
-    const otpResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Authenticate/RequestOtp?userId=${userId}`, 'GET', {});
+  async requestNewOtp() {
+    const otpResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Authenticate/RequestOtp?id=${this.userId}`, 'GET', {});
+    if (otpResponse == true) {
+      this.errorMsg = 'A new OTP has been sent to your registered email or phone.'
+      this.showRequestOtp = false
+    }
+    else{
+      this.errorMsg = 'Failed to send new OTP. Please try again later.'
+    }
   }
 
   /**

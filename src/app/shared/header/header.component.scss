@@ -9,15 +9,18 @@ header {
     top: 0;
     left: 0;
     background-color: $darkBg;
+    padding-top: 20px;
+    padding-bottom: 20px;
 
     .header-container {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        padding-top: 15px;
-        padding-bottom: 15px;
         position: relative;
+        background-color: $lightBg;
+        padding: 15px 30px;
+        border-radius: 25px;
     }
 
 
@@ -49,6 +52,10 @@ header {
     margin-left: 15px;
 }
 
+.header-btns {
+    gap: 15px;
+}
+
 .dropdown-header {
     padding-left: 15px;
     position: relative;
@@ -68,7 +75,7 @@ header {
             border-bottom: 1px solid $lightBg;
 
             &:hover {
-                background: $yellow;
+                background: $lightGreen;
                 color: $darkBg
             }
 
@@ -207,7 +214,7 @@ header {
             display: none;
             flex-direction: column;
             align-items: center;
-            border-top: 2px solid $yellow;
+            border-top: 2px solid $lightGreen;
             padding-left: 0;
             padding-right: 0;
 
@@ -221,7 +228,7 @@ header {
     .right-section {
         margin-top: 10px;
         padding-top: 20px;
-        border-top: 2px solid $yellow;
+        border-top: 2px solid $lightGreen;
         padding-left: 15px;
     }
 

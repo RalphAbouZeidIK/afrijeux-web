@@ -22,7 +22,7 @@
     }
 
     .clear-btn {
-        color: $yellow;
+        color: $lightGreen;
         font-size: 12px;
         font-weight: 300;
         text-decoration-line: underline;
@@ -114,7 +114,7 @@
 
 .bet-item {
     background: $lightBg;
-    border-bottom: 1px solid $yellow;
+    border-bottom: 1px solid $lightGreen;
     padding-bottom: 15px;
 
 }
@@ -180,13 +180,13 @@ input[type="number"]::-webkit-inner-spin-button {
 
 
 .cart-body-holder.ticket-body {
-    border: 1px solid $yellow;
+    border: 1px solid $lightGreen;
     margin-bottom: 0px;
 }
 
 .cart-body-holder {
     margin-bottom: 20px;
-    border: 1px solid $yellow;
+    border: 1px solid $lightGreen;
 }
 
 
@@ -338,7 +338,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             .yellow-circle {
-                background-color: $yellow;
+                background-color: $lightGreen;
                 width: 25px;
                 height: 25px;
                 border-radius: 50%;

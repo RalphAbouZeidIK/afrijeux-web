@@ -164,6 +164,7 @@ export class UserService {
    */
   async isUserLoggedIn() {
     let isLoggedIn: any = (await this.getUserToken() == '') ? false : true
+    console.log(isLoggedIn)
     return isLoggedIn;
 
   }
