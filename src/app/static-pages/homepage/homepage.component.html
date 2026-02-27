@@ -1,31 +1,8 @@
 <div class="homepage-container">
     <!-- Hero Banner Section -->
     <app-hero-banner></app-hero-banner>
+    <app-games-list></app-games-list>
 
-
-    <!-- All Games Section -->
-    <section class="all-games-section">
-        <div class="section-header">
-            <h2>All Games</h2>
-            <p>Each game offers unique chances to win. Choose your favorite, play, and let the winning begin!</p>
-        </div>
-
-        <div class="games-grid">
-            <div class="game-card" *ngFor="let game of games">
-                <div class="game-card-content">
-                    <div class="game-label">Today</div>
-                    <div class="countdown-badge">Closes in {{ game.timeRemaining }}</div>
-                    <div class="game-info">
-                        <h3>{{ game.name }}</h3>
-                        <div class="prize-display">
-                            <span class="prize-amount">{{ game.prize }}</span>
-                        </div>
-                    </div>
-                    <button class="play-now-btn" (click)="startGameSelection()">Play Now</button>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Previous Draw Results Section -->
     <section class="previous-results-section">

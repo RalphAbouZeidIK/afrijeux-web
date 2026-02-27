@@ -1,0 +1,139 @@
+@use '/src/variables' as *;
+
+// ===== ALL GAMES SECTION =====
+.all-games-section {
+    padding: 100px 52px;
+    background-color: $darkBg;
+
+    .games-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 78px;
+        max-width: 1400px;
+        margin: 0 auto;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+    }
+}
+
+// ===== GAME CARD =====
+.game-card {
+    border: 2px solid $lightBg;
+    border-radius: 35px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 275 307\' preserveAspectRatio=\'none\'><g transform=\'matrix(-15.55 27 3.0854 4.0649 292.5 -18.5)\'><foreignObject x=\'-780.66\' y=\'-780.66\' width=\'1561.3\' height=\'1561.3\'><div xmlns=\'http://www.w3.org/1999/xhtml\' style=\'background-image: conic-gradient(from 90deg, rgb(7, 9, 6) -18.711%, rgb(19, 24, 17) -9.3459%, rgb(32, 38, 29) 0.019619%, rgb(19, 24, 17) 8.7562%, rgb(7, 9, 6) 17.493%, rgb(7, 9, 6) 25.684%, rgb(7, 9, 6) 81.289%, rgb(19, 24, 17) 90.654%, rgb(32, 38, 29) 100.02%); opacity:1; height: 100%; width: 100%;\'></div></foreignObject></g></svg>'), linear-gradient(90deg, #070906 0%, #070906 100%);
+    background-size: cover;
+    overflow: hidden;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    height: 307px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 20px 40px rgba(164, 246, 117, 0.15);
+    }
+
+    .game-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.15;
+        pointer-events: none;
+    }
+
+    .game-card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .game-label {
+        font-family: $font-regular;
+        font-size: 12px;
+        font-weight: 700;
+        color: $white;
+        text-transform: uppercase;
+    }
+
+    .countdown-badge {
+        background: linear-gradient(135deg, #639247 0%, #75bb51 10%, #a4f675 40%, #84c45e 70%, #639247 100%);
+        color: $darkBg;
+        /* black-green text color */
+        padding: 5px 10px;
+        border-radius: 16px;
+        font-family: $font-regular;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .game-info {
+        text-align: center;
+
+        h3 {
+            font-family: $font-bold;
+            font-size: 18px;
+            font-weight: 700;
+            color: $white;
+            margin: 0 0 15px 0;
+        }
+    }
+
+    .prize-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .currency-icon {
+            width: 22px;
+            height: 29px;
+            object-fit: contain;
+        }
+
+        .prize-amount {
+            font-family: $font-bold;
+            font-size: 40px;
+            font-weight: 700;
+            color: $lightGreen;
+        }
+    }
+
+    .play-now-btn {
+        border: 1px solid $lightGreen;
+        background-color: $darkBg;
+        color: $white;
+        padding: 5px 30px;
+        border-radius: 30px;
+        font-family: $font-regular;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+
+        &:hover {
+            background-color: $lightGreen;
+            color: $darkerBg;
+        }
+    }
+}

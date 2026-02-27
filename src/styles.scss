@@ -180,6 +180,31 @@ h2 {
     }
 }
 
+// ===== SECTION HEADERS =====
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 0 52px;
+
+    h2 {
+        font-family: $font-bold;
+        font-size: 36px;
+        font-weight: 700;
+        color: $white;
+        margin: 0 0 10px 0;
+        line-height: 60px;
+    }
+
+    p {
+        font-family: $font-regular;
+        font-size: 18px;
+        font-weight: 500;
+        color: $white;
+        margin: 0;
+        line-height: 25px;
+    }
+}
+
 .container-fluid .container-fluid {
     padding: 0;
 }
