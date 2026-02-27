@@ -1,0 +1,52 @@
+<div class=" container-fluid" data-node-id="310:1148">
+  <div class="hero-banner">
+    <div class="hero-content">
+      <!-- Left Section: Text Content -->
+      <div class="text-section">
+        <div class="heading-wrapper">
+          <h1 class="main-heading">
+            <span>We help you reach</span>
+            <span>your dreams faster!</span>
+          </h1>
+        </div>
+
+        <div class="description-section">
+          <div class="description-text">
+            <p class="description-highlight">Millions in prizes,</p>
+            <p class="description-normal">just one ticket away.</p>
+          </div>
+
+          <div class="button-group">
+            <button *ngFor="let option of pickOptions" class="pick-button" (click)="onPickClick(option)"
+              [attr.data-option]="option.id">
+              {{ option.label }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section: Machine Image -->
+      <div class="machine-section">
+        <img [src]="lotteryMachineImage" alt="Gold Lottery Machine" class="machine-image">
+      </div>
+    </div>
+
+    <!-- Decorative Background Elements -->
+    <div class="designs-section">
+      <div class="stripes">
+        <img [src]="vectorStriped1" alt="" class="stripe stripe-1">
+        <img [src]="vectorStriped2" alt="" class="stripe stripe-2">
+        <img [src]="vectorStriped3" alt="" class="stripe stripe-3">
+      </div>
+
+      <div class="aurora-bg">
+        <div class="glow-container">
+          <img [src]="vectorGlow1" alt="" class="glow-element">
+          <img [src]="vectorGlow2" alt="" class="glow-overlay">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
