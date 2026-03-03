@@ -1,7 +1,10 @@
-<div class="flexbox-container wrap">
+<div class="flexbox-container wrap {{cssClass}}">
     <ng-container *ngFor="let chosenball of chosenBallsArray; let i=index">
         <div class="box"
-            [ngClass]="getBallClass(chosenball.number) + (shouldEmit ? ' clickable' : '') + (chosenball.isSelected && shouldHighlight ? ' highlight' : '')"
+            [ngClass]="(shouldEmit ? ' clickable' : '') +
+                     ((chosenball.isSelected && shouldHighlight) ||
+                      (selectedBall && chosenball.id === selectedBall.id) ?
+                       ' highlight' : '')"
             (click)="shouldEmit && ballClicked.emit(chosenball)">
             <p class="ballnbr">{{chosenball.number}}</p>
         </div>

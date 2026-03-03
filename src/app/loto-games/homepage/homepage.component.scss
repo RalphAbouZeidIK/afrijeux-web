@@ -1,1 +1,16 @@
 @use '/src/variables' as *;
+
+.btns-holder {
+    display: flex;
+    /* already applied via d-flex but ensure context */
+
+    a {
+        /* let each button size to its text plus padding */
+        flex: 0 0 auto;
+        /* don’t stretch or shrink */
+        display: flex;
+        /* shrink-wrap content */
+        padding: 10px 20px;
+        align-items: center;
+    }
+}

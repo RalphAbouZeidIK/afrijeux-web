@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { race } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, race } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
+import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
 
@@ -30,6 +33,10 @@ export class HomepageComponent {
 
   listOfBalls: any[] = [];   // your available numbers
 
+  // store the currently chosen ball for each pickX slot so we can tell the
+  // corresponding `app-ball-list` which ball should be highlighted
+  slotSelections: any[] = [];
+
   showBallPicker: boolean = false;
 
   Stake = 0
@@ -38,7 +45,6 @@ export class HomepageComponent {
 
   ballToChangeId = null
 
-  showConfirmation = false
 
   isQuickPick = false
 
@@ -46,13 +52,18 @@ export class HomepageComponent {
 
   isPickXGame = false
 
+  path = this.gnrcSrv.getGameRoute()
+
+  fixedConfig: any
+
   constructor(
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService,
-    private cartSrv: CartService
+    private cartSrv: CartService,
+    private gamesSrv: GamesService
   ) { }
 
   ngOnInit(): void {
+
     this.generateDisplayBalls();
     this.isPickXGame = window.location.href.includes("PickX")
     console.log(this.isPickXGame)
@@ -87,25 +98,21 @@ export class HomepageComponent {
   }
 
   async getEvents() {
-    let gameEventsResponse: any
-
-    if (this.isAndroidApp) {
-      gameEventsResponse = await this.machineSrv.getGamesEvents()
-      console.log(gameEventsResponse)
-      if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
-        gameEventsResponse.GameConfiguration.EventConfiguration.forEach((eventItem: any) => {
-          if (!eventItem.IsSalesStopped) {
-            this.eventsList.push(eventItem)
-          }
-        });
+    let gameEventsResponse = await this.gamesSrv.getGamesEvents()
+    console.log(gameEventsResponse)
+    gameEventsResponse.forEach((eventItem: any) => {
+      if (!eventItem.IsSalesStopped) {
+        this.eventsList.push(eventItem)
+        this.composeEventDetails(this.eventsList[0])
       }
-    }
+    });
     console.log(this.eventsList)
   }
 
   async composeEventDetails(raceItem: any) {
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
-    let fixedConfig = await this.machineSrv.getFixedConfiguration(configId)
+    let fixedConfig = await this.gamesSrv.getFixedConfig(configId)
+    this.fixedConfig = fixedConfig
     let numberOfSelectedBalls = (this.isPickXGame) ? fixedConfig[0].NumberOfBalls : 6
     let numberOfBalls = (this.isPickXGame) ? 10 : fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
     console.log(raceItem)
@@ -114,8 +121,17 @@ export class HomepageComponent {
     raceItem.fixedConfig = fixedConfig
     this.selectedEvent = raceItem
     this.showEventDetails = true
+
+    // if we have bet types available and none chosen yet, pick the first one
+    if (this.isPickXGame && fixedConfig && fixedConfig.length) {
+      this.selectedType = fixedConfig[0];
+      this.onTypeChanged(this.selectedType);
+    }
+
     this.selectedBalls = this.generateDrawBalls(numberOfSelectedBalls)
     this.listOfBalls = this.generateBallObjects(numberOfBalls)
+    // reset the per-slot selection array
+    this.slotSelections = new Array(numberOfSelectedBalls).fill(null);
     console.log(this.listOfBalls)
 
   }
@@ -140,6 +156,17 @@ export class HomepageComponent {
     return drawBalls;
   }
 
+  /**
+   * Helper to convert a numeric count into an iterable array suitable for
+   * `*ngFor`. Usage in template: `*ngFor="let _ of range(fixedConfig[0].NumberOfBalls)"`
+   */
+  range(count: number): any[] {
+    if (!count || count < 0) {
+      return [];
+    }
+    return Array.from({ length: count });
+  }
+
   onTypeChanged(event: any) {
     console.log(event);
     this.selectedType = event
@@ -148,13 +175,27 @@ export class HomepageComponent {
   }
 
   quickPick() {
-    this.selectedBalls = this.selectedBalls.map((ball: any) => {
-      return { number: Math.floor(Math.random() * 10), id: ball.id, isSelected: true }
-    })
-    this.showConfirmation = true
-    this.isQuickPick = true
+    // choose a random ball from the available list for each slot
+    this.selectedBalls = this.selectedBalls.map((ball: any, idx: number) => {
+      const randomIndex = Math.floor(Math.random() * this.listOfBalls.length);
+      const pick = this.listOfBalls[randomIndex];
+      // record in slotSelections so the correct component highlights it
+      this.slotSelections[idx] = pick;
+      return { ...pick, isSelected: true, id: ball.id };
+    });
 
-    console.log(this.selectedBalls)
+    // also mark the picked balls as selected in listOfBalls if desired
+    this.listOfBalls = this.listOfBalls.map(b => ({ ...b, selected: false }));
+    this.slotSelections.forEach((p: any) => {
+      const found = this.listOfBalls.find(b => b.id === p?.id);
+      if (found) {
+        found.selected = true;
+      }
+    });
+
+    this.isQuickPick = true;
+
+    console.log(this.selectedBalls);
   }
 
   isBallSelected(ball: any): boolean {
@@ -172,11 +213,13 @@ export class HomepageComponent {
     this.showBallPicker = true
   }
 
-  selectBall(ball: any) {
+  selectBall(ball: any, index = 0) {
     this.isQuickPick = false
 
     if (this.isPickXGame) {
-      this.selectPickXBall(ball)
+      // record the choice for that slot so the corresponding child component
+      // can highlight it
+      this.selectPickXBall(ball, index)
     }
     else {
       this.selectLotoBall(ball)
@@ -184,11 +227,21 @@ export class HomepageComponent {
     console.log(this.selectedBalls)
   }
 
-  selectPickXBall(ball: any) {
-    const index = this.selectedBalls.findIndex((b: any) => b.id === this.ballToChangeId);
-    this.selectedBalls[index] = { ...ball, isSelected: true, id: this.ballToChangeId };
-    this.showConfirmation = this.selectedBalls.every((b: any) => b.isSelected);
+  selectPickXBall(ball: any, index: any) {
+    console.log(ball);
+    // if this slot already has the same ball selected, deselect it
+    const currently = this.slotSelections[index];
+    if (currently && currently.id === ball.id) {
+      this.slotSelections[index] = null;
+      // mark as unselected placeholder
+      this.selectedBalls[index] = { number: 'X', id: index, isSelected: false };
+    } else {
+      this.slotSelections[index] = ball;
+      this.selectedBalls[index] = { ...ball, isSelected: true, id: this.ballToChangeId };
+    }
+
     this.showBallPicker = false;    // hide the ball list after selection
+    console.log(this.selectedBalls);
   }
 
   selectLotoBall(ball: any) {
@@ -233,6 +286,14 @@ export class HomepageComponent {
   }
 
   addToBet() {
+    if (this.isPickXGame) {
+      console.log(this.selectedType)
+      if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedType == null) {
+        alert()
+        return
+      }
+    }
+
     let pickItem = {
       pickTypeId: this.selectedType.PickTypeId,
       pickTypeName: this.selectedType.PickTypeName,
@@ -247,9 +308,9 @@ export class HomepageComponent {
       id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
     }
     this.cartSrv.updateLotoList(pickItem)
+    this.slotSelections = []
     this.selectedBalls = []
-    this.selectedType = null
-    this.showConfirmation = false
+    this.selectedType = this.fixedConfig[0];
     this.isQuickPick = false
     this.selectedBalls = this.generateDrawBalls(this.selectedEvent.ConfigurationVersionId)
     console.log(this.ticketItem)

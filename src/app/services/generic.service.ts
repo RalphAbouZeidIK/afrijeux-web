@@ -32,6 +32,12 @@ export class GenericService {
     return path
   }
 
+  getGameRoute() {
+    let route = this.router.url.split('/')[1]
+    ////console.log(this.router.url)
+    return route
+  }
+
   isMachineApp() {
     const currentUrl: any = window.location.href;
     return currentUrl.includes('Machine') || (!navigator.onLine)

@@ -15,6 +15,11 @@ export class BallListComponent implements OnInit {
 
   @Input() shouldEmit = true
 
+  @Input() cssClass: any = null
+
+  // ball object that should be treated as currently selected/highlighted
+  @Input() selectedBall: any;
+
   getBallClass(ballNumber: number | string): string {
 
     if (ballNumber === 'X') return 'emptyBox';

@@ -147,9 +147,8 @@ h2 {
 
     main,
     aside {
-        max-height: calc(100vh - 75px);
-        overflow: auto;
         display: block;
+        width: 78%;
 
         >* {
             display: block;
@@ -629,7 +628,7 @@ label {
 }
 
 .body-holder {
-    margin-top: 110px;
+    margin-top: 115px;
 
     .body-holder {
         margin-top: 0;
@@ -754,10 +753,34 @@ app-odd-item:nth-of-type(3n) {
     margin-bottom: 15px;
 }
 
-.loto-game-container {
-    width: 600px;
+.input-bg {
+    width: fit-content;
     max-width: 100%;
     margin: 0 auto;
+    padding: 10px 15px;
+}
+
+.sign-button {
+    height: 17px;
+    width: 17px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loto-game-container {
+    max-width: 100%;
+    margin: 0 auto;
+    border: 2px solid $lightGreen;
+    border-radius: 35px;
+    padding: 30px;
+
+    .inner-container {
+        width: 690px;
+        max-width: 100%;
+        margin: 0 auto
+    }
 
     h2 {
         text-align: center;
@@ -783,6 +806,28 @@ app-odd-item:nth-of-type(3n) {
         margin-bottom: 15px;
     }
 
+    .input-bg {
+        border-radius: 35px;
+        border: 1px solid #C2D4E1;
+        background: $lightBg;
+        display: flex;
+        align-items: center;
+
+        select.form-control,
+        select.form-control:focus {
+            width: auto;
+            border-radius: 35px;
+            padding: 0 8px;
+            text-align: right;
+        }
+
+        input {
+            text-align: center;
+            padding: 0
+        }
+    }
+
+
     .btn {
         flex: 1;
         padding: 13px 10px;
@@ -792,7 +837,6 @@ app-odd-item:nth-of-type(3n) {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        max-height: calc(100vh - 95px);
         overflow: auto;
         margin-bottom: 20px;
     }
@@ -824,26 +868,12 @@ app-odd-item:nth-of-type(3n) {
     }
 
     .balls-list-holder {
-        position: fixed;
-        top: 0;
-        left: 0;
-        padding: 15px;
-        background: rgba(24, 25, 28, 0.98);
+        position: relative;
         z-index: 2;
-        height: 100%;
-        width: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;
-        padding-top: 70px;
 
-        &.loto-game {
-            position: relative;
-            height: auto;
-            width: auto;
-            background: transparent;
-            padding-top: 0;
-        }
     }
 
     .title-label {
@@ -857,8 +887,15 @@ app-odd-item:nth-of-type(3n) {
     }
 
     .stake-block {
+        width: 270px;
+        max-width: 100%;
+        margin-bottom: 0;
+
         input {
             text-align: center;
+            font-size: 14px;
+            border: none;
+            line-height: 19px;
         }
 
         .btn {

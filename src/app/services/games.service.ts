@@ -17,6 +17,8 @@ export class GamesService {
 
   outcomesFromCodeSearch: any
 
+  path = this.gnrcSrv.getGameRoute()
+
   constructor(
     private gnrcSrv: GenericService,
     private apiSrv: ApiService,
@@ -176,5 +178,34 @@ export class GamesService {
   }
 
 
+  async getGamesEvents() {
+    let apiResponse: any = []
+    if (this.isAndroidApp) {
+      let gameEventsResponse = await this.machineSrv.getGamesEvents()
+      if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
+        apiResponse = gameEventsResponse.GameConfiguration.EventConfiguration
+      }
+    }
+    else {
+      let path = this.gnrcSrv.getGameRoute()
+      apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `${path}/GetEventConfiguration`, 'GET', {});
+    }
+    return apiResponse
+  }
+
+  async getFixedConfig(fixedConfigId: any) {
+    let apiResponse: any
+    let path = this.gnrcSrv.getGameRoute()
+    if (this.isAndroidApp) {
+      let apiResponse = await this.machineSrv.getFixedConfiguration(fixedConfigId)
+    }
+    else {
+      let apiParams = {
+        body: [fixedConfigId]
+      }
+      apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `${path}/GetFixedConfiguration`, 'POST', apiParams);
+    }
+    return apiResponse
+  }
 
 }

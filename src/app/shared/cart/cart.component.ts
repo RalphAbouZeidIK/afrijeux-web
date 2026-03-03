@@ -75,6 +75,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   lotoTotalPrice: any = 0
 
+  isAndroidApp = this.gnrcSrv.isMachineApp()
+
   //stakeSubscription: Subscription
 
   constructor(
@@ -104,8 +106,10 @@ export class CartComponent implements OnInit, OnDestroy {
     this.isPickXGame = currentUrl.includes("PickX")
     this.isSportsBetting = currentUrl.includes("Sports")
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
+    if (this.isAndroidApp) {
+      this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
 
-    this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
+    }
     //console.log(this.canIssueTicket)
 
     let sbCartData = this.storageSrv.getItem('sbCartData')
