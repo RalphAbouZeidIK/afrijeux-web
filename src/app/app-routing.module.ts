@@ -65,17 +65,6 @@ const routes: Routes = [
     }
   },
   {
-    path: 'User',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
-    canActivate: [SharedGuard],
-    data: {
-      breadcrumb: 'My profile',
-      shouldBeLoggedIn: true,
-      showLink: true,
-      title: 'routerLinks.appTitle.User',
-    }
-  },
-  {
     path: 'PickX',
     loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
     canActivate: [SharedGuard],
@@ -95,6 +84,17 @@ const routes: Routes = [
       shouldBeLoggedIn: true,
       showLink: true,
       title: 'routerLinks.appTitle.Jackpot',
+    }
+  },
+  {
+    path: 'User',
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+    canActivate: [SharedGuard],
+    data: {
+      breadcrumb: 'My profile',
+      shouldBeLoggedIn: true,
+      showLink: true,
+      title: 'routerLinks.appTitle.User',
     }
   },
   // Machine-prefixed versions

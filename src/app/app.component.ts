@@ -205,22 +205,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    else {
-      this.routes = this.router.config;
-
-      this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
-
-      const shouldShowLinks = this.isLoggedIn;
-      console.log(shouldShowLinks)
-      this.router.config.forEach((menuItem: any) => {
-
-        if (menuItem.data.shouldBeLoggedIn && menuItem.data.showLink) {
-          menuItem.data.showLink = shouldShowLinks;
-        }
-      });
-
-      this.navList = this.router.config.filter((item: any) => item.data.showLink);
-    }
+    // desktop clients no longer build navList here; header obtains the
+    // menu from MenuService which already applies showLink/shouldBeLoggedIn
+    // rules.
 
 
 
