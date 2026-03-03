@@ -413,7 +413,7 @@ export class LoginComponent implements OnChanges, OnInit {
     this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
     this.hidePopup()
     this.usrSrv.gettUserId()
-    this.router.navigate(['HPBPMU/courses'])
+    
   }
 
 }

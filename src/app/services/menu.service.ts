@@ -53,12 +53,22 @@ export class MenuService {
    */
   async getMenu(): Promise<MenuItem[]> {
     const menuItems: MenuItem[] = [];
-    const isLoggedIn = this.userService.isUserLoggedIn(); // assume synchronous check
-    console.log(this.router.config)
+    // login status returned as a Promise<boolean>, so we must await it before
+    // we start filtering routes.  Previously the code treated the promise as
+    // a boolean which is always truthy and therefore allowed routes that
+    // should have been hidden.  This was the source of the "buggy" menu.
+    const isLoggedIn = await this.userService.isUserLoggedIn();
+
+    console.log(this.router.config);
     for (const r of this.router.config) {
       const data = r.data || {};
-      // Check showLink and shouldBeLoggedIn
-      if (!data['showLink']) continue;
+
+      // showLink should default to true when not provided.  Only explicitly
+      // `false` should hide the route.  The older check (`if (!data['showLink'])`)
+      // treated `undefined` as false and suppressed a lot of entries.
+      const showLink = data['showLink'] !== false;
+      if (!showLink) continue;
+
       if (data['shouldBeLoggedIn'] && !isLoggedIn) continue;
 
       const item: MenuItem = {
@@ -78,7 +88,8 @@ export class MenuService {
         item.children = children
           .filter(c => {
             const cData = c.data || {};
-            if (!cData['showLink']) return false;
+            const showChild = cData['showLink'] !== false;
+            if (!showChild) return false;
             if (cData['shouldBeLoggedIn'] && !isLoggedIn) return false;
 
             // ✅ Only include if game matches or is empty

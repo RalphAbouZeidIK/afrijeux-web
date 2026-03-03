@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { filter, Subscription } from 'rxjs';
@@ -6,6 +6,7 @@ import { GenericService } from 'src/app/services/generic.service';
 import { MenuItem, MenuService } from 'src/app/services/menu.service';
 import { UserRouteConfig } from 'src/app/services/routing.service';
 import { UserService } from 'src/app/services/user.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./header.component.scss'],
   standalone: false
 })
-export class HeaderComponent implements OnInit, OnChanges {
+export class HeaderComponent implements OnInit {
   type: any = ''
 
   showDocumentsPopup = false
@@ -54,7 +55,8 @@ export class HeaderComponent implements OnInit, OnChanges {
     private route: Router,
     private gnrcSrv: GenericService,
     private translate: TranslateService,
-    private menuSvc: MenuService
+    private menuSvc: MenuService,
+    private cdRef: ChangeDetectorRef
   ) {
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
@@ -65,18 +67,30 @@ export class HeaderComponent implements OnInit, OnChanges {
       ////console.log(data)
       this.userBalance = data
     });
-    this.translate.use(this.selectedLanguage.code)
+    this.translate.use(this.selectedLanguage.code);
+
+    // listen to login/logout events directly so we can refresh menu immediately
+    // we schedule the refresh on the next tick because other subscribers (e.g. the
+    // AppComponent) may be asynchronously mutating router.config.  deferring
+    // ensures getMenu() sees the fully‑updated config and stored token.
+    this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
+      console.log('Header detected login status change:', loggedIn);
+      // clear the existing menu first so that the change is visible
+      this.menu = [];
+      setTimeout(() => {
+        this.getMenu();
+      }, 0);
+    });
   }
 
   async ngOnInit() {
     this.route.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-        console.log(this.menu)
+        console.log(this.menu);
       });
 
-    this.getMenu()
-    console.log(this.menu)
+    await this.getMenu();
 
     if (await this.usrSrv.isUserLoggedIn()) {
       //this.getUserBalance()
@@ -88,11 +102,15 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.langChangeSub = this.translate.onLangChange.subscribe(() => {
       this.composeRoutes();
     });
-
   }
 
   async getMenu() {
-    this.menu = await this.menuSvc.getMenu();
+    console.log('Header calling getMenu');
+    const newMenu = await this.menuSvc.getMenu();
+    console.log('Header menu result:', newMenu);
+    this.menu = newMenu;
+    // menuSvc's call may resolve outside Angular zone; ensure view updates
+    this.cdRef.detectChanges();
   }
 
   async getUserBalance() {
@@ -173,15 +191,6 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.getMenu(); // Refresh menu with new translations
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['isLoggedIn']?.firstChange) {
-      this.getMenu()
-      console.log(this.menu)
-    }
-    if (!changes['navList']?.firstChange) {
-      this.getMenu()
-    }
-  }
 
   ngOnDestroy() {
     // Cleanup subscription to avoid memory leaks
