@@ -1,0 +1,20 @@
+<div class="promo-hero">
+  <div class="section-header hero-header">
+    <h2>How to Play</h2>
+    <p class="subtitle">Ready to dive in? We'll guide you on how to play, ensuring you have everything you need to join us!</p>
+  </div>
+
+  <div class="features">
+    <div class="feature" *ngFor="let f of features">
+        <div class="diamond"></div>
+      <div class="diamond-wrap">
+        <img [src]="imgDiamond" alt="diamond" class="diamond-bg" />
+        <div class="icon-wrap">
+          <img [src]="f.icon" alt="icon" class="feature-icon" />
+        </div>
+      </div>
+      <h3 class="feature-title">{{ f.title }}</h3>
+      <div class="feature-text">{{ f.text }}</div>
+    </div>
+  </div>
+</div>

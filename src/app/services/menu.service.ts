@@ -57,7 +57,6 @@ export class MenuService {
     console.log(this.router.config)
     for (const r of this.router.config) {
       const data = r.data || {};
-
       // Check showLink and shouldBeLoggedIn
       if (!data['showLink']) continue;
       if (data['shouldBeLoggedIn'] && !isLoggedIn) continue;

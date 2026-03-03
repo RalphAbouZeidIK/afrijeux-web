@@ -86,6 +86,8 @@ h2 {
     &.btn-primary {
         background-color: $lightGreen;
         color: $black;
+        border: 2px solid $lightGreen;
+
 
         &:hover {
             background-color: $darkBg;
@@ -96,6 +98,7 @@ h2 {
     &.btn-secondary {
         background-color: $darkBg;
         color: $white;
+        border: 2px solid $darkBg;
 
         &:hover {
             background-color: $lightGreen;
@@ -202,6 +205,24 @@ h2 {
         color: $white;
         margin: 0;
         line-height: 25px;
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(25% - 59px), max-content));
+    justify-content: center;
+    gap: 78px;
+    margin: 0 auto;
+
+    @media (max-width: 1200px) {
+        gap: 40px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+        gap: 30px;
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 

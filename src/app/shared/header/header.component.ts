@@ -72,7 +72,6 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.route.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-        this.getMenu()
         console.log(this.menu)
       });
 

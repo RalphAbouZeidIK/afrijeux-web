@@ -1,0 +1,74 @@
+@use '/src/variables' as *;
+
+.promo-hero {
+    background-color: $darkBg;
+    color: $white;
+    padding: 60px 52px;
+    text-align: center;
+
+
+
+    .features {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        margin: 0 auto;
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            flex: 1 1 0;
+
+            .diamond-wrap {
+                position: relative;
+                width: 102px;
+                height: 102px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+
+                .icon-wrap {
+                    position: absolute;
+                    width: 40px;
+                    height: 40px;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -65%) rotate(45deg);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px;
+                    background: linear-gradient(101deg, #A4F675 -2.12%, #84D555 29.9%, #69B93B 43.33%, #6EAE48 59.85%, #639247 105.3%);
+
+                    .feature-icon {
+                        transform: rotate(-45deg);
+                    }
+                }
+            }
+
+            .feature-title {
+                font-family: $font-bold;
+                font-size: 20px;
+                margin: 0;
+                text-transform: capitalize;
+            }
+
+            .feature-text {
+                font-family: $font-regular;
+                font-size: 16px;
+                text-align: center;
+                line-height: 1.6;
+            }
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .features {
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+}

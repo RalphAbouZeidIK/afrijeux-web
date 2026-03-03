@@ -5,6 +5,8 @@ import { routing } from './static-pages-routing';
 import { HomepageComponent } from './homepage/homepage.component';
 import { HeroBannerComponent } from './hero-banner/hero-banner.component';
 import { GamesListComponent } from './games-list/games-list.component';
+import { PreviousResultsComponent } from './previous-results/previous-results.component';
+import { PromoHeroComponent } from './promo-hero/promo-hero.component';
 
 
 
@@ -12,7 +14,9 @@ import { GamesListComponent } from './games-list/games-list.component';
   declarations: [
     HomepageComponent,
     HeroBannerComponent,
-    GamesListComponent
+    GamesListComponent,
+    PreviousResultsComponent,
+    PromoHeroComponent
   ],
   imports: [
     routing,

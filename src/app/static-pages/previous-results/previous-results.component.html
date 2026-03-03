@@ -1,0 +1,41 @@
+<div class="previous-results-container">
+  <div class="section-header">
+    <h2>Previous Draw Results</h2>
+    <p>Check the latest draw results to see if you're a winner! Stay informed about past numbers and recent payouts.</p>
+  </div>
+
+  <!-- search bar -->
+  <div class="search-bar">
+    <div class="search-input" (click)="onSearch(searchInput.value)">
+      <img [src]="imgGroup" alt="search" class="search-icon" />
+      <input #searchInput type="text" placeholder="Check your ticket" />
+    </div>
+    <div class="search-filter" (click)="onFilterChange('all')">
+      <span>All</span>
+      <img [src]="imgPolygon1" alt="dropdown" class="dropdown-icon" />
+    </div>
+  </div>
+
+  <!-- results cards -->
+  <div class="grid results-grid">
+    <div class="result-box" *ngFor="let r of results">
+        <div class="card-top">
+          <!-- decorative pattern overlay -->
+          <img *ngIf="cardTopPattern" [src]="cardTopPattern" alt="pattern" class="card-top-pattern" />
+          <h3 class="result-name">{{ r.name }}</h3>
+          <p class="result-date">{{ r.date }}</p>
+          <div class="numbers">
+            <span class="result-ball" *ngFor="let n of r.numbers">{{ n }}</span>
+          </div>
+        </div>
+        <div class="card-bottom">
+          <span class="prize-label">Prize</span>
+          <span class="prize-amount">{{ r.prize }}</span>
+        </div>
+    </div>
+  </div>
+
+  <div class="search-button-container">
+    <button class="btn btn-primary">Search Previous Results</button>
+  </div>
+</div>

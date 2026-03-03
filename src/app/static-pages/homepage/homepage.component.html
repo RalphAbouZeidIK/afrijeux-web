@@ -2,53 +2,10 @@
     <!-- Hero Banner Section -->
     <app-hero-banner></app-hero-banner>
     <app-games-list></app-games-list>
+    <app-previous-results></app-previous-results>
 
+    <app-promo-hero></app-promo-hero>
 
-    <!-- Previous Draw Results Section -->
-    <section class="previous-results-section">
-        <div class="section-header">
-            <h2>Previous Draw Results</h2>
-            <p>Check the latest draw results to see if you're a winner! Stay informed about past numbers and more.</p>
-        </div>
-
-        <div class="results-grid">
-            <div class="result-card" *ngFor="let result of previousDrawResults">
-                <div class="result-content">
-                    <h3>{{ result.name }}</h3>
-                    <div class="result-numbers">
-                        <span class="result-ball" *ngFor="let num of result.results">{{ num }}</span>
-                    </div>
-                    <p class="result-prize">{{ result.prize }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="results-nav">
-            <button class="search-btn">
-                <span>🔍</span>
-                <span>Search Results</span>
-            </button>
-            <a href="#" class="view-results-link">View Previous Results</a>
-        </div>
-    </section>
-
-    <!-- How to Play Section -->
-    <section class="how-to-play-section">
-        <div class="section-header">
-            <h2>How to Play</h2>
-            <p>Ready to win? Here's how you can play with confidence. Games are exciting by chance.</p>
-        </div>
-
-        <div class="steps-grid">
-            <div class="step-card" *ngFor="let step of howToPlaySteps">
-                <div class="step-icon">
-                    <div class="icon-placeholder">🎯</div>
-                </div>
-                <h3>{{ step.title }}</h3>
-                <p>{{ step.description }}</p>
-            </div>
-        </div>
-    </section>
 
     <!-- Responsible Gaming Section -->
     <section class="responsible-gaming-section">

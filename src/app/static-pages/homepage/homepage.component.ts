@@ -15,12 +15,7 @@ export class HomepageComponent {
 
   games: Array<any> = [];
 
-  previousDrawResults = [
-    { id: 1, name: 'Pick 2', results: [2, 5], prize: '₦1.13M', timeRemaining: '01:37:03' },
-    { id: 2, name: 'Pick 3', results: [1, 6, 8], prize: '₦1.23M', timeRemaining: '01:37:03' },
-    { id: 3, name: 'Pick 4', results: [3, 5, 7, 9], prize: '₦7.8M', timeRemaining: '01:37:03' },
-    { id: 4, name: 'Jackpot', results: [2, 4, 6, 8, 9], prize: '₦15.6M', timeRemaining: '01:37:03' }
-  ];
+
 
 
   howToPlaySteps = [
