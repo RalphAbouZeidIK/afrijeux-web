@@ -49,5 +49,12 @@ export class HomepageComponent {
     }
   ];
 
+  prizeSummaryLines: string[] = [
+    'Straight → Example 1-2 → Result 1-2 → Exact order → 60×',
+    'Rumble → Example 1-2 → Result 2-1 → Any order → 30×',
+    'Chance Hit 1 → Example 1-2 → Result 5-2 → Last digit match → 2×',
+    'Chance Hit 2 → Example 1-2 → Result 1-2 → Two match in exact order → 25×'
+  ];
+
 }
 

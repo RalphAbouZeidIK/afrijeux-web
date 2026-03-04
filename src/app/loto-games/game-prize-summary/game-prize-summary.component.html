@@ -1,0 +1,13 @@
+<div class="prize-container">
+  <div class="prize-inner">
+    <div class="image-section" *ngIf="imageUrl">
+      <img class="prize-img" [src]="imageUrl" alt="" />
+    </div>
+    <div class="text-section">
+      <h2 class="prize-title">{{ title }}</h2>
+      <div class="prize-text">
+        <p *ngFor="let line of summaryLines">{{ line }}</p>
+      </div>
+    </div>
+  </div>
+</div>

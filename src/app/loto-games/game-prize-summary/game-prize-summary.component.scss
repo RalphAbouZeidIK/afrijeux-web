@@ -1,0 +1,82 @@
+@use '/src/variables' as *;
+
+.prize-container {
+    background-color: #0b1705;
+    padding: 100px 0;
+}
+
+.prize-inner {
+    display: flex;
+    align-items: center;
+    gap: 182px;
+    flex-wrap: wrap;
+    width: 990px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto
+}
+
+.text-section {
+    flex: 1 1 526px;
+    color: $white;
+
+    .prize-title {
+        font-family: $font-bold;
+        font-size: 20px;
+        text-transform: capitalize;
+        color: $lightGreen;
+        margin-bottom: 15px;
+    }
+
+    .prize-text {
+        font-size: 14px;
+        line-height: 1.6;
+
+        p {
+            margin: 0 0 8px 0;
+        }
+    }
+}
+
+/* responsive */
+@media all and (max-width: 1200px) {
+    .prize-container {
+        padding: 80px 60px;
+    }
+
+    .prize-inner {
+        gap: 100px;
+    }
+}
+
+@media all and (max-width: 768px) {
+    .prize-container {
+        padding: 60px 20px;
+    }
+
+    .prize-inner {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .text-section {
+        text-align: center;
+
+        .prize-title {
+            font-size: 18px;
+        }
+
+        .prize-text {
+            font-size: 13px;
+        }
+    }
+
+    .image-section .prize-img {
+        width: 200px;
+        height: 80px;
+    }
+
+    .text-section,
+    .image-section {
+        flex: auto
+    }
+}
