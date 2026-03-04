@@ -7,6 +7,7 @@ import { LotoGamesCoreComponent } from './loto-games-core/loto-games-core.compon
 import { GameBlockComponent } from './game-block/game-block.component';
 import { GameBannerComponent } from './game-banner/game-banner.component';
 import { GameOverviewComponent } from './game-overview/game-overview.component';
+import { GameHowtoComponent } from './game-howto/game-howto.component';
 
 
 
@@ -16,7 +17,8 @@ import { GameOverviewComponent } from './game-overview/game-overview.component';
     LotoGamesCoreComponent,
     GameBlockComponent,
     GameBannerComponent,
-    GameOverviewComponent
+    GameOverviewComponent,
+    GameHowtoComponent
   ],
   imports: [
     routing,

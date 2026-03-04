@@ -1,0 +1,95 @@
+@use '/src/variables' as *;
+
+/* background dark (#0b1705) same as homepage area */
+.howto-container {
+    background-color: #0b1705;
+    padding: 100px 234px;
+    display: flex;
+    justify-content: center;
+}
+
+.content-inner {
+    display: flex;
+    align-items: center;
+    gap: 184px;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.text-section {
+    flex: 1 1 546px;
+
+    .howto-title {
+        font-family: $font-bold;
+        font-size: 20px;
+        color: $lightGreen;
+        text-transform: capitalize;
+        margin-bottom: 15px;
+    }
+
+    .howto-list {
+        font-size: 14px;
+        color: $white;
+        line-height: 1.6;
+        padding-left: 21px;
+
+        li {
+            margin-bottom: 8px;
+        }
+    }
+}
+
+.image-section {
+    flex: 0 0 242px;
+
+    .flow-img {
+        width: 242px;
+        height: 162px;
+        object-fit: contain;
+    }
+}
+
+/* responsive */
+@media all and (max-width: 1200px) {
+    .howto-container {
+        padding: 80px 60px;
+    }
+
+    .content-inner {
+        gap: 100px;
+    }
+}
+
+@media all and (max-width: 768px) {
+    .howto-container {
+        padding: 60px 20px;
+    }
+
+    .content-inner {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .text-section {
+        text-align: center;
+
+        .howto-title {
+            font-size: 18px;
+        }
+
+        .howto-list {
+            font-size: 13px;
+        }
+    }
+
+    .image-section .flow-img {
+        width: 180px;
+        height: 120px;
+    }
+
+    .text-section,
+    .image-section {
+        flex: auto
+    }
+}

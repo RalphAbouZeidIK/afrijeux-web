@@ -13,5 +13,12 @@ export class HomepageComponent {
     'Players may place bets using several play types: Straight, Rumble, Chance, or Reverse Straight. Each type has its own rules and payout structure.'
   ];
 
+  howtoSteps: string[] = [
+    'Choose Your Numbers: Select any two digits from 0 to 9 (digits may be repeated).',
+    'Select a Play Type: Choose Straight, Rumble, Chance.',
+    'Purchase Your Ticket: Confirm your selection and pay the ticket cost.',
+    'Check the Draw: Match your numbers based on the selected play type.'
+  ];
+
 }
 

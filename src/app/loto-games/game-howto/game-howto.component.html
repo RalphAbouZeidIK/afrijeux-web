@@ -1,0 +1,13 @@
+<div class="howto-container">
+  <div class="content-inner">
+    <div class="text-section">
+      <h2 class="howto-title">{{ title }}</h2>
+      <ol class="howto-list">
+        <li *ngFor="let step of steps">{{ step }}</li>
+      </ol>
+    </div>
+    <div class="image-section">
+      <img class="flow-img" [src]="imageUrl" alt="" />
+    </div>
+  </div>
+</div>
