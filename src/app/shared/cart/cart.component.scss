@@ -5,10 +5,15 @@
     background: $lightBg;
     overflow: hidden;
     font-size: 14px;
-    margin-bottom: 25px;
     border-radius: 40px 0 40px 40px;
     box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.08);
     padding: 25px 30px;
+
+    /* allow container to grow/stretch inside aside */
+    flex: 1 1 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 
 
     .cart-header {
@@ -102,6 +107,9 @@
         background-color: $darkBg;
         border-radius: 25px;
         margin-bottom: 15px;
+        &:last-of-type{
+            margin-bottom: 0;
+        }
     }
 
     .title-odd {
@@ -162,6 +170,16 @@
         color: #9F9F9F;
         line-height: 16px;
     }
+
+    /* body holder should expand between header and footer */
+    .cart-body-holder {
+        flex: 1 1 auto;
+        min-height: 0;
+        /* allow it to shrink inside flex container */
+        /* no scroll here, let the list itself scroll */
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .total-holder {
@@ -177,14 +195,23 @@
 .price-submit {
     display: flex;
     justify-content: space-between;
+    padding-top: 15px;
 
     .info-item {
         width: calc(100% - 150px);
-        background-color:$darkBg;
-        padding:14px 15px;
+        background-color: $darkBg;
+        padding: 14px 15px;
         border-radius: 25px;
         margin-bottom: 0;
     }
+}
+
+.list-of-bets {
+    flex: 1 1 auto;
+    min-height: 0;
+    /* allow flex child to shrink and overflow properly */
+    overflow: auto;
+    /* max-height handled by flex container */
 }
 
 @media all and (max-width:1400px) {
@@ -205,6 +232,8 @@
 
 @media all and (max-width:1200px) {
     .cart-body-holder {
+        flex: none;
+        /* override flex on small screens */
         max-height: 0;
         -webkit-transition: all 0.5s ease-in-out;
         -moz-transition: all 0.5s ease-in-out;
@@ -244,10 +273,7 @@
         display: none;
     }
 
-    .list-of-bets {
-        overflow: auto;
-        max-height: 150px;
-    }
+
 
     .cart-container {
         background-color: $white;

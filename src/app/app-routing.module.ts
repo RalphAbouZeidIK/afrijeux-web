@@ -50,7 +50,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Sports Betting',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Sports',
     }
   },

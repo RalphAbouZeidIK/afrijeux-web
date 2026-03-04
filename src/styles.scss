@@ -600,7 +600,26 @@ aside {
 .page-holder {
     display: flex;
     justify-content: space-between;
+    /* allow sidebar to size itself rather than stretching to match main */
+    align-items: flex-start;
     max-width: 100%;
+    /* always at least full viewport so sidebar can be constrained */
+    min-height: 100vh;
+}
+
+/* sidebar layout helpers */
+.page-holder > aside.cart {
+    display: flex;
+    flex-direction: column;
+    /* height will be set dynamically via component binding */
+}
+
+.page-holder > aside.cart app-shared-cart {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    /* also fill the parent height */
+    height: 100%;
 }
 
 

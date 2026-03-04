@@ -1,6 +1,6 @@
 <div class="container-fluid page-holder">
     <main>
-        <div class="loto-game-container">
+        <div class="loto-game-container" #gameBlock>
             <div class="inner-container">
                 <ng-container *ngIf="!showEventDetails">
                     <h2 class="center">
@@ -80,7 +80,7 @@
 
         </div>
     </main>
-    <aside class="cart">
+    <aside class="cart" [style.height.px]="cartHeight">
         <app-shared-cart></app-shared-cart>
     </aside>
 </div>

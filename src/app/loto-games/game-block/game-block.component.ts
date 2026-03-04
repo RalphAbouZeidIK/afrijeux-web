@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
@@ -9,7 +9,7 @@ import { GenericService } from 'src/app/services/generic.service';
   templateUrl: './game-block.component.html',
   styleUrl: './game-block.component.scss'
 })
-export class GameBlockComponent {
+export class GameBlockComponent implements AfterViewInit, OnDestroy {
   isAndroidApp = false
 
   eventsList: any = []
@@ -50,6 +50,11 @@ export class GameBlockComponent {
 
   path = this.gnrcSrv.getGameRoute()
 
+  /* height for sidebar cart; calculated from game block size */
+  cartHeight = 0;
+
+  @ViewChild('gameBlock') gameBlock!: ElementRef<HTMLElement>;
+
   fixedConfig: any
 
   constructor(
@@ -65,6 +70,38 @@ export class GameBlockComponent {
     console.log(this.isPickXGame)
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
+  }
+
+  private resizeObserver: ResizeObserver | null = null;
+
+  ngAfterViewInit(): void {
+    // measure after view has been rendered
+    this.updateCartHeight();
+
+    // observe any size changes of the game block container
+    if (typeof ResizeObserver !== 'undefined' && this.gameBlock?.nativeElement) {
+      this.resizeObserver = new ResizeObserver(() => this.updateCartHeight());
+      this.resizeObserver.observe(this.gameBlock.nativeElement);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.updateCartHeight();
+  }
+
+  private updateCartHeight() {
+    // use the height of the gameBlock container as reference
+    if (this.gameBlock && this.gameBlock.nativeElement) {
+      const rect = this.gameBlock.nativeElement.getBoundingClientRect();
+      this.cartHeight = rect.height;
+    }
   }
 
   generateDisplayBalls() {
@@ -117,6 +154,8 @@ export class GameBlockComponent {
     raceItem.fixedConfig = fixedConfig
     this.selectedEvent = raceItem
     this.showEventDetails = true
+    // content changed; recalc height in next tick
+    setTimeout(() => this.updateCartHeight());
 
     // if we have bet types available and none chosen yet, pick the first one
     if (this.isPickXGame && fixedConfig && fixedConfig.length) {
