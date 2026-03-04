@@ -1,0 +1,13 @@
+<div class="overview-container">
+  <div class="content-wrapper">
+    <div class="left">
+      <img class="icon" [src]="imageUrl" alt="" />
+    </div>
+    <div class="right">
+      <h2 class="overview-title">{{ title }}</h2>
+      <div class="overview-text">
+        <p *ngFor="let p of paragraphs">{{ p }}</p>
+      </div>
+    </div>
+  </div>
+</div>

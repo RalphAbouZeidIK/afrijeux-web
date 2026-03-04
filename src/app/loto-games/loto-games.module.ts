@@ -6,6 +6,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { LotoGamesCoreComponent } from './loto-games-core/loto-games-core.component';
 import { GameBlockComponent } from './game-block/game-block.component';
 import { GameBannerComponent } from './game-banner/game-banner.component';
+import { GameOverviewComponent } from './game-overview/game-overview.component';
 
 
 
@@ -14,7 +15,8 @@ import { GameBannerComponent } from './game-banner/game-banner.component';
     HomepageComponent,
     LotoGamesCoreComponent,
     GameBlockComponent,
-    GameBannerComponent
+    GameBannerComponent,
+    GameOverviewComponent
   ],
   imports: [
     routing,

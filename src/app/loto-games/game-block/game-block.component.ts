@@ -47,6 +47,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   ticketItem: any = []
 
+
   isPickXGame = false
 
   path = this.gnrcSrv.getGameRoute()

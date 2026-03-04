@@ -1,0 +1,94 @@
+@use '/src/variables' as *;
+
+/* Dark background similar to figma design: #2b3422 */
+.overview-container {
+  background-color: #2b3422;
+  padding: 50px 284px 100px;
+  display: flex;
+  justify-content: center;
+
+  /* responsive padding */
+  @media all and (max-width: 1200px) {
+    padding: 50px 60px 80px;
+  }
+
+  @media all and (max-width: 768px) {
+    padding: 30px 20px 60px;
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  max-width: 870px;
+  width: 100%;
+  gap: 235px;
+
+  @media all and (max-width: 1200px) {
+    gap: 100px;
+  }
+
+  @media all and (max-width: 768px) {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+
+.left {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .icon {
+    width: 152px;
+    height: 162px;
+    object-fit: contain;
+    transform: scaleY(-1) rotate(180deg); /* flip as in figma */
+  }
+
+  @media all and (max-width: 768px) {
+    .icon {
+      width: 120px;
+      height: 128px;
+    }
+  }
+}
+
+.right {
+  flex: 1 1 auto;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .overview-title {
+    font-family: $font-bold;
+    font-size: 20px;
+    text-transform: capitalize;
+    color: $lightGreen;
+    margin: 0;
+  }
+
+  .overview-text {
+    font-size: 14px;
+    line-height: 1.6;
+
+    p {
+      margin: 0 0 8px 0;
+    }
+  }
+
+  @media all and (max-width: 768px) {
+    align-items: center;
+    text-align: center;
+
+    .overview-title {
+      font-size: 18px;
+    }
+
+    .overview-text {
+      font-size: 13px;
+    }
+  }
+}
