@@ -56,30 +56,38 @@
         <div class="list-of-bets">
             <ng-container *ngFor="let betItem of listOfBets">
                 <div class="bet-item">
+
+                    <a class="close-icon" (click)="removeItemFormSlip(betItem)">
+                        <img src="assets/images/close-icon-grey.svg" />
+                    </a>
                     <div class="title-odd">
-                        <a class="close-icon" (click)="removeItemFormSlip(betItem)">
-                            <img src="assets/images/close-icon-grey.svg" />
-                        </a>
+                        <span class="greyText">
+                            Pick 2
+                        </span>
                         <span>
-                            Chosen Balls: {{betItem.displayBalls}}<br>
+                            Balls Chosen: {{betItem.displayBalls}}
+                        </span>
+                        <span class="greyText">
                             Bet Type: {{betItem.ticketTypeName}}
                         </span>
-                        <span class="odd">{{betItem.stake | number:'1.0-3'}} AED</span>
                     </div>
-                    <div class="outcomeName">
-                        <span>{{betItem.OutcomeName}}</span>
-                    </div>
+
+                    <span class="odd">{{betItem.stake | number:'1.0-3'}} AED</span>
+
+
                 </div>
             </ng-container>
         </div>
-        <div class="ticket-infos">
-            <div class="info-item">
-                <span>Total Price:</span>
-                <span>{{listOfBets.TicketPrice | number:'1.0-3'}} AED</span>
-            </div>
-        </div>
+
     </div>
-    <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket" [disabled]="stake == 0"
-        (click)="issueTicket()">Place
-        Bets</button>
+    <div class="price-submit">
+        <div class="info-item">
+            <span>Total Price:</span>
+            <span>{{listOfBets.TicketPrice | number:'1.0-3'}} AED</span>
+        </div>
+        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket" [disabled]="stake == 0"
+            (click)="issueTicket()">Place
+            Bets</button>
+    </div>
+
 </div>

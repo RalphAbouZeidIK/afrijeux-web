@@ -6,24 +6,21 @@
     overflow: hidden;
     font-size: 14px;
     margin-bottom: 25px;
+    border-radius: 40px 0 40px 40px;
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.08);
+    padding: 25px 30px;
 
-    .btn {
-        width: 100%;
-        border-radius: 0;
-
-    }
 
     .cart-header {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        padding: 15px;
-        border-bottom: 3px solid $lightGreen;
+        margin-bottom: 15px;
     }
 
     .clear-btn {
-        color: $lightGreen;
+        color: #639247;
         font-size: 12px;
         font-weight: 300;
         text-decoration-line: underline;
@@ -33,11 +30,22 @@
     .cart-title {
         margin: 0;
         font-weight: 700;
+        font-size: 18px;
+        font-family: $font-bold;
     }
 
     .close-icon {
         margin-right: 10px;
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 17px;
+
+        img {
+            height: 11px;
+            width: 11px;
+        }
     }
 
     .type-container {
@@ -91,9 +99,9 @@
 
     .bet-item {
         padding: 15px;
-        border-bottom: 1px solid $lightGreen;
-
-        font-weight: bold;
+        background-color: $darkBg;
+        border-radius: 25px;
+        margin-bottom: 15px;
     }
 
     .title-odd {
@@ -102,14 +110,12 @@
     }
 
     .odd {
-        font-weight: bold;
         color: $lightGreen;
-        margin-left: auto
+        margin-left: auto;
     }
 
     .ticket-infos {
         padding: 15px;
-        border-top: 3px solid $lightGreen;
     }
 
     .info-item {
@@ -137,8 +143,24 @@
     &.loto-cart {
         .title-odd {
             margin-bottom: 0;
-            align-items: center;
+            flex-direction: column;
         }
+
+        .bet-item {
+            display: flex;
+        }
+
+        .title-odd span {
+            margin-bottom: 5px;
+            line-height: 18px;
+        }
+    }
+
+    .greyText {
+        font-weight: normal;
+        font-size: 12px;
+        color: #9F9F9F;
+        line-height: 16px;
     }
 }
 
@@ -150,6 +172,19 @@
     color: $darkBg;
     border-bottom: 1px solid $darkBg;
     font-weight: bold;
+}
+
+.price-submit {
+    display: flex;
+    justify-content: space-between;
+
+    .info-item {
+        width: calc(100% - 150px);
+        background-color:$darkBg;
+        padding:14px 15px;
+        border-radius: 25px;
+        margin-bottom: 0;
+    }
 }
 
 @media all and (max-width:1400px) {

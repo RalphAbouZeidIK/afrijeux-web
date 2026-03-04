@@ -4,13 +4,15 @@ import { routing } from './loto-games-routing';
 import { SharedModule } from '../shared/shared.module';
 import { HomepageComponent } from './homepage/homepage.component';
 import { LotoGamesCoreComponent } from './loto-games-core/loto-games-core.component';
+import { GameBlockComponent } from './game-block/game-block.component';
 
 
 
 @NgModule({
   declarations: [
     HomepageComponent,
-    LotoGamesCoreComponent
+    LotoGamesCoreComponent,
+    GameBlockComponent
   ],
   imports: [
     routing,

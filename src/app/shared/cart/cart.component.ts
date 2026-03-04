@@ -108,7 +108,9 @@ export class CartComponent implements OnInit, OnDestroy {
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (this.isAndroidApp) {
       this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
-
+    }
+    else {
+      this.canIssueTicket = true
     }
     //console.log(this.canIssueTicket)
 

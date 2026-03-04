@@ -1,0 +1,86 @@
+<div class="container-fluid page-holder">
+    <main>
+        <div class="loto-game-container">
+            <div class="inner-container">
+                <ng-container *ngIf="!showEventDetails">
+                    <h2 class="center">
+                        {{ 'pickx.title' | translate }}
+                    </h2>
+                    <div class="events-list" *ngIf="eventsList.length>0">
+                        <a *ngFor="let event of eventsList" class="event-item btn btn-primary"
+                            (click)="composeEventDetails(event)">
+                            {{ event.EventName }}
+                        </a>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="showEventDetails">
+                    <h5>
+                        {{selectedEvent.EventName}} / {{selectedEvent.EventDate || selectedEvent.GameEventDate}}
+                    </h5>
+                    <div class="selected-balls-type d-flex input-bg">
+                        <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
+                            [shouldHighlight]="false"></app-ball-list>
+
+                        <!-- <input type="text" disabled class="form-control"
+                value="Event Type: {{selectedEvent.fixedConfig[0].Name}}, Nb of Balls {{selectedEvent.ConfigurationVersionId}}"> -->
+                        <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="onTypeChanged($event)"
+                            *ngIf="isPickXGame">
+                            <ng-container *ngFor="let categoryItem of selectedEvent.fixedConfig">
+                                <option [ngValue]="categoryItem">
+                                    {{ categoryItem.TicketTypeName }}
+                                </option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    <div class="balls-list-holder">
+                        <h2>Select Your Numbers</h2>
+                        <span class="game-note">
+                            <ng-container *ngIf="isPickXGame">
+                                Select any two digits from 0 to 9 (digits may be repeated).
+                            </ng-container>
+                        </span>
+                        <!-- for PickX games we render one ball-list per configured ball -->
+                        <ng-container *ngIf="isPickXGame; else singleBall">
+                            <ng-container
+                                *ngFor="let _ of range(selectedEvent?.fixedConfig?.[0]?.NumberOfBalls || 0); let i = index">
+                                <app-ball-list [chosenBallsArray]="listOfBalls" [selectedBall]="slotSelections[i]"
+                                    (ballClicked)="selectBall($event,i)" [attr.data-index]="i">
+                                </app-ball-list>
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #singleBall>
+                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectBall($event)">
+                            </app-ball-list>
+                        </ng-template>
+                    </div>
+
+                    <div class="bottom-section d-flex">
+                        <div class="form-group stake-block">
+                            <div class="input-bg stake-block">
+                                <a (click)="updateMultiplier(false)" class="sign-button">
+                                    <img src="assets/images/minus.svg" alt="Minus">
+                                </a>
+                                <input type="number" class="form-control" [(ngModel)]="Stake" placeholder="Stake" />
+                                <a (click)="updateMultiplier(true)" class="sign-button">
+                                    <img src="assets/images/plus.svg" alt="Plus">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="btns-holder d-flex">
+                            <a class="btn btn-primary" (click)="quickPick()">Quick Pick</a>
+                            <a class="btn btn-success" (click)="addToBet()">Confirm Selections</a>
+                        </div>
+
+                    </div>
+
+
+                </ng-container>
+            </div>
+
+        </div>
+    </main>
+    <aside class="cart">
+        <app-shared-cart></app-shared-cart>
+    </aside>
+</div>
