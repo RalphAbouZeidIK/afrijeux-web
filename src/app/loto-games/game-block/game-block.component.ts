@@ -2,10 +2,11 @@ import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestro
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-game-block',
-  standalone:false,
+  standalone: false,
   templateUrl: './game-block.component.html',
   styleUrl: './game-block.component.scss'
 })
@@ -57,10 +58,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   fixedConfig: any
 
+  showCart = false
+
   constructor(
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
-    private gamesSrv: GamesService
+    private gamesSrv: GamesService,
+    private storageSrv: LocalStorageService
   ) { }
 
   ngOnInit(): void {
@@ -70,6 +74,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     console.log(this.isPickXGame)
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
+    let lotoCartData = this.storageSrv.getItem('lotoCartData')
+    if (lotoCartData) {
+      this.showCart = true
+    }
   }
 
   private resizeObserver: ResizeObserver | null = null;

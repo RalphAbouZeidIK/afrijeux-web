@@ -1,6 +1,7 @@
 <div class="container-fluid page-holder">
     <main>
         <div class="loto-game-container" #gameBlock>
+
             <div class="inner-container">
                 <ng-container *ngIf="!showEventDetails">
                     <h2 class="center">
@@ -81,6 +82,8 @@
         </div>
     </main>
     <aside class="cart" [style.height.px]="cartHeight">
-        <app-shared-cart></app-shared-cart>
+        <app-game-banner [style.height.px]="cartHeight" *ngIf="!showCart" [prizePoolLabel]="'Pick 2 Prize Pool'"
+            [prizePoolAmount]="'3.65M'"></app-game-banner>
+        <app-shared-cart *ngIf="showCart"></app-shared-cart>
     </aside>
 </div>

@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { HomepageComponent } from './homepage/homepage.component';
 import { LotoGamesCoreComponent } from './loto-games-core/loto-games-core.component';
 import { GameBlockComponent } from './game-block/game-block.component';
+import { GameBannerComponent } from './game-banner/game-banner.component';
 
 
 
@@ -12,7 +13,8 @@ import { GameBlockComponent } from './game-block/game-block.component';
   declarations: [
     HomepageComponent,
     LotoGamesCoreComponent,
-    GameBlockComponent
+    GameBlockComponent,
+    GameBannerComponent
   ],
   imports: [
     routing,
