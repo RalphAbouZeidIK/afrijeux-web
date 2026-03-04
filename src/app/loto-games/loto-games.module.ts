@@ -8,6 +8,7 @@ import { GameBlockComponent } from './game-block/game-block.component';
 import { GameBannerComponent } from './game-banner/game-banner.component';
 import { GameOverviewComponent } from './game-overview/game-overview.component';
 import { GameHowtoComponent } from './game-howto/game-howto.component';
+import { GamePlaytypesComponent } from './game-playtypes/game-playtypes.component';
 
 
 
@@ -18,7 +19,8 @@ import { GameHowtoComponent } from './game-howto/game-howto.component';
     GameBlockComponent,
     GameBannerComponent,
     GameOverviewComponent,
-    GameHowtoComponent
+    GameHowtoComponent,
+    GamePlaytypesComponent
   ],
   imports: [
     routing,

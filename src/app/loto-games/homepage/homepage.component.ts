@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlayTypeRule } from '../game-playtypes/game-playtypes.component';
 
 @Component({
   selector: 'app-homepage',
@@ -18,6 +19,34 @@ export class HomepageComponent {
     'Select a Play Type: Choose Straight, Rumble, Chance.',
     'Purchase Your Ticket: Confirm your selection and pay the ticket cost.',
     'Check the Draw: Match your numbers based on the selected play type.'
+  ];
+
+  playTypeRules: PlayTypeRule[] = [
+    {
+      name: 'Straight',
+      description: [
+        'Win if your numbers match the winning numbers in the exact order drawn.',
+        'Example: If you play 1-2, you win only if the result is 1-2.',
+        'Payout: 60× your bet.'
+      ]
+    },
+    {
+      name: 'Chance (Right-to-Left Match)',
+      description: [
+        'You win if one or more digits of your selection match the draw result from right to left, in the correct order.',
+        'Hit 1: Only the last digit matches. Result pattern: x-2. Payout: 2× your bet.',
+        'Hit 2: The two digits match in exact order. Result pattern: 1-2. Payout: 25× your bet.',
+        'If the last digit does not match, there is no win on Chance.'
+      ]
+    },
+    {
+      name: 'Rumble (Any Order)',
+      description: [
+        'You win if your numbers match the winning numbers in any order.',
+        'Example: If you play 1-2, you win if the result is 1-2 or 2-1.',
+        'Payout: 30× your bet.'
+      ]
+    }
   ];
 
 }

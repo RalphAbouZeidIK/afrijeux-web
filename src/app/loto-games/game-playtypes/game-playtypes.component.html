@@ -1,0 +1,16 @@
+<div class="playtypes-container">
+  <div class="playtypes-content">
+    <div class="header">
+      <h2 class="pt-title">{{ title }}</h2>
+      <p class="pt-subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    </div>
+    <div class="rules-row">
+      <div class="rule-card" *ngFor="let r of rules">
+        <p class="rule-name">{{ r.name }}</p>
+        <div class="rule-desc">
+          <p *ngFor="let line of r.description">{{ line }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
