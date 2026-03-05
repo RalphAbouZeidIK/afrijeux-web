@@ -17,8 +17,6 @@ export class CartService {
 
   listOfBets: any = this.storageSrv.getItem('sbCartData') || []
 
-  listOfPMUBets: any = this.storageSrv.getItem('cartData') || []
-
   listOfLotoBets: any = this.storageSrv.getItem('lotoCartData') || []
 
   bonusRules: any = []
@@ -126,26 +124,6 @@ export class CartService {
   }
 
 
-  // updateMultiplier(betItem: any, isAdd: any) {
-  //   let fullData = this.listOfPMUBets
-  //   //console.log(fullData)
-  //   //console.log(betItem)
-  //   let race = fullData.find((itemInStorage: any) => itemInStorage.raceId == betItem.raceId)
-  //   if (isAdd) {
-  //     race.Multiplier++
-  //     this.storageSrv.setItem('cartData', fullData)
-  //     this.setCartDataListener(fullData)
-  //     return
-  //   }
-  //   race.Multiplier--
-  //   this.storageSrv.setItem('cartData', fullData)
-  //   this.setCartDataListener(fullData)
-  // }
-
-  //////////////////////////////HPB BETTING METHODS END//////////////////////////////////////////////////
-
-
-
   //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
 
   setSBBets(betItem: any, StakeFromSearch: any = 200, clearBets: any = false) {
@@ -235,7 +213,7 @@ export class CartService {
     storageData.splice(matchIndex, 1)
     this.listOfBets.splice(matchIndex, 1)
     this.removeCartData(betItem.MatchId)
-    this.storageSrv.setItem('sbCartData', storageData)
+    this.storageSrv.setItem('lotoCartData', storageData)
     this.setSBCartDataListener(storageData)
   }
 
@@ -245,9 +223,19 @@ export class CartService {
   updateLotoList(pickItem: any) {
     this.listOfLotoBets = this.storageSrv.getItem('lotoCartData') || []
     this.listOfLotoBets.push(pickItem)
-    this.storageSrv.setItem('lotoCartData', this.listOfLotoBets)
-    this.addSBCartData$.next(this.listOfLotoBets);
     console.log(this.listOfLotoBets)
+    this.storageSrv.setItem('lotoCartData', this.listOfLotoBets)
+    this.addCartData$.next(this.listOfLotoBets);
+    console.log(this.listOfLotoBets)
+  }
+
+
+  removeLotoBetItem(betItem: any, index: any) {
+    let storageData = this.storageSrv.getItem('lotoCartData')
+    storageData.splice(index, 1)
+    this.listOfBets.splice(index, 1)
+    this.storageSrv.setItem('lotoCartData', storageData)
+    this.addCartData$.next(storageData);
   }
 
 
@@ -256,6 +244,7 @@ export class CartService {
   clearBets() {
     this.listOfBets = []
     this.addSBCartData$.next(this.listOfBets);
+    this.addCartData$.next(this.listOfBets);
   }
 
 

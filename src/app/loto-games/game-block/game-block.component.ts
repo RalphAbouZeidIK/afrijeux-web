@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
@@ -61,12 +62,24 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   showCart = false
 
+  cartSubscription: Subscription
+
   constructor(
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
     private gamesSrv: GamesService,
     private storageSrv: LocalStorageService
-  ) { }
+  ) {
+
+    this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
+      if (data && data.length > 0) {
+        this.showCart = true
+      }
+      else {
+        this.showCart = false
+      }
+    })
+  }
 
   ngOnInit(): void {
 
@@ -76,7 +89,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
     let lotoCartData = this.storageSrv.getItem('lotoCartData')
-    if (lotoCartData) {
+    if (lotoCartData && lotoCartData.length > 0) {
       this.showCart = true
     }
   }
@@ -357,7 +370,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     this.selectedType = this.fixedConfig[0];
     this.isQuickPick = false
     this.selectedBalls = this.generateDrawBalls(this.selectedEvent.ConfigurationVersionId)
-    console.log(this.ticketItem)
-    console.log(pickItem)
+    this.showCart = true
   }
 }

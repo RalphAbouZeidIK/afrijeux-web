@@ -56,5 +56,20 @@ export class HomepageComponent {
     'Chance Hit 2 → Example 1-2 → Result 1-2 → Two match in exact order → 25×'
   ];
 
+  drawInfoText = 'Draws typically occur twice daily (Afternoon and Evening). Results are published immediately after each draw.';
+
+  highlights: string[] = [
+    'Server or machine-generated draws (certified RNG).',
+    'Multi-device availability: terminals, mobile devices, or websites.',
+    'Operators may adjust bet limits, payouts, and draw frequency.'
+  ];
+
+  examples: string[] = [
+    'Bet 5 XAF Straight on 1-2 → Result 1-2 → Win 300 XAF .',
+    'Bet 5 XAF  Rumble on 1-2 → Result 2-1 → Win 150 XAF .',
+    'Bet 5 XAF  Chance on 1-2 → Result 4-2 → Hit 1 → Win 10 XAF .',
+    'Bet 5 XAF  Chance on 1-2 → Result 1-2 → Hit 2 → Win 125 XAF .'
+  ];
+
 }
 

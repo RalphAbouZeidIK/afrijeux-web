@@ -54,10 +54,10 @@
 
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && isPickXGame">
         <div class="list-of-bets">
-            <ng-container *ngFor="let betItem of listOfBets">
+            <ng-container *ngFor="let betItem of listOfBets, let i = index">
                 <div class="bet-item">
 
-                    <a class="close-icon" (click)="removeItemFormSlip(betItem)">
+                    <a class="close-icon" (click)="removeLotoItemFormSlip(betItem,i)">
                         <img src="assets/images/close-icon-grey.svg" />
                     </a>
                     <div class="title-odd">

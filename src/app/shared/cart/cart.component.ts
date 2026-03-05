@@ -58,7 +58,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   Math: any;
 
-  isSportsBetting = false
+
 
   betItem: any
 
@@ -66,12 +66,15 @@ export class CartComponent implements OnInit, OnDestroy {
 
   isDesktopSubscription: Subscription
 
-
   canIssueTicket = false
 
-  isJackpotGame = false
+  currentUrl: any = window.location.href;
 
-  isPickXGame = false
+  isSportsBetting = this.currentUrl.includes("Sports")
+
+  isJackpotGame = this.currentUrl.includes("Jackpot")
+
+  isPickXGame = this.currentUrl.includes("PickX")
 
   lotoTotalPrice: any = 0
 
@@ -91,9 +94,18 @@ export class CartComponent implements OnInit, OnDestroy {
       this.isDesktop = isDesktop;
     });
 
-    this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
-      this.cartInitialize(data)
-    });
+    if (this.isSportsBetting) {
+      this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
+        this.cartInitialize(data)
+      });
+    }
+
+    else {
+      this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
+        this.cartInitialize(data)
+      });
+    }
+
 
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
@@ -101,10 +113,6 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    const currentUrl: any = window.location.href;
-    this.isJackpotGame = currentUrl.includes("Jackpot")
-    this.isPickXGame = currentUrl.includes("PickX")
-    this.isSportsBetting = currentUrl.includes("Sports")
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (this.isAndroidApp) {
       this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
@@ -197,6 +205,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
   removeItemFormSlip(betItem: any) {
     this.cartSrv.removeBetItem(betItem)
+  }
+
+  removeLotoItemFormSlip(betItem: any, index: any) {
+    this.cartSrv.removeLotoBetItem(betItem, index)
   }
 
   OnclickIsMobile() {

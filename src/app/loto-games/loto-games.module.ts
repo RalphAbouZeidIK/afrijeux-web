@@ -10,6 +10,8 @@ import { GameOverviewComponent } from './game-overview/game-overview.component';
 import { GameHowtoComponent } from './game-howto/game-howto.component';
 import { GamePlaytypesComponent } from './game-playtypes/game-playtypes.component';
 import { GamePrizeSummaryComponent } from './game-prize-summary/game-prize-summary.component';
+import { GameDetailsComponent } from './game-details/game-details.component';
+import { GameIntroComponent } from './game-intro/game-intro.component';
 
 
 
@@ -22,7 +24,9 @@ import { GamePrizeSummaryComponent } from './game-prize-summary/game-prize-summa
     GameOverviewComponent,
     GameHowtoComponent,
     GamePlaytypesComponent,
-    GamePrizeSummaryComponent
+    GamePrizeSummaryComponent,
+    GameDetailsComponent,
+    GameIntroComponent
   ],
   imports: [
     routing,
