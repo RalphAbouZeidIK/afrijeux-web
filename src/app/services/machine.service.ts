@@ -17,6 +17,10 @@ declare var require: any;
   providedIn: 'root'
 })
 export class MachineService {
+  webMachine = {
+    MachineId: 3342,
+    machineCode: '0001'
+  }
 
   /** modal status subscriber */
   private openModal$ = new Subject();
@@ -35,6 +39,7 @@ export class MachineService {
 
   deviceIp: any = null
 
+  isAndroidApp = this.gnrcSrv.isMachineApp()
 
   constructor(
     private apiSrv: ApiService,
@@ -88,50 +93,16 @@ export class MachineService {
   }
 
   async encryptedRequest(objectToEncrypt: any, isRegisterMachineApi: boolean = false, isSyncApi: boolean = false) {
-
-    let registerMachineId = objectToEncrypt.Machine || null
     let amount = objectToEncrypt.Ticket?.Stake || null
+
     let timeStamp = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS')
     //console.log(objectToEncrypt)
-    objectToEncrypt = JSON.stringify(objectToEncrypt);
-    const xxtea = require('xxtea-node');
-    let encryptData: any;
-    let machineData = await this.getMachineData();
 
-    if (isRegisterMachineApi) {
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(registerMachineId)));
-    }
-
-    else if (isSyncApi) {
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.encryptionKey));
-    }
-
-    else {
-
-      if (!machineData) {
-        console.warn("⚠️ No machineData found yet, retrying...");
-        machineData = await this.getMachineData();
-      }
-      let encryptionPass = machineData?.CommunicationKey || 'default';
-      ////////console.log(`Encryption Pass ${encryptionPass}`)
-      encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(encryptionPass));
-
-
-    }
-
-
-    const uint8Array = new Uint8Array(encryptData);
-    let binaryString = '';
-    for (let i = 0; i < uint8Array.length; i++) {
-      binaryString += String.fromCharCode(uint8Array[i]);
-    }
-
-    const base64String = btoa(binaryString);
     //console.log('Base64 Encoded String:', base64String);
     const body: any = {
-      machine: (isRegisterMachineApi) ? registerMachineId : machineData.MachineId.toString(),  //("3359")
+
       timeStamp: timeStamp,
-      EncryptedRequestDTO: base64String,
+
       geolocation: {
         latitude: "0",
         longitude: "0",
@@ -139,10 +110,58 @@ export class MachineService {
       },
       ip: this.deviceIp,
       culture: null,
-      machineCode: (isRegisterMachineApi) ? null : machineData.MachineCode,   //("6821")
+
       currency: null,
       amount: amount
     }
+
+    if (this.isAndroidApp) {
+
+      let registerMachineId = objectToEncrypt.Machine || null
+      objectToEncrypt = JSON.stringify(objectToEncrypt);
+      const xxtea = require('xxtea-node');
+      let encryptData: any;
+      let machineData = await this.getMachineData();
+
+      if (isRegisterMachineApi) {
+        encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.GetMachineDefaultKey(registerMachineId)));
+      }
+
+      else if (isSyncApi) {
+        encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(this.encryptionKey));
+      }
+
+      else {
+
+        if (!machineData) {
+          console.warn("⚠️ No machineData found yet, retrying...");
+          machineData = await this.getMachineData();
+        }
+        let encryptionPass = machineData?.CommunicationKey || 'default';
+        ////////console.log(`Encryption Pass ${encryptionPass}`)
+        encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(encryptionPass));
+
+
+      }
+
+      const uint8Array = new Uint8Array(encryptData);
+      let binaryString = '';
+      for (let i = 0; i < uint8Array.length; i++) {
+        binaryString += String.fromCharCode(uint8Array[i]);
+      }
+
+      const base64String = btoa(binaryString);
+
+      body.machine = (isRegisterMachineApi) ? registerMachineId : machineData.MachineId.toString() //("3359")
+      body.EncryptedRequestDTO = base64String
+      body.machineCode = (isRegisterMachineApi) ? null : machineData.MachineCode  //("6821")
+    }
+
+    else {
+      body.issueTicketRequest = objectToEncrypt
+    }
+
+
 
     console.log(body)
 
@@ -190,11 +209,11 @@ export class MachineService {
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
     if (!apiRoute.includes('SendReports')) {
       let userData = await this.getUserData()
-      let machineData = await this.getMachineData();
+      let machineData = (this.isAndroidApp) ? await this.getMachineData() : this.webMachine
 
       params = {
         ...params,
-        PersonId: (userData) ? userData.PersonId : null,
+        PersonId: (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId(),
         GameOperationId: (machineData) ? machineData.OperationId : null,
         TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
         MachineId: (machineData) ? machineData.MachineId : null
@@ -322,10 +341,16 @@ export class MachineService {
   }
 
   async getGameId(gameIdOnly = true) {
-    let machineData: any = await this.getMachineData()
-    //console.log(machineData)
-    let game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
-    //console.log(game)
+    let game: any = null
+    if (this.isAndroidApp) {
+      let machineData: any = await this.getMachineData()
+      game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
+    }
+
+    else {
+      game = await this.gnrcSrv.getGame(this.gnrcSrv.getGameRoute())
+    }
+    console.log(game)
     return (gameIdOnly) ? game.GameId : game
   }
 
@@ -382,33 +407,41 @@ export class MachineService {
   }
 
   async issueTicket(ticketObject: any, shouldHaveGameEventId = false) {
-    //const printerErrorPromise = this.bridge.waitForPrinterError();
-    // const printerError = await this.bridge.waitForPrinterError();
-    // console.log(printerError)
+
     let isPrintedFlag = 1;
-    // if (printerError) {
-    //   isPrintedFlag = 0; // failed printing
-    // }
+
     let fullTicketId: any = ''
 
-    //console.log('continuing issue ticket')
     let userData = await this.getUserData()
-    let machineData = await this.getMachineData();
-    let gameId = await this.getGameId()
+
+    let ticketRequestId: any = null
+
+    let machineData: any = (this.isAndroidApp) ? await this.getMachineData() : this.webMachine
+
+    let gameId: any = null
+
+    let userId: any = (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId()
+    console.log(userId)
+
+    gameId = await this.getGameId()
+
+    ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userId.toString() + this.gnrcSrv.getFormattedToday() + gameId
+    ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
+
+
+
 
     let date = new Date()
 
-    let ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userData.PersonId.toString() + this.gnrcSrv.getFormattedToday() + gameId
-    ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
 
     let ticketBody = {
-      GameId: await this.getGameId(),
+      GameId: gameId,
       FullTicketId: fullTicketId,
       EncryptedTicketKey: '',
       IsVoucher: 0,
       Stake: ticketObject.TicketPrice,
       MachineId: machineData.MachineId,
-      PersonId: userData.PersonId,
+      PersonId: userId,
       MachineTicketId: 0,
       MachineDateIssued: date.toISOString(),
       ServiceDateIssued: date.toISOString(),
@@ -423,47 +456,57 @@ export class MachineService {
       GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null
     }
     console.log(ticketBody)
+
     let params = {
-      GameId: await this.getGameId(),
+      GameId: gameId,
       Ticket: ticketBody,
       TicketRequestId: ticketRequestId,
       LoyalityReferenceId: 0,
       IsOffline: this.isOnline ? 0 : 1
     }
+    console.log(params)
 
-    if (!this.isOnline) {
-      const canPrint = await this.checksBeforePrinting(ticketObject);
+    if (this.isAndroidApp) {
+      if (!this.isOnline) {
+        const canPrint = await this.checksBeforePrinting(ticketObject);
 
-      if (!canPrint) {
-        return; // Stop execution
+        if (!canPrint) {
+          return; // Stop execution
+        }
+        fullTicketId = await this.generateFullTicketId()
+        params.Ticket.FullTicketId = fullTicketId
+        let issueTicketReponse = await this.issueTicketData(ticketBody)
+        const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
+        this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId);
+        let printResponse = {
+          success: true
+        }
+        return printResponse
       }
-      fullTicketId = await this.generateFullTicketId()
-      params.Ticket.FullTicketId = fullTicketId
-      let issueTicketReponse = await this.issueTicketData(ticketBody)
-      const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-      this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId);
-      let printResponse = {
-        success: true
+
+
+      try {
+        const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
+        //console.log(apiResponse)
+        if (apiResponse.DataToPrint) {
+          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
+          return apiResponse
+        }
+        else if (apiResponse.status == false) {
+          this.setModalData(true, false, apiResponse.message)
+          return apiResponse
+        }
+        //////console.log(apiResponse)
+      } catch (error) {
+        //////console.log(error)
       }
-      return printResponse
     }
 
+    else {
+      const apiResponse = await this.handleApiResponse('OnlineMaster', `${this.gnrcSrv.getGameRoute()}/IssueTicket`, 'POST', params)
 
-    try {
-      const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-      //console.log(apiResponse)
-      if (apiResponse.DataToPrint) {
-        this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
-        return apiResponse
-      }
-      else if (apiResponse.status == false) {
-        this.setModalData(true, false, apiResponse.message)
-        return apiResponse
-      }
-      //////console.log(apiResponse)
-    } catch (error) {
-      //////console.log(error)
     }
+
   }
 
 

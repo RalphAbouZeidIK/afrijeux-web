@@ -60,13 +60,21 @@ export class GenericService {
     this.isDesktop$.next(value);
   }
 
+  gettUserId() {
+    let userId = this.usrSrv.gettUserId()
+    console.log(userId)
+    return userId
+  }
+
 
   /**
    * Get url's first path
    * @returns 
    */
   async getGame(apiRout: any) {
+    console.log(apiRout)
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetOnlineGames', 'GET', {});
+    console.log(apiResponse)
     const game = apiResponse.find((item: any) => item.APIRout == apiRout);
     ////console.log(game)
     return game
