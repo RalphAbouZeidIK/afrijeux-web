@@ -1,0 +1,118 @@
+@use '/src/variables' as *;
+
+.responsible-gaming-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 35px;
+    margin: 0 52px;
+    padding: 56px 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background:
+        radial-gradient(circle at 24% 52%, rgba(180, 235, 147, 0.88) 0%, rgba(144, 207, 108, 0.72) 28%, rgba(72, 131, 48, 0.92) 100%),
+        linear-gradient(105deg, #8bc568 0%, #6daa47 32%, #4f8c35 66%, #2f671e 100%);
+    margin-bottom: 100px;
+    margin-top: 50px;
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        pointer-events: none;
+        border: 1px solid rgba(46, 106, 27, 0.34);
+        border-radius: 50%;
+    }
+
+    &::before {
+        width: 900px;
+        height: 420px;
+        top: -220px;
+        left: -300px;
+        transform: rotate(-9deg);
+    }
+
+    &::after {
+        width: 860px;
+        height: 390px;
+        top: -180px;
+        right: -360px;
+        transform: rotate(8deg);
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 1;
+        max-width: 640px;
+        margin: 0 auto;
+        text-align: center;
+        color: $white;
+    }
+
+    .eyebrow {
+        margin: 0;
+        font-family: $font-regular;
+        font-size: 28px;
+        font-weight: 400;
+        line-height: 1.2;
+    }
+
+    h2 {
+        margin: 8px 0 16px;
+        font-family: $font-bold;
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .description {
+        margin: 0 auto;
+        max-width: 585px;
+        font-family: $font-regular;
+        font-size: 14px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.94);
+    }
+
+    .btn {
+        margin-top: 28px;
+        min-width: 245px;
+        padding:16px 20px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .responsible-gaming-banner {
+        margin:50px 24px;
+
+        .eyebrow {
+            font-size: 24px;
+        }
+
+        h2 {
+            font-size: 40px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .responsible-gaming-banner {
+        margin: 20px 14px;
+        padding: 40px 16px;
+        border-radius: 24px;
+
+        .eyebrow {
+            font-size: 22px;
+        }
+
+        h2 {
+            font-size: 34px;
+            line-height: 1.15;
+        }
+
+        .description {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+    }
+}

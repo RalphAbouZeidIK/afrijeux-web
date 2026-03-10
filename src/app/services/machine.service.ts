@@ -111,7 +111,7 @@ export class MachineService {
       ip: this.deviceIp,
       culture: null,
 
-      currency: null,
+      currency: 5,
       amount: amount
     }
 
@@ -225,6 +225,11 @@ export class MachineService {
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false, (apiRoute.includes('ProcessTickets')) ? true : false);
 
     let apiResponse: any
+    debugger
+    if (!this.isAndroidApp) {
+      apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
+      return apiResponse
+    }
 
     if (navigator.onLine) {
       // Save full API response exactly
@@ -487,15 +492,15 @@ export class MachineService {
 
       try {
         const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-        //console.log(apiResponse)
+        console.log(apiResponse)
         if (apiResponse.DataToPrint) {
           this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
-          return apiResponse
+
         }
         else if (apiResponse.status == false) {
           this.setModalData(true, false, apiResponse.message)
-          return apiResponse
         }
+        return apiResponse
         //////console.log(apiResponse)
       } catch (error) {
         //////console.log(error)
@@ -504,7 +509,7 @@ export class MachineService {
 
     else {
       const apiResponse = await this.handleApiResponse('OnlineMaster', `${this.gnrcSrv.getGameRoute()}/IssueTicket`, 'POST', params)
-
+      return apiResponse
     }
 
   }

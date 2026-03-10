@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit {
     await this.getMenu();
 
     if (await this.usrSrv.isUserLoggedIn()) {
-      //this.getUserBalance()
+      this.getUserBalance()
     }
 
     this.composeRoutes(); // Initial translation

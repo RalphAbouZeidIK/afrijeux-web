@@ -143,7 +143,7 @@ export class CartComponent implements OnInit, OnDestroy {
       this.calculateBonus()
     }
 
-    if (this.isPickXGame && this.listOfBets.length > 0) {
+    if ((this.isPickXGame || this.isJackpotGame) && this.listOfBets.length > 0) {
       this.listOfBets.GameEventId = this.listOfBets[0].gameEventId
       this.listOfBets.TicketPrice = 0
       this.listOfBets.forEach((ticketItem: any) => {
@@ -258,9 +258,17 @@ export class CartComponent implements OnInit, OnDestroy {
       apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
     }
 
-    if (apiResponse.DataToPrint) {
+    if (this.isAndroidApp && apiResponse.DataToPrint) {
       this.clearBets()
       this.machineSrv.setModalData(true, true, apiResponse.message)
+    }
+
+    else {
+      console.log(apiResponse)
+      if (apiResponse.Status == true || apiResponse == true) {
+        this.clearBets()
+        this.machineSrv.setModalData(true, true, apiResponse.message || 'Success')
+      }
     }
 
 

@@ -58,11 +58,11 @@
                     <div class="bottom-section d-flex">
                         <div class="form-group stake-block">
                             <div class="input-bg stake-block">
-                                <a (click)="updateMultiplier(false)" class="sign-button">
+                                <a (click)="updateMultiplier(false)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/minus.svg" alt="Minus">
                                 </a>
-                                <input type="number" class="form-control" [(ngModel)]="Stake" placeholder="Stake" />
-                                <a (click)="updateMultiplier(true)" class="sign-button">
+                                <input type="number" class="form-control" [(ngModel)]="Stake" placeholder="Stake" [disabled]="!isPickXGame" />
+                                <a (click)="updateMultiplier(true)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/plus.svg" alt="Plus">
                                 </a>
                             </div>

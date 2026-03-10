@@ -12,6 +12,8 @@
 
     <app-notifications-popup [list]="notificationsList" *ngIf="isLoggedIn"
       (removeNotificationOutput)="removeNotificaiton($event)"></app-notifications-popup>
+
+    <app-footer></app-footer>
   </ng-container>
 
   <ng-container *ngIf="isAndroidApp">

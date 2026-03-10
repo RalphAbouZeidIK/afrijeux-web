@@ -1,7 +1,7 @@
 <div class="overlay" (click)="hideMenus()" [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
 
 <div class="cart-container"
-    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0,'loto-cart':isPickXGame, 'sport-betting-cart':isSportsBetting}">
+    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
     <div class="cart-header" (click)="OnclickIsMobile()">
         <span class="mobileOnly rect-bar"></span>
         <p class="cart-title">Bet Slip </p>
@@ -52,7 +52,7 @@
 
     </div>
 
-    <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && isPickXGame">
+    <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && (isPickXGame || isJackpotGame)">
         <div class="list-of-bets">
             <ng-container *ngFor="let betItem of listOfBets, let i = index">
                 <div class="bet-item">
@@ -67,7 +67,7 @@
                         <span>
                             Balls Chosen: {{betItem.displayBalls}}
                         </span>
-                        <span class="greyText">
+                        <span class="greyText" *ngIf="isPickXGame">
                             Bet Type: {{betItem.ticketTypeName}}
                         </span>
                     </div>

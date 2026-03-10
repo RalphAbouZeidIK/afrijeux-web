@@ -7,6 +7,7 @@ import { HeroBannerComponent } from './hero-banner/hero-banner.component';
 import { GamesListComponent } from './games-list/games-list.component';
 import { PreviousResultsComponent } from './previous-results/previous-results.component';
 import { PromoHeroComponent } from './promo-hero/promo-hero.component';
+import { ResponsibleGamingBannerComponent } from './responsible-gaming-banner/responsible-gaming-banner.component';
 
 
 
@@ -16,7 +17,8 @@ import { PromoHeroComponent } from './promo-hero/promo-hero.component';
     HeroBannerComponent,
     GamesListComponent,
     PreviousResultsComponent,
-    PromoHeroComponent
+    PromoHeroComponent,
+    ResponsibleGamingBannerComponent
   ],
   imports: [
     routing,

@@ -51,6 +51,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   isPickXGame = false
 
+  isJackpotGame = false
+
   path = this.gnrcSrv.getGameRoute()
 
   /* height for sidebar cart; calculated from game block size */
@@ -85,6 +87,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
     this.generateDisplayBalls();
     this.isPickXGame = window.location.href.includes("PickX")
+    this.isJackpotGame = window.location.href.includes("Jackpot")
     console.log(this.isPickXGame)
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
@@ -129,6 +132,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   generateDisplayBalls() {
 
     this.selectedBalls = [];
+
 
     // Add selected numbers
     for (let i = 0; i < this.selectedNumbers.length; i++) {
@@ -190,7 +194,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     // reset the per-slot selection array
     this.slotSelections = new Array(numberOfSelectedBalls).fill(null);
     console.log(this.listOfBalls)
-
+    console.log(this.selectedBalls)
   }
 
   generateBallObjects(x: number) {
@@ -232,27 +236,47 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   }
 
   quickPick() {
-    // choose a random ball from the available list for each slot
-    this.selectedBalls = this.selectedBalls.map((ball: any, idx: number) => {
-      const randomIndex = Math.floor(Math.random() * this.listOfBalls.length);
-      const pick = this.listOfBalls[randomIndex];
-      // record in slotSelections so the correct component highlights it
-      this.slotSelections[idx] = pick;
-      return { ...pick, isSelected: true, id: ball.id };
-    });
-
-    // also mark the picked balls as selected in listOfBalls if desired
-    this.listOfBalls = this.listOfBalls.map(b => ({ ...b, selected: false }));
-    this.slotSelections.forEach((p: any) => {
-      const found = this.listOfBalls.find(b => b.id === p?.id);
-      if (found) {
-        found.selected = true;
+    if (this.isJackpotGame) {
+      // Select 6 random numbers for Jackpot game
+      this.selectedNumbers = [];
+      const numToSelect = 6;
+      while (this.selectedNumbers.length < numToSelect) {
+        const randomIndex = Math.floor(Math.random() * this.listOfBalls.length);
+        const ball = this.listOfBalls[randomIndex];
+        if (!this.selectedNumbers.includes(ball.number)) {
+          this.selectedNumbers.push(ball.number);
+        }
       }
-    });
+      // Update listOfBalls to mark selected balls
+      this.listOfBalls.forEach(b => b.isSelected = this.selectedNumbers.includes(b.number));
+      this.updateLotoPrice()
+      this.generateDisplayBalls();
+      this.isQuickPick = true;
+    }
 
-    this.isQuickPick = true;
+    else if (this.isPickXGame) {
+      // choose a random ball from the available list for each slot
+      this.selectedBalls = this.selectedBalls.map((ball: any, idx: number) => {
+        const randomIndex = Math.floor(Math.random() * this.listOfBalls.length);
+        const pick = this.listOfBalls[randomIndex];
+        // record in slotSelections so the correct component highlights it
+        this.slotSelections[idx] = pick;
+        return { ...pick, isSelected: true, id: ball.id };
+      });
 
-    console.log(this.selectedBalls);
+      // also mark the picked balls as selected in listOfBalls if desired
+      this.listOfBalls = this.listOfBalls.map(b => ({ ...b, selected: false }));
+      this.slotSelections.forEach((p: any) => {
+        const found = this.listOfBalls.find(b => b.id === p?.id);
+        if (found) {
+          found.selected = true;
+        }
+      });
+
+      this.isQuickPick = true;
+
+      console.log(this.selectedBalls);
+    }
   }
 
   isBallSelected(ball: any): boolean {
@@ -302,7 +326,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   }
 
   selectLotoBall(ball: any) {
-
     const index = this.selectedNumbers.indexOf(ball.number);
 
     // ✅ REMOVE if already selected
@@ -317,7 +340,19 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
       ball.isSelected = true;
     }
 
+    this.updateLotoPrice()
     this.generateDisplayBalls();
+  }
+
+  updateLotoPrice() {
+
+    let numBalls = this.selectedNumbers.length
+    if (numBalls >= 6) {
+      let priceKey = `Pick${numBalls}Price`;
+      let priceItem = this.fixedConfig.find((item: any) => item.Name === priceKey);
+      this.Stake = parseFloat(priceItem.Value);
+
+    }
   }
 
   updateMultiplier(isAdd: boolean) {
@@ -343,33 +378,49 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   }
 
   addToBet() {
+    let pickItem: any
     if (this.isPickXGame) {
       console.log(this.selectedType)
       if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedType == null) {
         alert()
         return
       }
+
+      pickItem = {
+        pickTypeId: this.selectedType.PickTypeId,
+        pickTypeName: this.selectedType.PickTypeName,
+        ticketTypeId: this.selectedType.TicketTypeId,
+        ticketTypeName: this.selectedType.TicketTypeName,
+        IsQuickPick: this.isQuickPick,
+        gameEventId: this.selectedEvent.GameEventId,
+        eventName: this.selectedEvent.EventName,
+        displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
+        Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
+        stake: this.Stake,
+        id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
+      }
     }
 
-    let pickItem = {
-      pickTypeId: this.selectedType.PickTypeId,
-      pickTypeName: this.selectedType.PickTypeName,
-      ticketTypeId: this.selectedType.TicketTypeId,
-      ticketTypeName: this.selectedType.TicketTypeName,
-      IsQuickPick: this.isQuickPick,
-      gameEventId: this.selectedEvent.GameEventId,
-      eventName: this.selectedEvent.EventName,
-      displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
-      Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
-      stake: this.Stake,
-      id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
+    else {
+      if (this.selectedNumbers.length < 6 || this.selectedNumbers.length > 9) {
+        alert()
+        return
+      }
+      this.updateLotoPrice()
+      pickItem = {
+        IsQuickPick: this.isQuickPick,
+        gameEventId: this.selectedEvent.GameEventId,
+        eventName: this.selectedEvent.EventName,
+        displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
+        SelectedNumber: this.selectedBalls.map((b: any) => b.number),
+        stake: this.Stake,
+        id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
+      }
     }
+
+
     this.cartSrv.updateLotoList(pickItem)
-    this.slotSelections = []
-    this.selectedBalls = []
-    this.selectedType = this.fixedConfig[0];
-    this.isQuickPick = false
-    this.selectedBalls = this.generateDrawBalls(this.selectedEvent.ConfigurationVersionId)
-    this.showCart = true
+    this.selectedNumbers = [];
+    this.composeEventDetails(this.selectedEvent)
   }
 }
