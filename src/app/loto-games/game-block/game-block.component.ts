@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
@@ -13,6 +14,8 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 })
 export class GameBlockComponent implements AfterViewInit, OnDestroy {
   isAndroidApp = false
+
+  selectedTypeId: number | null = null
 
   eventsList: any = []
 
@@ -70,7 +73,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
     private gamesSrv: GamesService,
-    private storageSrv: LocalStorageService
+    private storageSrv: LocalStorageService,
+    private route: ActivatedRoute
   ) {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
@@ -162,9 +166,28 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     gameEventsResponse.forEach((eventItem: any) => {
       if (!eventItem.IsSalesStopped) {
         this.eventsList.push(eventItem)
-        this.composeEventDetails(this.eventsList[0])
       }
     });
+
+    if (this.eventsList.length > 0) {
+      let selectedEvent = this.eventsList[0];
+
+      if (this.isPickXGame) {
+        const gameType = this.route.snapshot.queryParamMap.get('gametype');
+        if (gameType) {
+          this.selectedTypeId = Number(gameType);
+          const matchedEvent = this.eventsList.find(
+            (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(gameType)
+          );
+          if (matchedEvent) {
+            selectedEvent = matchedEvent;
+          }
+        }
+      }
+
+      this.composeEventDetails(selectedEvent)
+    }
+
     console.log(this.eventsList)
   }
 
@@ -179,6 +202,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
     raceItem.fixedConfig = fixedConfig
     this.selectedEvent = raceItem
+    if (this.isPickXGame) {
+      this.selectedTypeId = Number(raceItem?.ConfigurationVersionId);
+    }
     this.showEventDetails = true
     // content changed; recalc height in next tick
     setTimeout(() => this.updateCartHeight());
@@ -377,8 +403,23 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  private getGameNameForBet(): string {
+    if (this.isJackpotGame) {
+      return 'Jackpot';
+    }
+
+    const configId = Number(this.selectedEvent?.ConfigurationVersionId ?? this.selectedTypeId);
+    if (this.isPickXGame && !Number.isNaN(configId)) {
+      return `Pick${configId}`;
+    }
+
+    return 'Jackpot';
+  }
+
   addToBet() {
     let pickItem: any
+    const gameName = this.getGameNameForBet();
+
     if (this.isPickXGame) {
       console.log(this.selectedType)
       if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedType == null) {
@@ -396,6 +437,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
         eventName: this.selectedEvent.EventName,
         displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
         Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
+        gameName: gameName,
         stake: this.Stake,
         id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
       }
@@ -413,6 +455,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
         eventName: this.selectedEvent.EventName,
         displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
         SelectedNumber: this.selectedBalls.map((b: any) => b.number),
+        gameName: gameName,
         stake: this.Stake,
         id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
       }

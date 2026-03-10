@@ -178,7 +178,7 @@ export class GamesService {
   }
 
 
-  async getGamesEvents() {
+  async getGamesEvents(gameName?: any) {
     let apiResponse: any = []
     if (this.isAndroidApp) {
       let gameEventsResponse = await this.machineSrv.getGamesEvents()
@@ -187,8 +187,8 @@ export class GamesService {
       }
     }
     else {
-      let path = this.gnrcSrv.getGameRoute()
-      apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `${path}/GetEventConfiguration`, 'GET', {});
+      let path = (gameName) ? `${gameName}/GetEventConfiguration` : `${this.gnrcSrv.getGameRoute()}/GetEventConfiguration`
+      apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `${path}`, 'GET', {});
     }
     return apiResponse
   }

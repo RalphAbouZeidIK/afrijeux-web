@@ -8,13 +8,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { AppFooterComponent } from './app-footer/app-footer.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AppFooterComponent
-
+    AppComponent
   ],
   imports: [
     BrowserModule,

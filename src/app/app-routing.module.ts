@@ -67,10 +67,9 @@ const routes: Routes = [
   {
     path: 'PickX',
     loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
-    canActivate: [SharedGuard],
     data: {
       breadcrumb: 'PickX',
-      shouldBeLoggedIn: true,
+      shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.Pickx',
     }
@@ -78,10 +77,9 @@ const routes: Routes = [
   {
     path: 'Jackpot',
     loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
-    canActivate: [SharedGuard],
     data: {
       breadcrumb: 'Jackpot',
-      shouldBeLoggedIn: true,
+      shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.Jackpot',
     }

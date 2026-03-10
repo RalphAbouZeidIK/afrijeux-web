@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GamesService } from 'src/app/services/games.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-homepage',
@@ -6,7 +8,7 @@ import { Component } from '@angular/core';
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss'
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit {
   showGameSelection = false;
 
   frame35 = 'https://www.figma.com/api/mcp/asset/9835aaaf-f769-4db4-a13c-0d68737608ff';
@@ -15,7 +17,9 @@ export class HomepageComponent {
 
   games: Array<any> = [];
 
+  pickXEvents: any;
 
+  jackpotEvents: any;
 
 
   howToPlaySteps = [
@@ -36,7 +40,7 @@ export class HomepageComponent {
     }
   ];
 
-  constructor() {
+  constructor(private gamesSrv: GamesService, private usrSrv: UserService) {
     // initialize games with icon references
     this.games = [
       { id: 1, name: 'PICK 2', prize: '₦3.65M', timeRemaining: '01:37:03', label: 'Today', frameIcon: this.frame35 },
@@ -44,6 +48,20 @@ export class HomepageComponent {
       { id: 3, name: 'PICK 4', prize: '₦7.2M', timeRemaining: '01:37:03', label: 'Today', frameIcon: this.frame36 },
       { id: 4, name: 'JACKPOT', prize: '₦12.8M', timeRemaining: '01:37:03', label: 'Monday 9:30 AM', frameIcon: this.frame36 }
     ];
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.getGameEvents()
+  }
+
+  async getGameEvents() {
+    const pickXEvents = await this.gamesSrv.getGamesEvents('PickX');
+    this.pickXEvents = Array.isArray(pickXEvents)
+      ? [...pickXEvents].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+      : [];
+    console.log('PickX Events:', this.pickXEvents);
+    this.jackpotEvents = await this.gamesSrv.getGamesEvents('Jackpot');
+    console.log('Jackpot Events:', this.jackpotEvents);
   }
 
   startGameSelection() {

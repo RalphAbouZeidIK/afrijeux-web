@@ -16,12 +16,7 @@
             <p class="description-normal">just one ticket away.</p>
           </div>
 
-          <div class="button-group">
-            <button *ngFor="let option of pickOptions" class="pick-button" (click)="onPickClick(option)"
-              [attr.data-option]="option.id">
-              {{ option.label }}
-            </button>
-          </div>
+          <app-games-links></app-games-links>
         </div>
       </div>
 

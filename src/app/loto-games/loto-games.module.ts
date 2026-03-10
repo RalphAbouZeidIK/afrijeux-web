@@ -33,6 +33,8 @@ import { GameIntroComponent } from './game-intro/game-intro.component';
     CommonModule,
     SharedModule
   ],
-  exports: [HomepageComponent]
+  exports: [
+    HomepageComponent
+  ]
 })
 export class LotoGamesModule { }

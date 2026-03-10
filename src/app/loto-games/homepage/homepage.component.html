@@ -1,8 +1,10 @@
-<app-game-block></app-game-block>
-<app-game-intro></app-game-intro>
-<app-game-overview [title]="'Overview'" [paragraphs]="overviewParagraphs"></app-game-overview>
-<app-game-howto [title]="'How to Play'" [steps]="howtoSteps"></app-game-howto>
-<app-game-playtypes [title]="'Play Types and Rules'" [subtitle]="'Discover explanations for the three types of draws.'"
-    [rules]="playTypeRules"></app-game-playtypes>
-<app-game-prize-summary [title]="'Prize Structure Summary'" [summaryLines]="prizeSummaryLines"></app-game-prize-summary>
-<app-game-details [drawInfoText]="drawInfoText" [highlights]="highlights" [examples]="examples"></app-game-details>
+<ng-container *ngIf="shouldRenderContent">
+    <app-game-block></app-game-block>
+    <app-game-intro></app-game-intro>
+    <app-game-overview [title]="'Overview'" [paragraphs]="overviewParagraphs"></app-game-overview>
+    <app-game-howto [title]="'How to Play'" [steps]="howtoSteps"></app-game-howto>
+    <app-game-playtypes [title]="'Play Types and Rules'" [subtitle]="'Discover explanations for the three types of draws.'"
+        [rules]="playTypeRules"></app-game-playtypes>
+    <app-game-prize-summary [title]="'Prize Structure Summary'" [summaryLines]="prizeSummaryLines"></app-game-prize-summary>
+    <app-game-details [drawInfoText]="drawInfoText" [highlights]="highlights" [examples]="examples"></app-game-details>
+</ng-container>

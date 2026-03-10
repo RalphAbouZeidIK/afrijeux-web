@@ -33,7 +33,8 @@ export class GenericService {
   }
 
   getGameRoute() {
-    let route = this.router.url.split('/')[1]
+    let route = this.router.url.split('/')[1]?.split('?')[0]
+    console.log(route)
     ////console.log(this.router.url)
     return route
   }

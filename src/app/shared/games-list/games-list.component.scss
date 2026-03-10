@@ -1,0 +1,66 @@
+@use '/src/variables' as *;
+
+.game-page {
+    margin-bottom: 25px;
+
+    .button-group {
+        justify-content: center;
+    }
+}
+
+.button-group {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        gap: 12px;
+    }
+}
+
+
+.pick-button {
+    border: 1px solid $white;
+    border-radius: 20px;
+    padding: 2px 16px;
+    height: 28px;
+    min-width: 73px;
+    background-color: transparent;
+    color: $white;
+    font-family: $font-regular;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 24px;
+    white-space: nowrap;
+    cursor: pointer;
+    @include transition(0.3s);
+
+    &:hover {
+        background-color: rgba($lightGreen, 0.1);
+        border-color: $lightGreen;
+        color: $lightGreen;
+    }
+
+    &:active {
+        background-color: rgba($lightGreen, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        font-size: 11px;
+        padding: 2px 14px;
+        min-width: 65px;
+    }
+}
+
+
+
+.btn {
+    opacity: 0.6;
+
+    &.selected-pick {
+        opacity: 1;
+        cursor: default;
+        pointer-events: none;
+    }
+}

@@ -23,6 +23,8 @@ import { PrintComponent } from './print/print.component';
 import { ModalComponent } from './modal/modal.component';
 import { CartComponent } from './cart/cart.component';
 import { BallListComponent } from './ball/ball-list.component';
+import { AppFooterComponent } from './app-footer/app-footer.component';
+import { GamesLinksComponent } from './games-list/games-list.component';
 
 
 // Custom date formats
@@ -50,7 +52,9 @@ export const MY_FORMATS = {
     PrintComponent,
     ModalComponent,
     CartComponent,
-    BallListComponent
+    BallListComponent,
+    AppFooterComponent,
+    GamesLinksComponent
   ],
   exports: [
     HeaderComponent,
@@ -69,7 +73,9 @@ export const MY_FORMATS = {
     ModalComponent,
     NgbPaginationModule,
     CartComponent,
-    BallListComponent
+    BallListComponent,
+    AppFooterComponent,
+    GamesLinksComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,

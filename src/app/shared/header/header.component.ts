@@ -138,7 +138,6 @@ export class HeaderComponent implements OnInit {
   togglePopupFn(type: any) {
     document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
     this.type = type
-    this.showDocumentsPopup = !this.showDocumentsPopup;
     this.usrSrv.setLoginPopupStatus({
       show: true,
       type: this.type

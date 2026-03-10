@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { PlayTypeRule } from '../game-playtypes/game-playtypes.component';
 
 @Component({
@@ -7,7 +9,13 @@ import { PlayTypeRule } from '../game-playtypes/game-playtypes.component';
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss'
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit, OnDestroy {
+  shouldRenderContent = true;
+
+  private queryParamsSubscription: Subscription | null = null;
+  private hasInitializedQueryParams = false;
+
+  constructor(private route: ActivatedRoute) {}
 
   overviewParagraphs: string[] = [
     'Pick 2 is a simple and exciting lottery-style game where players select a two-digit combination (each digit from 0 to 9). The game allows repetition of digits.',
@@ -70,6 +78,31 @@ export class HomepageComponent {
     'Bet 5 XAF  Chance on 1-2 → Result 4-2 → Hit 1 → Win 10 XAF .',
     'Bet 5 XAF  Chance on 1-2 → Result 1-2 → Hit 2 → Win 125 XAF .'
   ];
+
+  ngOnInit(): void {
+    this.queryParamsSubscription = this.route.queryParamMap.subscribe(() => {
+      // Skip the first emission to avoid an unnecessary initial remount.
+      if (!this.hasInitializedQueryParams) {
+        this.hasInitializedQueryParams = true;
+        return;
+      }
+
+      this.reloadHomepageContent();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe();
+    }
+  }
+
+  private reloadHomepageContent(): void {
+    this.shouldRenderContent = false;
+    setTimeout(() => {
+      this.shouldRenderContent = true;
+    });
+  }
 
 }
 

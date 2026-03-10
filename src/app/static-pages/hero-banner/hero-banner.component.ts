@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-hero-banner',
@@ -13,6 +13,9 @@ export class HeroBannerComponent {
   vectorStriped3 = 'assets/images/vector-3.svg';
   vectorGlow1 = 'assets/images/glow-1.svg';
   vectorGlow2 = 'assets/images/glow-2.svg';
+
+  @Input() pickXEvents: any = [];
+  @Input() jackpotEvents: any = [];
 
   pickOptions = [
     { label: 'Pick 2', id: 'pick2' },
