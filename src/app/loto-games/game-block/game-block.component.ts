@@ -95,7 +95,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     console.log(this.isPickXGame)
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
-    let lotoCartData = this.storageSrv.getItem('lotoCartData')
+    let lotoCartData = this.cartSrv.getCurrentLotoCartData()
     if (lotoCartData && lotoCartData.length > 0) {
       this.showCart = true
     }
@@ -258,7 +258,42 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     console.log(event);
     this.selectedType = event
     this.Stake = event.MinStake
+    this.clampStakeToTypeLimits()
 
+  }
+
+  onStakeInputChange(value: any, inputEl?: HTMLInputElement) {
+    const parsedValue = Number(value);
+    this.Stake = Number.isFinite(parsedValue) ? parsedValue : 0;
+    this.clampStakeToTypeLimits();
+
+    // Keep the DOM input in sync with the clamped model value so extra typing
+    // does not append digits after the limit is reached.
+    if (inputEl) {
+      inputEl.value = String(this.Stake);
+    }
+  }
+
+  private clampStakeToTypeLimits() {
+    if (!this.selectedType) {
+      return;
+    }
+
+    const minStake = Number(this.selectedType.MinStake);
+    const maxStake = Number(this.selectedType.MaxStake);
+
+    if (!Number.isFinite(minStake) || !Number.isFinite(maxStake)) {
+      return;
+    }
+
+    if (this.Stake < minStake) {
+      this.Stake = minStake;
+      return;
+    }
+
+    if (this.Stake > maxStake) {
+      this.Stake = maxStake;
+    }
   }
 
   quickPick() {
@@ -382,25 +417,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   }
 
   updateMultiplier(isAdd: boolean) {
-    if (isAdd) {
-      if (this.Stake >= this.selectedType.MaxStake) {
-        alert('Maximum stake reached')
-        return
-      }
-      else {
-        this.Stake += 1
-      }
-    }
-
-    else {
-      if (this.Stake <= this.selectedType.MinStake) {
-        alert('Minimum stake reached')
-        return
-      }
-      else {
-        this.Stake -= 1
-      }
-    }
+    this.Stake += isAdd ? 1 : -1
+    this.clampStakeToTypeLimits()
   }
 
   private getGameNameForBet(): string {

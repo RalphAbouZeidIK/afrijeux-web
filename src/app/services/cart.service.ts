@@ -17,7 +17,7 @@ export class CartService {
 
   listOfBets: any = this.storageSrv.getItem('sbCartData') || []
 
-  listOfLotoBets: any = this.storageSrv.getItem('lotoCartData') || []
+  listOfLotoBets: any = []
 
   bonusRules: any = []
 
@@ -220,22 +220,77 @@ export class CartService {
   //////////////////////////////SPORTS BETTING METHODS START//////////////////////////////////////////////////
 
   ////////////////////////////////LOTO METHODS START//////////////////////////////////////////////////
+  private getLotoStorageKey(gameName: string | null | undefined): string {
+    const normalized = (gameName || '').toString().toLowerCase();
+    return normalized ? `lotoCartData_${normalized}` : 'lotoCartData';
+  }
+
+  private getGameTypeFromUrl(href: string): string | null {
+    // supports both regular and hash-based routes:
+    // /PickX?gametype=3 and /#/PickX?gametype=3
+    const match = href.match(/[?&]gametype=([^&#]+)/i);
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+
+  getCurrentLotoStorageKey(): string {
+    const href = window.location.href;
+
+    if (href.includes('Jackpot')) {
+      return this.getLotoStorageKey('jackpot');
+    }
+
+    if (href.includes('PickX')) {
+      const gameType = this.getGameTypeFromUrl(href);
+      if (gameType) {
+        return this.getLotoStorageKey(`pick${gameType}`);
+      }
+    }
+
+    return 'lotoCartData';
+  }
+
+  getCurrentLotoCartData(): any[] {
+    const currentKey = this.getCurrentLotoStorageKey();
+    const currentData = this.storageSrv.getItem(currentKey);
+    if (Array.isArray(currentData)) {
+      return currentData;
+    }
+
+    // backward compatibility with previous single-key storage
+    const legacy = this.storageSrv.getItem('lotoCartData');
+    return Array.isArray(legacy) ? legacy : [];
+  }
+
   updateLotoList(pickItem: any) {
-    this.listOfLotoBets = this.storageSrv.getItem('lotoCartData') || []
+    const storageKey = this.getLotoStorageKey(pickItem?.gameName);
+    this.listOfLotoBets = this.storageSrv.getItem(storageKey) || []
     this.listOfLotoBets.push(pickItem)
     console.log(this.listOfLotoBets)
-    this.storageSrv.setItem('lotoCartData', this.listOfLotoBets)
+    this.storageSrv.setItem(storageKey, this.listOfLotoBets)
     this.addCartData$.next(this.listOfLotoBets);
     console.log(this.listOfLotoBets)
   }
 
 
   removeLotoBetItem(betItem: any, index: any) {
-    let storageData = this.storageSrv.getItem('lotoCartData')
+    const storageKey = this.getCurrentLotoStorageKey();
+    let storageData = this.storageSrv.getItem(storageKey) || []
     storageData.splice(index, 1)
-    this.listOfBets.splice(index, 1)
-    this.storageSrv.setItem('lotoCartData', storageData)
+    this.listOfLotoBets = [...storageData]
+    this.storageSrv.setItem(storageKey, storageData)
     this.addCartData$.next(storageData);
+  }
+
+  clearCurrentLotoBets() {
+    const storageKey = this.getCurrentLotoStorageKey();
+    this.listOfLotoBets = [];
+    this.storageSrv.removeItem(storageKey);
+    this.addCartData$.next([]);
+  }
+
+  clearAllLotoBets() {
+    ['lotoCartData', 'lotoCartData_pick2', 'lotoCartData_pick3', 'lotoCartData_pick4', 'lotoCartData_pick5', 'lotoCartData_jackpot']
+      .forEach((key) => this.storageSrv.removeItem(key));
   }
 
 
@@ -243,6 +298,8 @@ export class CartService {
 
   clearBets() {
     this.listOfBets = []
+    this.listOfLotoBets = []
+    this.clearAllLotoBets()
     this.addSBCartData$.next(this.listOfBets);
     this.addCartData$.next(this.listOfBets);
   }

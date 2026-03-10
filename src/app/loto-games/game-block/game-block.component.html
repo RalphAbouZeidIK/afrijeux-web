@@ -62,7 +62,9 @@
                                 <a (click)="updateMultiplier(false)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/minus.svg" alt="Minus">
                                 </a>
-                                <input type="number" class="form-control" [(ngModel)]="Stake" placeholder="Stake" [disabled]="!isPickXGame" />
+                                <input #stakeInput type="number" class="form-control" [(ngModel)]="Stake"
+                                    (ngModelChange)="onStakeInputChange($event, stakeInput)" [min]="selectedType?.MinStake"
+                                    [max]="selectedType?.MaxStake" placeholder="Stake" [disabled]="!isPickXGame" />
                                 <a (click)="updateMultiplier(true)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/plus.svg" alt="Plus">
                                 </a>

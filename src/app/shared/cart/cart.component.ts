@@ -123,7 +123,7 @@ export class CartComponent implements OnInit, OnDestroy {
     //console.log(this.canIssueTicket)
 
     let sbCartData = this.storageSrv.getItem('sbCartData')
-    let lotoCartData = this.storageSrv.getItem('lotoCartData')
+    let lotoCartData = this.cartSrv.getCurrentLotoCartData()
     if (sbCartData) {
       this.cartInitialize(sbCartData)
     }
@@ -198,9 +198,13 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   clearBets() {
-    this.storageSrv.removeItem('sbCartData')
-    this.storageSrv.removeItem('lotoCartData')
-    this.cartSrv.clearBets()
+    if (this.isSportsBetting) {
+      this.storageSrv.removeItem('sbCartData')
+      this.cartSrv.clearBets()
+      return;
+    }
+
+    this.cartSrv.clearCurrentLotoBets()
   }
 
   removeItemFormSlip(betItem: any) {
@@ -267,6 +271,7 @@ export class CartComponent implements OnInit, OnDestroy {
       console.log(apiResponse)
       if (apiResponse.Status == true || apiResponse == true) {
         this.clearBets()
+        this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
         this.machineSrv.setModalData(true, true, apiResponse.message || 'Success')
       }
     }

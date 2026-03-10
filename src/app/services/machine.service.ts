@@ -225,7 +225,6 @@ export class MachineService {
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false, (apiRoute.includes('ProcessTickets')) ? true : false);
 
     let apiResponse: any
-    debugger
     if (!this.isAndroidApp) {
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       return apiResponse
@@ -741,7 +740,6 @@ export class MachineService {
   }
 
   async generateFullTicketId() {
-    debugger
     let machineData = await this.getMachineData();
     let gameId = await this.getGameId()
     let fullTicketId = '0';
