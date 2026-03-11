@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -18,9 +18,10 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./cart.component.scss'],
   standalone: false
 })
-export class CartComponent implements OnInit, OnDestroy {
+export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() listOfBets: any = []
+  @Input() selectedEvent: any = null
 
   cartSubscription: Subscription
 
@@ -123,11 +124,23 @@ export class CartComponent implements OnInit, OnDestroy {
     //console.log(this.canIssueTicket)
 
     let sbCartData = this.storageSrv.getItem('sbCartData')
-    let lotoCartData = this.cartSrv.getCurrentLotoCartData()
     if (sbCartData) {
       this.cartInitialize(sbCartData)
     }
-    else if (lotoCartData) {
+    else {
+      this.loadLotoCartDataFromContext();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedEvent'] && !this.isSportsBetting) {
+      this.loadLotoCartDataFromContext();
+    }
+  }
+
+  private loadLotoCartDataFromContext() {
+    const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
+    if (lotoCartData) {
       this.cartInitialize(lotoCartData)
     }
   }
@@ -204,7 +217,7 @@ export class CartComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.cartSrv.clearCurrentLotoBets()
+    this.cartSrv.clearCurrentLotoBets(this.selectedEvent)
   }
 
   removeItemFormSlip(betItem: any) {
@@ -212,7 +225,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   removeLotoItemFormSlip(betItem: any, index: any) {
-    this.cartSrv.removeLotoBetItem(betItem, index)
+    this.cartSrv.removeLotoBetItem(betItem, index, this.selectedEvent)
   }
 
   OnclickIsMobile() {

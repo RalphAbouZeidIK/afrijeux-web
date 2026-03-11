@@ -232,7 +232,30 @@ export class CartService {
     return match ? decodeURIComponent(match[1]) : null;
   }
 
-  getCurrentLotoStorageKey(): string {
+  private getGameNameFromEvent(eventItem: any): string | null {
+    if (!eventItem) {
+      return null;
+    }
+
+    const configVersionId = eventItem?.ConfigurationVersionId;
+    if (configVersionId != null && configVersionId !== '') {
+      return `pick${configVersionId}`;
+    }
+
+    const eventName = (eventItem?.EventName || eventItem?.name || eventItem?.gameName || '').toString().toLowerCase();
+    if (eventName.includes('jackpot')) {
+      return 'jackpot';
+    }
+
+    return null;
+  }
+
+  getCurrentLotoStorageKey(selectedEvent?: any): string {
+    const gameNameFromEvent = this.getGameNameFromEvent(selectedEvent);
+    if (gameNameFromEvent) {
+      return this.getLotoStorageKey(gameNameFromEvent);
+    }
+
     const href = window.location.href;
 
     if (href.includes('Jackpot')) {
@@ -249,8 +272,8 @@ export class CartService {
     return 'lotoCartData';
   }
 
-  getCurrentLotoCartData(): any[] {
-    const currentKey = this.getCurrentLotoStorageKey();
+  getCurrentLotoCartData(selectedEvent?: any): any[] {
+    const currentKey = this.getCurrentLotoStorageKey(selectedEvent);
     const currentData = this.storageSrv.getItem(currentKey);
     if (Array.isArray(currentData)) {
       return currentData;
@@ -272,8 +295,8 @@ export class CartService {
   }
 
 
-  removeLotoBetItem(betItem: any, index: any) {
-    const storageKey = this.getCurrentLotoStorageKey();
+  removeLotoBetItem(betItem: any, index: any, selectedEvent?: any) {
+    const storageKey = this.getCurrentLotoStorageKey(selectedEvent);
     let storageData = this.storageSrv.getItem(storageKey) || []
     storageData.splice(index, 1)
     this.listOfLotoBets = [...storageData]
@@ -281,8 +304,8 @@ export class CartService {
     this.addCartData$.next(storageData);
   }
 
-  clearCurrentLotoBets() {
-    const storageKey = this.getCurrentLotoStorageKey();
+  clearCurrentLotoBets(selectedEvent?: any) {
+    const storageKey = this.getCurrentLotoStorageKey(selectedEvent);
     this.listOfLotoBets = [];
     this.storageSrv.removeItem(storageKey);
     this.addCartData$.next([]);

@@ -14,18 +14,6 @@ export class HeroBannerComponent {
   vectorGlow1 = 'assets/images/glow-1.svg';
   vectorGlow2 = 'assets/images/glow-2.svg';
 
-  @Input() pickXEvents: any = [];
-  @Input() jackpotEvents: any = [];
+  @Input() allEvents: any = [];
 
-  pickOptions = [
-    { label: 'Pick 2', id: 'pick2' },
-    { label: 'Pick 3', id: 'pick3' },
-    { label: 'Pick 4', id: 'pick4' },
-    { label: 'Jackpot', id: 'jackpot' }
-  ];
-
-  onPickClick(option: any) {
-    console.log('Selected:', option);
-    // Add navigation or other logic here
-  }
 }

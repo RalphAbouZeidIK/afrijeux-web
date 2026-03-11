@@ -91,7 +91,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'My profile',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.User',
     }
   },

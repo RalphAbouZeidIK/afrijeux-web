@@ -97,10 +97,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     console.log(this.isPickXGame)
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
-    let lotoCartData = this.cartSrv.getCurrentLotoCartData()
-    if (lotoCartData && lotoCartData.length > 0) {
-      this.showCart = true
-    }
   }
 
   private resizeObserver: ResizeObserver | null = null;
@@ -209,6 +205,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     if (this.isPickXGame) {
       this.selectedTypeId = Number(raceItem?.ConfigurationVersionId);
     }
+
+    const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
+    this.showCart = Array.isArray(lotoCartData) && lotoCartData.length > 0;
+
     this.showEventDetails = true
     // content changed; recalc height in next tick
     setTimeout(() => this.updateCartHeight());

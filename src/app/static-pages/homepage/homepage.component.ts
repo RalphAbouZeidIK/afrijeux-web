@@ -17,6 +17,8 @@ export class HomepageComponent implements OnInit {
 
   games: Array<any> = [];
 
+  allEvents: any;
+
   pickXEvents: any;
 
   jackpotEvents: any;
@@ -55,13 +57,8 @@ export class HomepageComponent implements OnInit {
   }
 
   async getGameEvents() {
-    const pickXEvents = await this.gamesSrv.getGamesEvents('PickX');
-    this.pickXEvents = Array.isArray(pickXEvents)
-      ? [...pickXEvents].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
-      : [];
-    console.log('PickX Events:', this.pickXEvents);
-    this.jackpotEvents = await this.gamesSrv.getGamesEvents('Jackpot');
-    console.log('Jackpot Events:', this.jackpotEvents);
+    const allEvents = await this.gamesSrv.getAllLotoGames();
+    this.allEvents = allEvents;
   }
 
   startGameSelection() {
