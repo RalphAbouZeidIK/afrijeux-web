@@ -1,13 +1,13 @@
-<div [class]="cssClass">
+<div [class]="isGamePage ? 'game-page' : ''">
     <div class="button-group">
         <button *ngFor="let pickX of pickXEvents" class="pick-button"
-            [ngClass]="{'btn btn-primary': cssClass === 'game-page','pick-button': cssClass !== 'game-page', 'selected-pick': isSelectedPickX(pickX)}"
+            [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isSelectedPickX(pickX)}"
             [attr.data-option]="pickX.id" routerLink="/PickX"
             [queryParams]="{ gametype: pickX.ConfigurationVersionId }">
             Pick {{ pickX.ConfigurationVersionId }}
         </button>
         <button *ngFor="let jackpot of jackpotEvents" class="pick-button"
-            [ngClass]="{'btn btn-primary': cssClass === 'game-page','pick-button': cssClass !== 'game-page', 'selected-pick': isJackpotRoute()}"
+            [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isJackpotRoute()}"
             [attr.data-option]="jackpot.id" routerLink="/Jackpot">
             Jackpot
         </button>

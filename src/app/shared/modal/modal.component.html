@@ -1,12 +1,9 @@
 <ng-template #content>
-	<div class="modal-parent" [ngClass]="{'success':isSuccess}">
-		<ng-container *ngIf="isSuccess">
-			<img src="/assets/images/success-icon.svg" alt="">
-		</ng-container>
-		<ng-container *ngIf="!isSuccess">
-			<img src="/assets/images/error-icon.svg" alt="">
-		</ng-container>
-		<h2>{{msgCode | translate}}</h2>
+	<div class="toast-parent" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+		<div class="toast-icon" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+			<img [src]="isSuccess ? 'assets/images/success-icon.svg' : 'assets/images/error-icon.svg'" alt="">
+		</div>
+		<p class="toast-message">{{ msgCode | translate }}</p>
 	</div>
 
 </ng-template>

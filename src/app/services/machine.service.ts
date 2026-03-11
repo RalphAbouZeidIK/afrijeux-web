@@ -71,22 +71,6 @@ export class MachineService {
   }
 
 
-  setModalData(openModal: boolean, success: boolean, messageCode: string) {
-    let modalStatus = {
-      openModal: openModal,
-      success: success,
-      msgCode: messageCode
-    }
-    this.setModalStatus(modalStatus)
-  }
-
-  getModalStatus(): Observable<any> {
-    return this.openModal$;
-  }
-
-  setModalStatus(status: any) {
-    this.openModal$.next(status);
-  }
 
   setDeviceIp(ip: any) {
     this.deviceIp = ip;
@@ -320,7 +304,7 @@ export class MachineService {
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
     if (apiResponse.status == false) {
-      this.setModalData(true, apiResponse.status, apiResponse.message)
+      this.gnrcSrv.setModalData(true, apiResponse.status, apiResponse.message)
       return
     }
     apiResponse.Games = apiResponse.Games.map((gameItem: any) => ({
@@ -497,7 +481,7 @@ export class MachineService {
 
         }
         else if (apiResponse.status == false) {
-          this.setModalData(true, false, apiResponse.message)
+          this.gnrcSrv.setModalData(true, false, apiResponse.message)
         }
         return apiResponse
         //////console.log(apiResponse)
@@ -524,7 +508,7 @@ export class MachineService {
     ////console.log(validateTicketResponse)
 
     if (validateTicketResponse.status == false) {
-      this.setModalData(true, false, validateTicketResponse.message)
+      this.gnrcSrv.setModalData(true, false, validateTicketResponse.message)
     }
 
     else if (validateTicketResponse.dataToPrint) {
@@ -544,7 +528,7 @@ export class MachineService {
     }
 
     if (reportsResponse.status == false) {
-      this.setModalData(true, false, reportsResponse.message)
+      this.gnrcSrv.setModalData(true, false, reportsResponse.message)
     }
 
     if (shouldPrint) {
@@ -560,7 +544,7 @@ export class MachineService {
     let payTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/PayTicket`, 'POST', params)
 
     if (payTicketResponse.status == false) {
-      this.setModalData(true, false, payTicketResponse.message)
+      this.gnrcSrv.setModalData(true, false, payTicketResponse.message)
     }
     else if (payTicketResponse.DataToPrint) {
       this.bridge.sendPrintMessage('normalText', payTicketResponse.DataToPrint, payTicketResponse.Sender, payTicketResponse.FullTicketId);
@@ -573,7 +557,7 @@ export class MachineService {
     let cancelTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/FlagToCancelTicket`, 'POST', params)
     ////console.log(cancelTicketResponse)
     if (cancelTicketResponse) {
-      this.setModalData(true, cancelTicketResponse.status, cancelTicketResponse.message)
+      this.gnrcSrv.setModalData(true, cancelTicketResponse.status, cancelTicketResponse.message)
     }
     return cancelTicketResponse
   }
@@ -592,7 +576,7 @@ export class MachineService {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetMatchListByName`, 'POST', apiParams)
     //console.log(apiResponse)
     if (apiResponse.status == false) {
-      this.setModalData(true, apiResponse.status, apiResponse.message)
+      this.gnrcSrv.setModalData(true, apiResponse.status, apiResponse.message)
     }
     return apiResponse.data
   }
@@ -606,14 +590,14 @@ export class MachineService {
   async getOutcomesListByMatchCode(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetOutcomesListByEventCode`, 'POST', apiParams)
     if (apiResponse.status == false) {
-      this.setModalData(true, apiResponse.status, apiResponse.message)
+      this.gnrcSrv.setModalData(true, apiResponse.status, apiResponse.message)
     }
     else if (apiResponse.data.length == 0) {
       let message = ''
       this.translate.get('machine.errorMessages.noOutcomesAvailable').subscribe((msg: string) => {
         message = msg
       });
-      this.setModalData(true, false, message)
+      this.gnrcSrv.setModalData(true, false, message)
     }
     else {
       return apiResponse.data
@@ -630,7 +614,7 @@ export class MachineService {
   async getTicketByCode(apiParams: any) {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetTicketByCode`, 'POST', apiParams)
     if (apiResponse.status == false) {
-      this.setModalData(true, false, apiResponse.message)
+      this.gnrcSrv.setModalData(true, false, apiResponse.message)
       return null
     }
     ////console.log(apiResponse)
@@ -666,7 +650,7 @@ export class MachineService {
 
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/IssueTicket`, 'POST', params)
     if (apiResponse.status == false) {
-      this.setModalData(true, false, apiResponse.message)
+      this.gnrcSrv.setModalData(true, false, apiResponse.message)
     }
     else if (apiResponse.DataToPrint) {
       this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
@@ -731,7 +715,7 @@ export class MachineService {
     let offlinePrintError = permissionError || dateError || maxSalesError || maxStakeError
 
     if (!navigator.onLine && offlinePrintError) {
-      this.setModalData(true, false, 'Printing Error')
+      this.gnrcSrv.setModalData(true, false, 'Printing Error')
       return
     }
 
@@ -1019,7 +1003,7 @@ export class MachineService {
 
     let apiResponse = await this.handleApiResponse('PMUHybrid', 'PMUHybrid/ProcessTickets', 'POST', params)
     await this.updateTicketsInDb(apiResponse.data)
-    this.setModalData(true, true, 'All Tickets are  synced.');
+    this.gnrcSrv.setModalData(true, true, 'All Tickets are  synced.');
     console.log(apiResponse)
   }
 

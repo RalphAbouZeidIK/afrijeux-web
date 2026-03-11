@@ -49,7 +49,7 @@ const routes: Routes = [
     loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
     data: {
       breadcrumb: 'Sports Betting',
-      shouldBeLoggedIn: true,
+      shouldBeLoggedIn: false,
       showLink: false,
       title: 'routerLinks.appTitle.Sports',
     }

@@ -287,11 +287,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     }
 
     if (this.Stake < minStake) {
+      this.gnrcSrv.setModalData(true, false, `Minimum stake for this bet type is ${minStake}.`)
       this.Stake = minStake;
       return;
     }
 
     if (this.Stake > maxStake) {
+      this.gnrcSrv.setModalData(true, false, `Maximum stake for this bet type is ${maxStake}.`)
       this.Stake = maxStake;
     }
   }
@@ -441,7 +443,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     if (this.isPickXGame) {
       console.log(this.selectedType)
       if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedType == null) {
-        alert()
+        this.gnrcSrv.setModalData(true, false, 'Please select all balls and a type.');
         return
       }
 
@@ -463,7 +465,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
     else {
       if (this.selectedNumbers.length < 6 || this.selectedNumbers.length > 9) {
-        alert()
+        this.gnrcSrv.setModalData(true, false, 'Please select between 6 and 9 balls.');
         return
       }
       this.updateLotoPrice()
@@ -478,8 +480,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
         id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
       }
     }
-
-
+    console.log(pickItem)
+    this.Stake = 0
     this.cartSrv.updateLotoList(pickItem)
     this.selectedNumbers = [];
     this.composeEventDetails(this.selectedEvent)

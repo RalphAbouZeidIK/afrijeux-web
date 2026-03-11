@@ -1,11 +1,10 @@
 @use '/src/variables' as *;
 
+
+
+
 .flexbox-container {
     display: flex;
-
-}
-
-.flexbox-container.wrap {
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 15px;
@@ -26,6 +25,23 @@
                 font-weight: bold;
             }
         }
+    }
+
+    &.resultBalls {
+        gap: 0 8px;
+        justify-content: center;
+
+        .box {
+            height: 34px;
+            width: 34px;
+            background-color: $lightGreen;
+
+            .ballnbr {
+                font-size: 18px;
+                font-family: $font-bold;
+            }
+        }
+
     }
 
 }
@@ -122,6 +138,7 @@
         margin-left: 120px
     }
 }
+
 
 @media (max-width:898px) {
     .box {

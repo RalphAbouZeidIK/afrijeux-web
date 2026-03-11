@@ -4,6 +4,7 @@ import { CacheService } from 'src/app/services/cache.service';
 import { machineMenuRoutes } from '../machine-route';
 import { MachineService } from 'src/app/services/machine.service';
 import { NativeBridgeService } from 'src/app/services/native-bridge.service';
+import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
     private cacheSrv: CacheService,
     private router: Router,
     private machineSrv: MachineService,
-    private nativeBridge: NativeBridgeService,
+    private gnrcSrv: GenericService,
     private cacheService: CacheService
   ) {
     this.getMenu()
@@ -75,7 +76,7 @@ export class HomeComponent implements OnInit {
     const tickets = await this.cacheService.getTicketsFromFlutter({ IsSync: 0, IsOffline: 1 });
     if (tickets.length === 0) {
       this.isLoading = false;
-      this.machineSrv.setModalData(true, true, 'All Tickets are already synced.');
+      this.gnrcSrv.setModalData(true, true, 'All Tickets are already synced.');
       return;
     }
     await this.machineSrv.syncOfflineTickets(tickets);

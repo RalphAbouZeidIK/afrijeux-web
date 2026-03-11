@@ -208,4 +208,10 @@ export class GamesService {
     return apiResponse
   }
 
+  async getPreviousResults() {
+    let apiResponse: any
+    apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetGamesResult`, 'GET', {});
+    return apiResponse
+  }
+
 }

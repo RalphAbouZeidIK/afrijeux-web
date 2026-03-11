@@ -198,7 +198,7 @@ section {
 // ===== SECTION HEADERS =====
 .section-header {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     padding: 0 52px;
 
     h2 {
@@ -206,8 +206,9 @@ section {
         font-size: 36px;
         font-weight: 700;
         color: $white;
-        margin: 0 0 10px 0;
+        margin: 0;
         line-height: 60px;
+        padding-bottom: 0;
     }
 
     p {
@@ -659,9 +660,14 @@ header {
     min-height: 73px;
 }
 
+.modal-dialog {
+    width: 300px;
+}
 
 .modal-content {
-    background-color: $darkBg;
+    background-color: transparent;
+    border: none;
+    width: auto;
 }
 
 

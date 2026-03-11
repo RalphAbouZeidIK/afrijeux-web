@@ -264,7 +264,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     if (this.isAndroidApp && apiResponse.DataToPrint) {
       this.clearBets()
-      this.machineSrv.setModalData(true, true, apiResponse.message)
+      this.gnrcSrv.setModalData(true, true, apiResponse.message)
     }
 
     else {
@@ -272,7 +272,7 @@ export class CartComponent implements OnInit, OnDestroy {
       if (apiResponse.Status == true || apiResponse == true) {
         this.clearBets()
         this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
-        this.machineSrv.setModalData(true, true, apiResponse.message || 'Success')
+        this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
       }
     }
 

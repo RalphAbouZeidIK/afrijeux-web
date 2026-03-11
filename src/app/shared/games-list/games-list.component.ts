@@ -14,7 +14,7 @@ export class GamesLinksComponent implements OnInit {
 
   jackpotEvents: any;
 
-  @Input() cssClass = '';
+  @Input() isGamePage = false;
   @Input() selectedTypeId: number | string | null = null;
 
   constructor(private gamesSrv: GamesService, private router: Router) { }

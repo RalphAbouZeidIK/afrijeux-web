@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GenericService {
+  private openModal$ = new Subject();
 
   constructor(private apiSrv: ApiService, private usrSrv: UserService, private router: Router) { }
 
@@ -149,6 +150,24 @@ export class GenericService {
   async getCurrencies() {
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetAllCurrencies', 'GET', {});
     return apiResponse
+  }
+
+
+  setModalData(openModal: boolean, success: boolean, messageCode: string) {
+    let modalStatus = {
+      openModal: openModal,
+      success: success,
+      msgCode: messageCode
+    }
+    this.setModalStatus(modalStatus)
+  }
+
+  getModalStatus(): Observable<any> {
+    return this.openModal$;
+  }
+
+  setModalStatus(status: any) {
+    this.openModal$.next(status);
   }
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModalConfig, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
 
 @Component({
@@ -26,14 +27,15 @@ export class ModalComponent implements OnDestroy {
   constructor(
     config: NgbModalConfig,
     private modalService: NgbModal,
-    private machineSrv: MachineService
+    private gnrcSrv: GenericService
   ) {
     // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
 
     /** Subscribe to modal status */
-    this.modalSubbscription = this.machineSrv.getModalStatus().subscribe((data) => {
+    this.modalSubbscription = this.gnrcSrv.getModalStatus().subscribe((data) => {
+      console.log(data)
       if (data.openModal) {
         this.isSuccess = data.success
         this.msgCode = data.msgCode
@@ -47,7 +49,11 @@ export class ModalComponent implements OnDestroy {
   }
 
   open() {
-    this.modalRef = this.modalService.open(this.contentTemplateRef, { centered: true })
+    this.modalRef = this.modalService.open(this.contentTemplateRef, {
+      centered: false,
+      backdrop: false,
+      windowClass: 'toaster-modal'
+    })
   }
 
   close() {

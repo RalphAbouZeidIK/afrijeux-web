@@ -1,25 +1,54 @@
-.modal-parent {
-    padding: 30px;
-    text-align: center;
+@use '/src/variables' as *;
 
-    img {
-        display: block;
-        width: 60px;
-        margin: 0 auto;
-        margin-bottom: 25px;
+:host {
+    ::ng-deep .modal.toaster-modal {
+        pointer-events: none;
     }
 
-    h2 {
-        margin-bottom: 0;
+    ::ng-deep .modal.toaster-modal .modal-dialog {
+        margin: 16px auto;
+        max-width: max-content;
+        pointer-events: none;
     }
 
-    h2 {
-        color: #d75a4a
+    ::ng-deep .modal.toaster-modal .modal-content {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        pointer-events: none;
+    }
+}
+
+.toast-parent {
+    min-height: 40px;
+    padding: 8px 18px 8px 12px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+    font-size: 14px;
+    justify-content: center;
+
+    &.error {
+        background: #FF3B30;
+
     }
 
     &.success {
-        h2 {
-            color: #25ae88;
-        }
+        background: $lightGreen;
+        color: $darkBg;
     }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.toast-icon {
+    width: 20px;
+    height: 20px;
+
+
 }

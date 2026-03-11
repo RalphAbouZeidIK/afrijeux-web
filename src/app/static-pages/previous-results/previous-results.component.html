@@ -10,28 +10,26 @@
       <img [src]="imgGroup" alt="search" class="search-icon" />
       <input #searchInput type="text" placeholder="Check your ticket" />
     </div>
-    <div class="search-filter" (click)="onFilterChange('all')">
-      <span>All</span>
-      <img [src]="imgPolygon1" alt="dropdown" class="dropdown-icon" />
-    </div>
+
   </div>
 
   <!-- results cards -->
   <div class="grid results-grid">
     <div class="result-box" *ngFor="let r of results">
-        <div class="card-top">
-          <!-- decorative pattern overlay -->
-          <img *ngIf="cardTopPattern" [src]="cardTopPattern" alt="pattern" class="card-top-pattern" />
-          <h3 class="result-name">{{ r.name }}</h3>
-          <p class="result-date">{{ r.date }}</p>
-          <div class="numbers">
-            <span class="result-ball" *ngFor="let n of r.numbers">{{ n }}</span>
-          </div>
-        </div>
-        <div class="card-bottom">
-          <span class="prize-label">Prize</span>
-          <span class="prize-amount">{{ r.prize }}</span>
-        </div>
+      <div class="card-top">
+        <!-- decorative pattern overlay -->
+        <img *ngIf="cardTopPattern" [src]="cardTopPattern" alt="pattern" class="card-top-pattern" />
+        <h3 class="result-name">{{ r.EventName }}</h3>
+        <p class="result-date">{{ r.EventDate | date:'medium' }}</p>
+        <app-ball-list [cssClass]="'resultBalls'" [chosenBallsArray]="getResultBalls(r)" [shouldHighlight]="false"
+          [shouldEmit]="false">
+        </app-ball-list>
+
+      </div>
+      <div class="card-bottom">
+        <span class="prize-label">Prize</span>
+        <span class="prize-amount">{{ r.prize }}</span>
+      </div>
     </div>
   </div>
 

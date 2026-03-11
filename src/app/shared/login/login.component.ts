@@ -183,7 +183,7 @@ export class LoginComponent implements OnChanges, OnInit {
       let respoonse = await this.machineSrv.loginMachine(loginParams)
       console.log(respoonse)
       if (respoonse.status == false) {
-        this.machineSrv.setModalData(true, false, respoonse.message)
+        this.gnrcSrv.setModalData(true, false, respoonse.message)
       }
       else {
         this.router.navigate(['Machine/Home'])
