@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { GamesService } from 'src/app/services/games.service';
 
@@ -8,29 +8,38 @@ import { GamesService } from 'src/app/services/games.service';
   templateUrl: './games-list.component.html',
   styleUrl: './games-list.component.scss'
 })
-export class GamesLinksComponent implements OnInit {
+export class GamesLinksComponent implements OnChanges {
 
   pickXEvents: any;
 
   jackpotEvents: any;
 
+  @Input() allEvents: any;
   @Input() isGamePage = false;
   @Input() selectedTypeId: number | string | null = null;
 
   constructor(private gamesSrv: GamesService, private router: Router) { }
 
-  async getGameEvents() {
-    const pickXEvents = await this.gamesSrv.getGamesEvents('PickX');
-    this.pickXEvents = Array.isArray(pickXEvents)
-      ? [...pickXEvents].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+  getGameEvents() {
+    console.log(this.allEvents)
+    this.pickXEvents = Array.isArray(this.allEvents?.pickXGames)
+      ? [...this.allEvents.pickXGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
     console.log('PickX Events:', this.pickXEvents);
-    this.jackpotEvents = await this.gamesSrv.getGamesEvents('Jackpot');
+    this.jackpotEvents = Array.isArray(this.allEvents?.jackpotGames)
+      ? [...this.allEvents.jackpotGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+      : [];
     console.log('Jackpot Events:', this.jackpotEvents);
   }
 
-  ngOnInit() {
-    this.getGameEvents();
+  // ngOnInit() {
+  //   this.getGameEvents();
+  // }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['allEvents']) {
+      this.getGameEvents();
+    }
   }
 
   isSelectedPickX(pickX: any): boolean {

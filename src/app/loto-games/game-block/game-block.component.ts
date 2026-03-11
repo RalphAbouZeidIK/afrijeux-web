@@ -69,6 +69,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   cartSubscription: Subscription
 
+  allEvents: any
+
   constructor(
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
@@ -161,7 +163,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   }
 
   async getEvents() {
-    let gameEventsResponse = await this.gamesSrv.getGamesEvents()
+    const allEvents = await this.gamesSrv.getAllLotoGames();
+    this.allEvents = allEvents;
+    let gameEventsResponse = (this.isPickXGame) ? allEvents?.pickXGames : allEvents?.jackpotGames;
     console.log(gameEventsResponse)
     gameEventsResponse.forEach((eventItem: any) => {
       if (!eventItem.IsSalesStopped) {

@@ -193,6 +193,12 @@ export class GamesService {
     return apiResponse
   }
 
+  async getAllLotoGames() {
+    let pickXGames: any = await this.getGamesEvents('PickX');
+    let jackpotGames: any = await this.getGamesEvents('Jackpot');
+    return { pickXGames, jackpotGames };  
+  }
+
   async getFixedConfig(fixedConfigId: any) {
     let apiResponse: any
     let path = this.gnrcSrv.getGameRoute()
