@@ -25,6 +25,7 @@ import { CartComponent } from './cart/cart.component';
 import { BallListComponent } from './ball/ball-list.component';
 import { AppFooterComponent } from './app-footer/app-footer.component';
 import { GamesLinksComponent } from './games-list/games-list.component';
+import { OptionListComponent } from './option-list/option-list.component';
 
 
 // Custom date formats
@@ -54,7 +55,8 @@ export const MY_FORMATS = {
     CartComponent,
     BallListComponent,
     AppFooterComponent,
-    GamesLinksComponent
+    GamesLinksComponent,
+    OptionListComponent
   ],
   exports: [
     HeaderComponent,
@@ -75,7 +77,8 @@ export const MY_FORMATS = {
     CartComponent,
     BallListComponent,
     AppFooterComponent,
-    GamesLinksComponent
+    GamesLinksComponent,
+    OptionListComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,

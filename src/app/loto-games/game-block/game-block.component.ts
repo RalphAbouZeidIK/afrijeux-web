@@ -5,6 +5,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { OptionListItem } from 'src/app/shared/option-list/option-list.component';
 
 @Component({
   selector: 'app-game-block',
@@ -70,6 +71,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   cartSubscription: Subscription
 
   allEvents: any
+
+  selectedResultFilter: string | number | null = 1;
+
+  showOptionsList = false
 
   constructor(
     private gnrcSrv: GenericService,
@@ -256,6 +261,16 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
       return [];
     }
     return Array.from({ length: count });
+  }
+
+
+  onFilterChange(option: any) {
+    console.log(option)
+    this.selectedType = option
+    this.Stake = option.MinStake
+    this.clampStakeToTypeLimits()
+    this.selectedResultFilter = option.TicketTypeId;
+    console.log('filter', option.TicketTypeId);
   }
 
   onTypeChanged(event: any) {

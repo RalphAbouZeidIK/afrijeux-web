@@ -127,6 +127,42 @@ section {
     padding: 40px 52px;
 }
 
+.option-list-holder {
+    position: relative;
+    z-index: 4;
+    padding-left: 15px;
+
+    .selected-option {
+        color: #B7B7B7;
+        display: inline-flex;
+        font-size: 14px;
+        padding-right: 14px;
+        position: relative;
+
+        cursor: pointer;
+
+        &::after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid #B7B7B7;
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-35%);
+        }
+    }
+}
+
+app-option-list {
+    width: 260px;
+    display: block;
+    flex: 0 0 260px;
+    position: absolute;
+    right: -20px;
+    top: 40px;
+}
+
 @media all and (min-width:1400px) {
     .container {
         max-width: 1440px;
