@@ -23,7 +23,7 @@
                         <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
                             [shouldHighlight]="false"></app-ball-list>
 
-                        <div class="option-list-holder" (click)="showOptionsList = !showOptionsList">
+                        <div class="option-list-holder" *ngIf="isPickXGame" (click)="showOptionsList = !showOptionsList">
                             <span class="selected-option">{{ selectedType?.TicketTypeName }}</span>
                             <app-option-list *ngIf="showOptionsList" [options]="selectedEvent.fixedConfig"
                                 [selectedValue]="selectedResultFilter"

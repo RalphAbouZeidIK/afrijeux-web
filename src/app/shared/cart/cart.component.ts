@@ -287,6 +287,9 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
         this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
       }
+      else{
+        this.gnrcSrv.setModalData(true, false, apiResponse.Message || 'Failed to confirm betslip.')
+      }
     }
 
 
