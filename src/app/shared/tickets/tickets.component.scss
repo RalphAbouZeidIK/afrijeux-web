@@ -1,0 +1,229 @@
+@use '/src/variables' as *;
+
+.ticket-history {
+	background:
+		radial-gradient(circle at 50% 100%, rgba(164, 246, 117, 0.14), transparent 44%),
+		linear-gradient(180deg, #031200 0%, #071a03 55%, #031200 100%);
+	border: 1px solid rgba(164, 246, 117, 0.2);
+	border-radius: 26px;
+	color: $white;
+	font-family: $font-regular;
+	margin: 1rem 0;
+	padding: 1.25rem;
+}
+
+.ticket-history__header {
+	h2 {
+		font-family: $font-bold;
+		font-size: 2rem;
+		margin: 0;
+	}
+
+	p {
+		color: #90a38a;
+		margin: 0.25rem 0 0;
+	}
+}
+
+.ticket-history__controls {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	justify-content: space-between;
+	margin-top: 1.1rem;
+}
+
+.filter-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.pill {
+	background: rgba(164, 246, 117, 0.18);
+	border: 1px solid rgba(164, 246, 117, 0.14);
+	border-radius: 20px;
+	color: #b3c8a9;
+	cursor: pointer;
+	font-size: 0.82rem;
+	min-width: 56px;
+	padding: 0.4rem 0.9rem;
+
+	&.active {
+		background: #a4f675;
+		border-color: #a4f675;
+		color: #13230c;
+		font-family: $font-bold;
+	}
+}
+
+.search-box {
+	min-width: 250px;
+
+	input {
+		background: rgba(255, 255, 255, 0.06);
+		border: 1px solid rgba(164, 246, 117, 0.22);
+		border-radius: 22px;
+		color: $white;
+		outline: none;
+		padding: 0.55rem 0.9rem;
+		width: 100%;
+
+		&::placeholder {
+			color: #95a58f;
+		}
+	}
+}
+
+.ticket-list {
+	margin-top: 1.2rem;
+}
+
+.ticket-card {
+	background: rgba(4, 26, 3, 0.9);
+	border: 1px solid rgba(164, 246, 117, 0.2);
+	border-radius: 20px;
+	margin-bottom: 0.7rem;
+	overflow: hidden;
+}
+
+.ticket-card__head {
+	align-items: center;
+	background: transparent;
+	border: none;
+	color: $white;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	padding: 0.95rem 1rem;
+	text-align: left;
+	width: 100%;
+}
+
+.ticket-title {
+	font-family: $font-bold;
+	font-size: 1rem;
+}
+
+.chevron {
+	color: #9fc08f;
+	font-size: 1.1rem;
+	transform: rotate(90deg);
+	transition: transform 0.2s ease;
+
+	&.open {
+		transform: rotate(-90deg);
+	}
+}
+
+.ticket-card__body {
+	border-top: 1px solid rgba(164, 246, 117, 0.2);
+}
+
+.sub-ticket {
+	align-items: center;
+	border-top: 1px solid rgba(164, 246, 117, 0.14);
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: minmax(180px, 1fr) minmax(240px, 1fr) auto;
+	padding: 0.9rem 1rem;
+}
+
+.sub-ticket__id {
+	color: $white;
+	font-family: $font-bold;
+	margin: 0;
+}
+
+.sub-ticket__date {
+	color: #93a28e;
+	font-size: 0.8rem;
+	margin: 0.2rem 0 0;
+}
+
+.sub-ticket__numbers {
+	p {
+		color: #9fad99;
+		font-size: 0.8rem;
+		margin: 0 0 0.35rem;
+	}
+}
+
+.balls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+}
+
+.ball {
+	align-items: center;
+	background: radial-gradient(circle at 30% 25%, #fdffe6 0%, #f3de89 48%, #ceaa54 100%);
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	border-radius: 50%;
+	color: #1f2f1a;
+	display: inline-flex;
+	font-family: $font-bold;
+	font-size: 0.76rem;
+	height: 26px;
+	justify-content: center;
+	width: 26px;
+}
+
+.sub-ticket__status {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	justify-self: end;
+}
+
+.status-pill {
+	border-radius: 999px;
+	color: #061f00;
+	font-family: $font-bold;
+	font-size: 0.75rem;
+	min-width: 58px;
+	padding: 0.28rem 0.55rem;
+	text-align: center;
+
+	&.status-pill--won {
+		background: #8df553;
+	}
+
+	&.status-pill--lost {
+		background: #ff4e4e;
+		color: #330000;
+	}
+
+	&.status-pill--pending {
+		background: #f7d955;
+		color: #312405;
+	}
+}
+
+.winning {
+	color: #8df553;
+	font-family: $font-bold;
+	font-size: 0.95rem;
+	text-align: right;
+}
+
+.sub-ticket--empty {
+	color: #9fb298;
+	display: block;
+	font-size: 0.88rem;
+}
+
+@media (max-width: 900px) {
+	.search-box {
+		min-width: 100%;
+	}
+
+	.sub-ticket {
+		grid-template-columns: 1fr;
+	}
+
+	.sub-ticket__status {
+		justify-self: start;
+	}
+}

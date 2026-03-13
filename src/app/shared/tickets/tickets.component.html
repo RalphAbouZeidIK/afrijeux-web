@@ -1,1 +1,60 @@
-<p>tickets works!</p>
+<section class="ticket-history">
+	<div class="ticket-history__header">
+		<h2>Ticket History</h2>
+		<p>Track your lottery tickets and winnings</p>
+	</div>
+
+	<div class="ticket-history__controls">
+		<div class="filter-pills">
+			<button type="button" class="pill" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">All</button>
+			<button type="button" class="pill" [class.active]="activeFilter === 'won'" (click)="setFilter('won')">Won</button>
+			<button type="button" class="pill" [class.active]="activeFilter === 'lost'" (click)="setFilter('lost')">Lost</button>
+			<button type="button" class="pill" [class.active]="activeFilter === 'pending'" (click)="setFilter('pending')">Pending</button>
+		</div>
+
+		<div class="search-box">
+			<input
+				type="text"
+				placeholder="Check your ticket"
+				[ngModel]="searchTerm"
+				(ngModelChange)="onSearchChange($event)"
+			/>
+		</div>
+	</div>
+
+	<div class="ticket-list">
+		<div class="ticket-card" *ngFor="let ticket of filteredTickets; trackBy: trackByTicket">
+			<button type="button" class="ticket-card__head" (click)="toggleTicket(ticket)">
+				<span class="ticket-title">{{ getTicketLabel(ticket) }}</span>
+				<span class="chevron" [class.open]="isExpanded(ticket)">&#8250;</span>
+			</button>
+
+			<div class="ticket-card__body" *ngIf="isExpanded(ticket)">
+				<div class="sub-ticket" *ngFor="let subTicket of ticket._subTickets; trackBy: trackBySubTicket">
+					<div class="sub-ticket__left">
+						<p class="sub-ticket__id">{{ subTicket?.TicketId || subTicket?.SubTicketId || subTicket?.TicketCode || 'Ticket Number Here' }}</p>
+						<p class="sub-ticket__date">Purchase Date: {{ getTicketDate(subTicket) }}</p>
+					</div>
+
+					<div class="sub-ticket__numbers">
+						<p>Your Numbers:</p>
+						<div class="balls">
+							<span class="ball" *ngFor="let number of getSubTicketNumbers(subTicket)">{{ number }}</span>
+						</div>
+					</div>
+
+					<div class="sub-ticket__status">
+						<span class="status-pill" [ngClass]="'status-pill--' + getSubTicketStatus(subTicket)">
+							{{ getSubTicketStatusLabel(subTicket) }}
+						</span>
+						<span class="winning" *ngIf="getSubTicketWinningAmount(subTicket) > 0">+${{ getSubTicketWinningAmount(subTicket) }}</span>
+					</div>
+				</div>
+
+				<div class="sub-ticket sub-ticket--empty" *ngIf="ticket._subTickets.length === 0">
+					No sub tickets found.
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

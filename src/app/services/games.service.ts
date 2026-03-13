@@ -196,7 +196,7 @@ export class GamesService {
   async getAllLotoGames() {
     let pickXGames: any = await this.getGamesEvents('PickX');
     let jackpotGames: any = await this.getGamesEvents('Jackpot');
-    return { pickXGames, jackpotGames };  
+    return { pickXGames, jackpotGames };
   }
 
   async getFixedConfig(fixedConfigId: any) {
@@ -217,6 +217,12 @@ export class GamesService {
   async getPreviousResults() {
     let apiResponse: any
     apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetGamesResult`, 'GET', {});
+    return apiResponse
+  }
+
+  async getTickets() {
+    let apiResponse: any
+    apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Tickets/GetTickets`, 'GET', {});
     return apiResponse
   }
 

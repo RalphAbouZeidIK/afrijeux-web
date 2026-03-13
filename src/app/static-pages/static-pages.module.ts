@@ -8,11 +8,13 @@ import { GamesListComponent } from './games-list/games-list.component';
 import { PreviousResultsComponent } from './previous-results/previous-results.component';
 import { PromoHeroComponent } from './promo-hero/promo-hero.component';
 import { ResponsibleGamingBannerComponent } from './responsible-gaming-banner/responsible-gaming-banner.component';
+import { PagesCoreComponent } from './pages-core/pages-core.component';
 
 
 
 @NgModule({
   declarations: [
+    PagesCoreComponent,
     HomepageComponent,
     HeroBannerComponent,
     GamesListComponent,
