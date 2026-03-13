@@ -23,11 +23,11 @@ export class GamesLinksComponent implements OnChanges {
   getGameEvents() {
     console.log(this.allEvents)
     this.pickXEvents = Array.isArray(this.allEvents?.pickXGames)
-      ? [...this.allEvents.pickXGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+      ? [...this.allEvents.pickXGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
     console.log('PickX Events:', this.pickXEvents);
     this.jackpotEvents = Array.isArray(this.allEvents?.jackpotGames)
-      ? [...this.allEvents.jackpotGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+      ? [...this.allEvents.jackpotGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
     console.log('Jackpot Events:', this.jackpotEvents);
   }

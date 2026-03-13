@@ -38,6 +38,7 @@ export class ApiService {
   }
 
   private async handleError(error: any) {
+    debugger
     if (this.errorHandled) return;
     this.errorHandled = true;
 
@@ -52,10 +53,8 @@ export class ApiService {
       }
 
       else {
-        if (this.router.url !== '/') {
-          this.userSrv.signOut();
-          this.router.navigate(['']);
-        }
+        this.userSrv.signOut();
+        this.router.navigate(['']);
       }
 
       setTimeout(() => (this.errorHandled = false), 5000);
