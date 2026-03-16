@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { LoginComponent } from './shared/login/login.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { UofComponent } from './sports/uof/uof.component';
+import { TicketsComponent } from './shared/tickets/tickets.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -93,7 +94,17 @@ const routes: Routes = [
       shouldBeLoggedIn: true,
       showLink: false,
       title: 'routerLinks.appTitle.User',
-    }
+    },
+  },
+  {
+    path: 'Tickets',
+    component: TicketsComponent,
+    data: {
+      breadcrumb: 'My Tickets',
+      shouldBeLoggedIn: true,
+      showLink: true,
+      title: 'routerLinks.appTitle.Tickets',
+    },
   },
   // Machine-prefixed versions
   {

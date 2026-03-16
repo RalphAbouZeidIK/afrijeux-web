@@ -16,7 +16,7 @@ import { OptionListItem } from 'src/app/shared/option-list/option-list.component
 export class GameBlockComponent implements AfterViewInit, OnDestroy {
   isAndroidApp = false
 
-  selectedTypeId: number | null = null
+  selectedGameEventId: number | null = null
 
   eventsList: any = []
 
@@ -178,11 +178,21 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
       let selectedEvent = this.eventsList[0];
 
       if (this.isPickXGame) {
-        const gameType = this.route.snapshot.queryParamMap.get('gametype');
-        if (gameType) {
-          this.selectedTypeId = Number(gameType);
+        const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
+        const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
+
+        if (gameEventId) {
+          this.selectedGameEventId = Number(gameEventId);
           const matchedEvent = this.eventsList.find(
-            (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(gameType)
+            (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
+          );
+          if (matchedEvent) {
+            selectedEvent = matchedEvent;
+          }
+        } else if (legacyGameType) {
+          // Backward compatibility for old links that still pass gametype.
+          const matchedEvent = this.eventsList.find(
+            (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(legacyGameType)
           );
           if (matchedEvent) {
             selectedEvent = matchedEvent;
@@ -208,7 +218,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     raceItem.fixedConfig = fixedConfig
     this.selectedEvent = raceItem
     if (this.isPickXGame) {
-      this.selectedTypeId = Number(raceItem?.ConfigurationVersionId);
+      this.selectedGameEventId = Number(raceItem?.GameEventId);
     }
 
     const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
@@ -447,7 +457,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
       return 'Jackpot';
     }
 
-    const configId = Number(this.selectedEvent?.ConfigurationVersionId ?? this.selectedTypeId);
+    const configId = Number(this.selectedEvent?.ConfigurationVersionId);
     if (this.isPickXGame && !Number.isNaN(configId)) {
       return `Pick${configId}`;
     }

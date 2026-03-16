@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { GamesService } from 'src/app/services/games.service';
 import { PlayTypeRule } from '../game-playtypes/game-playtypes.component';
 import { LotoGameContent, LotoGameContentKey, LOTO_GAME_CONTENT } from './homepage-content';
 
@@ -15,8 +16,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   private queryParamsSubscription: Subscription | null = null;
   private hasInitializedQueryParams = false;
+  private allLotoEvents: any = null;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private gamesSrv: GamesService) {}
 
   introTitle = '';
   introDescription = '';
@@ -36,8 +38,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
   examples: string[] = [];
 
   ngOnInit(): void {
-    this.queryParamsSubscription = this.route.queryParamMap.subscribe(() => {
-      this.applySelectedContent();
+    this.queryParamsSubscription = this.route.queryParamMap.subscribe(async () => {
+      await this.applySelectedContent();
 
       // Skip the first emission to avoid an unnecessary initial remount.
       if (!this.hasInitializedQueryParams) {
@@ -62,19 +64,30 @@ export class HomepageComponent implements OnInit, OnDestroy {
     });
   }
 
-  private applySelectedContent(): void {
-    const contentKey = this.resolveContentKey();
+  private async applySelectedContent(): Promise<void> {
+    const contentKey = await this.resolveContentKey();
     const content = LOTO_GAME_CONTENT[contentKey] || LOTO_GAME_CONTENT.pick2;
     this.setContent(content);
   }
 
-  private resolveContentKey(): LotoGameContentKey {
+  private async resolveContentKey(): Promise<LotoGameContentKey> {
     const currentUrl = window.location.href;
     if (currentUrl.includes('/Jackpot')) {
       return 'jackpot';
     }
 
+    const gameEventId = Number(this.route.snapshot.queryParamMap.get('gameEventId'));
+    if (!Number.isNaN(gameEventId) && gameEventId > 0) {
+      const configVersionId = await this.getConfigurationVersionIdFromGameEventId(gameEventId);
+      return this.getPickContentKeyFromConfigurationVersion(configVersionId);
+    }
+
+    // Backward compatibility for old URLs that still use gametype.
     const gameType = Number(this.route.snapshot.queryParamMap.get('gametype'));
+    return this.getPickContentKeyFromConfigurationVersion(gameType);
+  }
+
+  private getPickContentKeyFromConfigurationVersion(gameType: number): LotoGameContentKey {
     if (gameType === 2) {
       return 'pick2';
     }
@@ -92,6 +105,24 @@ export class HomepageComponent implements OnInit, OnDestroy {
     }
 
     return 'pick2';
+  }
+
+  private async getConfigurationVersionIdFromGameEventId(gameEventId: number): Promise<number> {
+    try {
+      if (!this.allLotoEvents) {
+        this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
+      }
+
+      const pickXEvents = Array.isArray(this.allLotoEvents?.pickXGames) ? this.allLotoEvents.pickXGames : [];
+      const matchedEvent = pickXEvents.find(
+        (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
+      );
+
+      return Number(matchedEvent?.ConfigurationVersionId);
+    } catch (error) {
+      console.warn(error);
+      return NaN;
+    }
   }
 
   private setContent(content: LotoGameContent): void {

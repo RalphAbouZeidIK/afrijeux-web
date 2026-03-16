@@ -16,7 +16,7 @@ export class GamesLinksComponent implements OnChanges {
 
   @Input() allEvents: any;
   @Input() isGamePage = false;
-  @Input() selectedTypeId: number | string | null = null;
+  @Input() selectedGameEventId: number | string | null = null;
 
   constructor(private gamesSrv: GamesService, private router: Router) { }
 
@@ -43,10 +43,10 @@ export class GamesLinksComponent implements OnChanges {
   }
 
   isSelectedPickX(pickX: any): boolean {
-    if (this.selectedTypeId == null) {
+    if (this.selectedGameEventId == null) {
       return false;
     }
-    return Number(this.selectedTypeId) === Number(pickX?.ConfigurationVersionId);
+    return Number(this.selectedGameEventId) === Number(pickX?.GameEventId);
   }
 
   isJackpotRoute(): boolean {

@@ -226,4 +226,9 @@ export class GamesService {
     return apiResponse
   }
 
+  async getTicketPicks(ticketId: any) {
+    let apiResponse: any
+    apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Tickets/GetPicks/${ticketId}`, 'GET', {});
+    return apiResponse
+  }
 }

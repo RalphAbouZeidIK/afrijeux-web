@@ -225,10 +225,10 @@ export class CartService {
     return normalized ? `lotoCartData_${normalized}` : 'lotoCartData';
   }
 
-  private getGameTypeFromUrl(href: string): string | null {
+  private getGameEventIdFromUrl(href: string): string | null {
     // supports both regular and hash-based routes:
-    // /PickX?gametype=3 and /#/PickX?gametype=3
-    const match = href.match(/[?&]gametype=([^&#]+)/i);
+    // /PickX?gameEventId=12345 and /#/PickX?gameEventId=12345
+    const match = href.match(/[?&]gameEventId=([^&#]+)/i);
     return match ? decodeURIComponent(match[1]) : null;
   }
 
@@ -237,9 +237,9 @@ export class CartService {
       return null;
     }
 
-    const configVersionId = eventItem?.ConfigurationVersionId;
-    if (configVersionId != null && configVersionId !== '') {
-      return `pick${configVersionId}`;
+    const gameEventId = eventItem?.GameEventId;
+    if (gameEventId != null && gameEventId !== '') {
+      return `gameevent_${gameEventId}`;
     }
 
     const eventName = (eventItem?.EventName || eventItem?.name || eventItem?.gameName || '').toString().toLowerCase();
@@ -263,9 +263,15 @@ export class CartService {
     }
 
     if (href.includes('PickX')) {
-      const gameType = this.getGameTypeFromUrl(href);
-      if (gameType) {
-        return this.getLotoStorageKey(`pick${gameType}`);
+      const gameEventId = this.getGameEventIdFromUrl(href);
+      if (gameEventId) {
+        return this.getLotoStorageKey(`gameevent_${gameEventId}`);
+      }
+
+      // backward compatibility for old URLs using gametype
+      const legacyGameType = href.match(/[?&]gametype=([^&#]+)/i);
+      if (legacyGameType?.[1]) {
+        return this.getLotoStorageKey(`pick${decodeURIComponent(legacyGameType[1])}`);
       }
     }
 
@@ -285,7 +291,9 @@ export class CartService {
   }
 
   updateLotoList(pickItem: any) {
-    const storageKey = this.getLotoStorageKey(pickItem?.gameName);
+    const storageKey = pickItem?.gameEventId != null
+      ? this.getLotoStorageKey(`gameevent_${pickItem.gameEventId}`)
+      : this.getLotoStorageKey(pickItem?.gameName);
     this.listOfLotoBets = this.storageSrv.getItem(storageKey) || []
     this.listOfLotoBets.push(pickItem)
     console.log(this.listOfLotoBets)
@@ -314,6 +322,24 @@ export class CartService {
   clearAllLotoBets() {
     ['lotoCartData', 'lotoCartData_pick2', 'lotoCartData_pick3', 'lotoCartData_pick4', 'lotoCartData_pick5', 'lotoCartData_jackpot']
       .forEach((key) => this.storageSrv.removeItem(key));
+
+    this.clearStorageByPrefix('lotoCartData_gameevent_');
+  }
+
+  private clearStorageByPrefix(prefix: string) {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        localStorage.removeItem(key);
+      }
+    }
+
+    for (let i = sessionStorage.length - 1; i >= 0; i--) {
+      const key = sessionStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        sessionStorage.removeItem(key);
+      }
+    }
   }
 
 

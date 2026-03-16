@@ -3,7 +3,7 @@
         <button *ngFor="let pickX of pickXEvents" class="pick-button"
             [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isSelectedPickX(pickX)}"
             [attr.data-option]="pickX.id" routerLink="/PickX"
-            [queryParams]="{ gametype: pickX.ConfigurationVersionId }">
+            [queryParams]="{ gameEventId: pickX.GameEventId }">
             Pick {{ pickX.ConfigurationVersionId }}
         </button>
         <button *ngFor="let jackpot of jackpotEvents" class="pick-button"

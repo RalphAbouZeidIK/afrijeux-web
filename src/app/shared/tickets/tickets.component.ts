@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GamesService } from 'src/app/services/games.service';
+import { SharedModule } from "../shared.module";
 
 @Component({
   selector: 'app-tickets',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SharedModule],
   templateUrl: './tickets.component.html',
   styleUrl: './tickets.component.scss'
 })
@@ -34,6 +35,20 @@ export class TicketsComponent implements OnInit {
     this.applyFilters();
   }
 
+  async getTicketPicks(ticket: any): Promise<any[]> {
+    if (!ticket?.TicketId) {
+      return [];
+    }
+    try {
+      const apiResponse = await this.gamesSrv.getTicketPicks(ticket.TicketId);
+      return Array.isArray(apiResponse) ? apiResponse : [];
+    }
+    catch (error) {
+      console.error('Error fetching ticket picks:', error);
+      return [];
+    }
+  }
+
   setFilter(filter: 'all' | 'won' | 'lost' | 'pending'): void {
     this.activeFilter = filter;
     this.applyFilters();
@@ -44,7 +59,13 @@ export class TicketsComponent implements OnInit {
     this.applyFilters();
   }
 
-  toggleTicket(ticket: any): void {
+  async toggleTicket(ticket: any): Promise<void> {
+    if (!ticket._subTickets || ticket._subTickets.length === 0) {
+      let picksList = await this.getTicketPicks(ticket);
+      console.log(picksList)
+      ticket._subTickets = picksList.length > 0 ? picksList : this.extractSubTickets(ticket);
+      console.log('Sub-tickets for ticket', ticket._ticketUiId, ':', ticket._subTickets);
+    }
     const ticketId = ticket?._ticketUiId;
     if (!ticketId) {
       return;
@@ -56,13 +77,18 @@ export class TicketsComponent implements OnInit {
     this.expandedTicketIds.add(ticketId);
   }
 
+
+
+
   isExpanded(ticket: any): boolean {
     return this.expandedTicketIds.has(ticket?._ticketUiId);
   }
 
   getTicketLabel(ticket: any): string {
-    const ticketId = ticket?.TicketId ?? ticket?.ticketId ?? ticket?.TicketCode ?? ticket?.FullTicketId;
-    return ticketId != null ? String(ticketId) : '-';
+    const eventName = ticket?.Name
+    const FullTicketId = ticket?.FullTicketId;
+    let fullTicketLabel = `Ticket ID: ${FullTicketId}`;
+    return fullTicketLabel;
   }
 
   getTicketDate(ticket: any): string {
@@ -98,20 +124,14 @@ export class TicketsComponent implements OnInit {
   }
 
   getSubTicketNumbers(subTicket: any): any[] {
-    const numbers = subTicket?.Numbers ?? subTicket?.numbers ?? subTicket?.SelectedNumbers ?? subTicket?.DrawNumbers;
-    if (Array.isArray(numbers)) {
-      return numbers;
-    }
-    if (typeof numbers === 'string') {
-      return numbers.split(',').map((n: string) => n.trim()).filter((n: string) => n !== '');
-    }
-    const gamePick = subTicket?.GamePick ?? subTicket?.gamePick;
-    if (Array.isArray(gamePick)) {
-      return gamePick
-        .map((pick: any) => pick?.Number ?? pick?.Value ?? pick?.PickValue)
-        .filter((value: any) => value !== undefined && value !== null);
-    }
-    return [];
+    let returnedNumbers: any = []
+    returnedNumbers = subTicket?.Balls
+      .split(',')
+      .map((n: string) => n.trim())
+      .filter((n: string) => n !== '')
+      .map((n: string) => ({ number: Number(n) }));
+    console.log(returnedNumbers)
+    return returnedNumbers;
   }
 
   getSubTicketStatus(subTicket: any): 'won' | 'lost' | 'pending' {
@@ -119,7 +139,7 @@ export class TicketsComponent implements OnInit {
     if (subTicket?.IsWinning === 1 || rawStatus.includes('won') || Number(subTicket?.WinningAmount ?? 0) > 0) {
       return 'won';
     }
-    if (subTicket?.IsPending === 1 || rawStatus.includes('pending')) {
+    if (subTicket?.IsGenerated === 0 || rawStatus.includes('pending')) {
       return 'pending';
     }
     if (subTicket?.IsWinning === 0 || rawStatus.includes('lost') || rawStatus.includes('lose')) {
@@ -129,6 +149,7 @@ export class TicketsComponent implements OnInit {
   }
 
   getSubTicketStatusLabel(subTicket: any): string {
+    console.log(subTicket)
     const status = this.getSubTicketStatus(subTicket);
     return status.charAt(0).toUpperCase() + status.slice(1);
   }

@@ -38,7 +38,6 @@ export class ApiService {
   }
 
   private async handleError(error: any) {
-    debugger
     if (this.errorHandled) return;
     this.errorHandled = true;
 

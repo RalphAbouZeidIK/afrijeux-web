@@ -1,28 +1,15 @@
 @use '/src/variables' as *;
 
 .ticket-history {
-	background:
-		radial-gradient(circle at 50% 100%, rgba(164, 246, 117, 0.14), transparent 44%),
-		linear-gradient(180deg, #031200 0%, #071a03 55%, #031200 100%);
-	border: 1px solid rgba(164, 246, 117, 0.2);
-	border-radius: 26px;
 	color: $white;
 	font-family: $font-regular;
-	margin: 1rem 0;
-	padding: 1.25rem;
+	padding: 0;
+	padding-bottom: 70px;
 }
 
-.ticket-history__header {
-	h2 {
-		font-family: $font-bold;
-		font-size: 2rem;
-		margin: 0;
-	}
-
-	p {
-		color: #90a38a;
-		margin: 0.25rem 0 0;
-	}
+.section-header {
+	text-align: left;
+	padding: 0;
 }
 
 .ticket-history__controls {
@@ -41,20 +28,12 @@
 }
 
 .pill {
-	background: rgba(164, 246, 117, 0.18);
-	border: 1px solid rgba(164, 246, 117, 0.14);
-	border-radius: 20px;
-	color: #b3c8a9;
-	cursor: pointer;
-	font-size: 0.82rem;
-	min-width: 56px;
-	padding: 0.4rem 0.9rem;
+	font-size: 12px;
+	padding: 8px 20px;
+	opacity: 0.6;
 
 	&.active {
-		background: #a4f675;
-		border-color: #a4f675;
-		color: #13230c;
-		font-family: $font-bold;
+		opacity: 1;
 	}
 }
 
@@ -78,6 +57,10 @@
 
 .ticket-list {
 	margin-top: 1.2rem;
+	background: #152811;
+	padding: 24px;
+	border-radius: 40px;
+	border: 1px solid rgba(164, 246, 117, 0.20);
 }
 
 .ticket-card {
@@ -102,7 +85,6 @@
 }
 
 .ticket-title {
-	font-family: $font-bold;
 	font-size: 1rem;
 }
 
@@ -132,7 +114,6 @@
 
 .sub-ticket__id {
 	color: $white;
-	font-family: $font-bold;
 	margin: 0;
 }
 
@@ -163,7 +144,6 @@
 	border-radius: 50%;
 	color: #1f2f1a;
 	display: inline-flex;
-	font-family: $font-bold;
 	font-size: 0.76rem;
 	height: 26px;
 	justify-content: center;
@@ -180,7 +160,6 @@
 .status-pill {
 	border-radius: 999px;
 	color: #061f00;
-	font-family: $font-bold;
 	font-size: 0.75rem;
 	min-width: 58px;
 	padding: 0.28rem 0.55rem;
@@ -203,7 +182,6 @@
 
 .winning {
 	color: #8df553;
-	font-family: $font-bold;
 	font-size: 0.95rem;
 	text-align: right;
 }
