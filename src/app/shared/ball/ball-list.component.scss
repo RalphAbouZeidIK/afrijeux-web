@@ -148,14 +148,18 @@
 }
 
 
-@media (max-width:898px) {
+@media (max-width:1200px) {
+    .flexbox-container {
+        gap: 5px;
+    }
+
     .box {
-        width: 45px;
-        height: 45px;
-        margin: 6px;
+        width: 25px;
+        height: 25px;
+        margin: 0;
     }
 
     .ballnbr {
-        font-size: 12px;
+        font-size: 16px;
     }
 }
