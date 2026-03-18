@@ -32,11 +32,14 @@ export class PreviousResultsComponent implements OnInit {
   }
 
   // placeholder for search/filter logic
-  onSearch(value: string) {
+  async onSearch(value: string) {
     console.log('search ticket', value);
+    let apiResponse = await this.gamesSrv.checkTicket(value);
+    console.log(apiResponse)
+
   }
 
-  onFilterChange(option: string) {
+  async onFilterChange(option: string) {
     console.log('filter', option);
   }
 

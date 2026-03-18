@@ -270,7 +270,7 @@ app-option-list {
     }
 
     @media (max-width: 768px) {
-        gap: 30px;
+        gap: 15px;
         grid-template-columns: repeat(1, 1fr);
     }
 }
@@ -1096,5 +1096,23 @@ app-odd-item:nth-of-type(3n) {
         padding-bottom: 230px !important;
     }
 
+    section {
+        padding: 20px 15px;
+    }
+
+    .section-header {
+        margin-bottom: 20px;
+        padding: 0;
+
+        h2 {
+            font-size: 24px;
+            line-height: 30px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
 
 }

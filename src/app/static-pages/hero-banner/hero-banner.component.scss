@@ -16,6 +16,10 @@
   min-height: 657px;
   margin-bottom: 40px;
 
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
+
   .hero-content {
     display: flex;
     align-items: center;
@@ -30,6 +34,7 @@
       flex-direction: column;
       height: auto;
       padding: 40px 0;
+      min-height: 300px;
     }
   }
 
@@ -46,6 +51,7 @@
       padding-left: 30px;
       padding-right: 30px;
       gap: 40px;
+      min-height: 0;
     }
   }
 

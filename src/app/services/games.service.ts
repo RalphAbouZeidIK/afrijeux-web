@@ -231,4 +231,10 @@ export class GamesService {
     apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Tickets/GetPicks/${ticketId}`, 'GET', {});
     return apiResponse
   }
+
+  async checkTicket(ticketId: any) {
+    let apiResponse: any
+    apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Tickets/CheckTicket/${ticketId}`, 'GET', {});
+    return apiResponse
+  }
 }
