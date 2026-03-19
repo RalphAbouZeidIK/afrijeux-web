@@ -1,6 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { GamesService } from 'src/app/services/games.service';
 
+interface TicketSearchResult {
+  GameName: string;
+  IsCanceled: boolean;
+  IsGenerated: boolean;
+  IsPaid: boolean;
+  IsWinning: boolean;
+  Payout: number;
+  Stake: number;
+  GameEventDate: string;
+  EventName: string;
+  TotalPicks: number;
+  WonPicks: number;
+  LostPicks: number;
+}
+
 @Component({
   selector: 'app-previous-results',
   standalone: false,
@@ -12,6 +27,10 @@ export class PreviousResultsComponent implements OnInit {
   cardTopPattern = 'assets/images/previous-draw.png';
 
   results: Array<any> = [];
+  searchResult: TicketSearchResult | null = null;
+  showSearchPopup = false;
+  isSearching = false;
+  searchError = '';
 
   constructor(private gamesSrv: GamesService) {
     this.results = [
@@ -33,9 +52,30 @@ export class PreviousResultsComponent implements OnInit {
 
   // placeholder for search/filter logic
   async onSearch(value: string) {
-    console.log('search ticket', value);
-    let apiResponse = await this.gamesSrv.checkTicket(value);
-    console.log(apiResponse)
+    const ticketValue = value?.trim();
+    if (!ticketValue || this.isSearching) {
+      return;
+    }
+
+    this.isSearching = true;
+    this.searchError = '';
+
+    try {
+      const apiResponse = await this.gamesSrv.checkTicket(ticketValue);
+      const parsed = this.normalizeSearchResponse(apiResponse);
+      console.log('checkTicket response', apiResponse, 'parsed', parsed);
+       this.searchResult = apiResponse[0];
+     
+
+      this.showSearchPopup = true;
+    } catch (error) {
+      console.error('checkTicket failed', error);
+      this.searchResult = null;
+      this.searchError = 'Unable to fetch ticket details right now. Please try again.';
+      this.showSearchPopup = true;
+    } finally {
+      this.isSearching = false;
+    }
 
   }
 
@@ -71,5 +111,113 @@ export class PreviousResultsComponent implements OnInit {
         const parsed = Number(item);
         return { number: Number.isNaN(parsed) ? item : parsed };
       });
+  }
+
+  closeSearchPopup(): void {
+    this.showSearchPopup = false;
+  }
+
+  getSearchStatusLabel(result: TicketSearchResult | null): string {
+    if (!result) {
+      return '';
+    }
+
+    if (result.IsCanceled) {
+      return 'Canceled';
+    }
+
+    if (result.IsWinning) {
+      return 'Won';
+    }
+
+    if (result.IsGenerated && !result.IsPaid) {
+      return 'Lost';
+    }
+
+    return 'Pending';
+  }
+
+  getSearchStatusClass(result: TicketSearchResult | null): string {
+    if (!result) {
+      return 'is-pending';
+    }
+
+    if (result.IsCanceled) {
+      return 'is-canceled';
+    }
+
+    if (result.IsWinning) {
+      return 'is-won';
+    }
+
+    if (result.IsGenerated && !result.IsPaid) {
+      return 'is-lost';
+    }
+
+    return 'is-pending';
+  }
+
+  getTicketSummary(result: TicketSearchResult | null): string {
+    if (!result) {
+      return '';
+    }
+
+    const ticketLabel = result.TotalPicks === 1 ? 'Ticket' : 'Tickets';
+    return `${result.TotalPicks} ${ticketLabel} ${result.WonPicks} Won`;
+  }
+
+  getFormattedGameDate(dateValue: string | null | undefined): string {
+    if (!dateValue) {
+      return 'N/A';
+    }
+
+    const parsedDate = new Date(dateValue);
+    if (Number.isNaN(parsedDate.getTime())) {
+      return dateValue;
+    }
+
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    }).format(parsedDate);
+  }
+
+  getFormattedCurrency(value: number | null | undefined): string {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return '0';
+    }
+
+    return new Intl.NumberFormat('en-US').format(Number(value));
+  }
+
+  private normalizeSearchResponse(apiResponse: any): TicketSearchResult | null {
+    const candidate = apiResponse?.Data || apiResponse?.data || apiResponse?.Result || apiResponse?.result || apiResponse;
+
+    if (!candidate || typeof candidate !== 'object') {
+      return null;
+    }
+
+    if (!('GameName' in candidate) || !('GameEventDate' in candidate)) {
+      return null;
+    }
+
+    return {
+      GameName: String(candidate.GameName || ''),
+      IsCanceled: Boolean(candidate.IsCanceled),
+      IsGenerated: Boolean(candidate.IsGenerated),
+      IsPaid: Boolean(candidate.IsPaid),
+      IsWinning: Boolean(candidate.IsWinning),
+      Payout: Number(candidate.Payout || 0),
+      Stake: Number(candidate.Stake || 0),
+      GameEventDate: String(candidate.GameEventDate || ''),
+      EventName: String(candidate.EventName || ''),
+      TotalPicks: Number(candidate.TotalPicks || 0),
+      WonPicks: Number(candidate.WonPicks || 0),
+      LostPicks: Number(candidate.LostPicks || 0)
+    };
   }
 }

@@ -8,7 +8,7 @@
   <div class="search-bar">
     <div class="search-input" >
       <img [src]="imgGroup" alt="search" class="search-icon" (click)="onSearch(searchInput.value)" />
-      <input #searchInput type="text" placeholder="Check your ticket" />
+      <input #searchInput type="text" placeholder="Check your ticket" (keyup.enter)="onSearch(searchInput.value)" />
     </div>
 
   </div>
@@ -35,5 +35,38 @@
 
   <div class="search-button-container">
     <button class="btn btn-primary">Search Previous Results</button>
+  </div>
+
+  <div class="search-ticket-backdrop" *ngIf="showSearchPopup" (click)="closeSearchPopup()">
+    <div class="search-ticket-popup" role="dialog" aria-modal="true" aria-label="Ticket Search Result" (click)="$event.stopPropagation()">
+      <button type="button" class="search-ticket-close" aria-label="Close" (click)="closeSearchPopup()">x</button>
+
+      <ng-container *ngIf="searchResult; else searchErrorBlock">
+        <article class="ticket-result-card" [ngClass]="getSearchStatusClass(searchResult)">
+          <div class="ticket-result-header">
+            <h3 class="ticket-result-title">{{ searchResult.GameName }}: {{ searchResult.EventName }}</h3>
+            <span class="ticket-result-pill">{{ getSearchStatusLabel(searchResult) }}</span>
+          </div>
+
+          <p class="ticket-result-subtitle">{{ getTicketSummary(searchResult) }}</p>
+          <p class="ticket-result-date">Draw Date: {{ getFormattedGameDate(searchResult.GameEventDate) }}</p>
+
+          <!-- <div class="ticket-result-meta">
+            <span>Stake: {{ searchResult.Stake }}</span>
+            <span>Payout: {{ getFormattedCurrency(searchResult.Payout) }}</span>
+          </div> -->
+        </article>
+      </ng-container>
+
+      <ng-template #searchErrorBlock>
+        <article class="ticket-result-card is-error">
+          <div class="ticket-result-header">
+            <h3 class="ticket-result-title">Ticket Lookup</h3>
+            <span class="ticket-result-pill">Info</span>
+          </div>
+          <p class="ticket-result-subtitle">{{ searchError || 'No details found for this ticket.' }}</p>
+        </article>
+      </ng-template>
+    </div>
   </div>
 </section>
