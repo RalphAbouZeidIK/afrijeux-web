@@ -12,25 +12,19 @@ import { TicketsComponent } from "../shared/tickets/tickets.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: UserRouteConfig.deposit.path,
+    redirectTo: UserRouteConfig.profile.path,
     pathMatch: 'full'
   },
   {
     path: '',
     component: UserCoreComponent,
-    title: UserRouteConfig.deposit.title,
+    title: UserRouteConfig.profile.title,
     children: [
       {
-        path: UserRouteConfig.deposit.path,
+        path: UserRouteConfig.profile.path,
         component: DepositComponent,
 
-        data: { showLink: true, title: UserRouteConfig.deposit.title, }
-      },
-      {
-        path: UserRouteConfig.withdraw.path,
-        component: WithdrawComponent,
-
-        data: { showLink: UserRouteConfig.withdraw.showLink, title: UserRouteConfig.withdraw.title }
+        data: { showLink: true, title: UserRouteConfig.profile.title, }
       },
       {
         path: UserRouteConfig.tickets.path,

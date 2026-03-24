@@ -32,8 +32,24 @@
         </div>
       </div> -->
 
-      <button class="btn btn-primary" *ngIf="isLoggedIn" (click)="logout()">{{ 'generic.logout' | translate
-        }}</button>
+      <div class="user-menu-holder" *ngIf="isLoggedIn">
+        <button type="button" class="user-icon-toggle" aria-label="User menu" (click)="toggleUserMenu()">
+          <i class="fa fa-user" aria-hidden="true"></i>
+        </button>
+
+        <div class="option-list-holder user-menu-dropdown" [class.is-open]="showUserMenu" *ngIf="personNavList.length > 0">
+          <div class="option-list">
+            <a
+              *ngFor="let item of personNavList"
+              class="option-list__item"
+              [routerLink]="item.key !== 'logout' ? ['/' + item.path] : null"
+              (click)="item.key === 'logout' ? logout() : hideMenus()"
+            >
+              {{ item.title }}
+            </a>
+          </div>
+        </div>
+      </div>
 
       <div class="header-btns d-flex" *ngIf="!isLoggedIn">
         <button class="btn btn-secondary" (click)="togglePopupFn('signup')">{{ 'generic.register' | translate}}</button>

@@ -35,6 +35,8 @@ export class HeaderComponent implements OnInit {
 
   personNavList: any = [];
 
+  showUserMenu = false;
+
   balanceSubsription: Subscription;
 
   langChangeSub: Subscription | undefined;
@@ -166,11 +168,17 @@ export class HeaderComponent implements OnInit {
   hideMenus() {
     document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
     document.querySelector('.dropdown-header')?.classList.remove("active");
+    this.showUserMenu = false;
+  }
+
+  toggleUserMenu() {
+    this.showUserMenu = !this.showUserMenu;
   }
 
   composeRoutes() {
     const itemsToTranslate = Object.entries(UserRouteConfig)
-      .map(([key, value]) => ({ key, ...value }));
+      .map(([key, value]: [string, any]) => ({ key, ...value }))
+      .filter((item: any) => item.showLink);
 
     const translationKeys = itemsToTranslate.map((item: any) => item.title);
 
@@ -181,7 +189,7 @@ export class HeaderComponent implements OnInit {
         title: translations[item.title] || item.title
       }));
     });
-    ////console.log(this.personNavList)
+    console.log(this.personNavList)
   }
 
   changeLanguage(language: { code: string, name: string }) {

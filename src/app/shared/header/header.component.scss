@@ -56,6 +56,81 @@ header {
     gap: 15px;
 }
 
+.user-menu-holder {
+    position: relative;
+}
+
+.user-icon-toggle {
+    align-items: center;
+    background-color: $darkBg;
+    border: 0;
+    border-radius: 50%;
+    color: $white;
+    cursor: pointer;
+    display: flex;
+    font-size: 18px;
+    height: 41px;
+    justify-content: center;
+    transition: color 0.2s ease;
+    width: 41px;
+
+    &:hover,
+    &:focus-visible {
+        color: $lightGreen;
+        outline: none;
+    }
+}
+
+.user-menu-dropdown {
+    opacity: 0;
+    padding-left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 18px);
+    transition: opacity 0.2s ease;
+    width: 220px;
+
+    &.is-open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .option-list {
+        background: $lightBg;
+        border-radius: 25px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .option-list__item {
+        align-items: center;
+        background: transparent;
+        border: 0;
+        color: $white;
+        cursor: pointer;
+        display: flex;
+        font-family: $font-regular;
+        font-size: 16px;
+        font-weight: 500;
+        height: 48px;
+        justify-content: flex-start;
+        letter-spacing: -0.3125px;
+        line-height: 24px;
+        padding: 0 16px;
+        text-decoration: none;
+        width: 100%;
+
+        &:hover {
+            background: $lightGreen;
+            color: $darkBg;
+        }
+    }
+}
+
 .dropdown-header {
     padding-left: 15px;
     position: relative;
@@ -183,6 +258,11 @@ header {
     .user-icon img {
         display: block;
         height: 30px
+    }
+
+    .user-menu-dropdown {
+        right: 0;
+        width: 200px;
     }
 
     .logo {
