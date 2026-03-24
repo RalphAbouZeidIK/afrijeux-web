@@ -11,14 +11,14 @@ export const UserRouteConfig = {
     title: 'routerLinks.UserTitles.withdraw',
     showLink: true,
   },
-  myBets: {
-    path: 'my-bets',
-    title: 'routerLinks.UserTitles.myBets',
+  tickets: {
+    path: 'tickets',
+    title: 'routerLinks.UserTitles.tickets',
     showLink: true,
   },
   logout: {
     path: 'logout',
     title: 'routerLinks.UserTitles.logout',
-    showLink: false,
+    showLink: true,
   },
 };

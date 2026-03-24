@@ -6,6 +6,7 @@ import { DepositComponent } from "./deposit/deposit.component";
 import { MesPariesPopupComponent } from "./mes-paries-popup/mes-paries-popup.component";
 import { WithdrawComponent } from "./withdraw/withdraw.component";
 import { UserRouteConfig } from "../services/routing.service";
+import { TicketsComponent } from "../shared/tickets/tickets.component";
 
 
 const routes: Routes = [
@@ -32,10 +33,10 @@ const routes: Routes = [
         data: { showLink: UserRouteConfig.withdraw.showLink, title: UserRouteConfig.withdraw.title }
       },
       {
-        path: UserRouteConfig.myBets.path,
-        component: MesPariesPopupComponent,
+        path: UserRouteConfig.tickets.path,
+        component: TicketsComponent,
 
-        data: { showLink: UserRouteConfig.myBets.showLink, title: UserRouteConfig.myBets.title, }
+        data: { showLink: UserRouteConfig.tickets.showLink, title: UserRouteConfig.tickets.title, }
       },
 
       {

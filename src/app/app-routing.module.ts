@@ -102,7 +102,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'My Tickets',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Tickets',
     },
   },

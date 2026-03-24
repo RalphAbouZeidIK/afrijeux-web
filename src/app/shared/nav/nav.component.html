@@ -4,7 +4,7 @@
             <a class="nav-link" [routerLink]="[navItem.path]" routerLinkActive="active">
                 {{ navItem.title }}
             </a>
-            <ul class="nav justify-content-center sub-nav-holder"
+            <!-- <ul class="nav justify-content-center sub-nav-holder"
                 *ngIf="navItem.children?.length">
                 <li *ngFor="let child of navItem.children" class="nav-item">
                     <a class="nav-link" [routerLink]="[child.path]" routerLinkActive="active"
@@ -12,7 +12,7 @@
                         {{ child.title }}
                     </a>
                 </li>
-            </ul>
+            </ul> -->
         </li>
     </ul>
 </div>
