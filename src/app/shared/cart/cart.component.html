@@ -1,12 +1,18 @@
 <div class="overlay" (click)="hideMenus()" [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
 
+<button class="mobile-cart-toggle" *ngIf="listOfBets && listOfBets.length > 0 && !showOnClickMobile"
+    (click)="openCartOnMobile()" type="button">
+    <span>Bet Slip</span>
+    <span class="mobile-cart-count">{{totalBets || listOfBets.length}}</span>
+</button>
+
 <div class="cart-container"
     [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
     <div class="cart-header" (click)="OnclickIsMobile()">
         <span class="mobileOnly rect-bar"></span>
         <p class="cart-title">Bet Slip </p>
         <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
-        <a class="clear-btn" *ngIf="showCartButtons" (click)="clearBets()">Clear all</a>
+        <a class="clear-btn" *ngIf="showCartButtons" (click)="$event.stopPropagation(); clearBets()">Clear all</a>
     </div>
 
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && isSportsBetting">

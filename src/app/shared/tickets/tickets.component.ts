@@ -87,7 +87,7 @@ export class TicketsComponent implements OnInit {
   getTicketLabel(ticket: any): string {
     const eventName = ticket?.Name
     const FullTicketId = ticket?.FullTicketId;
-    let fullTicketLabel = `Ticket ID: ${FullTicketId}`;
+    let fullTicketLabel = `Event: ${eventName} <br> Ticket ID: ${FullTicketId}`;
     return fullTicketLabel;
   }
 

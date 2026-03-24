@@ -25,7 +25,7 @@
     }
 
     .clear-btn {
-        color: #639247;
+        color: $lightGreen;
         font-size: 12px;
         font-weight: 300;
         text-decoration-line: underline;
@@ -107,7 +107,8 @@
         background-color: $darkBg;
         border-radius: 25px;
         margin-bottom: 15px;
-        &:last-of-type{
+
+        &:last-of-type {
             margin-bottom: 0;
         }
     }
@@ -214,6 +215,14 @@
     /* max-height handled by flex container */
 }
 
+.mobile-cart-toggle {
+    display: none;
+}
+
+.mobile-close-btn {
+    display: none;
+}
+
 @media all and (max-width:1400px) {
 
     .cart-container .cart-header,
@@ -231,22 +240,43 @@
 }
 
 @media all and (max-width:1200px) {
+    .mobile-cart-toggle {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 12px;
+        z-index: 3;
+        height: 48px;
+        border: 0;
+        background: $lightGreen;
+        color: $darkBg;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: $font-bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+    }
+
+    .mobile-cart-count {
+        min-width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background: $darkBg;
+        color: $white;
+        font-size: 12px;
+        line-height: 20px;
+        padding: 0 6px;
+    }
+
     .cart-body-holder {
-        flex: none;
-        /* override flex on small screens */
-        max-height: 0;
-        -webkit-transition: all 0.5s ease-in-out;
-        -moz-transition: all 0.5s ease-in-out;
-        -ms-transition: all 0.5s ease-in-out;
-        -o-transition: all 0.5s ease-in-out;
-        transition: all 0.5s ease-in-out;
+        flex: 1 1 auto;
+        min-height: 0;
     }
 
     .show-cart {
-        .cart-body-holder {
-            max-height: 100vh;
-        }
-
         .clear-btn {
             width: 50px;
 
@@ -269,6 +299,22 @@
         white-space: nowrap;
     }
 
+    .mobile-close-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        height: 28px;
+        border: 0;
+        border-radius: 14px;
+        background: $darkBg;
+        color: $white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 0 10px;
+        margin-left: 8px;
+    }
+
     .showOnClickMobile {
         display: none;
     }
@@ -280,7 +326,7 @@
 
         .cart-header {
             cursor: pointer;
-            padding: 8px 15px;
+            padding: 0;
             border-color: $offWhite;
 
             .rect-bar {
@@ -372,12 +418,12 @@
 
         .bet-item {
             padding: 8px 15px;
+            margin-bottom: 5px;
         }
 
         .title-odd {
             font-size: 12px;
             margin-bottom: 5px;
-            align-items: center;
         }
 
         .outcomeName {
@@ -394,11 +440,6 @@
         }
     }
 
-    .cart-title {
-        color: $darkBg;
-        font-size: 14px;
-        font-weight: 700;
-    }
 
     .overlay {
         content: '';
@@ -406,41 +447,89 @@
         width: 100%;
         top: 0;
         left: 0;
+        right: 0;
+        bottom: 0;
         position: fixed;
-        display: none;
         background-color: rgba(0, 0, 0, 0.7);
-        z-index: 2;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        -webkit-transition: opacity 0.35s ease, visibility 0.35s ease;
+        -moz-transition: opacity 0.35s ease, visibility 0.35s ease;
+        -ms-transition: opacity 0.35s ease, visibility 0.35s ease;
+        -o-transition: opacity 0.35s ease, visibility 0.35s ease;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
     }
 
     .overlay.show-cart {
-        display: block;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
 
     .cart-container {
         margin-bottom: 0;
         position: fixed;
-        z-index: 3;
+        z-index: 1001;
         left: 12px;
         width: calc(100% - 24px);
-        -webkit-transition: all 0.5s ease-in-out;
-        -moz-transition: all 0.5s ease-in-out;
-        -ms-transition: all 0.5s ease-in-out;
-        -o-transition: all 0.5s ease-in-out;
-        transition: all 0.5s ease-in-out;
+        max-height: calc(100vh - 70px);
+        bottom: 0;
+        transform: translateY(calc(100% + 18px));
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        -webkit-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        -moz-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        -ms-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        -o-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        padding: 20px 15px;
 
-        * {
-            color: $darkBg
+        .bet-item,
+        .bet-item span,
+        .ticket-infos,
+        .ticket-infos span,
+        .price-submit .info-item,
+        .price-submit .info-item span {
+            color: $white;
+        }
+
+        .bet-item .odd {
+            color: $lightGreen;
+        }
+
+        .bet-item .greyText {
+            color: #9F9F9F;
         }
 
         &.has-bets {
-            bottom: 0;
+            z-index: 1001;
+        }
 
+        &.has-bets.show-cart {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
     }
 
     .cart-container input {
         border-color: $darkBg;
-        color: $darkBg
+        color: $darkBg;
     }
 
+    .loto-cart .list-of-bets {
+        padding-top: 6px;
+    }
+
+    .cart-container.loto-cart .title-odd span {
+        margin-bottom: 0;
+        line-height: 16px;
+    }
+    .cart-container.loto-cart .bet-item{
+        align-items: center;
+    }
 }

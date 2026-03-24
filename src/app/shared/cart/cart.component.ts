@@ -148,6 +148,9 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   cartInitialize(cartData: any) {
     this.listOfBets = cartData
     this.showCartButtons = this.listOfBets?.length > 0;
+    if (!this.showCartButtons) {
+      this.showOnClickMobile = false
+    }
 
     if (this.isSportsBetting) {
       this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
@@ -231,6 +234,12 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   OnclickIsMobile() {
     if (!this.isDesktop) {
       this.showOnClickMobile = !this.showOnClickMobile
+    }
+  }
+
+  openCartOnMobile() {
+    if (!this.isDesktop && this.listOfBets?.length > 0) {
+      this.showOnClickMobile = true
     }
   }
 
