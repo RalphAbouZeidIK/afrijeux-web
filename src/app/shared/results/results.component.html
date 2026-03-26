@@ -17,6 +17,25 @@
           {{ filter }}
         </button>
       </div>
+
+      <div class="results-view__dropdown option-list-holder" *ngIf="eventOptions.length > 0">
+        <button
+          type="button"
+          class="results-view__dropdown-trigger"
+          (click)="toggleEventOptions()"
+          [attr.aria-expanded]="showEventOptions"
+          aria-label="Select jackpot event"
+        >
+          <span class="selected-option">{{ selectedEventOption.TicketTypeName }}</span>
+        </button>
+
+        <app-option-list
+          *ngIf="showEventOptions"
+          [options]="eventOptions"
+          [selectedValue]="selectedEventOption.TicketTypeId"
+          (optionChange)="onEventChange($event)"
+        ></app-option-list>
+      </div>
     </div>
 
     <div class="results-view__card" *ngIf="selectedDraw as draw">

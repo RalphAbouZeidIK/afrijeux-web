@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { GamesService } from 'src/app/services/games.service';
+import { OptionListItem } from 'src/app/shared/option-list/option-list.component';
 
 interface ResultTableRow {
     distribution: string;
@@ -28,17 +29,38 @@ export class ResultsComponent implements OnInit {
     activeFilter = 'Jackpot';
     searchTerm = '';
     draws: ResultDraw[] = [];
-    jackpotGameId = 38
+    jackpotGameId = 38;
+    eventOptions: OptionListItem[] = [];
+    selectedEventOption: OptionListItem = {
+        TicketTypeId: 'all',
+        TicketTypeName: 'All Jackpot Events'
+    };
+    showEventOptions = false;
 
 
-    constructor(private gamesSrv: GamesService) { }
+    constructor(
+        private gamesSrv: GamesService,
+        private elementRef: ElementRef<HTMLElement>
+    ) { }
 
     async ngOnInit(): Promise<void> {
-        await this.getResults();
-        await this.getEventResultIds(this.jackpotGameId);
+        await Promise.all([
+            this.getResults(),
+            this.getEventResultIds(this.jackpotGameId)
+        ]);
     }
 
-    async getResults(eventId?: string): Promise<void> {
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent): void {
+        const dropdownHost = this.elementRef.nativeElement.querySelector('.results-view__dropdown');
+        const target = event.target as Node | null;
+
+        if (this.showEventOptions && dropdownHost && target && !dropdownHost.contains(target)) {
+            this.showEventOptions = false;
+        }
+    }
+
+    async getResults(eventId?: string | number): Promise<void> {
         try {
             const response = await this.gamesSrv.getDrawResults(this.jackpotGameId, eventId);
             this.draws = this.normalizeDraws(response);
@@ -47,14 +69,31 @@ export class ResultsComponent implements OnInit {
         }
     }
 
-    async getEventResultIds(gameId: number): Promise<string[]> {
+    async getEventResultIds(gameId: number): Promise<void> {
         try {
             const response = await this.gamesSrv.getEventResultIds(gameId);
-            return response;
+            const normalizedOptions = this.normalizeEventOptions(response);
+            this.eventOptions = [
+                {
+                    TicketTypeId: 'all',
+                    TicketTypeName: 'All Jackpot Events'
+                },
+                ...normalizedOptions
+            ];
         } catch (error) {
             console.error('Error fetching event result IDs:', error);
-            return [];
+            this.eventOptions = [this.selectedEventOption];
         }
+    }
+
+    toggleEventOptions(): void {
+        this.showEventOptions = !this.showEventOptions;
+    }
+
+    async onEventChange(option: OptionListItem): Promise<void> {
+        this.selectedEventOption = option;
+        this.showEventOptions = false;
+        await this.getResults(option.TicketTypeId === 'all' ? '' : option.TicketTypeId);
     }
 
 
@@ -99,6 +138,43 @@ export class ResultsComponent implements OnInit {
             gameType,
             balls: this.extractBalls(item),
             rows: this.extractRows(item)
+        };
+    }
+
+    private normalizeEventOptions(response: any): OptionListItem[] {
+        const source = this.extractArray(response);
+
+        return source
+            .map((item: any, index: number) => this.normalizeEventOption(item, index))
+            .filter((item: OptionListItem | null): item is OptionListItem => item !== null);
+    }
+
+    private normalizeEventOption(item: any, index: number): OptionListItem | null {
+        if (item === null || item === undefined || item === '') {
+            return null;
+        }
+
+        if (typeof item === 'string' || typeof item === 'number') {
+            return {
+                TicketTypeId: item,
+                TicketTypeName: `Draw ${item}`
+            };
+        }
+
+        const eventId = item?.DrawNumber ?? item?.GameEventId ?? item?.EventId ?? item?.Id ?? item?.Value ?? item?.id ?? item?.value;
+
+        if (eventId === null || eventId === undefined || eventId === '') {
+            return null;
+        }
+
+        const drawNumber = item?.DrawNumber ?? eventId ?? index + 1;
+        const fallbackName = `Draw ${drawNumber}`;
+        const eventName = item?.EventName ?? item?.Name ?? item?.Label ?? item?.Description ?? fallbackName;
+        const eventDate = this.formatEventOptionDate(item?.DrawDate ?? item?.EventDate ?? item?.GameEventDate);
+
+        return {
+            TicketTypeId: eventId,
+            TicketTypeName: eventDate ? `${eventName} - ${eventDate}` : String(eventName)
         };
     }
 
@@ -229,6 +305,24 @@ export class ResultsComponent implements OnInit {
             return String(value ?? 0);
         }
         return new Intl.NumberFormat('en-US').format(parsed);
+    }
+
+    private formatEventOptionDate(value: any): string {
+        if (!value) {
+            return '';
+        }
+
+        const parsedDate = new Date(value);
+
+        if (Number.isNaN(parsedDate.getTime())) {
+            return '';
+        }
+
+        return new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        }).format(parsedDate);
     }
 
 
