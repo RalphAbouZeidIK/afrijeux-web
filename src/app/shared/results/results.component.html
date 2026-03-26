@@ -1,0 +1,57 @@
+<section class="results-view">
+  <div class="container-fluid">
+    <div class="section-header results-shared-header">
+      <h2>Results</h2>
+      <p>Track your lottery tickets and winnings</p>
+    </div>
+
+    <div class="results-view__controls results-shared-controls">
+      <div class="results-shared-filter-pills">
+        <button
+          *ngFor="let filter of filters"
+          type="button"
+          class="btn btn-primary results-shared-pill"
+          [class.active]="activeFilter === filter"
+          (click)="setFilter(filter)"
+        >
+          {{ filter }}
+        </button>
+      </div>
+    </div>
+
+    <div class="results-view__card" *ngIf="selectedDraw as draw">
+      <div class="results-view__header">
+        <h3>{{ draw.eventName }}</h3>
+
+        <app-ball-list
+          cssClass="resultBalls resultsPage"
+          [chosenBallsArray]="draw.balls"
+          [shouldHighlight]="false"
+          [shouldEmit]="false"
+        ></app-ball-list>
+      </div>
+
+      <div class="results-table">
+        <div class="results-table__head">
+          <span>Distribution</span>
+          <span>Winners</span>
+          <span>Single Prize</span>
+          <span>Total Prizes</span>
+        </div>
+
+        <div class="results-table__body">
+          <div class="results-table__row" *ngFor="let row of draw.rows; trackBy: trackByRow">
+            <span>{{ row.distribution }}</span>
+            <span>{{ row.winners }}</span>
+            <span>{{ row.singlePrize }}</span>
+            <span>{{ row.totalPrizes }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-view__empty" *ngIf="!selectedDraw">
+      No results found.
+    </div>
+  </div>
+</section>

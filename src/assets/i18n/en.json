@@ -15,7 +15,8 @@
             "Pickx": "PickX",
             "Jackpot": "Jackpot",
             "mainTitle": "Wingbig",
-            "Tickets": "My Tickets"
+            "Tickets": "My Tickets",
+            "Results": "Results"
         },
         "HPBTitles": {
             "mesParies": "My Bets",
@@ -38,7 +39,8 @@
             "myBets": "My Bets",
             "deposit": "Deposit Funds",
             "withdraw": "Withdraw",
-            "logout": "Logout"
+            "logout": "Logout",
+            "tickets": "My Tickets"
         }
     },
     "alerts": {

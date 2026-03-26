@@ -6,6 +6,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { UofComponent } from './sports/uof/uof.component';
 import { TicketsComponent } from './shared/tickets/tickets.component';
+import { ResultsComponent } from './shared/results/results.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -97,13 +98,13 @@ const routes: Routes = [
     },
   },
   {
-    path: 'Tickets',
-    component: TicketsComponent,
+    path: 'Results',
+    component: ResultsComponent,
     data: {
-      breadcrumb: 'My Tickets',
-      shouldBeLoggedIn: true,
-      showLink: false,
-      title: 'routerLinks.appTitle.Tickets',
+      breadcrumb: 'Results',
+      shouldBeLoggedIn: false,
+      showLink: true,
+      title: 'routerLinks.appTitle.Results',
     },
   },
   // Machine-prefixed versions

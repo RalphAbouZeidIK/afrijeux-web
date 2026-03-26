@@ -1,19 +1,19 @@
 <section class="ticket-history">
 	<div class="container-fluid">
-		<div class="section-header">
+		<div class="section-header results-shared-header">
 			<h2>Ticket History</h2>
 			<p>Track your lottery tickets and winnings</p>
 		</div>
 
-		<div class="ticket-history__controls">
-			<div class="filter-pills">
-				<button type="button" class="btn btn-primary pill" [class.active]="activeFilter === 'all'"
+		<div class="ticket-history__controls results-shared-controls">
+			<div class="filter-pills results-shared-filter-pills">
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'all'"
 					(click)="setFilter('all')">All</button>
-				<button type="button" class="btn btn-primary pill" [class.active]="activeFilter === 'won'"
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'won'"
 					(click)="setFilter('won')">Won</button>
-				<button type="button" class="btn btn-primary pill" [class.active]="activeFilter === 'lost'"
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'lost'"
 					(click)="setFilter('lost')">Lost</button>
-				<button type="button" class="btn btn-primary pill" [class.active]="activeFilter === 'pending'"
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'pending'"
 					(click)="setFilter('pending')">Pending</button>
 			</div>
 

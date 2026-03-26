@@ -1,0 +1,119 @@
+@use '/src/variables' as *;
+
+.results-view {
+  color: $white;
+  padding: 0;
+  padding-bottom: 70px;
+}
+
+.results-view__search {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 22px;
+  display: flex;
+  min-width: 270px;
+  padding: 0.55rem 0.9rem;
+
+  i {
+    color: #b7b7b7;
+    margin-right: 0.55rem;
+  }
+
+  input {
+    background: transparent;
+    border: 0;
+    color: $white;
+    outline: none;
+    width: 100%;
+
+    &::placeholder {
+      color: #95a58f;
+    }
+  }
+}
+
+.results-view__card {
+  background: linear-gradient(180deg, rgba(23, 48, 15, 0.92) 0%, rgba(19, 37, 13, 0.95) 100%);
+  border: 1px solid rgba(164, 246, 117, 0.2);
+  border-radius: 34px;
+  margin-top: 1.2rem;
+  padding: 24px 26px;
+}
+
+.results-view__header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  h3 {
+    color: $white;
+    font-size: 18px;
+    margin: 0;
+  }
+}
+
+.results-table {
+  margin-top: 25px;
+}
+
+.results-table__head {
+  color: #9ead99;
+  display: grid;
+  font-size: 12px;
+  gap: 12px;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  padding: 0 30px;
+}
+
+.results-table__body {
+  margin-top: 10px;
+}
+
+.results-table__row {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid rgba(164, 246, 117, 0.18);
+  border-radius: 999px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  margin-bottom: 10px;
+  min-height: 44px;
+  padding: 10px 30px;
+
+
+  span {
+    color: $white;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.results-view__empty {
+  color: #9fb298;
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .results-view__search {
+    min-width: 100%;
+  }
+
+  .results-view__header {
+    h3 {
+      font-size: 20px;
+    }
+  }
+
+  .results-table__head,
+  .results-table__row {
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    padding: 0 12px;
+  }
+
+  .results-table__row span {
+    font-size: 14px;
+  }
+}

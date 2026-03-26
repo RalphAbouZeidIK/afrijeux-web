@@ -17,7 +17,7 @@ import { MachineService } from './services/machine.service';
   standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
-  title = 'PMU';
+  title = 'WinBig';
   isFullwidth = false
   /**
    * Subscribe to login status

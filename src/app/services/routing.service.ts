@@ -3,7 +3,7 @@
 export const UserRouteConfig = {
   profile: {
     path: 'profile',
-    title: 'routerLinks.UserTitles.profile',
+    title: 'routerLinks.UserTitles.myProfile',
     showLink: true,
   },
   tickets: {
