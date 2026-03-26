@@ -24,31 +24,39 @@ interface ResultDraw {
 })
 
 export class ResultsComponent implements OnInit {
-    filters = ['Pick 2', 'Pick 3', 'Pick 4', 'Jackpot'];
+    filters = ['Pick 2', 'Pick 3', 'Pick 4', 'Pick 5', 'Jackpot'];
     activeFilter = 'Jackpot';
     searchTerm = '';
     draws: ResultDraw[] = [];
-    jackpotId = 38
+    jackpotGameId = 38
+
 
     constructor(private gamesSrv: GamesService) { }
 
     async ngOnInit(): Promise<void> {
         await this.getResults();
+        await this.getEventResultIds(this.jackpotGameId);
     }
 
-    async getResults(): Promise<void> {
+    async getResults(eventId?: string): Promise<void> {
         try {
-            const response = await this.gamesSrv.getDrawResults(this.jackpotId);
+            const response = await this.gamesSrv.getDrawResults(this.jackpotGameId, eventId);
             this.draws = this.normalizeDraws(response);
         } catch (error) {
             console.error('Error fetching results:', error);
-            this.draws = this.getFallbackDraws();
-        }
-
-        if (this.draws.length === 0) {
-            this.draws = this.getFallbackDraws();
         }
     }
+
+    async getEventResultIds(gameId: number): Promise<string[]> {
+        try {
+            const response = await this.gamesSrv.getEventResultIds(gameId);
+            return response;
+        } catch (error) {
+            console.error('Error fetching event result IDs:', error);
+            return [];
+        }
+    }
+
 
     setFilter(filter: string): void {
         this.activeFilter = filter;
@@ -166,7 +174,7 @@ export class ResultsComponent implements OnInit {
 
         if (!Array.isArray(rowSources) || rowSources.length === 0) {
             const mappedApiRows = this.mapJackpotRows(item);
-            return mappedApiRows.length > 0 ? mappedApiRows : this.getFallbackRows();
+            return mappedApiRows;
         }
 
         return rowSources.map((row: any, index: number) => ({
@@ -223,22 +231,5 @@ export class ResultsComponent implements OnInit {
         return new Intl.NumberFormat('en-US').format(parsed);
     }
 
-    private getFallbackRows(): ResultTableRow[] {
-        return [
-            { distribution: '6 Good Numbers', winners: '0', singlePrize: '0', totalPrizes: '0' },
-            { distribution: '5 Good Numbers', winners: '3', singlePrize: '7,000', totalPrizes: '21,000' },
-            { distribution: '4 Good Numbers', winners: '16', singlePrize: '350', totalPrizes: '5,600' },
-            { distribution: '3 Good Numbers', winners: '27', singlePrize: '35', totalPrizes: '945' }
-        ];
-    }
 
-    private getFallbackDraws(): ResultDraw[] {
-        return [{
-            id: '2024-001',
-            eventName: 'Results Of Draw-2024-001',
-            gameType: 'Jackpot',
-            balls: [7, 2, 5, 24, 11, 4].map((number) => ({ number })),
-            rows: this.getFallbackRows()
-        }];
-    }
 }

@@ -243,4 +243,11 @@ export class GamesService {
     apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Results/GetResults?GameId=${gameId}&GameEventId=${eventId}`, 'GET', {});
     return apiResponse
   }
+
+  async getEventResultIds(gameId: any) {
+    let apiResponse: any
+    apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Results/GetEventResultIds?GameId=${gameId}`, 'GET', {});
+    return apiResponse
+  }
+
 }
