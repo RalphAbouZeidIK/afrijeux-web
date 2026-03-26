@@ -147,7 +147,8 @@ export class ResultsComponent implements OnInit {
     private normalizeDraw(item: any, index: number): ResultDraw {
         const id = String(item?.DrawNumber ?? item?.ResultId ?? item?.DrawId ?? item?.EventId ?? index + 1);
         const drawDate = item?.DrawDate ? ` (${new Date(item.DrawDate).toLocaleDateString('en-US')})` : '';
-        const eventName = String(item?.EventName ?? item?.Name ?? `Results Of Draw-${id}${drawDate}`);
+        const nameFromApi = item?.EventName ?? item?.Name ?? `${id}${drawDate}`;
+        const eventName = String(`Results Of Draw - ${nameFromApi} `);
         const gameType = String(item?.GameName ?? item?.VersionType ?? item?.Category ?? item?.Type ?? 'Jackpot');
 
         return {

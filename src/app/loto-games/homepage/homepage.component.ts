@@ -84,7 +84,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
     // Backward compatibility for old URLs that still use gametype.
     const gameType = Number(this.route.snapshot.queryParamMap.get('gametype'));
-    return this.getPickContentKeyFromConfigurationVersion(gameType);
+    if (!Number.isNaN(gameType) && gameType > 0) {
+      return this.getPickContentKeyFromConfigurationVersion(gameType);
+    }
+
+    // No URL params: infer the default pick type from available PickX events.
+    const defaultVersionId = await this.getDefaultPickXConfigurationVersion();
+    return this.getPickContentKeyFromConfigurationVersion(defaultVersionId);
   }
 
   private getPickContentKeyFromConfigurationVersion(gameType: number): LotoGameContentKey {
@@ -119,6 +125,28 @@ export class HomepageComponent implements OnInit, OnDestroy {
       );
 
       return Number(matchedEvent?.ConfigurationVersionId);
+    } catch (error) {
+      console.warn(error);
+      return NaN;
+    }
+  }
+
+  private async getDefaultPickXConfigurationVersion(): Promise<number> {
+    try {
+      if (!this.allLotoEvents) {
+        this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
+      }
+
+      const pickXEvents = Array.isArray(this.allLotoEvents?.pickXGames)
+        ? this.allLotoEvents.pickXGames.filter((eventItem: any) => !eventItem?.IsSalesStopped)
+        : [];
+
+      if (pickXEvents.length === 0) {
+        return NaN;
+      }
+
+      // Keep the same default event strategy as the game block (first available event).
+      return Number(pickXEvents[0]?.ConfigurationVersionId);
     } catch (error) {
       console.warn(error);
       return NaN;
