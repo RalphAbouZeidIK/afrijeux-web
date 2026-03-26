@@ -71,6 +71,8 @@
   top: calc(100% + 8px);
   width: 280px;
   z-index: 10;
+  max-height: 200px;
+  overflow: auto;
 }
 
 .results-view__header {

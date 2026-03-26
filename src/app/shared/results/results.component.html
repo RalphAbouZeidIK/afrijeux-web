@@ -50,7 +50,7 @@
         ></app-ball-list>
       </div>
 
-      <div class="results-table">
+      <div class="results-table" *ngIf="activeFilter === 'Jackpot'">
         <div class="results-table__head">
           <span>Distribution</span>
           <span>Winners</span>

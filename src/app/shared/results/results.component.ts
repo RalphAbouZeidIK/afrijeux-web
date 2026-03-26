@@ -17,6 +17,11 @@ interface ResultDraw {
     rows: ResultTableRow[];
 }
 
+interface ResultEventOption extends OptionListItem {
+    eventDate?: string;
+    versionId?: number;
+}
+
 @Component({
     selector: 'app-results',
     standalone: false,
@@ -30,10 +35,12 @@ export class ResultsComponent implements OnInit {
     searchTerm = '';
     draws: ResultDraw[] = [];
     jackpotGameId = 38;
-    eventOptions: OptionListItem[] = [];
-    selectedEventOption: OptionListItem = {
-        TicketTypeId: 'all',
-        TicketTypeName: 'All Jackpot Events'
+    pickXGameId = 35;
+    currentGameId = this.jackpotGameId;
+    eventOptions: ResultEventOption[] = [];
+    selectedEventOption: ResultEventOption = {
+        TicketTypeId: '',
+        TicketTypeName: 'No events found'
     };
     showEventOptions = false;
 
@@ -44,10 +51,7 @@ export class ResultsComponent implements OnInit {
     ) { }
 
     async ngOnInit(): Promise<void> {
-        await Promise.all([
-            this.getResults(),
-            this.getEventResultIds(this.jackpotGameId)
-        ]);
+        await this.loadResultsForFilter(this.activeFilter);
     }
 
     @HostListener('document:click', ['$event'])
@@ -60,29 +64,38 @@ export class ResultsComponent implements OnInit {
         }
     }
 
-    async getResults(eventId?: string | number): Promise<void> {
+    async getResults(eventId?: string | number, gameId: number = this.currentGameId): Promise<void> {
         try {
-            const response = await this.gamesSrv.getDrawResults(this.jackpotGameId, eventId);
+            const response = await this.gamesSrv.getDrawResults(gameId, eventId);
             this.draws = this.normalizeDraws(response);
         } catch (error) {
             console.error('Error fetching results:', error);
         }
     }
 
-    async getEventResultIds(gameId: number): Promise<void> {
+    async getEventResultIds(gameId: number, versionId?: number): Promise<void> {
         try {
             const response = await this.gamesSrv.getEventResultIds(gameId);
             const normalizedOptions = this.normalizeEventOptions(response);
-            this.eventOptions = [
-                {
-                    TicketTypeId: 'all',
-                    TicketTypeName: 'All Jackpot Events'
-                },
-                ...normalizedOptions
-            ];
+            const filteredOptions = this.filterEventOptionsByVersion(normalizedOptions, versionId);
+
+            this.eventOptions = filteredOptions.sort((a, b) => this.getEventTimeValue(b.eventDate) - this.getEventTimeValue(a.eventDate));
+
+            if (this.eventOptions.length > 0) {
+                this.selectedEventOption = this.eventOptions[0];
+                await this.getResults(this.selectedEventOption.TicketTypeId, gameId);
+                return;
+            }
+
+            this.selectedEventOption = {
+                TicketTypeId: '',
+                TicketTypeName: 'No events found'
+            };
+            this.draws = [];
         } catch (error) {
             console.error('Error fetching event result IDs:', error);
-            this.eventOptions = [this.selectedEventOption];
+            this.eventOptions = [];
+            this.draws = [];
         }
     }
 
@@ -93,20 +106,25 @@ export class ResultsComponent implements OnInit {
     async onEventChange(option: OptionListItem): Promise<void> {
         this.selectedEventOption = option;
         this.showEventOptions = false;
-        await this.getResults(option.TicketTypeId === 'all' ? '' : option.TicketTypeId);
+        await this.getResults(option.TicketTypeId, this.currentGameId);
     }
 
 
-    setFilter(filter: string): void {
+    async setFilter(filter: string): Promise<void> {
         this.activeFilter = filter;
+        this.showEventOptions = false;
+        await this.loadResultsForFilter(filter);
     }
 
     get filteredDraws(): ResultDraw[] {
-        const normalizedFilter = this.activeFilter.toLowerCase();
+        const normalizedFilter = this.normalizeCompareText(this.activeFilter);
         const normalizedSearch = this.searchTerm.trim().toLowerCase();
 
         return this.draws.filter((draw) => {
-            const matchesFilter = normalizedFilter === 'all' || draw.gameType.toLowerCase().includes(normalizedFilter.toLowerCase());
+            const normalizedGameType = this.normalizeCompareText(draw.gameType);
+            const matchesFilter = normalizedFilter === 'all'
+                || normalizedGameType.includes(normalizedFilter)
+                || normalizedFilter.includes(normalizedGameType);
             const matchesSearch = normalizedSearch.length === 0
                 || draw.eventName.toLowerCase().includes(normalizedSearch)
                 || draw.id.toLowerCase().includes(normalizedSearch);
@@ -130,7 +148,7 @@ export class ResultsComponent implements OnInit {
         const id = String(item?.DrawNumber ?? item?.ResultId ?? item?.DrawId ?? item?.EventId ?? index + 1);
         const drawDate = item?.DrawDate ? ` (${new Date(item.DrawDate).toLocaleDateString('en-US')})` : '';
         const eventName = String(item?.EventName ?? item?.Name ?? `Results Of Draw-${id}${drawDate}`);
-        const gameType = String(item?.GameName ?? item?.Category ?? item?.Type ?? 'Jackpot');
+        const gameType = String(item?.GameName ?? item?.VersionType ?? item?.Category ?? item?.Type ?? 'Jackpot');
 
         return {
             id,
@@ -141,15 +159,15 @@ export class ResultsComponent implements OnInit {
         };
     }
 
-    private normalizeEventOptions(response: any): OptionListItem[] {
+    private normalizeEventOptions(response: any): ResultEventOption[] {
         const source = this.extractArray(response);
 
         return source
             .map((item: any, index: number) => this.normalizeEventOption(item, index))
-            .filter((item: OptionListItem | null): item is OptionListItem => item !== null);
+            .filter((item: ResultEventOption | null): item is ResultEventOption => item !== null);
     }
 
-    private normalizeEventOption(item: any, index: number): OptionListItem | null {
+    private normalizeEventOption(item: any, index: number): ResultEventOption | null {
         if (item === null || item === undefined || item === '') {
             return null;
         }
@@ -157,11 +175,13 @@ export class ResultsComponent implements OnInit {
         if (typeof item === 'string' || typeof item === 'number') {
             return {
                 TicketTypeId: item,
-                TicketTypeName: `Draw ${item}`
+                TicketTypeName: `Draw ${item}`,
+                eventDate: '',
+                versionId: undefined
             };
         }
 
-        const eventId = item?.DrawNumber ?? item?.GameEventId ?? item?.EventId ?? item?.Id ?? item?.Value ?? item?.id ?? item?.value;
+        const eventId = item?.GameEventId ?? item?.EventId ?? item?.DrawNumber ?? item?.Id ?? item?.Value ?? item?.id ?? item?.value;
 
         if (eventId === null || eventId === undefined || eventId === '') {
             return null;
@@ -170,11 +190,15 @@ export class ResultsComponent implements OnInit {
         const drawNumber = item?.DrawNumber ?? eventId ?? index + 1;
         const fallbackName = `Draw ${drawNumber}`;
         const eventName = item?.EventName ?? item?.Name ?? item?.Label ?? item?.Description ?? fallbackName;
-        const eventDate = this.formatEventOptionDate(item?.DrawDate ?? item?.EventDate ?? item?.GameEventDate);
+        const rawEventDate = item?.DrawDate ?? item?.EventDate ?? item?.GameEventDate;
+        const eventDate = this.formatEventOptionDate(rawEventDate);
+        const parsedVersionId = this.parseVersionId(item?.VersionId ?? item?.ConfigurationVersionId ?? item?.VersionType);
 
         return {
             TicketTypeId: eventId,
-            TicketTypeName: eventDate ? `${eventName} - ${eventDate}` : String(eventName)
+            TicketTypeName: eventDate ? `${eventName} - ${eventDate}` : String(eventName),
+            eventDate: rawEventDate,
+            versionId: parsedVersionId
         };
     }
 
@@ -183,7 +207,7 @@ export class ResultsComponent implements OnInit {
             return response;
         }
 
-        if (response && typeof response === 'object' && ('DrawNumber' in response || 'Ball1' in response)) {
+        if (response && typeof response === 'object' && ('DrawNumber' in response || 'Ball1' in response || 'GameEventId' in response)) {
             return [response];
         }
 
@@ -323,6 +347,80 @@ export class ResultsComponent implements OnInit {
             day: 'numeric',
             year: 'numeric'
         }).format(parsedDate);
+    }
+
+    private async loadResultsForFilter(filter: string): Promise<void> {
+        const normalizedFilter = filter.toLowerCase();
+
+        if (normalizedFilter === 'jackpot') {
+            this.currentGameId = this.jackpotGameId;
+            await this.getEventResultIds(this.jackpotGameId);
+            return;
+        }
+
+        const versionId = this.getVersionIdFromFilter(normalizedFilter);
+        this.currentGameId = this.pickXGameId;
+        await this.getEventResultIds(this.pickXGameId, versionId);
+    }
+
+    private getVersionIdFromFilter(normalizedFilter: string): number | undefined {
+        if (normalizedFilter === 'pick 2') {
+            return 2;
+        }
+        if (normalizedFilter === 'pick 3') {
+            return 3;
+        }
+        if (normalizedFilter === 'pick 4') {
+            return 4;
+        }
+        if (normalizedFilter === 'pick 5') {
+            return 5;
+        }
+        return undefined;
+    }
+
+    private filterEventOptionsByVersion(options: ResultEventOption[], versionId?: number): ResultEventOption[] {
+        if (!versionId) {
+            return options;
+        }
+
+        return options.filter((option) => Number(option.versionId) === Number(versionId));
+    }
+
+    private parseVersionId(value: any): number | undefined {
+        if (value === null || value === undefined || value === '') {
+            return undefined;
+        }
+
+        const numericValue = Number(value);
+        if (!Number.isNaN(numericValue)) {
+            return numericValue;
+        }
+
+        if (typeof value === 'string') {
+            const match = value.match(/(\d+)/);
+            if (match) {
+                const extracted = Number(match[1]);
+                return Number.isNaN(extracted) ? undefined : extracted;
+            }
+        }
+
+        return undefined;
+    }
+
+    private getEventTimeValue(value: any): number {
+        if (!value) {
+            return 0;
+        }
+
+        const parsedDate = new Date(value);
+        return Number.isNaN(parsedDate.getTime()) ? 0 : parsedDate.getTime();
+    }
+
+    private normalizeCompareText(value: string): string {
+        return String(value || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '');
     }
 
 
