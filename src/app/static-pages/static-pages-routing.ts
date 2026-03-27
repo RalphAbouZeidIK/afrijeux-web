@@ -5,6 +5,8 @@ import { HomepageComponent } from "./homepage/homepage.component";
 import { TicketsComponent } from "../shared/tickets/tickets.component";
 import { SharedGuard } from "../shared.guard";
 import { PagesCoreComponent } from "./pages-core/pages-core.component";
+import { PrivacyPolicyComponent } from "./play-responsibly/privacy-policy/privacy-policy.component";
+import { TermsOfServiceComponent } from "./play-responsibly/terms-of-service/terms-of-service.component";
 
 const routes: Routes = [
     {
@@ -13,6 +15,8 @@ const routes: Routes = [
         children: [
             { path: '', component: HomepageComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.appTitle.mainTitle' } },
             { path: 'Tickets', component: TicketsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.appTitle.Tickets' }, canActivate: [SharedGuard] },
+            { path: 'privacy-policy', component: PrivacyPolicyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Privacy Policy' } },
+            { path: 'terms-of-service', component: TermsOfServiceComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Terms of Service' } },
         ]
     },
 ];

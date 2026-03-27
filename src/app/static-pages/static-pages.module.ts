@@ -9,6 +9,9 @@ import { PreviousResultsComponent } from './previous-results/previous-results.co
 import { PromoHeroComponent } from './promo-hero/promo-hero.component';
 import { ResponsibleGamingBannerComponent } from './responsible-gaming-banner/responsible-gaming-banner.component';
 import { PagesCoreComponent } from './pages-core/pages-core.component';
+import { LegalPageContentComponent } from './play-responsibly/legal-page-content/legal-page-content.component';
+import { PrivacyPolicyComponent } from './play-responsibly/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './play-responsibly/terms-of-service/terms-of-service.component';
 
 
 
@@ -20,7 +23,10 @@ import { PagesCoreComponent } from './pages-core/pages-core.component';
     GamesListComponent,
     PreviousResultsComponent,
     PromoHeroComponent,
-    ResponsibleGamingBannerComponent
+    ResponsibleGamingBannerComponent,
+    LegalPageContentComponent,
+    PrivacyPolicyComponent,
+    TermsOfServiceComponent
   ],
   imports: [
     routing,

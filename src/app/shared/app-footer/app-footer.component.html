@@ -3,15 +3,17 @@
 		<div class="top-row">
 			<div class="brand-block">
 				<div class="brand-line">
-					<span class="logo">LOGO</span>
-					<span class="rights">&copy; 2026 [Brand Name]. All rights reserved.</span>
+					<span class="logo">
+						<img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />
+					</span>
+					<span class="rights">&copy; 2026 Winbig. All rights reserved.</span>
 				</div>
 				<p class="responsible-note">Please play responsibly. For assistance, contact our support team.</p>
 			</div>
 
 			<nav class="policy-nav" aria-label="Footer links">
-				<a href="#">Privacy Policy</a>
-				<a href="#">Terms of Service</a>
+				<a routerLink="/privacy-policy">Privacy Policy</a>
+				<a routerLink="/terms-of-service">Terms of Service</a>
 				<a href="#">Cookies Settings</a>
 			</nav>
 		</div>
