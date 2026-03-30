@@ -9,9 +9,8 @@
     min-height: 100vh;
     padding: 0;
     margin: 0;
+
 }
-
-
 
 // ===== SEARCH & NAVIGATION BUTTONS =====
 .results-nav {
@@ -35,7 +34,6 @@
 
         &:hover {
             background: linear-gradient(135deg, rgba(164, 246, 117, 0.2) 0%, rgba(164, 246, 117, 0.1) 100%);
-            lightBg: $lightGreen;
         }
     }
 

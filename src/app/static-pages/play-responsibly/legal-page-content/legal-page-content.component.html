@@ -1,25 +1,26 @@
 <section class="legal-page" *ngIf="content">
-    
-        <div class="legal-page__header">
-            <h1>{{ content.title }}</h1>
-            <p>{{ content.subtitle }}</p>
-        </div>
 
-        <div class="legal-page__body">
-            <aside class="legal-page__toc" aria-label="Legal sections">
-                <a *ngFor="let section of content.sections; index as i" [href]="'#' + section.id"
-                    [class.active]="activeSectionId === section.id" (click)="onTocClick($event, section.id)">
-                    {{ i + 1 }}. {{ section.title }}
-                </a>
-            </aside>
 
-            <div class="legal-page__sections">
-                <article *ngFor="let section of content.sections; index as i" [id]="section.id" class="legal-section">
-                    <h2>{{ i + 1 }}. {{ section.title }}</h2>
-                    <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
-                </article>
+
+    <div class="legal-page__body">
+        <aside class="legal-page__toc" aria-label="Legal sections">
+            <a *ngFor="let section of content.sections; index as i" [href]="'#' + section.id"
+                [class.active]="activeSectionId === section.id" (click)="onTocClick($event, section.id)">
+                {{ i + 1 }}. {{ section.title }}
+            </a>
+        </aside>
+
+        <div class="legal-page__sections">
+            <div class="legal-page__header">
+                <h1>{{ content.title }}</h1>
+                <p>{{ content.subtitle }}</p>
             </div>
+            <article *ngFor="let section of content.sections; index as i" [id]="section.id" class="legal-section">
+                <h2>{{ i + 1 }}. {{ section.title }}</h2>
+                <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+            </article>
         </div>
-    
+    </div>
+
 
 </section>

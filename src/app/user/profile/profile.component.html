@@ -1,0 +1,140 @@
+<section class="wallet-section">
+    <!-- Header: Title and Description -->
+    <div class="wallet-section__header">
+        <div class="section-header wallet-section__heading-wrapper">
+            <h2 class="wallet-section__title">Wallet</h2>
+            <p class="wallet-section__description">Manage your funds, track transactions, and view your balance.</p>
+        </div>
+        <div class="wallet-section__buttons">
+            <!-- <button class="btn btn-primary" (click)="openModal('deposit')">
+                <span class="btn__icon"><img src="assets/images/deposit.svg" alt=""></span>
+                Add Money
+            </button> -->
+            <button class="btn btn-secondary" (click)="openModal('withdraw')">
+                <span class="btn__icon"><img src="assets/images/withdraw.svg" alt=""></span>
+                Withdraw
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content: Two Columns -->
+    <div class="wallet-section__content">
+        <!-- Left Column: Account Details -->
+        <div class="wallet-section__left">
+            <!-- Account Details Card -->
+            <div class="account-details-holder">
+                <h2 class="wallet-section__card-title">Account Details</h2>
+                <div class="wallet-section__card">
+
+                    <div class="account-details">
+                        <div class="account-details__item">
+                            <div class="account-details__icon-wrapper">
+                                <span class="account-details__icon"><img src="assets/images/wallet.svg" alt=""></span>
+                            </div>
+                            <div class="account-details__content">
+                                <p class="account-details__label">Available Balance</p>
+                                <p class="account-details__value">{{ userBalance?.Wallet | number }} {{ userBalance?.CurrencyCode }}</p>
+                            </div>
+                        </div>
+                        <div class="account-details__divider"></div>
+                        <div class="account-details__row">
+                            <div class="account-details__column">
+                                <p class="account-details__label-small">Total Deposited</p>
+                                <div class="account-details__value-with-icon positive">
+                                    <span class="account-details__icon-small"><img src="assets/images/total-deposit.svg"
+                                            alt=""></span>
+                                    <span>${{ totalDeposited.toFixed(2) }}</span>
+                                </div>
+                            </div>
+                            <div class="account-details__column">
+                                <p class="account-details__label-small">Total Withdrawn</p>
+                                <div class="account-details__value-with-icon negative">
+                                    <span class="account-details__icon-small"><img
+                                            src="assets/images/total-withdrawal.svg" alt=""></span>
+                                    <span>${{ totalWithdrawn.toFixed(2) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Linked Bank Accounts Card -->
+            <div class="bank-cards">
+                <div class="wallet-section__card-header">
+                    <h2 class="wallet-section__card-title">Linked Bank Accounts</h2>
+                    <button class="wallet-section__add-link">+ Add Bank Account</button>
+                </div>
+                <div class="wallet-section__card">
+
+                    <div class="bank-account">
+                        <div class="bank-account__icon-wrapper">
+                            <span class="bank-account__icon"><img src="assets/images/bank.svg" alt=""></span>
+                        </div>
+                        <div class="bank-account__content">
+                            <div class="bank-account__header">
+                                <p class="bank-account__name">Vanessa Abou Diwan</p>
+                                <span class="bank-account__badge">
+                                    <img src="assets/images/primary-badge.svg" alt="Primary Badge">
+                                    Primary</span>
+                            </div>
+                            <div class="bank-account__details">
+                                <span class="bank-account__number">•••• •••• 9012</span>
+                                <span class="bank-account__expiry">Exp. 12/28</span>
+                                <span class="bank-account__cvv">CVV 123</span>
+                            </div>
+                        </div>
+                        <button class="bank-account__delete-btn"><img src="assets/images/delete.svg"
+                                alt="Delete"></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Transactions History -->
+        <div class="wallet-section__right">
+            <h2 class="wallet-section__card-title">Transactions History</h2>
+            <div class="wallet-section__card transactions-card">
+                <div class="transactions-list">
+                    <div *ngFor="let transaction of transactions" class="transaction"
+                        [ngClass]="getStatusClass(transaction.TransactionStatus)">
+                        <div class="transaction__left">
+                            <div class="transaction__icon-wrapper"
+                                [ngClass]="getTransactionIconClass(transaction.TransactionType)">
+                                <span *ngIf="transaction.TransactionType === 'Deposit'" class="transaction__icon"><img
+                                        src="assets/images/trn-deposit.svg" alt=""></span>
+                                <span *ngIf="transaction.TransactionType === 'Withdraw'" class="transaction__icon"><img
+                                        src="assets/images/trn-withdrawal.svg" alt=""></span>
+                            </div>
+                            <div class="transaction__text">
+                                <p class="transaction__type">{{ transaction.TransactionType }}</p>
+                                <p class="transaction__date">{{ transaction.DateCreated }}</p>
+                            </div>
+                        </div>
+                        <div class="transaction__right">
+                            <p class="transaction__status" [ngClass]="getStatusClass(transaction.TransactionStatus)">
+                                {{ transaction.TransactionStatus === 'Confirmed' ? 'Completed' :
+                                transaction.TransactionStatus }}
+                            </p>
+                            <p class="transaction__amount" [ngClass]="getAmountClass(transaction.TransactionType)">
+                                {{ transaction.TransactionType === 'Deposit' ? '+' : '-' }}{{ '$' +
+                                transaction.Amount.toFixed(2) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Deposit / Withdraw Modal -->
+<div class="money-form-overlay" *ngIf="showModal" (click.self)="closeModal()">
+    <app-withdraw
+        [mode]="modalMode"
+        (closed)="closeModal()"
+        (submitted)="onTransactionSubmitted()">
+    </app-withdraw>
+</div>

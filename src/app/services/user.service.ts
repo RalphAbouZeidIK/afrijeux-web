@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { jwtDecode } from "jwt-decode";
 import { Router } from '@angular/router';
 import { CacheService } from './cache.service';
+import { ApiService } from './api.service';
 /**
  * Service that has the main user functions 
  */
@@ -19,7 +20,7 @@ export class UserService {
 
   private loginPopup$ = new Subject();
 
-  private userBalance$ = new Subject();
+  private userBalance$ = new BehaviorSubject<any>(null);
 
   /**
    * Variable used to store user data
@@ -86,7 +87,7 @@ export class UserService {
   }
 
   getUserBalance() {
-    return this.userBalance$;
+    return this.userBalance$.asObservable();
   }
 
 
@@ -219,6 +220,7 @@ export class UserService {
     ////console.log(decoded)
     return decoded.PersonId
   }
+
 
   /**
    * Remove user data and sign out 

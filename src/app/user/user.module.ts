@@ -6,6 +6,7 @@ import { routing } from './user-routing';
 import { MesPariesPopupComponent } from './mes-paries-popup/mes-paries-popup.component';
 import { DepositComponent } from './deposit/deposit.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
@@ -14,7 +15,8 @@ import { WithdrawComponent } from './withdraw/withdraw.component';
     UserCoreComponent,
     MesPariesPopupComponent,
     DepositComponent,
-    WithdrawComponent
+    WithdrawComponent,
+    ProfileComponent
   ],
   imports: [
     routing,

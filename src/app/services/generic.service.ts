@@ -152,6 +152,10 @@ export class GenericService {
     return apiResponse
   }
 
+  getTransactions() {
+    const apiResponse = this.apiSrv.makeApi('OnlineMaster', 'UserInfo/GetTransactions', 'GET', {})
+    return apiResponse
+  }
 
   setModalData(openModal: boolean, success: boolean, messageCode: string) {
     let modalStatus = {

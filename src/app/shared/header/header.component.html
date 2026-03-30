@@ -15,7 +15,7 @@
 
       <div class="header-btns isloggedIn" *ngIf="isLoggedIn">
         <span class="header-text" *ngIf="userBalance?.Wallet > 0">
-          <span class="header-balance">Balance</span>
+          <span class="icon"><img src="assets/images/wallet.svg" alt=""></span>
           {{userBalance?.Wallet | number}} {{userBalance?.CurrencyCode}}
         </span>
       </div>
@@ -34,17 +34,15 @@
 
       <div class="user-menu-holder" *ngIf="isLoggedIn">
         <button type="button" class="user-icon-toggle" aria-label="User menu" (click)="toggleUserMenu()">
-          <i class="fa fa-user" aria-hidden="true"></i>
+          <img src="assets/images/User.svg" alt="">
         </button>
 
-        <div class="option-list-holder user-menu-dropdown" [class.is-open]="showUserMenu" *ngIf="personNavList.length > 0">
+        <div class="option-list-holder user-menu-dropdown" [class.is-open]="showUserMenu"
+          *ngIf="personNavList.length > 0">
           <div class="option-list">
-            <a
-              *ngFor="let item of personNavList"
-              class="option-list__item"
+            <a *ngFor="let item of personNavList" class="option-list__item"
               [routerLink]="item.key !== 'logout' ? ['/' + item.path] : null"
-              (click)="item.key === 'logout' ? logout() : hideMenus()"
-            >
+              (click)="item.key === 'logout' ? logout() : hideMenus()">
               {{ item.title }}
             </a>
           </div>

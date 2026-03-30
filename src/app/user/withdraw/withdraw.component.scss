@@ -1,4 +1,235 @@
-h5{
-    font-weight: bold;
-    margin-bottom: 20px;
+@use '/src/variables' as *;
+
+.money-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  // Header
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    font-family: $font-bold;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: -0.45px;
+    color: $white;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__description {
+    font-family: $font-regular;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.15px;
+    color: #9ca3af;
+    margin: 0;
+    max-width: 360px;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // Preset Amounts
+  &__presets {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  &__presets-row {
+    display: flex;
+    gap: 8px;
+  }
+
+
+  &__preset-btn {
+    flex: 1;
+    height: 48px;
+    background: $darkBg;
+    border: 1px solid rgba(164, 246, 117, 0.2);
+    border-radius: 30px;
+    color: $white;
+    font-family: $font-regular;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    transition: all 0.2s ease;
+
+    &:hover,
+    &--active {
+      border-color: #639247;
+      color: $white;
+      background-color: #639247;
+    }
+
+  }
+
+
+  // Custom Amount Input
+  &__input-wrapper {
+    position: relative;
+    padding-top: 8px;
+  }
+
+  &__input-label {
+    position: absolute;
+    top: 0;
+    left: 23px;
+    z-index: 1;
+    background: $darkBg;
+    padding: 0 6px;
+    font-family: $font-regular;
+    font-size: 10px;
+    font-weight: 500;
+    color: #9f9f9f;
+    border-radius: 0 0 6px 6px;
+  }
+
+  &__input-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2b2b2b;
+    border-radius: 20px;
+    padding: 0 15px;
+    height: 45px;
+  }
+
+  &__input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: $white;
+    font-family: $font-regular;
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    // Remove number spinners
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+  }
+
+  &__input-currency {
+    font-family: $font-regular;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    flex-shrink: 0;
+  }
+
+  // Error
+  &__error {
+    font-family: $font-regular;
+    font-size: 13px;
+    color: #ff3b30;
+    margin: -8px 0 0;
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 4px;
+  }
+
+  &__cancel-btn {
+    height: 45px;
+    padding: 0 20px;
+    background: #232e1e;
+    border: 1px solid #4f584b;
+    border-radius: 30px;
+    color: $white;
+    font-family: $font-regular;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      border-color: $lightGreen;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__submit-btn {
+    height: 45px;
+    padding: 0 20px;
+    background: $lightGreen;
+    border: none;
+    border-radius: 30px;
+    color: $darkBg;
+    font-family: $font-regular;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+
+    &:hover:not(:disabled) {
+      background: darken(#a4f675, 8%);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Modal overlay — used by the parent that renders this component
+.money-form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
 }

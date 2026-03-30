@@ -168,8 +168,19 @@ header {
 }
 
 .header-text {
+    img {
+        display: block;
+    }
+
     color: $white;
-    font-weight: 700;
+    font-weight: normal;
+    display: flex;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: $darkBg;
+    border-radius: 30px;
 
     .header-balance {
 
@@ -235,6 +246,10 @@ header {
     font-weight: bold;
     text-transform: uppercase;
     text-decoration: none;
+}
+
+.right-section {
+    gap: 20px
 }
 
 @media all and (max-width:1200px) {

@@ -117,6 +117,7 @@ export class HeaderComponent implements OnInit {
 
   async getUserBalance() {
     this.userBalance = await this.gnrcSrv.getBalance()
+    this.usrSrv.setUserBalance(this.userBalance)
   }
 
 

@@ -6,9 +6,6 @@
     color: $white;
 
     &__header {
-        text-align: center;
-        max-width: 810px;
-        margin: 0 auto 52px;
 
         h1 {
             font-family: $font-bold;
@@ -70,8 +67,7 @@
     &__sections {
         display: flex;
         flex-direction: column;
-        gap: 72px;
-        max-width: 888px;
+        gap: 65px;
     }
 }
 
@@ -81,17 +77,15 @@
     h2 {
         margin: 0 0 15px;
         font-family: $font-bold;
-        font-size: 22px;
+        font-size: 18px;
         line-height: 1.25;
         padding-bottom: 0;
     }
 
     p {
         margin: 0;
-        font-family: $font-regular;
         font-size: 16px;
         line-height: 1.85;
-        color: #9f9f9f;
     }
 }
 

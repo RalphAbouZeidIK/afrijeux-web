@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GenericService } from 'src/app/services/generic.service';
 import { UserService } from 'src/app/services/user.service';
@@ -9,73 +9,124 @@ import { UserService } from 'src/app/services/user.service';
   styleUrl: './withdraw.component.scss',
   standalone: false
 })
-export class WithdrawComponent {
+export class WithdrawComponent implements OnInit, OnDestroy {
 
-  userBalance: any = 0;
+  @Input() mode: 'deposit' | 'withdraw' = 'deposit';
+  @Output() closed = new EventEmitter<void>();
+  @Output() submitted = new EventEmitter<void>();
+
+  userBalance: any;
   transactionTypesResponse: any = [];
-  withdrawAmount: number = 0;
-  showError: boolean = false;
+  amount: any = null;
   currencies: any = [];
   currencyId: number = 0;
-  alert: any = null
-  showAlert: boolean = false
+  showError: boolean = false;
+  isLoading: boolean = false;
+
+  readonly presetAmounts = [10, 25, 50, 100, 250, 500];
+
+  private balanceSubscription: Subscription | undefined;
 
   constructor(
     private usrSrv: UserService,
     private gnrcSrv: GenericService
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
-    this.getAvailableWithdraw()
-    this.getTransactionTypes()
-    this.getCurrencies()
+    this.balanceSubscription = this.usrSrv.getUserBalance().subscribe((data) => {
+      this.userBalance = data;
+    });
+    this.getTransactionTypes();
+    this.getCurrencies();
   }
 
-  async getAvailableWithdraw() {
-    let balanceResponse = await this.gnrcSrv.getBalance()
-    ////console.log(balanceResponse)
-    this.userBalance = balanceResponse
+  ngOnDestroy(): void {
+    this.balanceSubscription?.unsubscribe();
+  }
+
+  get title(): string {
+    return this.mode === 'deposit' ? 'Add Money' : 'Withdraw';
+  }
+
+  get description(): string {
+    return this.mode === 'deposit'
+      ? 'Choose an amount or enter a custom value to add to your wallet.'
+      : 'Choose an amount or enter a custom value to withdraw from your wallet.';
+  }
+
+  get submitLabel(): string {
+    return this.mode === 'deposit'
+      ? (this.amount > 0 ? 'Add ' + this.amount.toFixed(2) : 'Add Money')
+      : (this.amount > 0 ? 'Withdraw ' + this.amount.toFixed(2) : 'Withdraw');
+  }
+
+  get currencyCode(): string {
+    return this.userBalance?.CurrencyCode || '';
+  }
+
+  selectPreset(value: number): void {
+    this.amount = value;
+    this.showError = false;
   }
 
   async getTransactionTypes() {
-    this.transactionTypesResponse = await this.gnrcSrv.getTransactionTypes()
-    ////console.log(this.transactionTypesResponse)
+    this.transactionTypesResponse = await this.gnrcSrv.getTransactionTypes();
   }
 
   async getCurrencies() {
-    this.currencies = await this.gnrcSrv.getCurrencies()
-    this.currencyId = this.currencies[0].id
-    ////console.log(this.currencies)
+    this.currencies = await this.gnrcSrv.getCurrencies();
+    if (this.currencies?.length) {
+      this.currencyId = this.currencies[0].Id;
+    }
   }
 
-  async submitWithdraw() {
-    this.showError = false
-    if (this.withdrawAmount <= 0 || this.withdrawAmount > this.userBalance.WinningAmount) {
-      this.showError = true
-      return
-    }
-    let params = {
-      body: {
-        "amount": this.withdrawAmount,
-        "currencyId": this.currencyId,
-        "transactionTypeId": this.transactionTypesResponse.find((x: any) => x.name == 'Withdraw').id
-      }
-    }
-    ////console.log(params)
-    let withdrawResponse = await this.gnrcSrv.updateBalance(params)
-    this.showAlert = true
-    if (!withdrawResponse.isSuccess) {
-      this.showError = true
-    }
-    else {
-      this.usrSrv.triggerNotification({
-        type: 'success',
-        message: 'Withdraw request has been submitted successfully'
-      })
+  close(): void {
+    this.closed.emit();
+  }
 
-      this.getAvailableWithdraw()
-      this.withdrawAmount = 0
+  async submit(): Promise<void> {
+    this.showError = false;
+
+    if (this.amount <= 0) {
+      this.showError = true;
+      return;
+    }
+
+    if (this.mode === 'withdraw' && this.userBalance?.WinningAmount != null && this.amount > this.userBalance.WinningAmount) {
+      this.showError = true;
+      return;
+    }
+
+    const typeName = this.mode === 'deposit' ? 'Deposit' : 'Withdraw';
+    const transactionType = this.transactionTypesResponse.find((x: any) => x.Name === typeName);
+
+    const params = {
+      body: {
+        amount: this.amount,
+        currencyId: this.currencyId,
+        transactionTypeId: transactionType?.Id
+      }
+    };
+
+    this.isLoading = true;
+    try {
+      const response = await this.gnrcSrv.updateBalance(params);
+      if (response?.IsSuccess) {
+        const updatedBalance = await this.gnrcSrv.getBalance();
+        this.usrSrv.setUserBalance(updatedBalance);
+        this.usrSrv.triggerNotification({
+          type: 'success',
+          message: this.mode === 'deposit'
+            ? 'Deposit submitted successfully'
+            : 'Withdraw request has been submitted successfully'
+        });
+        this.submitted.emit();
+        this.close();
+      } else {
+        this.showError = true;
+      }
+    } finally {
+      this.isLoading = false;
     }
   }
 }

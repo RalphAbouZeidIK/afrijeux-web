@@ -1,0 +1,597 @@
+@use '/src/variables' as *;
+
+img{
+    display: block;
+}
+
+.money-form-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+
+}
+
+.wallet-section {
+    padding: 0px 52px 50px;
+    color: $white;
+
+    // Header Section
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 25px;
+
+        h2 {
+            line-height: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+
+    &__heading-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    &__buttons {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+
+        @media (max-width: 768px) {
+            width: 100%;
+
+            .btn {
+                flex: 1;
+            }
+        }
+    }
+
+    // Main Content
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 30px;
+        align-items: start;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+    }
+
+    &__left {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    &__right {
+        display: flex;
+        flex-direction: column;
+    }
+
+    // Card Styling
+    &__card {
+        background: #152811;
+        border: 1px solid rgba(164, 246, 117, 0.2);
+        border-radius: 25px;
+        padding:20px  25px;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+
+        &.transactions-card {
+            padding: 25px;
+            border-radius: 40px;
+            flex: 1;
+            min-height: 300px;
+        }
+    }
+
+    &__card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0;
+        
+    }
+
+    &__card-title {
+        font-family: $font-regular;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 28px;
+        letter-spacing: -0.45px;
+        color: $white;
+        margin: 0;
+        padding-bottom: 15px;
+    }
+
+    &__add-link {
+        background: $darkBg;
+        border: none;
+        color: $lightGreen;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 30px;
+        cursor: pointer;
+        text-decoration: underline;
+        font-family: $font-regular;
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: $white;
+        }
+    }
+}
+.bank-cards{
+    .wallet-section__card-header{
+        margin-bottom: 15px;
+    }
+    .wallet-section__card-title{
+        padding-bottom: 0;
+    }
+}
+// Account Details Styles
+.account-details {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+
+    &__item {
+        display: flex;
+        gap: 10px;
+        align-items:center;
+    }
+
+    &__icon-wrapper {
+        width: 34px;
+        height: 34px;
+        background: rgba(164, 246, 117, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__icon {
+        font-size: 18px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    &__label {
+        font-family: $font-regular;
+        font-size: 14px;
+        line-height: 20px;
+        color: #9ca3af;
+        margin: 0;
+    }
+
+    &__value {
+        
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 23px;
+        letter-spacing: 0.40px;
+        color: $lightGreen;
+        margin: 0;
+    }
+
+    &__divider {
+        width: 100%;
+        height: 1px;
+        background: rgba(164, 246, 117, 0.2);
+        margin: 4px 0;
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    &__column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__label-small {
+        font-family: $font-regular;
+        font-size: 12px;
+        line-height: 16px;
+        color: #9ca3af;
+        margin: 0;
+    }
+
+    &__value-with-icon {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: -0.31px;
+
+        &.positive {
+            color: #00c950;
+        }
+
+        &.negative {
+            color: #ff3b30;
+        }
+    }
+
+    &__icon-small {
+        font-size: 12px;
+    }
+}
+
+// Bank Account Styles
+.bank-account {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: $darkBg;
+    border: 1px solid rgba(164, 246, 117, 0.2);
+    border-radius: 25px;
+    padding: 17px;
+
+    &__icon-wrapper {
+        width: 36px;
+        height: 36px;
+        background: rgba(164, 246, 117, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__icon {
+        font-size: 20px;
+    }
+
+    &__content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__name {
+        
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: -0.31px;
+        color: $white;
+        margin: 0;
+    }
+
+    &__badge {
+        background: $lightGreen;
+        color: $darkBg;
+        font-size: 10px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 30px;
+        white-space: nowrap;
+        font-family: $font-regular;
+        display: flex;
+        gap:4px;    
+    }
+
+    &__details {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    &__number,
+    &__expiry,
+    &__cvv {
+        font-family: $font-regular;
+        font-size: 14px;
+        line-height: 20px;
+        color: #9ca3af;
+    }
+
+    &__delete-btn {
+        background: $darkBg;
+        border: 1px solid rgba(164, 246, 117, 0.2);
+        border-radius: 30px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $lightGreen;
+        }
+    }
+}
+
+// Transactions List Styles
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 400px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(164, 246, 117, 0.3);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba(164, 246, 117, 0.5);
+        }
+    }
+}
+
+// Transaction Item Styles
+.transaction {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $darkBg;
+    border: 1px solid rgba(164, 246, 117, 0.2);
+    border-radius: 25px;
+    padding: 13px 17px;
+    gap: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(164, 246, 117, 0.05);
+    }
+
+    &.transaction__status--failed {
+        border-color: rgba(255, 59, 48, 0.2);
+    }
+
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    &__icon-wrapper {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 12px;
+
+        &.transaction__icon--deposit {
+            background: #2a441b;
+        }
+
+        &.transaction__icon--withdrawal {
+            background: #23190a;
+        }
+    }
+
+    &__icon {
+        font-size: 12px;
+    }
+
+    &__text {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+    }
+
+    &__type {
+        font-family: $font-regular;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: -0.31px;
+        color: $white;
+        margin: 0;
+        text-transform: capitalize;
+    }
+
+    &__date {
+        font-family: $font-regular;
+        font-size: 10px;
+        line-height: 20px;
+        color: #9f9f9f;
+        margin: 0;
+    }
+
+    &__right {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: 12px;
+        max-width: 200px;
+        text-align: right;
+        align-items: center;
+    }
+
+    &__status {
+        font-family: $font-regular;
+        font-size: 12px;
+        line-height: 16px;
+        margin: 0;
+
+        &.transaction__status--completed,
+        &.transaction__status--confirmed {
+            color: $lightGreen;
+        }
+
+        &.transaction__status--failed {
+            color: #ff3b30;
+        }
+
+        &.transaction__status--pending {
+            color: #f7d955;
+        }
+    }
+
+    &__amount {
+        
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: -0.31px;
+        margin: 0;
+
+        &.transaction__amount--positive {
+            color: $lightGreen;
+        }
+
+        &.transaction__amount--negative {
+            color: #ff3b30;
+        }
+    }
+}
+
+// Button Styles
+.btn {
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    display: flex;
+    gap:8px;
+    &.btn-primary {
+
+        transition: all 0.3s ease;
+        &:hover {
+            background-color: $lightGreen;
+            color: #000;
+            opacity: 0.9;
+        }
+    }
+
+    &.btn-secondary {
+
+        border: 2px solid rgba(164, 246, 117, 0.20);
+        background: #0B1705;
+
+        &:hover {
+            background: rgba(164, 246, 117, 0.1);
+            border-color: $lightGreen;
+            color: $white;
+        }
+    }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+    .wallet-section {
+        padding: 30px 40px;
+
+        &__title {
+            font-size: 32px;
+            line-height: 40px;
+        }
+
+        &__card {
+            padding: 20px;
+            border-radius: 20px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .wallet-section {
+        padding: 20px;
+
+        &__header {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        &__title {
+            font-size: 28px;
+        }
+
+        &__description {
+            font-size: 16px;
+        }
+
+        &__content {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        &__buttons {
+            width: 100%;
+
+            .btn {
+                flex: 1;
+            }
+        }
+    }
+
+    .bank-account {
+        flex-wrap: wrap;
+
+        &__details {
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    }
+
+    .transaction {
+        flex-wrap: wrap;
+
+        &__right {
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+}

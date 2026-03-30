@@ -7,6 +7,7 @@ import { MesPariesPopupComponent } from "./mes-paries-popup/mes-paries-popup.com
 import { WithdrawComponent } from "./withdraw/withdraw.component";
 import { UserRouteConfig } from "../services/routing.service";
 import { TicketsComponent } from "../shared/tickets/tickets.component";
+import { ProfileComponent } from "./profile/profile.component";
 
 
 const routes: Routes = [
@@ -22,7 +23,7 @@ const routes: Routes = [
     children: [
       {
         path: UserRouteConfig.profile.path,
-        component: DepositComponent,
+        component: ProfileComponent,
 
         data: { showLink: true, title: UserRouteConfig.profile.title, }
       },
