@@ -12,6 +12,7 @@ import { PagesCoreComponent } from './pages-core/pages-core.component';
 import { LegalPageContentComponent } from './play-responsibly/legal-page-content/legal-page-content.component';
 import { PrivacyPolicyComponent } from './play-responsibly/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './play-responsibly/terms-of-service/terms-of-service.component';
+import { CookiesSettingsComponent } from './play-responsibly/cookies-settings/cookies-settings.component';
 
 
 
@@ -26,7 +27,8 @@ import { TermsOfServiceComponent } from './play-responsibly/terms-of-service/ter
     ResponsibleGamingBannerComponent,
     LegalPageContentComponent,
     PrivacyPolicyComponent,
-    TermsOfServiceComponent
+    TermsOfServiceComponent,
+    CookiesSettingsComponent
   ],
   imports: [
     routing,

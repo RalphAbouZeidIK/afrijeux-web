@@ -1,0 +1,39 @@
+<section class="cookies-settings" data-node-id="1008:9848">
+    <div class="container-fluid">
+        <div class="cookies-settings__inner">
+            <div class="section-header">
+                <h2>Cookies Settings</h2>
+                <p>Manage your cookie preferences and understand how we use cookies to improve your experience.</p>
+            </div>
+
+            <div class="cookies-settings__cards">
+                <div class="cookie-card" *ngFor="let category of cookieCategories">
+                    <div class="cookie-card__content">
+                        <h2>{{ category.title }}</h2>
+                        <p>{{ category.description }}</p>
+                    </div>
+
+                    <div class="cookie-card__control" *ngIf="category.required; else toggleTemplate">
+                        <span class="always-active">Always Active</span>
+                    </div>
+
+                    <ng-template #toggleTemplate>
+                        <button type="button" class="toggle" [class.toggle--active]="category.enabled"
+                            (click)="toggleCookie(category)" [attr.aria-pressed]="category.enabled"
+                            [attr.aria-label]="'Toggle ' + category.title">
+                            <span class="toggle__thumb"></span>
+                        </button>
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="cookies-settings__actions">
+                <button class="action-btn action-btn--ghost" type="button" (click)="rejectAll()">Reject All</button>
+                <button class="action-btn action-btn--outline" type="button" (click)="saveSettings()">Save
+                    Settings</button>
+                <button class="action-btn action-btn--primary" type="button" (click)="acceptAll()">Accept All</button>
+            </div>
+        </div>
+    </div>
+
+</section>

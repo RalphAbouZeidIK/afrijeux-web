@@ -1,0 +1,229 @@
+@use '/src/variables' as *;
+
+.cookies-settings {
+    .section-header {
+        text-align: left;
+        padding: 0;
+    }
+
+    padding:0;
+    padding-bottom: 50px;
+
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    &__intro {
+        max-width: 888px;
+    }
+
+    &__intro h1 {
+        color: $white;
+        font-family: $font-bold;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 60px;
+        margin: 0;
+    }
+
+    &__intro p {
+        color: #8a8a8a;
+        font-family: $font-regular;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 28px;
+        margin: 5px 0 0;
+        max-width: 806px;
+    }
+
+    &__cards {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin-bottom: 45px;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+    }
+
+    .cookie-card {
+        align-items: flex-start;
+        background: rgba(164, 246, 117, 0.05);
+        border: 1px solid rgba(164, 246, 117, 0.2);
+        border-radius: 25px;
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        min-height: 123px;
+        padding: 30px;
+
+        &__content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        &__content h2 {
+            color: $white;
+            font-family: $font-regular;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 28px;
+            margin: 0;
+            padding-bottom: 0;
+        }
+
+        &__content p {
+            color: #9f9f9f;
+            font-family: $font-regular;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 26px;
+            margin: 10px 0 0;
+        }
+
+        &__control {
+            flex-shrink: 0;
+        }
+    }
+
+    .always-active {
+        align-items: center;
+        background-color: $lightBg;
+        border-radius: 999px;
+        color: #8a8a8a;
+        display: inline-flex;
+        font-family: $font-regular;
+        font-size: 14px;
+        font-weight: 500;
+        height: 40px;
+        justify-content: center;
+        line-height: 21px;
+        min-width: 118px;
+        padding: 0 16px;
+    }
+
+    .toggle {
+        background-color: $lightBg;
+        border: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        height: 28px;
+        padding: 4px;
+        position: relative;
+        width: 52px;
+
+        &__thumb {
+            background-color: $white;
+            border-radius: 999px;
+            display: block;
+            height: 20px;
+            transition: transform 0.2s ease;
+            width: 20px;
+        }
+
+        &--active {
+            background: linear-gradient(90deg, #a4f675 0%, #639247 100%);
+        }
+
+        &--active .toggle__thumb {
+            transform: translateX(24px);
+        }
+    }
+
+    .action-btn {
+        background: transparent;
+        border-radius: 999px;
+        font-family: $font-regular;
+        font-size: 16px;
+        font-weight: 500;
+        height: 50px;
+        line-height: 24px;
+        padding: 0 32px;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn--ghost {
+        border: 1px solid $lightBg;
+        color: $white;
+        min-width: 132px;
+    }
+
+    .action-btn--outline {
+        border: 1px solid $lightGreen;
+        color: $white;
+        min-width: 163px;
+    }
+
+    .action-btn--primary {
+        background: linear-gradient(118.71deg, #a4f675 8.38%, #84d555 32.53%, #69b93b 44.2%, #6eae48 58.56%, #639247 98.07%);
+        border: 0;
+        color: $darkBg;
+        height: 48px;
+        min-width: 136px;
+    }
+
+    @media (max-width: 1400px) {
+        padding: 80px 24px 60px;
+
+        &__inner {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 991px) {
+        min-height: auto;
+        padding-top: 50px;
+
+        .cookie-card {
+            flex-direction: column;
+        }
+
+        .cookie-card__control,
+        .toggle {
+            align-self: flex-start;
+        }
+
+        &__actions {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+    }
+
+    @media (max-width: 576px) {
+        padding-left: 16px;
+        padding-right: 16px;
+
+        &__intro h1 {
+            font-size: 28px;
+            line-height: 42px;
+        }
+
+        &__intro p {
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        .cookie-card {
+            padding: 20px;
+        }
+
+        .cookie-card__content h2 {
+            font-size: 22px;
+        }
+
+        .cookies-settings__actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 0 20px;
+        }
+    }
+}
