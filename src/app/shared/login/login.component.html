@@ -2,7 +2,8 @@
     <div class="form-bg">
 
         <h2 *ngIf="isSignup">{{ 'shared.login.signUpTitle' | translate }}</h2>
-        <h2 *ngIf="!isSignup">{{ 'shared.login.loginTitle' | translate }}</h2>
+        <h2 *ngIf="!isSignup && !forgotPassword && !showPasswordReset">{{ 'shared.login.loginTitle' | translate }}</h2>
+        <h2 *ngIf="forgotPassword || showPasswordReset">{{ 'shared.login.resetPassword' | translate }}</h2>
 
         <a class="close-icon" (click)="hidePopup()" *ngIf="!isAndroidApp">
             <img src="assets/images/close-icon.svg" alt="close">
@@ -12,7 +13,7 @@
         </span>
         <!-- ================= LOGIN FORM ================= -->
         <form class="form-content" [formGroup]="loginForm" (keydown)="keyDownFunction($event)"
-            *ngIf="!isSignup && !showOtpForm">
+            *ngIf="!isSignup && !showOtpForm && !forgotPassword && !showPasswordReset">
 
             <div class="form-group">
                 <label class="title-label">
@@ -28,10 +29,11 @@
                     {{ 'shared.login.password' | translate }}
                 </label>
 
-                <input type="password" class="form-control" title="password"
-                    formControlName="Password" placeholder="Password" />
+                <input type="password" class="form-control" title="password" formControlName="Password"
+                    placeholder="Password" />
 
-                <p class="text text-end forgot-password" *ngIf="!isSignup && !isAndroidApp">
+                <p class="text text-end forgot-password" *ngIf="!isSignup && !isAndroidApp"
+                    (click)="forgotPassword = true">
 
                     <a>{{ 'shared.login.forgotPassword' | translate }}</a>
                 </p>
@@ -41,7 +43,7 @@
 
         <!-- ================= SIGNUP FORM ================= -->
         <form class="form-content" [formGroup]="signupForm" (keydown)="keyDownFunction($event)"
-            *ngIf="isSignup && !showOtpForm">
+            *ngIf="isSignup && !showOtpForm && !forgotPassword && !showPasswordReset">
 
             <div class="form-group">
 
@@ -140,11 +142,118 @@
 
         </div>
 
+        <form *ngIf="forgotPassword" class="forgot-password-form" [formGroup]="forgotPasswordForm">
+            <!-- Forgot password form content goes here -->
+            <p class="form-label">
+                Enter your email address or UAE mobile number and we will send you an OTP to reset your password.
+            </p>
+            <div class="form-group">
+                <label class="title-label">
+
+                    {{ 'shared.login.resetPassword' | translate }}
+                </label>
+
+                <input type="text" class="form-control" formControlName="username"
+                    placeholder="Email or UAE mobile number" />
+
+                <div *ngIf="forgotPasswordForm.get('username')?.invalid && forgotPasswordForm.get('username')?.touched">
+
+                    <small class="text-danger" *ngIf="forgotPasswordForm.get('username')?.hasError('required')">
+                        {{ 'shared.login.emailOrPhoneRequired' | translate }}
+                    </small>
+
+                    <small class="text-danger" *ngIf="forgotPasswordForm.get('username')?.hasError('invalidUsername')">
+                        {{ 'shared.login.emailOrPhoneInvalid' | translate }}
+                    </small>
+
+                </div>
+            </div>
+            <div class="form-btns">
+
+
+                <button class="btn btn-primary" (click)="submitForgotPassword()"
+                    [disabled]="forgotPasswordForm.invalid">
+                    Send password reset email
+                </button>
+
+            </div>
+        </form>
+
+        <form *ngIf="showPasswordReset" class="password-reset-form" [formGroup]="resetPasswordForm">
+            <!-- Password reset form content goes here -->
+            <p class="form-label">
+                Enter the OTP sent to your email or mobile number, and set a new password.
+            </p>
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'shared.login.otp' | translate }}
+                </label>
+
+                <input type="text" class="form-control" formControlName="otp" placeholder="Enter OTP" />
+
+                <div *ngIf="resetPasswordForm.get('otp')?.invalid && resetPasswordForm.get('otp')?.touched">
+
+                    <small class="text-danger" *ngIf="resetPasswordForm.get('otp')?.hasError('required')">
+                        {{ 'shared.login.otpRequired' | translate }}
+                    </small>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'shared.login.username' | translate }}
+                </label>
+
+                <input type="text" class="form-control" formControlName="username"
+                    placeholder="Email or UAE mobile number" />
+
+                <div *ngIf="resetPasswordForm.get('username')?.invalid && resetPasswordForm.get('username')?.touched">
+
+                    <small class="text-danger" *ngIf="resetPasswordForm.get('username')?.hasError('required')">
+                        {{ 'shared.login.emailOrPhoneRequired' | translate }}
+                    </small>
+
+                    <small class="text-danger" *ngIf="resetPasswordForm.get('username')?.hasError('invalidUsername')">
+                        {{ 'shared.login.emailOrPhoneInvalid' | translate }}
+                    </small>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'shared.login.newPassword' | translate }}
+                </label>
+
+                <input type="password" class="form-control" formControlName="newPassword"
+                    placeholder="Enter new password" />
+
+                <div
+                    *ngIf="resetPasswordForm.get('newPassword')?.invalid && resetPasswordForm.get('newPassword')?.touched">
+
+                    <small class="text-danger" *ngIf="resetPasswordForm.get('newPassword')?.hasError('required')">
+                        {{ 'shared.login.newPasswordRequired' | translate }}
+                    </small>
+
+                    <small class="text-danger" *ngIf="resetPasswordForm.get('newPassword')?.hasError('minlength')">
+                        {{ 'shared.login.passwordMinlength' | translate }}
+                    </small>
+
+                </div>
+            </div>
+            <div class="form-btns">
+                <button class="btn btn-primary" (click)="submitNewPassword()" [disabled]="resetPasswordForm.invalid">
+                    Reset Password
+                </button>
+            </div>
+        </form>
+
+
         <!-- ================= ERROR MESSAGE ================= -->
 
 
         <!-- ================= ACTION BUTTONS ================= -->
-        <div class="form-btns" *ngIf="!showOtpForm">
+        <div class="form-btns" *ngIf="!showOtpForm && !forgotPassword && !showPasswordReset">
 
             <button class="btn btn-primary" *ngIf="!isSignup" (click)="submitLogin()" [disabled]="loginForm.invalid">
                 {{ 'shared.login.login' | translate }}
@@ -157,7 +266,7 @@
         </div>
 
         <!-- ================= SWITCH LINKS ================= -->
-        <p class="text text-center" *ngIf="!isAndroidApp && !showOtpForm">
+        <p class="text text-center" *ngIf="!isAndroidApp && !showOtpForm && !forgotPassword && !showPasswordReset">
 
             <span *ngIf="!isSignup">
                 {{ 'shared.login.noAccount' | translate }}

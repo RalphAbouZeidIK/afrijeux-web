@@ -27,11 +27,18 @@ export class LoginComponent implements OnChanges, OnInit {
 
   signupForm: FormGroup | any;
 
+  forgotPasswordForm: FormGroup | any;
+
+  resetPasswordForm: FormGroup | any;
+
   isAndroidApp = false
 
   showLoginPage = false
 
   userId: any;
+
+  forgotPassword = false
+  showPasswordReset: boolean = false;
 
 
   constructor(
@@ -68,6 +75,8 @@ export class LoginComponent implements OnChanges, OnInit {
     Password: new FormControl('', [Validators.required])
   });
 
+
+
   ngOnInit(): void {
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
@@ -97,6 +106,17 @@ export class LoginComponent implements OnChanges, OnInit {
       confirmPassword: ['', Validators.required]
     }, {
       validator: this.passwordMatchValidator // Custom validator for matching passwords
+    });
+
+
+    this.forgotPasswordForm = this.fb.group({
+      username: ['', [Validators.required, this.emailOrPhoneValidator]]
+    });
+
+    this.resetPasswordForm = this.fb.group({
+      username: ['', [Validators.required, this.emailOrPhoneValidator]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      otp: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]]
     });
   }
 
@@ -155,6 +175,7 @@ export class LoginComponent implements OnChanges, OnInit {
     this.isSignup = value
     this.showErrorMessage = false
   }
+
 
   async autoLogin() {
     let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
@@ -217,6 +238,67 @@ export class LoginComponent implements OnChanges, OnInit {
     }
 
   }
+
+  async submitForgotPassword() {
+    if (this.forgotPasswordForm.invalid) {
+      this.showErrorMessage = true
+      return
+    }
+    const value = this.forgotPasswordForm.value.username;
+    this.resetPasswordForm.patchValue({ username: value });
+
+    const isEmail = value.includes('@');
+    const payload = {
+      Username: value,
+    };
+
+    const params = {
+      body: payload
+    }
+
+    try {
+      const forgotPasswordResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/ResetPassword', 'POST', params);
+      if (forgotPasswordResponse.IsSuccess) {
+        this.forgotPassword = false
+        this.showPasswordReset = true
+        this.showErrorMessage = false
+      } else {
+        this.errorMsg = forgotPasswordResponse?.Message || 'Failed to send OTP. Please try again.'
+        this.showErrorMessage = true
+      }
+    } catch (error: any) {
+      this.errorMsg = error?.error?.Message || 'An error occurred. Please try again.'
+      this.showErrorMessage = true
+    }
+  }
+
+  async submitNewPassword() {
+    if (this.resetPasswordForm.invalid) {
+      this.showErrorMessage = true
+      return
+    }
+
+
+
+    const params = {
+      body: this.resetPasswordForm.value
+    };
+    console.log(params)
+    try {
+      const resetPasswordResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/ChangePassword', 'POST', params);
+      if (resetPasswordResponse.IsSuccess) {
+        this.showPasswordReset = false
+        this.showErrorMessage = false
+      } else {
+        this.errorMsg = resetPasswordResponse?.Message || 'Failed to reset password. Please try again.'
+        this.showErrorMessage = true
+      }
+    } catch (error: any) {
+      this.errorMsg = error?.error?.Message || 'An error occurred. Please try again.'
+      this.showErrorMessage = true
+    }
+  }
+
 
   async submitSignUp() {
     ////console.log(this.signupForm)
@@ -377,7 +459,7 @@ export class LoginComponent implements OnChanges, OnInit {
       this.errorMsg = 'A new OTP has been sent to your registered email or phone.'
       this.showRequestOtp = false
     }
-    else{
+    else {
       this.errorMsg = 'Failed to send new OTP. Please try again later.'
     }
   }
@@ -413,7 +495,7 @@ export class LoginComponent implements OnChanges, OnInit {
     this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
     this.hidePopup()
     this.usrSrv.gettUserId()
-    
+
   }
 
 }

@@ -57,6 +57,35 @@
 
 .ticket-title {
 	font-size: 1rem;
+	flex: 1;
+}
+
+.ticket-copy-btn {
+	align-items: center;
+	background: transparent;
+	border: none;
+	color: #9fc08f;
+	cursor: pointer;
+	display: inline-flex;
+	height: 24px;
+	justify-content: center;
+	margin: 0 0.5rem;
+	padding: 0;
+	transition: color 0.2s ease;
+	width: 24px;
+
+	&:hover {
+		color: #a4f675;
+	}
+
+	&:active {
+		color: #80d944;
+	}
+}
+
+.copy-icon {
+	height: 100%;
+	width: 100%;
 }
 
 .chevron {

@@ -14,9 +14,9 @@
 
 
       <div class="header-btns isloggedIn" *ngIf="isLoggedIn">
-        <span class="header-text" *ngIf="userBalance?.Wallet > 0">
+        <span class="header-text" *ngIf="userBalance?.Total > 0">
           <span class="icon"><img src="assets/images/wallet.svg" alt=""></span>
-          {{userBalance?.Wallet | number}} {{userBalance?.CurrencyCode}}
+          {{userBalance?.Total | number}} {{userBalance?.CurrencyCode}}
         </span>
       </div>
 

@@ -162,6 +162,43 @@ export class TicketsComponent implements OnInit {
 
   trackBySubTicket = (index: number, subTicket: any) => subTicket?.SubTicketId ?? subTicket?.TicketId ?? index;
 
+  copyTicketId(ticketId: string, event: Event): void {
+    event.stopPropagation();
+    if (!ticketId) {
+      return;
+    }
+
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ticketId).then(() => {
+        console.log('Ticket ID copied:', ticketId);
+      }).catch((err) => {
+        console.error('Failed to copy ticket ID:', err);
+        this.copyViaExecCommand(ticketId);
+      });
+    } else {
+      // Fallback for older browsers
+      this.copyViaExecCommand(ticketId);
+    }
+  }
+
+  private copyViaExecCommand(text: string): void {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Ticket ID copied (fallback):', text);
+    } catch (err) {
+      console.error('Failed to copy ticket ID:', err);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+
   private applyFilters(): void {
     const term = this.searchTerm.toLowerCase().trim();
     this.filteredTickets = this.tickets.filter((ticket: any) => {

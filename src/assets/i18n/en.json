@@ -87,7 +87,8 @@
             "loginHere": "Login here",
             "emailOrPhone": "Email or Phone",
             "emailOrPhoneInvalid": "Please enter a valid email or phone number",
-            "emailOrPhoneRequired": "Email or phone number is required"
+            "emailOrPhoneRequired": "Email or phone number is required",
+            "resetPassword": "Password Reset"
         }
     },
     "user": {
