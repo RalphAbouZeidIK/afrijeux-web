@@ -7,6 +7,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { UofComponent } from './sports/uof/uof.component';
 import { TicketsComponent } from './shared/tickets/tickets.component';
 import { ResultsComponent } from './shared/results/results.component';
+import { PlayResponsiblyComponent } from './static-pages/play-responsibly/play-responsibly.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -105,6 +106,16 @@ const routes: Routes = [
       shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.Results',
+    },
+  },
+  {
+    path: 'play-responsibly',
+    component: PlayResponsiblyComponent,
+    data: {
+      breadcrumb: 'Play Responsibly',
+      shouldBeLoggedIn: false,
+      showLink: true,
+      title: 'routerLinks.appTitle.PlayResponsibly',
     },
   },
   // Machine-prefixed versions

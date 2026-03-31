@@ -13,6 +13,7 @@ import { LegalPageContentComponent } from './play-responsibly/legal-page-content
 import { PrivacyPolicyComponent } from './play-responsibly/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './play-responsibly/terms-of-service/terms-of-service.component';
 import { CookiesSettingsComponent } from './play-responsibly/cookies-settings/cookies-settings.component';
+import { PlayResponsiblyComponent } from './play-responsibly/play-responsibly.component';
 
 
 
@@ -28,7 +29,8 @@ import { CookiesSettingsComponent } from './play-responsibly/cookies-settings/co
     LegalPageContentComponent,
     PrivacyPolicyComponent,
     TermsOfServiceComponent,
-    CookiesSettingsComponent
+    CookiesSettingsComponent,
+    PlayResponsiblyComponent
   ],
   imports: [
     routing,

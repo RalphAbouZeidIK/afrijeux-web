@@ -51,8 +51,12 @@ export class PreviousResultsComponent implements OnInit {
   }
 
   // placeholder for search/filter logic
-  async onSearch(value: string) {
-    const ticketValue = value?.trim();
+  async onSearch(value: string, input?: HTMLInputElement) {
+    const ticketValue = this.sanitizeTicketId(value);
+    if (input && input.value !== ticketValue) {
+      input.value = ticketValue;
+    }
+
     if (!ticketValue || this.isSearching) {
       return;
     }
@@ -62,10 +66,10 @@ export class PreviousResultsComponent implements OnInit {
 
     try {
       const apiResponse = await this.gamesSrv.checkTicket(ticketValue);
-      const parsed = this.normalizeSearchResponse(apiResponse);
-      console.log('checkTicket response', apiResponse, 'parsed', parsed);
-       this.searchResult = apiResponse[0];
-     
+      console.log('checkTicket response', apiResponse);
+
+      this.searchResult = apiResponse[0];
+      this.searchError = apiResponse ? '' : 'No details found for this ticket.';
 
       this.showSearchPopup = true;
     } catch (error) {
@@ -77,6 +81,13 @@ export class PreviousResultsComponent implements OnInit {
       this.isSearching = false;
     }
 
+  }
+
+  onTicketPaste(event: ClipboardEvent, input: HTMLInputElement): void {
+    event.preventDefault();
+
+    const pastedText = event.clipboardData?.getData('text') || '';
+    input.value = this.sanitizeTicketId(pastedText);
   }
 
   async onFilterChange(option: string) {
@@ -194,16 +205,18 @@ export class PreviousResultsComponent implements OnInit {
     return new Intl.NumberFormat('en-US').format(Number(value));
   }
 
+  private sanitizeTicketId(value: string | null | undefined): string {
+    return (value || '')
+      .normalize('NFKC')
+      .replace(/[\u200B-\u200D\uFEFF]/g, '')
+      .replace(/\s+/g, '')
+      .replace(/\D/g, '');
+  }
+
   private normalizeSearchResponse(apiResponse: any): TicketSearchResult | null {
+    debugger
     const candidate = apiResponse?.Data || apiResponse?.data || apiResponse?.Result || apiResponse?.result || apiResponse;
 
-    if (!candidate || typeof candidate !== 'object') {
-      return null;
-    }
-
-    if (!('GameName' in candidate) || !('GameEventDate' in candidate)) {
-      return null;
-    }
 
     return {
       GameName: String(candidate.GameName || ''),

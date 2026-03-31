@@ -8,6 +8,7 @@ import { PagesCoreComponent } from "./pages-core/pages-core.component";
 import { PrivacyPolicyComponent } from "./play-responsibly/privacy-policy/privacy-policy.component";
 import { TermsOfServiceComponent } from "./play-responsibly/terms-of-service/terms-of-service.component";
 import { CookiesSettingsComponent } from "./play-responsibly/cookies-settings/cookies-settings.component";
+import { PlayResponsiblyComponent } from "./play-responsibly/play-responsibly.component";
 
 const routes: Routes = [
     {
@@ -19,6 +20,7 @@ const routes: Routes = [
             { path: 'privacy-policy', component: PrivacyPolicyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Privacy Policy' } },
             { path: 'terms-of-service', component: TermsOfServiceComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Terms of Service' } },
             { path: 'cookies-settings', component: CookiesSettingsComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Cookies Settings' } },
+            { path: 'play-responsibly', component: PlayResponsiblyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Play Responsibly' } },
         ]
     },
 ];
