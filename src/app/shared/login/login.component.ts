@@ -323,6 +323,7 @@ export class LoginComponent implements OnChanges, OnInit {
     }
 
     try {
+       this.showErrorMessage = false
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
       ////console.log(signupResponse)
       if (signupResponse.IsSuccess) {
@@ -331,6 +332,13 @@ export class LoginComponent implements OnChanges, OnInit {
       }
 
       else {
+        if (signupResponse.ReasonId == 4) {
+          this.errorMsg = 'User already exists. Please login or use forgot password to reset your password.'
+        }
+        else {
+          this.errorMsg = signupResponse?.Message || 'Something went wrong. Please try again.'
+        }
+
         this.showErrorMessage = true
       }
     } catch (error: any) {
@@ -440,7 +448,8 @@ export class LoginComponent implements OnChanges, OnInit {
     }
 
     else {
-      this.errorMsg = 'Invalid OTP.'
+      this.errorMsg = 'Invalid OTP entered. Please try again.'
+      this.showErrorMessage = true
       this.showRequestOtp = true
     }
     // Call backend verification here

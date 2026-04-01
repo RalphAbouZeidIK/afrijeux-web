@@ -3,7 +3,9 @@
 img{
     display: block;
 }
-
+.username{
+    color:$lightGreen;
+}
 .money-form-overlay {
     position: fixed;
     inset: 0;

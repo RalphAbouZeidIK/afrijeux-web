@@ -168,41 +168,45 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     this.allEvents = allEvents;
     let gameEventsResponse = (this.isPickXGame) ? allEvents?.pickXGames : allEvents?.jackpotGames;
     console.log(gameEventsResponse)
-    gameEventsResponse.forEach((eventItem: any) => {
-      if (!eventItem.IsSalesStopped) {
-        this.eventsList.push(eventItem)
-      }
-    });
+    if (gameEventsResponse != null && gameEventsResponse !== undefined) {
+      gameEventsResponse.forEach((eventItem: any) => {
+        if (!eventItem.IsSalesStopped) {
+          this.eventsList.push(eventItem)
+        }
+      });
 
-    if (this.eventsList.length > 0) {
-      let selectedEvent = this.eventsList[0];
+      if (this.eventsList.length > 0) {
+        let selectedEvent = this.eventsList[0];
 
-      if (this.isPickXGame) {
-        const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
-        const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
+        if (this.isPickXGame) {
+          const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
+          const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
 
-        if (gameEventId) {
-          this.selectedGameEventId = Number(gameEventId);
-          const matchedEvent = this.eventsList.find(
-            (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
-          );
-          if (matchedEvent) {
-            selectedEvent = matchedEvent;
-          }
-        } else if (legacyGameType) {
-          // Backward compatibility for old links that still pass gametype.
-          const matchedEvent = this.eventsList.find(
-            (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(legacyGameType)
-          );
-          if (matchedEvent) {
-            selectedEvent = matchedEvent;
+          if (gameEventId) {
+            this.selectedGameEventId = Number(gameEventId);
+            const matchedEvent = this.eventsList.find(
+              (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
+            );
+            if (matchedEvent) {
+              selectedEvent = matchedEvent;
+            }
+          } else if (legacyGameType) {
+            // Backward compatibility for old links that still pass gametype.
+            const matchedEvent = this.eventsList.find(
+              (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(legacyGameType)
+            );
+            if (matchedEvent) {
+              selectedEvent = matchedEvent;
+            }
           }
         }
+
+        this.composeEventDetails(selectedEvent)
       }
-
-      this.composeEventDetails(selectedEvent)
     }
-
+    else {
+      this.showEventDetails = false
+    }
     console.log(this.eventsList)
   }
 

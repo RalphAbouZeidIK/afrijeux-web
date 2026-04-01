@@ -29,14 +29,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private balanceSubscription: Subscription | undefined;
 
+  userName: string = '';
+
   constructor(private gnrcSrv: GenericService, private usrSrv: UserService) { }
 
   ngOnInit(): void {
+    let userData = this.usrSrv.getUserData()
+    console.log(userData)
+    this.userName = userData?.Email || userData?.Phone || '';
     this.balanceSubscription = this.usrSrv.getUserBalance().subscribe((data) => {
       this.userBalance = data;
-      
     });
-    console.log('User balance updated:', this.userBalance);
     this.getTransactions();
   }
 
@@ -62,7 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .reduce((sum, t) => sum + t.Amount, 0);
 
     this.totalWithdrawn = this.transactions
-      .filter(t => t.TransactionType === 'Withdraw')
+      .filter(t => t.TransactionType === 'Withdraw' && t.TransactionStatus.toLowerCase() === 'confirmed')
       .reduce((sum, t) => sum + t.Amount, 0);
   }
 
