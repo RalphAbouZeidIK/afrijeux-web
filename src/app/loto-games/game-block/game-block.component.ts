@@ -5,6 +5,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { CartComponent } from 'src/app/shared/cart/cart.component';
 import { OptionListItem } from 'src/app/shared/option-list/option-list.component';
 
 @Component({
@@ -63,6 +64,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   cartHeight = 0;
 
   @ViewChild('gameBlock') gameBlock!: ElementRef<HTMLElement>;
+  @ViewChild('sharedCart') sharedCart?: CartComponent;
 
   fixedConfig: any
 
@@ -75,6 +77,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   selectedResultFilter: string | number | null = 1;
 
   showOptionsList = false
+
+  isBulkIssueInProgress = false
+
+  isBulkSeparateIssueInProgress = false
 
   constructor(
     private gnrcSrv: GenericService,
@@ -469,7 +475,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     return 'Jackpot';
   }
 
-  addToBet() {
+  addToBet(refreshEventDetails = true) {
     let pickItem: any
     const gameName = this.getGameNameForBet();
 
@@ -517,6 +523,93 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     this.Stake = 0
     this.cartSrv.updateLotoList(pickItem)
     this.selectedNumbers = [];
-    this.composeEventDetails(this.selectedEvent)
+    if (refreshEventDetails) {
+      this.composeEventDetails(this.selectedEvent)
+    }
+  }
+
+  async issue100Tickets() {
+    if (this.isBulkIssueInProgress || !this.selectedEvent) {
+      return;
+    }
+
+    this.isBulkIssueInProgress = true;
+
+    try {
+      for (let i = 0; i < 100; i++) {
+        this.quickPick();
+
+        if (this.isPickXGame && this.selectedType) {
+          this.Stake = Number(this.selectedType.MinStake) || 0;
+        } else if (this.isJackpotGame) {
+          this.updateLotoPrice();
+        }
+
+        this.addToBet(false);
+      }
+
+      this.composeEventDetails(this.selectedEvent);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      if (!this.sharedCart) {
+        this.gnrcSrv.setModalData(true, false, 'Cart is not ready yet. Please try again.');
+        return;
+      }
+
+      await this.sharedCart.issueTicket();
+    }
+    finally {
+      this.isBulkIssueInProgress = false;
+    }
+  }
+
+  async issue100TicketsSeparately() {
+    if (this.isBulkSeparateIssueInProgress || !this.selectedEvent) {
+      return;
+    }
+
+    this.isBulkSeparateIssueInProgress = true;
+
+    try {
+      const initialCartReady = await this.waitForSharedCart();
+      if (initialCartReady && !this.sharedCart?.isLoggedIn) {
+        await this.sharedCart!.issueTicket();
+        return;
+      }
+
+      for (let i = 0; i < 100; i++) {
+        this.quickPick();
+
+        if (this.isPickXGame && this.selectedType) {
+          this.Stake = Number(this.selectedType.MinStake) || 0;
+        } else if (this.isJackpotGame) {
+          this.updateLotoPrice();
+        }
+
+        this.addToBet(false);
+        const cartReady = await this.waitForSharedCart();
+        if (!cartReady) {
+          this.gnrcSrv.setModalData(true, false, 'Cart is not ready yet. Please try again.');
+          return;
+        }
+
+        await this.sharedCart!.issueTicket();
+      }
+
+      this.composeEventDetails(this.selectedEvent);
+    }
+    finally {
+      this.isBulkSeparateIssueInProgress = false;
+    }
+  }
+
+  private async waitForSharedCart(maxRetries = 30, delayMs = 50): Promise<boolean> {
+    for (let retry = 0; retry < maxRetries; retry++) {
+      if (this.sharedCart) {
+        return true;
+      }
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+    return false;
   }
 }

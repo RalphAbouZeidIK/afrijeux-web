@@ -70,6 +70,12 @@
                         <div class="btns-holder d-flex">
                             <a class="btn btn-primary" (click)="quickPick()">Quick Pick</a>
                             <a class="btn btn-success" (click)="addToBet()">Confirm Selections</a>
+                            <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
+                                {{ isBulkIssueInProgress ? 'Issuing...' : 'Issue 100 Tickets' }}
+                            </a>
+                            <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress" (click)="issue100TicketsSeparately()">
+                                {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 100 Separate Tickets' }}
+                            </a> -->
                         </div>
 
                     </div>
@@ -83,6 +89,6 @@
     <aside class="cart" [style.height.px]="cartHeight">
         <app-game-banner [style.height.px]="cartHeight" *ngIf="!showCart" [prizePoolLabel]="'Pick 2 Prize Pool'"
             [prizePoolAmount]="'3.65M'"></app-game-banner>
-        <app-shared-cart *ngIf="showCart" [selectedEvent]="selectedEvent"></app-shared-cart>
+        <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"></app-shared-cart>
     </aside> 
 </div>
