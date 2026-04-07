@@ -14,6 +14,9 @@ import { PrivacyPolicyComponent } from './play-responsibly/privacy-policy/privac
 import { TermsOfServiceComponent } from './play-responsibly/terms-of-service/terms-of-service.component';
 import { CookiesSettingsComponent } from './play-responsibly/cookies-settings/cookies-settings.component';
 import { PlayResponsiblyComponent } from './play-responsibly/play-responsibly.component';
+import { BrandedProductsComponent } from './branded-products/branded-products.component';
+import { BrandingShowcaseBlockComponent } from './branded-products/components/branding-showcase-block/branding-showcase-block.component';
+import { BrandingBenefitCardComponent } from './branded-products/components/branding-benefit-card/branding-benefit-card.component';
 
 
 
@@ -30,7 +33,10 @@ import { PlayResponsiblyComponent } from './play-responsibly/play-responsibly.co
     PrivacyPolicyComponent,
     TermsOfServiceComponent,
     CookiesSettingsComponent,
-    PlayResponsiblyComponent
+    PlayResponsiblyComponent,
+    BrandedProductsComponent,
+    BrandingShowcaseBlockComponent,
+    BrandingBenefitCardComponent
   ],
   imports: [
     routing,

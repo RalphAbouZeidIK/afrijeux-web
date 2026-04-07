@@ -2,9 +2,17 @@
 @use 'variables' as *;
 
 @font-face {
-    font-family: 'Switzer';
+    font-family: 'Switzer Bold';
     src: url('assets/fonts/Switzer-Bold.woff') format('woff');
     font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Switzer Regular';
+    src: url('assets/fonts/Switzer-Regular.woff') format('woff');
+    font-weight: 400;
     font-display: swap;
     font-style: normal;
 }

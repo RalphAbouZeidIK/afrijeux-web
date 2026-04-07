@@ -15,8 +15,10 @@ $lightGreen: #a4f675;
 $black: #000;
 
 // Typography
-$font-bold: 'Switzer', sans-serif;
+$font-bold: 'Switzer Bold', sans-serif;
 $font-regular: 'SF UI', sans-serif;
+$title-medium: 'Switzer Regular', sans-serif;
+
 
 @mixin transition($duration) {
     -webkit-transition: all $duration;

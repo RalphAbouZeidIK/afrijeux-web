@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <div class="showcase" [class.showcase--reverse]="reverse">
+
+    <div class="showcase__copy">
+      <h2>{{ title }}</h2>
+      <ul>
+        <li *ngFor="let item of items">
+          <span class="label">{{ item.label }}:</span>
+          <span class="body"> {{ item.text }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="showcase__visual">
+      <div class="img-stack">
+        <img class="img-front" [src]="imageUrl" [alt]="title" />
+      </div>
+    </div>
+
+  </div>
+</div>

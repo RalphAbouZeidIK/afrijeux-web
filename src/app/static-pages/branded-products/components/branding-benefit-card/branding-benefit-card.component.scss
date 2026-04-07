@@ -1,0 +1,65 @@
+@use '/src/variables' as *;
+
+.benefit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    margin-bottom: 100px;
+}
+
+// 56x56 outer centering wrapper
+.icon-outer {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    img {
+        position: absolute;
+        height:17px;
+
+    }
+}
+
+// 39.598x39.598 diamond, green gradient, rotated -45deg
+.icon-diamond {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(100.96deg,
+            #a4f675 2.12%,
+            #84d555 29.90%,
+            #69b93b 43.33%,
+            #6eae48 59.85%,
+            #639247 105.30%);
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+h3 {
+    font-family: $font-bold;
+    font-size: 20px;
+    line-height: 1;
+    color: $white;
+    text-transform: capitalize;
+    text-align: center;
+    margin: 0;
+    white-space: nowrap;
+}
+
+p {
+    font-family: $font-regular;
+    font-size: 16px;
+    line-height: 1.6;
+    color: $white;
+    text-align: center;
+    margin: 0;
+    max-width: 401px;
+}

@@ -1,0 +1,23 @@
+<div class="container-fluid">
+  <div class="benefit-card">
+
+    <!-- Diamond icon -->
+    <div class="icon-outer">
+      <div class="icon-diamond">
+
+      </div>
+
+      <ng-container [ngSwitch]="icon">
+        <img *ngSwitchCase="'customize'" src="assets/images/customize.svg" [alt]="title">
+        <img *ngSwitchCase="'quality'" src="assets/images/quality.svg" [alt]="title">
+        <img *ngSwitchCase="'lightning'" src="assets/images/lightning.svg" [alt]="title">
+
+      </ng-container>
+
+    </div>
+
+    <h3>{{ title }}</h3>
+    <p>{{ description }}</p>
+
+  </div>
+</div>
