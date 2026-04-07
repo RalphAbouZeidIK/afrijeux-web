@@ -1,22 +1,14 @@
 <div class="bp-page">
 
-  <!-- Hero -->
   <app-bp-hero [imageUrl]="heroContent.imageUrl" [imageAlt]="heroContent.imageAlt" [title]="heroContent.title"
     [description]="heroContent.description">
   </app-bp-hero>
 
-  <!-- Alternating showcase sections (Branding / Customization) -->
   <div class="bp-sections">
     <app-branding-showcase-block *ngFor="let s of sections" [title]="s.title" [items]="s.items" [reverse]="s.reverse"
       [imageUrl]="s.imageUrl">
     </app-branding-showcase-block>
   </div>
 
-  <!-- Bottom benefit cards -->
-  <div class="bp-benefits">
-    <app-branding-benefit-card *ngFor="let b of benefits" [title]="b.title" [description]="b.description"
-      [icon]="b.icon">
-    </app-branding-benefit-card>
-  </div>
-
+  
 </div>

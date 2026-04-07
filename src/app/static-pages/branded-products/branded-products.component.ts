@@ -14,6 +14,13 @@ interface BenefitCard {
     icon: 'customize' | 'quality' | 'lightning';
 }
 
+interface HeroContent {
+    title: string;
+    description: string;
+    imageUrl: string;
+    imageAlt: string;
+}
+
 @Component({
     selector: 'app-branded-products',
     standalone: false,
@@ -22,7 +29,12 @@ interface BenefitCard {
 })
 export class BrandedProductsComponent {
 
-    readonly heroImage = 'assets/images/products-hero.jpg';
+    readonly heroContent: HeroContent = {
+        title: 'Branded Products & Customization',
+        description: 'High-quality apparel and stationery tailored to your brand with flexible ordering, precise customization, and fast turnaround.',
+        imageUrl: 'assets/images/products-hero.jpg',
+        imageAlt: 'Branded Products fulfilment centre'
+    };
 
     sections: ShowcaseSection[] = [
         {

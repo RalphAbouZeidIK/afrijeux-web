@@ -171,6 +171,55 @@ app-option-list {
     top: 40px;
 }
 
+
+.bp-page {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    margin-bottom: 100px;
+}
+
+// ═══════════════════════════════════════════════════════
+//  Showcase sections container
+// ═══════════════════════════════════════════════════════
+.bp-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 136px;
+}
+
+// ═══════════════════════════════════════════════════════
+//  Benefits row  (Figma: 3 cards, gap 66px)
+// ═══════════════════════════════════════════════════════
+.bp-benefits {
+    display: flex;
+    gap: 66px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+// ═══════════════════════════════════════════════════════
+//  Responsive
+// ═══════════════════════════════════════════════════════
+@media (max-width: 1024px) {
+    .bp-page {
+        gap: 40px;
+    }
+
+    .bp-sections {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bp-benefits {
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+    }
+}
+
+
 @media all and (min-width:1400px) {
     .container {
         max-width: 1440px;
@@ -341,8 +390,8 @@ app-option-list {
     }
 }
 
-.money-form-overlay .form-bg{
-    width:470px;
+.money-form-overlay .form-bg {
+    width: 470px;
 }
 
 .mat-mdc-form-field-infix {
@@ -1027,7 +1076,7 @@ app-odd-item:nth-of-type(3n) {
         }
     }
 
-   
+
 
     app-mes-paries-popup {
         margin-bottom: 68px;
@@ -1137,8 +1186,9 @@ app-odd-item:nth-of-type(3n) {
             width: 100%;
         }
     }
-    .page-holder > aside.cart{
-        height:auto!important
+
+    .page-holder>aside.cart {
+        height: auto !important
     }
 
 }

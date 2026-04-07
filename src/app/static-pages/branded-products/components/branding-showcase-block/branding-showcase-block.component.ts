@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 export interface ShowcaseItem {
-    label: string;
+    label?: string ;
     text: string;
 }
 

@@ -8,6 +8,8 @@ import { UofComponent } from './sports/uof/uof.component';
 import { TicketsComponent } from './shared/tickets/tickets.component';
 import { ResultsComponent } from './shared/results/results.component';
 import { PlayResponsiblyComponent } from './static-pages/play-responsibly/play-responsibly.component';
+import { EventBrandingComponent } from './static-pages/event-branding/event-branding.component';
+import { BrandedProductsComponent } from './static-pages/branded-products/branded-products.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -106,6 +108,27 @@ const routes: Routes = [
       shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.Results',
+    },
+  },
+
+  {
+    path: 'branded-products',
+    component: BrandedProductsComponent,
+    data: {
+      breadcrumb: 'Branded Products',
+      shouldBeLoggedIn: false,
+      showLink: true,
+      title: 'Branded Products',
+    },
+  },
+  {
+    path: 'event-branding',
+    component: EventBrandingComponent,
+    data: {
+      breadcrumb: 'Event Branding',
+      shouldBeLoggedIn: false,
+      showLink: true,
+      title: 'Event Branding',
     },
   },
   {

@@ -63,12 +63,17 @@
 
     img {
         max-width: 100%;
+        width: 100%
     }
 
 
 }
 
 @media (max-width: 768px) {
+    .showcase__copy {
+        padding: 0 !important
+    }
+
     .showcase {
         flex-direction: column;
 

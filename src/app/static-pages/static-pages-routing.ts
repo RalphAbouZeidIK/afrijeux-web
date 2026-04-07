@@ -10,6 +10,7 @@ import { TermsOfServiceComponent } from "./play-responsibly/terms-of-service/ter
 import { CookiesSettingsComponent } from "./play-responsibly/cookies-settings/cookies-settings.component";
 import { PlayResponsiblyComponent } from "./play-responsibly/play-responsibly.component";
 import { BrandedProductsComponent } from "./branded-products/branded-products.component";
+import { EventBrandingComponent } from "./event-branding/event-branding.component";
 
 const routes: Routes = [
     {
@@ -23,6 +24,7 @@ const routes: Routes = [
             { path: 'cookies-settings', component: CookiesSettingsComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Cookies Settings' } },
             { path: 'play-responsibly', component: PlayResponsiblyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Play Responsibly' } },
             { path: 'branded-products', component: BrandedProductsComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Branded Products & Customization' } },
+            { path: 'event-branding', component: EventBrandingComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Event Giveaways & Brand Activations' } },
         ]
     },
 ];

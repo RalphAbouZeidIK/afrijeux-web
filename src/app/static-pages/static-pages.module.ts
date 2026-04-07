@@ -17,6 +17,8 @@ import { PlayResponsiblyComponent } from './play-responsibly/play-responsibly.co
 import { BrandedProductsComponent } from './branded-products/branded-products.component';
 import { BrandingShowcaseBlockComponent } from './branded-products/components/branding-showcase-block/branding-showcase-block.component';
 import { BrandingBenefitCardComponent } from './branded-products/components/branding-benefit-card/branding-benefit-card.component';
+import { BpHeroComponent } from './branded-products/components/bp-hero/bp-hero.component';
+import { EventBrandingComponent } from './event-branding/event-branding.component';
 
 
 
@@ -36,7 +38,9 @@ import { BrandingBenefitCardComponent } from './branded-products/components/bran
     PlayResponsiblyComponent,
     BrandedProductsComponent,
     BrandingShowcaseBlockComponent,
-    BrandingBenefitCardComponent
+    BrandingBenefitCardComponent,
+    BpHeroComponent,
+    EventBrandingComponent
   ],
   imports: [
     routing,
