@@ -19,4 +19,6 @@
     </app-branding-benefit-card>
   </div>
 
+  <a class="btn btn-primary contact-us-btn" (click)="showContactUs = true">Contact Us</a>
+  <app-contact-us *ngIf="showContactUs" (close)="showContactUs = false"></app-contact-us>
 </div>

@@ -27,7 +27,10 @@ interface HeroContent {
     templateUrl: './branded-products.component.html',
     styleUrls: ['./branded-products.component.scss']
 })
+
 export class BrandedProductsComponent {
+
+    showContactUs = false
 
     readonly heroContent: HeroContent = {
         title: 'Branded Products & Customization',

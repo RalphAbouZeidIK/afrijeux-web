@@ -1,0 +1,33 @@
+<div class="form-holder">
+    <div class="form-bg">
+
+        <h2>Contact Us</h2>
+        <a class="close-icon" (click)="onClose()">
+            <img src="assets/images/close-icon.svg" alt="close">
+        </a>
+        <form class="form-content">
+            <div class="form-group">
+                <input type="text" class="form-control" title="full name" formControlName="FullName"
+                    placeholder="Full name" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" title="email" formControlName="Email" placeholder="Email" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" title="phone number" formControlName="PhoneNumber"
+                    placeholder="Phone number" />
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" title="message" formControlName="Message"
+                    placeholder="Message"></textarea>
+            </div>
+            <div class="form-btns">
+
+                <button class="btn btn-primary">
+                    Submit
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

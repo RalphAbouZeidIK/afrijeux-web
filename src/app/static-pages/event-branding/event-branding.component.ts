@@ -28,6 +28,7 @@ interface HeroContent {
     styleUrls: ['./event-branding.component.scss']
 })
 export class EventBrandingComponent {
+    showContactUs = false
 
     readonly heroContent: HeroContent = {
         title: 'Event & Corporate Merchandise',
