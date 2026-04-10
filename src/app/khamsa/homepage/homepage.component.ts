@@ -44,7 +44,7 @@ export class HomepageComponent implements OnInit {
     let gameEventsResponse: any
 
     if (this.isAndroidApp) {
-      gameEventsResponse = await this.machineSrv.getGamesEvents()
+      gameEventsResponse = await this.machineSrv.getGamesEvents('khamsa')
       console.log(gameEventsResponse)
       if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
         gameEventsResponse.GameConfiguration.EventConfiguration.forEach((eventItem: any) => {

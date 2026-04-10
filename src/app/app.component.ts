@@ -199,10 +199,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log(machineData)
       let games = machineData?.Games
       console.log(games)
-      games.forEach((gameItem: any) => {
-        this.navList.push(gameItem)
+      if (games) {
+        games.forEach((gameItem: any) => {
+          this.navList.push(gameItem)
 
-      });
+        });
+      }
     }
 
     // desktop clients no longer build navList here; header obtains the

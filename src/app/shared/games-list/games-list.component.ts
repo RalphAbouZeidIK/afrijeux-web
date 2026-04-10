@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { GamesService } from 'src/app/services/games.service';
+import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
   selector: 'app-games-links',
@@ -9,6 +9,7 @@ import { GamesService } from 'src/app/services/games.service';
   styleUrl: './games-list.component.scss'
 })
 export class GamesLinksComponent implements OnChanges {
+  isAndroidApp = this.gnrcSrv.isMachineApp()
 
   pickXEvents: any;
 
@@ -18,7 +19,7 @@ export class GamesLinksComponent implements OnChanges {
   @Input() isGamePage = false;
   @Input() selectedGameEventId: number | string | null = null;
 
-  constructor(private gamesSrv: GamesService, private router: Router) { }
+  constructor(private gnrcSrv: GenericService, private router: Router) { }
 
   getGameEvents() {
     console.log(this.allEvents)

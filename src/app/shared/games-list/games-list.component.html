@@ -2,13 +2,14 @@
     <div class="button-group">
         <button *ngFor="let pickX of pickXEvents" class="pick-button"
             [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isSelectedPickX(pickX)}"
-            [attr.data-option]="pickX.id" routerLink="/PickX"
+            [attr.data-option]="pickX.id" [routerLink]="isAndroidApp ? '/Machine/PickX' : '/PickX'"
             [queryParams]="{ gameEventId: pickX.GameEventId }">
             Pick {{ pickX.ConfigurationVersionId }}
+         
         </button>
         <button *ngFor="let jackpot of jackpotEvents" class="pick-button"
             [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isJackpotRoute()}"
-            [attr.data-option]="jackpot.id" routerLink="/Jackpot">
+            [attr.data-option]="jackpot.id" [routerLink]="isAndroidApp ? '/Machine/Jackpot' : '/Jackpot'">
             Jackpot
         </button>
 

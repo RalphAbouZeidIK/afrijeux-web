@@ -194,10 +194,21 @@ export class MachineService {
     if (!apiRoute.includes('SendReports')) {
       let userData = await this.getUserData()
       let machineData = (this.isAndroidApp) ? await this.getMachineData() : this.webMachine
+      let personId: any = null
+
+      if (this.isAndroidApp) {
+        personId = (userData) ? userData.PersonId : null
+      }
+
+      else {
+        personId = this.gnrcSrv.gettUserId()
+      }
+
+      console.log(personId)
 
       params = {
         ...params,
-        PersonId: (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId(),
+        PersonId: personId,
         GameOperationId: (machineData) ? machineData.OperationId : null,
         TimeStamp: this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS'),
         MachineId: (machineData) ? machineData.MachineId : null
@@ -323,7 +334,7 @@ export class MachineService {
   }
 
   getGameRoute() {
-    let route = this.router.url.split('/')[2]
+    let route = this.router.url.split('/')[2]?.split('?')[0]
     ////console.log(this.router.url)
     return route
   }
@@ -1068,13 +1079,16 @@ export class MachineService {
 
   /************Offline Methods End************/
 
-  async getGamesEvents() {
+  async getGamesEvents(gameName: any) {
+    let machineData: any = await this.getMachineData()
+    let game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === gameName)
+    console.log(machineData, game)
     let params: any = {
-      GameId: await this.getGameId(),
+      GameId: game?.GameId,
       GameConfiguration: [],
       UserOnlineStatus: true,
     }
-    let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/GetEventConfiguration`, 'POST', params)
+    let gameEventsResponse = await this.handleApiResponse(game?.RouteName, `${game?.RouteName}/GetEventConfiguration`, 'POST', params)
     return gameEventsResponse
   }
 

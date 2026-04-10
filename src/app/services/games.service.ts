@@ -181,7 +181,7 @@ export class GamesService {
   async getGamesEvents(gameName?: any) {
     let apiResponse: any = []
     if (this.isAndroidApp) {
-      let gameEventsResponse = await this.machineSrv.getGamesEvents()
+      let gameEventsResponse = await this.machineSrv.getGamesEvents(gameName)
       if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
         apiResponse = gameEventsResponse.GameConfiguration.EventConfiguration
       }
@@ -195,7 +195,9 @@ export class GamesService {
 
   async getAllLotoGames() {
     let pickXGames: any = await this.getGamesEvents('PickX');
+    console.log('Fetched PickX games:', pickXGames);
     let jackpotGames: any = await this.getGamesEvents('Jackpot');
+    console.log('Fetched Jackpot games:', jackpotGames);
     return { pickXGames, jackpotGames };
   }
 
@@ -203,7 +205,7 @@ export class GamesService {
     let apiResponse: any
     let path = this.gnrcSrv.getGameRoute()
     if (this.isAndroidApp) {
-      let apiResponse = await this.machineSrv.getFixedConfiguration(fixedConfigId)
+      apiResponse = await this.machineSrv.getFixedConfiguration(fixedConfigId)
     }
     else {
       let apiParams = {

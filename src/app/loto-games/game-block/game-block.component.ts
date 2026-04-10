@@ -6,7 +6,6 @@ import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { CartComponent } from 'src/app/shared/cart/cart.component';
-import { OptionListItem } from 'src/app/shared/option-list/option-list.component';
 
 @Component({
   selector: 'app-game-block',
@@ -15,7 +14,6 @@ import { OptionListItem } from 'src/app/shared/option-list/option-list.component
   styleUrl: './game-block.component.scss'
 })
 export class GameBlockComponent implements AfterViewInit, OnDestroy {
-  isAndroidApp = false
 
   selectedGameEventId: number | null = null
 
@@ -82,6 +80,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   isBulkSeparateIssueInProgress = false
 
+  isAndroidApp = this.gnrcSrv.isMachineApp()
+
   constructor(
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
@@ -106,7 +106,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     this.isPickXGame = window.location.href.includes("PickX")
     this.isJackpotGame = window.location.href.includes("Jackpot")
     console.log(this.isPickXGame)
-    this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.getEvents()
   }
 

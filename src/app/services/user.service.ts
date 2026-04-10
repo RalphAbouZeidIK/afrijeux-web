@@ -215,7 +215,7 @@ export class UserService {
    * Get user id from token
    */
   gettUserId() {
-    let token = this.localStorageSrv.getItem('user_data', true).token
+    let token = this.localStorageSrv.getItem('user_data', true)?.token
     let decoded: any = jwtDecode(token);
     ////console.log(decoded)
     return decoded.PersonId
