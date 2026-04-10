@@ -99,3 +99,24 @@
         }
     }
 }
+
+.bp-hero__title {
+    animation: fadeInOut 0.6s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.bp-hero__description--hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}

@@ -8,80 +8,136 @@ import { LegalPageContent } from '../legal-content.model';
 })
 export class TermsOfServiceComponent {
     content: LegalPageContent = {
-        title: 'Terms of Service',
-        subtitle: 'Last updated: March 26, 2026',
+        title: 'Terms and Conditions',
+        subtitle: 'WinBig General Trading L.L.C. (“WinBig” or “Company”) is a company registered and licensed by the Department of Economic Development under license number 1371374. <br> WinBig operates through its website winbig.win, offering promotional products and related services.',
         sections: [
             {
                 id: 'acceptance-of-terms',
                 title: 'Acceptance of Terms',
                 paragraphs: [
-                    'By accessing and using this gaming platform, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, please do not use our service.'
+                    'By accessing or using the Website, you agree to comply with these Terms & Conditions, as well as any additional rules related to specific products, promotions, or services.',
+                    'WinBig reserves the right to update or modify these Terms at any time.'
                 ]
             },
             {
-                id: 'age-requirement',
-                title: 'Age Requirement',
+                id: 'account-registration',
+                title: 'Account Registration',
                 paragraphs: [
-                    'You must be at least 18 years old to use this service. By using this platform, you represent and warrant that you are of legal age to form a binding contract. We reserve the right to request proof of age at any time.'
+                    '•	Users must create an account with accurate and complete information ',
+                    '•	Each user is allowed only one account ',
+                    '•	Account credentials must be kept confidential; users are responsible for all activity under their account ',
+                    '•	WinBig reserves the right to refuse, suspend, or close any account at its discretion '
                 ]
             },
             {
-                id: 'user-account',
-                title: 'User Account',
+                id: 'use-of-the-platform',
+                title: 'Use of the Platform',
                 paragraphs: [
-                    'When you create an account with us, you must provide accurate, complete, and current information. You are responsible for:',
-                    'Maintaining the confidentiality of your account and password',
-                    'All activities that occur under your account',
-                    'Notifying us immediately of any unauthorized use'
+                    '•	The Website must be used in compliance with applicable laws ',
+                    '•	Any fraudulent activity, manipulation, or misuse of the platform is strictly prohibited ',
+                    '•	WinBig may suspend or terminate accounts involved in misconduct or abuse '
                 ]
             },
             {
-                id: 'responsible-gaming',
-                title: 'Responsible Gaming',
+                id: 'payments',
+                title: 'Payments (Deposits)',
                 paragraphs: [
-                    'We are committed to promoting responsible gaming. You agree to play within your means and set appropriate limits. If you feel you may have a gambling problem, we encourage you to use our self-exclusion tools or seek professional help.'
+                    '•	Payments are processed through authorised third-party payment providers (e.g., retailers, banks, or payment gateways) ',
+                    '•	Users must provide payment details directly to these providers; WinBig does not store or process sensitive payment information ',
+                    '•	Deposits can only be made using payment methods registered in the user’s name ',
+                    '•	WinBig reserves the right to perform identity verification checks before or after any transaction ',
+                    '•	All transactions may be monitored to prevent fraud, money laundering, or unauthorized use ',
+                    '•	WinBig may refuse or cancel any transaction that is deemed suspicious or non-compliant '
                 ]
             },
             {
-                id: 'prohibited-activities',
-                title: 'Prohibited Activities',
+                id: 'withdrawals',
+                title: 'Withdrawals',
                 paragraphs: [
-                    'You agree not to:',
-                    'Use the service for any illegal purpose',
-                    'Attempt to gain unauthorized access to any portion of the service',
-                    'Use any automated system to access the service',
-                    'Interfere with or disrupt the service or servers',
-                    'Engage in any form of cheating or collusion'
+                    '•	Withdrawal requests may be processed only after full account verification ',
+                    '•	Funds will generally be returned using the same method used for deposit, where applicable ',
+                    '•	WinBig may request identification documents (e.g., ID, passport, or driver’s license) before processing withdrawals ',
+                    '•	Withdrawals are typically processed within 24 hours, subject to verification and operational constraints ',
+                    '•	WinBig reserves the right to delay or decline withdrawals in cases of suspected fraud, misuse, or regulatory requirements '
                 ]
             },
             {
-                id: 'payments-and-withdrawals',
-                title: 'Payments and Withdrawals',
+                id: 'promotions',
+                title: 'Promotions & Bonuses',
                 paragraphs: [
-                    'All deposits and withdrawals are subject to our payment policies. We reserve the right to request additional documentation before processing withdrawals. Processing times may vary depending on the payment method selected.'
+                    '•	Each promotion is subject to its own specific terms and conditions ',
+                    '•	Bonuses are personal and may be limited to one per user unless stated otherwise ',
+                    '•	WinBig reserves the right to modify, suspend, or cancel promotions at any time ',
+                    '•	Any misuse of promotions may result in cancellation of bonuses, winnings, and/or account suspension '
                 ]
             },
             {
-                id: 'limitation-of-liability',
-                title: 'Limitation of Liability',
+                id: 'inactive',
+                title: 'Inactive & Dormant Accounts',
                 paragraphs: [
-                    'We shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service. This includes any loss of profits, revenue, or data.'
+                    '•	An account may be considered inactive if there is no activity for a defined period ',
+                    '•	WinBig may apply administrative fees to inactive accounts with a positive balance ',
+                    '•	Accounts with zero balance may be classified as dormant and may be closed at the Company’s discretion ',
+                    '•	Where applicable, WinBig will attempt to notify the user before applying fees or closing the account ',
+                    '•	Users are encouraged to maintain activity or withdraw funds to avoid inactivity status '
                 ]
             },
             {
-                id: 'changes-to-terms',
-                title: 'Changes to Terms',
+                id: 'account-closure',
+                title: 'Account Closure',
                 paragraphs: [
-                    'We reserve the right to modify or replace these Terms at any time. We will provide notice of any material changes by posting the new Terms on this page. Your continued use of the service after any such changes constitutes your acceptance of the new Terms.'
+                    'Users may request account closure at any time. Any remaining balance will be communicated and can be withdrawn prior to closure.'
                 ]
             },
             {
-                id: 'contact-information',
-                title: 'Contact Information',
+                id: 'fraud',
+                title: 'Fraud & Security',
                 paragraphs: [
-                    'For questions about these Terms, please contact us at legal@example.com'
+                    'WinBig reserves the right to:',
+                    '•	Investigate and report suspicious or illegal activity ',
+                    '•	Suspend or permanently close accounts involved in fraud ',
+                    '•	Cancel transactions or participation where misuse is detected ',
+                    '•	Cooperate with authorities and provide required information when necessary '
                 ]
-            }
+            },
+            {
+                id: 'pricing',
+                title: 'Pricing',
+                paragraphs: [
+                    'All prices are displayed in AED and may be updated at any time without prior notice.'
+                ]
+            },
+            {
+                id: 'liability',
+                title: 'Liability & Service Availability',
+                paragraphs: [
+                    'WinBig may suspend or interrupt the Website for maintenance or operational reasons.',
+                    'The Company is not liable for interruptions or technical issues beyond its control.'
+                ]
+            },
+            {
+                id: 'governing-law',
+                title: 'Governing Law',
+                paragraphs: [
+                    'These Terms are governed by the laws of the UAE. Any disputes shall fall under the jurisdiction of UAE courts.'
+                ]
+            },
+            {
+                id: 'general',
+                title: 'General',
+                paragraphs: [
+                    'If any provision of these Terms is found invalid or unenforceable, the remaining provisions shall remain in full force.'
+                ]
+            },
+            {
+                id: 'address',
+                title: 'Address',
+                paragraphs: [
+                    'You may contact us by sending us an e-mail to <a href="mailto:info@winbiggt.com">info@winbiggt.com</a> ',
+                    '•	Our office is located at:',
+                    'St number 1, Sultan Bin Khalifa Bin Zayed Al Nhyan <br>Mall 1<br>Dubai, United Arab Emirates'
+                ]
+            },
         ]
     };
 }

@@ -13,11 +13,11 @@
         <div class="legal-page__sections">
             <div class="legal-page__header">
                 <h1>{{ content.title }}</h1>
-                <p>{{ content.subtitle }}</p>
+                <p [innerHTML]="content.subtitle"></p>
             </div>
             <article *ngFor="let section of content.sections; index as i" [id]="section.id" class="legal-section">
                 <h2>{{ i + 1 }}. {{ section.title }}</h2>
-                <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+                <p *ngFor="let paragraph of section.paragraphs" [innerHtml]="paragraph"></p>
             </article>
         </div>
     </div>

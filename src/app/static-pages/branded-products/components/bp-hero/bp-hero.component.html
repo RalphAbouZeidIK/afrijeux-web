@@ -1,11 +1,11 @@
 <section class="bp-hero">
   <div class="container-fluid">
     <div class="parent">
-      <img class="bp-hero__img" [src]="imageUrl" [alt]="imageAlt || title" />
+      <img class="bp-hero__img" [src]="imageUrl" [alt]="imageAlt || currentTitle" />
       <div class="bp-hero__shade"></div>
       <div class="bp-hero__glass">
-        <h1>{{ title }}</h1>
-        <p>{{ description }}</p>
+        <h1 [@fadeInOut]="currentTitleIndex" class="bp-hero__title">{{ currentTitle }}</h1>
+        <p [@fadeInOut]="currentTitleIndex" [ngClass]="{ 'bp-hero__description--hidden': currentTitleIndex !== 0 }" class="bp-hero__description">{{ description }}</p>
       </div>
     </div>
   </div>

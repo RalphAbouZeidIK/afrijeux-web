@@ -20,7 +20,7 @@ const routes: Routes = [
             { path: '', component: HomepageComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.appTitle.mainTitle' } },
             { path: 'Tickets', component: TicketsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.appTitle.Tickets' }, canActivate: [SharedGuard] },
             { path: 'privacy-policy', component: PrivacyPolicyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Privacy Policy' } },
-            { path: 'terms-of-service', component: TermsOfServiceComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Terms of Service' } },
+            { path: 'terms-and-conditions', component: TermsOfServiceComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Terms and Conditions' } },
             { path: 'cookies-settings', component: CookiesSettingsComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Cookies Settings' } },
             { path: 'play-responsibly', component: PlayResponsiblyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Play Responsibly' } },
             { path: 'branded-products', component: BrandedProductsComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Branded Products & Customization' } },

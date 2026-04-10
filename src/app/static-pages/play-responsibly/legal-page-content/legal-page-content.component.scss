@@ -68,7 +68,10 @@
         display: flex;
         flex-direction: column;
         gap: 65px;
+
+
     }
+
 }
 
 .legal-section {
@@ -83,10 +86,21 @@
     }
 
     p {
-        margin: 0;
         font-size: 16px;
         line-height: 1.85;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
     }
+
+
+}
+
+
+
+::ng-deep .legal-section a {
+    color: $lightGreen
 }
 
 @media (max-width: 1024px) {
@@ -98,7 +112,7 @@
         }
 
         &__toc {
-           display: none;
+            display: none;
         }
 
         &__sections {
