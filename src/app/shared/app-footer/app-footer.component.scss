@@ -15,14 +15,12 @@
 
   .top-row {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 24px;
   }
 
-  .brand-block {
-    max-width: 438px;
-  }
+  
 
   .brand-line {
     display: flex;
@@ -46,11 +44,17 @@
   }
 
   .responsible-note {
-    margin: 10px 0 0;
+    margin:0 0 15px;
     font-family: $font-regular;
     font-size: 14px;
     line-height: 24px;
     color: #7e7e7e;
+    a{
+      color: #7e7e7e;
+      &:hover{
+        color:$lightGreen
+      }
+    }
   }
 
   .policy-nav {
