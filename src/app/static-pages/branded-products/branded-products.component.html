@@ -5,6 +5,9 @@
     [description]="heroContent.description">
   </app-bp-hero>
 
+  <!-- Product List -->
+  <app-bp-product-list [products]="products"></app-bp-product-list>
+
   <!-- Alternating showcase sections (Branding / Customization) -->
   <div class="bp-sections">
     <app-branding-showcase-block *ngFor="let s of sections" [title]="s.title" [items]="s.items" [reverse]="s.reverse"

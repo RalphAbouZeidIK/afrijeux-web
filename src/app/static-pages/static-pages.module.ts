@@ -18,7 +18,9 @@ import { BrandedProductsComponent } from './branded-products/branded-products.co
 import { BrandingShowcaseBlockComponent } from './branded-products/components/branding-showcase-block/branding-showcase-block.component';
 import { BrandingBenefitCardComponent } from './branded-products/components/branding-benefit-card/branding-benefit-card.component';
 import { BpHeroComponent } from './branded-products/components/bp-hero/bp-hero.component';
+import { BpProductListComponent } from './branded-products/components/bp-product-list/bp-product-list.component';
 import { EventBrandingComponent } from './event-branding/event-branding.component';
+
 
 
 
@@ -40,6 +42,7 @@ import { EventBrandingComponent } from './event-branding/event-branding.componen
     BrandingShowcaseBlockComponent,
     BrandingBenefitCardComponent,
     BpHeroComponent,
+    BpProductListComponent,
     EventBrandingComponent
   ],
   imports: [

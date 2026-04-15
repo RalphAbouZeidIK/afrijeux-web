@@ -1,5 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import { ShowcaseItem } from './components/branding-showcase-block/branding-showcase-block.component';
+import { Product } from './components/bp-product-list/bp-product-list.component';
 
 interface ShowcaseSection {
     title: string;
@@ -38,6 +39,65 @@ export class BrandedProductsComponent {
         imageUrl: 'assets/images/products-hero.jpg',
         imageAlt: 'Branded Products fulfilment centre'
     };
+
+    readonly products: Product[] = [
+        {
+            id: 1,
+            title: 'T-shirt',
+            price: 5,
+            image: 'assets/images/products/tshirt.png',
+            description: 'Premium branded T-shirt with logo printing'
+        },
+        {
+            id: 2,
+            title: 'Pen',
+            price: 5,
+            image: 'assets/images/products/pen.png',
+            description: 'High-quality pen with logo engraving'
+        },
+        {
+            id: 3,
+            title: 'Roll up Banner',
+            price: 5,
+            image: 'assets/images/products/roll-up-banner.png',
+            description: 'Durable roll-up banner with full-color printing for events and promotions'
+        },
+        {
+            id: 4,
+            title: 'Mug',
+            price: 5,
+            image: 'assets/images/products/mug.png',
+            description: 'Ceramic mug with custom logo printing for office or giveaways'
+        },
+        {
+            id: 5,
+            title: 'Winbig Notebook',
+            price: 5,
+            image: 'assets/images/products/notebook.png',
+            description: 'Premium notebooks with logo printing'
+        },
+        {
+            id: 6,
+            title: 'Football',
+            price: 5,
+            image: 'assets/images/products/football.png',
+            description: 'Official branded football for training and matches'
+        },
+        {
+            id: 7,
+            title: 'Cap',
+            price: 5,
+            image: 'assets/images/products/cap.png',
+            description: 'Branded cap with embroidered logo for everyday visibility and a polished team look'
+        },
+        {
+            id: 8,
+            title: 'Water Bottle',
+            price: 5,
+            image: 'assets/images/products/water-bottle.png',
+            description: 'Branded water bottle with logo printing for hydration on the go'
+        }
+    ];
 
     sections: ShowcaseSection[] = [
         {

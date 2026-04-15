@@ -17,7 +17,7 @@ const routes: Routes = [
         path: '',
         component: PagesCoreComponent,
         children: [
-            { path: '', redirectTo: 'branded-products', pathMatch: 'full' },
+            { path: '', component: HomepageComponent, pathMatch: 'full' },
             { path: 'Tickets', component: TicketsComponent, data: { showLink: true, shouldBeLoggedIn: true, title: 'routerLinks.appTitle.Tickets' }, canActivate: [SharedGuard] },
             { path: 'privacy-policy', component: PrivacyPolicyComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Privacy Policy' } },
             { path: 'terms-and-conditions', component: TermsOfServiceComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Terms and Conditions' } }, { path: 'cookies-settings', component: CookiesSettingsComponent, data: { showLink: false, shouldBeLoggedIn: false, title: 'Cookies Settings' } },
