@@ -75,7 +75,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'PickX',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Pickx',
     }
   },
@@ -85,7 +85,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Jackpot',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Jackpot',
     }
   },
@@ -106,7 +106,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Results',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Results',
     },
   },
@@ -137,7 +137,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Play Responsibly',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.PlayResponsibly',
     },
   },

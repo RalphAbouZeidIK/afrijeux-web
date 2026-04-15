@@ -80,10 +80,11 @@
 }
 
 @media (max-width: 768px) {
+
     .bp-hero {
         height: auto;
         border-radius: 24px;
-        
+
         &__glass {
             padding: 0 5%;
 
@@ -98,6 +99,17 @@
             }
         }
     }
+
+    .bp-hero .parent {
+        padding-bottom: 0;
+        height: 400px;
+    }
+
+    .bp-hero__img {
+        height: 100%;
+        object-fit: cover;
+        width: auto;
+    }
 }
 
 .bp-hero__title {
@@ -108,9 +120,11 @@
     0% {
         opacity: 0;
     }
+
     50% {
         opacity: 1;
     }
+
     100% {
         opacity: 1;
     }
@@ -119,4 +133,5 @@
 .bp-hero__description--hidden {
     opacity: 0 !important;
     pointer-events: none;
+    height: 0;
 }

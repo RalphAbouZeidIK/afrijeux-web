@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GenericService } from 'src/app/services/generic.service';
 
 interface CookieCategory {
     id: 'essential' | 'analytics' | 'marketing' | 'preference';
@@ -15,6 +16,7 @@ interface CookieCategory {
     styleUrl: './cookies-settings.component.scss'
 })
 export class CookiesSettingsComponent {
+    constructor(private gnrcSrv: GenericService) { }
     cookieCategories: CookieCategory[] = [
         {
             id: 'essential',
@@ -66,6 +68,6 @@ export class CookiesSettingsComponent {
     }
 
     saveSettings(): void {
-        // Placeholder action: state is already updated in-memory via toggles.
+        this.gnrcSrv.setModalData(true, true, 'Settings Saved');
     }
 }

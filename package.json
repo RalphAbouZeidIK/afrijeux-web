@@ -7,7 +7,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build": "ng build",
-    "build:angular": "node clean-dist.js && ng build --configuration production && node update-version.js && node zip-build.js && node copy-build.js"
+    "build:angular": "node clean-dist.js && ng build --configuration production && node update-version.js && node zip-build.js && node copy-build.js",
+    "build:v1": "node setup-routing.js v1 && node clean-dist.js && ng build --configuration production && node update-version.js && node zip-build.js && node copy-build.js",
+    "build:v2": "node setup-routing.js v2 && node clean-dist.js && ng build --configuration production && node update-version.js && node zip-build.js && node copy-build.js"
   },
   "private": true,
   "dependencies": {

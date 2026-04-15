@@ -71,7 +71,16 @@
 
 @media (max-width: 768px) {
     .showcase__copy {
-        padding: 0 !important
+        padding: 0 !important;
+        h2{
+            font-size:20px;
+            margin-bottom: 8px;
+        }
+        li{
+            font-size:16px;
+            line-height: 24px;
+            margin-bottom: 8px;
+        }
     }
 
     .showcase {
@@ -83,5 +92,6 @@
             }
         }
     }
+
 
 }
