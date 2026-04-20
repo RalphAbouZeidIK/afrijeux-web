@@ -19,6 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class LoginComponent implements OnChanges, OnInit {
 
+  isLogin = true;
 
   isSignup: any;
 
@@ -122,6 +123,7 @@ export class LoginComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.isSignup = (changes['loginObject'].currentValue.type == 'signup');
+    this.isLogin = !this.isSignup
     ////console.log(changes['loginObject'].currentValue)
   }
 
@@ -172,6 +174,7 @@ export class LoginComponent implements OnChanges, OnInit {
   }
 
   swtichToSignUp(value: boolean) {
+    this.isLogin = !value
     this.isSignup = value
     this.showErrorMessage = false
   }
@@ -323,7 +326,7 @@ export class LoginComponent implements OnChanges, OnInit {
     }
 
     try {
-       this.showErrorMessage = false
+      this.showErrorMessage = false
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
       ////console.log(signupResponse)
       if (signupResponse.IsSuccess) {

@@ -42,8 +42,8 @@ export class MachineCoreComponent implements OnInit {
 
     let params = {
       //CHANGE HERE TO GET OLD MACHINE CODE
-      //Machine: await this.bridge.getSerial(),
-      Machine: 'B42M001K02400073',
+      Machine: await this.bridge.getSerial(),
+      //Machine: 'B42M001K02400073',
       VersionCode: '1.0.0'
     }
 

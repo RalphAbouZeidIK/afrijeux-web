@@ -83,9 +83,12 @@ export class GenericService {
   }
 
   async getBalance() {
-    let balance = await this.apiSrv.makeApi(`OnlineMaster`, `UserInfo/GetBalance`, 'GET', {})
-    ////console.log(balance)
-    return balance
+    if (!this.isMachineApp()) {
+      let balance = await this.apiSrv.makeApi(`OnlineMaster`, `UserInfo/GetBalance`, 'GET', {})
+      ////console.log(balance)
+      return balance
+    }
+
   }
 
   async refreshToken() {

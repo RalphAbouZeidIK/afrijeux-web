@@ -1,4 +1,4 @@
-<app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId" [allEvents]="allEvents"></app-games-links>
+<app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId" [allEvents]="allEvents" *ngIf="!isAndroidApp"></app-games-links>
 <div class="container-fluid page-holder" *ngIf="showEventDetails">
     <main>
         <div class="loto-game-container" #gameBlock>

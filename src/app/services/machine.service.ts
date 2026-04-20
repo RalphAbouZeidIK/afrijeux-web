@@ -176,8 +176,8 @@ export class MachineService {
     const xxtea = require('xxtea-node');
     let decrypted: any;
     //CHANGE HERE TO GET OLD MACHINE CODE
-    //let machineSerial = await this.bridge.getSerial()
-    let machineSerial = 'B42M001K02400073'
+    let machineSerial = await this.bridge.getSerial()
+    //let machineSerial = 'B42M001K02400073'
     if (isRegisterMachineApi) {
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(this.GetMachineDefaultKey(machineSerial))))
     }
@@ -1089,6 +1089,7 @@ export class MachineService {
       UserOnlineStatus: true,
     }
     let gameEventsResponse = await this.handleApiResponse(game?.RouteName, `${game?.RouteName}/GetEventConfiguration`, 'POST', params)
+    console.trace(gameEventsResponse)
     return gameEventsResponse
   }
 

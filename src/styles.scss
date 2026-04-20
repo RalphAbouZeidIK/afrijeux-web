@@ -197,11 +197,13 @@ app-option-list {
     align-items: flex-start;
     justify-content: center;
 }
-.contact-us-btn{
-    width:200px;
-     margin: 0 auto;
-     display: block;
+
+.contact-us-btn {
+    width: 200px;
+    margin: 0 auto;
+    display: block;
 }
+
 // ═══════════════════════════════════════════════════════
 //  Responsive
 // ═══════════════════════════════════════════════════════
@@ -385,10 +387,33 @@ app-option-list {
 
     &.machine-layout {
         z-index: 3;
+        background: transparent;
 
         .form-bg {
             border-radius: 0;
-            padding: 25px 15px;
+            padding: 0;
+            padding-bottom: 30%;
+        }
+
+        h2 {
+            font-size: 24px;
+            padding-bottom: 0;
+            line-height: 42px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+        .form-btns{
+            margin-top: 40px;
+        }
+    }
+
+    .form-header {
+        p {
+            font-size: 12px;
+            opacity: 0.7;
+            margin: 0
         }
     }
 }
@@ -1100,7 +1125,7 @@ app-odd-item:nth-of-type(3n) {
     }
 
     .body-holder.android-app {
-        margin-top: 20px;
+        margin-top: 70px;
     }
 
     .hidden-mobile {

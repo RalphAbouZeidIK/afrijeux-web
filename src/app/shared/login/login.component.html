@@ -1,19 +1,26 @@
 <div class="form-holder" [ngClass]="{'machine-layout': isAndroidApp}" *ngIf="showLoginPage">
     <div class="form-bg">
+        <div class="form-header">
+            <ng-container *ngIf="!isAndroidApp">
+                <h2 *ngIf="isSignup">{{ 'shared.login.signUpTitle' | translate }}</h2>
+                <h2 *ngIf="isLogin">{{ 'shared.login.loginTitle' | translate }}</h2>
+                <h2 *ngIf="forgotPassword || showPasswordReset">{{ 'shared.login.resetPassword' | translate }}</h2>
+            </ng-container>
+            <ng-container *ngIf="isAndroidApp">
+                <h2>{{ 'shared.login.machineLogin' | translate }}</h2>
+                <p>{{ 'shared.login.machineLoginMessage' | translate }}</p>
+            </ng-container>
 
-        <h2 *ngIf="isSignup">{{ 'shared.login.signUpTitle' | translate }}</h2>
-        <h2 *ngIf="!isSignup && !forgotPassword && !showPasswordReset">{{ 'shared.login.loginTitle' | translate }}</h2>
-        <h2 *ngIf="forgotPassword || showPasswordReset">{{ 'shared.login.resetPassword' | translate }}</h2>
+            <a class="close-icon" (click)="hidePopup()" *ngIf="!isAndroidApp">
+                <img src="assets/images/close-icon.svg" alt="close">
+            </a>
+            <span class="text-danger" *ngIf="showErrorMessage">
+                {{ errorMsg }}
+            </span>
+        </div>
 
-        <a class="close-icon" (click)="hidePopup()" *ngIf="!isAndroidApp">
-            <img src="assets/images/close-icon.svg" alt="close">
-        </a>
-        <span class="text-danger" *ngIf="showErrorMessage">
-            {{ errorMsg }}
-        </span>
         <!-- ================= LOGIN FORM ================= -->
-        <form class="form-content" [formGroup]="loginForm" (keydown)="keyDownFunction($event)"
-            *ngIf="!isSignup && !showOtpForm && !forgotPassword && !showPasswordReset">
+        <form class="form-content" [formGroup]="loginForm" (keydown)="keyDownFunction($event)" *ngIf="isLogin">
 
             <div class="form-group">
                 <label class="title-label">
@@ -21,7 +28,7 @@
                 </label>
 
                 <input [type]="(isAndroidApp)?'number':'text'" class="form-control" title="Username"
-                    formControlName="Username" placeholder="Email/ Phone Number" />
+                    formControlName="Username" placeholder="{{ (isAndroidApp) ? 'User ID' : 'Email/ Phone Number' }}" />
             </div>
 
             <div class="form-group">
@@ -32,8 +39,8 @@
                 <input type="password" class="form-control" title="password" formControlName="Password"
                     placeholder="Password" />
 
-                <p class="text text-end forgot-password" *ngIf="!isSignup && !isAndroidApp"
-                    (click)="forgotPassword = true">
+                <p class="text text-end forgot-password" *ngIf="isLogin && !isAndroidApp"
+                    (click)="forgotPassword = true;isLogin=false;">
 
                     <a>{{ 'shared.login.forgotPassword' | translate }}</a>
                 </p>

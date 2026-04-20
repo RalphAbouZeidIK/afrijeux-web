@@ -15,6 +15,8 @@ import { ChangeDetectorRef } from '@angular/core';
   standalone: false
 })
 export class HeaderComponent implements OnInit {
+  isAndroidApp = this.gnrcSrv.isMachineApp()
+
   type: any = ''
 
   showDocumentsPopup = false

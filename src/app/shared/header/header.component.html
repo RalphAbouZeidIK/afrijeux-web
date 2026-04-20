@@ -1,16 +1,16 @@
-<header [ngClass]="{'is-mobile':!isDesktop}" class="header-main container-fluid ">
+<header [ngClass]="{'is-mobile':!isDesktop, 'android-app': isAndroidApp}" class="header-main container-fluid ">
 
   <div class="overlay" (click)="hideMenus()"></div>
-  <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()"></a>
+  <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()" *ngIf="!isAndroidApp"></a>
   <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/']" />
 
   <div class="header-container">
 
     <img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />
 
-    <app-nav parentClass="header-nav" [fullMenu]="menu"></app-nav>
+    <app-nav parentClass="header-nav" [fullMenu]="menu" *ngIf="!isAndroidApp"></app-nav>
 
-    <div class="right-section d-flex">
+    <div class="right-section d-flex" *ngIf="!isAndroidApp">
 
 
       <div class="header-btns isloggedIn" *ngIf="isLoggedIn">

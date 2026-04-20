@@ -88,7 +88,9 @@
             "emailOrPhone": "Email or Phone",
             "emailOrPhoneInvalid": "Please enter a valid email or phone number",
             "emailOrPhoneRequired": "Email or phone number is required",
-            "resetPassword": "Password Reset"
+            "resetPassword": "Password Reset",
+            "machineLogin": "Welcome Back,",
+            "machineLoginMessage": "Please login here to access all games."
         }
     },
     "user": {

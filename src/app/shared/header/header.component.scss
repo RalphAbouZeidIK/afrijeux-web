@@ -252,6 +252,13 @@ header {
     gap: 20px
 }
 
+.android-app {
+    background-color: $darkBg;
+    .logo {
+        margin: 0;
+    }
+}
+
 @media all and (max-width:1200px) {
     .overlay {
         content: '';
@@ -313,6 +320,7 @@ header {
     header {
         min-height: 60px;
         background-color: $lightBg;
+
 
         .header-container {
             display: none;

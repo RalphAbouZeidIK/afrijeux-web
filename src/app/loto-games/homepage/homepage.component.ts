@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { GamesService } from 'src/app/services/games.service';
 import { PlayTypeRule } from '../game-playtypes/game-playtypes.component';
 import { LotoGameContent, LotoGameContentKey, LOTO_GAME_CONTENT } from './homepage-content';
+import { GenericService } from 'src/app/services/generic.service';
 
 @Component({
   selector: 'app-homepage',
@@ -16,9 +17,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   private queryParamsSubscription: Subscription | null = null;
   private hasInitializedQueryParams = false;
-  private allLotoEvents: any = null;
+  allLotoEvents: any = null;
 
-  constructor(private route: ActivatedRoute, private gamesSrv: GamesService) {}
+  constructor(private route: ActivatedRoute, private gamesSrv: GamesService, private gnrcSrv: GenericService) { }
 
   introTitle = '';
   introDescription = '';
@@ -37,7 +38,11 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   examples: string[] = [];
 
-  ngOnInit(): void {
+  isAndroidApp = this.gnrcSrv.isMachineApp()
+
+  async ngOnInit(): Promise<void> {
+    this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
+    console.log(this.allLotoEvents)
     this.queryParamsSubscription = this.route.queryParamMap.subscribe(async () => {
       await this.applySelectedContent();
 

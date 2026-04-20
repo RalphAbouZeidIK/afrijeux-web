@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
@@ -13,7 +13,7 @@ import { CartComponent } from 'src/app/shared/cart/cart.component';
   templateUrl: './game-block.component.html',
   styleUrl: './game-block.component.scss'
 })
-export class GameBlockComponent implements AfterViewInit, OnDestroy {
+export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   selectedGameEventId: number | null = null
 
@@ -70,8 +70,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   cartSubscription: Subscription
 
-  allEvents: any
-
   selectedResultFilter: string | number | null = 1;
 
   showOptionsList = false
@@ -82,11 +80,14 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
+  @Input() allEvents: any = []
+
+  private configCache = new Map<number, any>()
+
   constructor(
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
     private gamesSrv: GamesService,
-    private storageSrv: LocalStorageService,
     private route: ActivatedRoute
   ) {
 
@@ -107,6 +108,14 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     this.isJackpotGame = window.location.href.includes("Jackpot")
     console.log(this.isPickXGame)
     this.getEvents()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('ngOnChanges triggered');
+    // Only re-process if allEvents reference has changed (avoids redundant API calls)
+    if (changes['allEvents'] && changes['allEvents'].currentValue !== changes['allEvents'].previousValue) {
+      this.getEvents();
+    }
   }
 
   private resizeObserver: ResizeObserver | null = null;
@@ -169,9 +178,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
   }
 
   async getEvents() {
-    const allEvents = await this.gamesSrv.getAllLotoGames();
-    this.allEvents = allEvents;
-    let gameEventsResponse = (this.isPickXGame) ? allEvents?.pickXGames : allEvents?.jackpotGames;
+    console.log(this.allEvents)
+    let gameEventsResponse = (this.isPickXGame) ? this.allEvents?.pickXGames : this.allEvents?.jackpotGames;
     console.log(gameEventsResponse)
     if (gameEventsResponse != null && gameEventsResponse !== undefined) {
       gameEventsResponse.forEach((eventItem: any) => {
@@ -217,14 +225,18 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
 
   async composeEventDetails(raceItem: any) {
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
-    let fixedConfig = await this.gamesSrv.getFixedConfig(configId)
-    this.fixedConfig = fixedConfig
-    let numberOfSelectedBalls = (this.isPickXGame) ? fixedConfig[0].NumberOfBalls : 6
-    let numberOfBalls = (this.isPickXGame) ? 10 : fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
+    if (this.configCache.has(configId)) {
+      this.fixedConfig = this.configCache.get(configId);
+    } else {
+      this.fixedConfig = await this.gamesSrv.getFixedConfig(configId)
+      this.configCache.set(configId, this.fixedConfig);
+    }
+    let numberOfSelectedBalls = (this.isPickXGame) ? this.fixedConfig[0].NumberOfBalls : 6
+    let numberOfBalls = (this.isPickXGame) ? 10 : this.fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
     console.log(raceItem)
-    console.log(fixedConfig)
+    console.log(this.fixedConfig)
 
-    raceItem.fixedConfig = fixedConfig
+    raceItem.fixedConfig = this.fixedConfig
     this.selectedEvent = raceItem
     if (this.isPickXGame) {
       this.selectedGameEventId = Number(raceItem?.GameEventId);
@@ -238,8 +250,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy {
     setTimeout(() => this.updateCartHeight());
 
     // if we have bet types available and none chosen yet, pick the first one
-    if (this.isPickXGame && fixedConfig && fixedConfig.length) {
-      this.selectedType = fixedConfig[0];
+    if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length) {
+      this.selectedType = this.fixedConfig[0];
       this.onTypeChanged(this.selectedType);
     }
 
