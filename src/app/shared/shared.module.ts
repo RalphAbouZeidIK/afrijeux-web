@@ -29,6 +29,7 @@ import { OptionListComponent } from './option-list/option-list.component';
 import { ResultsComponent } from './results/results.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { CarouselComponent } from './carousel/carousel.component';
+import { AppNavComponent } from './app-nav/app-nav.component';
 
 
 // Custom date formats
@@ -62,7 +63,8 @@ export const MY_FORMATS = {
     OptionListComponent,
     ResultsComponent,
     ContactUsComponent,
-    CarouselComponent
+    CarouselComponent,
+    AppNavComponent
   ],
   exports: [
     HeaderComponent,
@@ -87,7 +89,8 @@ export const MY_FORMATS = {
     OptionListComponent,
     ResultsComponent,
     ContactUsComponent,
-    CarouselComponent
+    CarouselComponent,
+    AppNavComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,

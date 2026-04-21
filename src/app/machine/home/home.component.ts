@@ -5,6 +5,7 @@ import { machineMenuRoutes } from '../machine-route';
 import { MachineService } from 'src/app/services/machine.service';
 import { NativeBridgeService } from 'src/app/services/native-bridge.service';
 import { GenericService } from 'src/app/services/generic.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private machineSrv: MachineService,
     private gnrcSrv: GenericService,
-    private cacheService: CacheService
+    private cacheService: CacheService,
+    private usrSrv: UserService
   ) {
     this.getMenu()
 
@@ -158,6 +160,7 @@ export class HomeComponent implements OnInit {
 
 
   async logout() {
+    this.usrSrv.signOut()
     await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
     this.router.navigate(['/Machine']);
   }

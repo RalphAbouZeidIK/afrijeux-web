@@ -210,6 +210,7 @@ export class LoginComponent implements OnChanges, OnInit {
         this.gnrcSrv.setModalData(true, false, respoonse.message)
       }
       else {
+        this.successfullLogin()
         this.router.navigate(['Machine/Home'])
       }
       ////console.log(respoonse)
@@ -497,16 +498,21 @@ export class LoginComponent implements OnChanges, OnInit {
    * @param token 
    * @returns 
    */
-  private async successfullLogin(userData: any, token: string) {
-    let currentDate = new Date()
+  private async successfullLogin(userData?: any, token: string = '') {
+    if (!this.isAndroidApp) {
+      this.usrSrv.setUserToken(token)
+      this.usrSrv.setUserData(userData)
+      this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
+      this.usrSrv.gettUserId()
+    }
 
-    this.usrSrv.setUserToken(token)
-    this.usrSrv.setUserData(userData)
+
+    let currentDate = new Date()
     this.usrSrv.setLoginStatus(true)
     this.usrSrv.setAccountExpiry(currentDate)
-    this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
+
     this.hidePopup()
-    this.usrSrv.gettUserId()
+
 
   }
 

@@ -1,6 +1,6 @@
 <app-carousel [images]="carouselImages" [showArrows]="false" [showIndicators]="true"></app-carousel>
 <app-games-links [isListingPage]="true"></app-games-links>
-
+ <a class="btn btn-primary logout-btn" (click)="logout();">Logout</a>
 <!-- <div class="machine-home">
     <div class="main-btns">
         <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">

@@ -136,9 +136,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200)
     this.getMenuItems()
-
+    this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (!this.isAndroidApp) {
-      this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
       this.pageTitleService.init();
     }
 
