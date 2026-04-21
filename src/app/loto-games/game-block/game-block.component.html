@@ -22,7 +22,7 @@
                     </h5>
                     <div class="selected-balls-type d-flex input-bg">
                         <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
-                            [shouldHighlight]="false"></app-ball-list>
+                            [shouldHighlight]="false" [shouldEmit]="false"></app-ball-list>
 
                         <div class="option-list-holder" *ngIf="isPickXGame"
                             (click)="showOptionsList = !showOptionsList">

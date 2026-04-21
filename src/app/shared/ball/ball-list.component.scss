@@ -19,6 +19,8 @@
         .box {
             width: 34px;
             height: 34px;
+            background-image: url(/assets/images/ball-icon.svg) !important;
+            background-color: transparent;
 
             .ballnbr {
                 font-size: 18px;
@@ -48,7 +50,8 @@
         }
     }
 
-    &.ticketsBalls, &.resultsPage {
+    &.ticketsBalls,
+    &.resultsPage {
         margin-bottom: 0;
     }
 
