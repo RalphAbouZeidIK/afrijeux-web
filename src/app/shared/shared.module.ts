@@ -28,6 +28,7 @@ import { GamesLinksComponent } from './games-list/games-list.component';
 import { OptionListComponent } from './option-list/option-list.component';
 import { ResultsComponent } from './results/results.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { CarouselComponent } from './carousel/carousel.component';
 
 
 // Custom date formats
@@ -60,8 +61,8 @@ export const MY_FORMATS = {
     GamesLinksComponent,
     OptionListComponent,
     ResultsComponent,
-    ContactUsComponent
-
+    ContactUsComponent,
+    CarouselComponent
   ],
   exports: [
     HeaderComponent,
@@ -85,7 +86,8 @@ export const MY_FORMATS = {
     GamesLinksComponent,
     OptionListComponent,
     ResultsComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    CarouselComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,
