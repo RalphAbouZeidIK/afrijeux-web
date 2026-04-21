@@ -1,3 +1,7 @@
+<div class="countdown-display" *ngIf="isAndroidApp">
+    <span class="countdown-label">Time to Draw:</span>
+    <span class="countdown-value">{{ countdownTime }}</span>
+</div>
 <app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId"
     *ngIf="!isAndroidApp"></app-games-links>
 <div class="container-fluid page-holder" *ngIf="showEventDetails">
@@ -20,6 +24,7 @@
                     <h5>
                         {{selectedEvent.EventName}} / {{selectedEvent.EventDate || selectedEvent.GameEventDate}}
                     </h5>
+
                     <div class="selected-balls-type d-flex input-bg">
                         <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
                             [shouldHighlight]="false" [shouldEmit]="false"></app-ball-list>
@@ -41,15 +46,14 @@
                         </span>
                         <!-- for PickX games we render one ball-list per configured ball -->
                         <ng-container *ngIf="isPickXGame; else singleBall">
-                            <ng-container
-                                *ngFor="let _ of range(selectedEvent?.fixedConfig?.[0]?.NumberOfBalls || 0); let i = index">
-                                <app-ball-list [chosenBallsArray]="listOfBalls" [selectedBall]="slotSelections[i]"
-                                    (ballClicked)="selectBall($event,i)" [attr.data-index]="i">
-                                </app-ball-list>
-                            </ng-container>
+                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectPickXBall($event)"
+                                (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx" [showDeleteButton]="true">
+                            </app-ball-list>
                         </ng-container>
                         <ng-template #singleBall>
-                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectBall($event)">
+                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectBall($event)"
+                                (ballDeleted)="deleteLastLotoBall()" cssClass="drawBalls jackpot"
+                                [showDeleteButton]="true">
                             </app-ball-list>
                         </ng-template>
                     </div>

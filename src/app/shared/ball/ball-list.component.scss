@@ -19,7 +19,7 @@
         .box {
             width: 34px;
             height: 34px;
-            background-image: url(/assets/images/ball-icon.svg) !important;
+            background-image: url(/assets/images/ball-icon.png) !important;
             background-color: transparent;
 
             .ballnbr {
@@ -55,18 +55,35 @@
         margin-bottom: 0;
     }
 
+    &.drawBalls {
+        justify-content: center;
+    }
+
+    &.pickx {
+        gap: 20px;
+        max-width: 100%;
+        width: 436px;
+    }
+
+    &.jackpot {
+
+        .delete-button {
+            display: none;
+        }
+    }
+
 }
 
 .box {
-    width: 55px;
-    height: 55px;
+    width: 56px;
+    height: 56px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     display: flex;
     background-image: none !important;
     background-color: #F8FAFC;
-    border-radius: 20px;
+    border-radius: 10px;
 
     &.clickable {
         cursor: pointer;
@@ -90,50 +107,6 @@
     border-radius: 50%;
 }
 
-.redBox {
-    background-image: url("/assets/images/ball-1.png");
-    background-color: red
-}
-
-.purpleBox {
-    background-image: url("/assets/images/ball-2.png");
-    background-color: purple
-}
-
-.yellowBox {
-    background-image: url("/assets/images/ball-3.png");
-    background-color: $lightGreen
-}
-
-.greenBox {
-    background-image: url("/assets/images/ball-4.png");
-    background-color: green
-}
-
-.blueBox {
-    background-image: url("/assets/images/ball-5.png");
-    background-color: blue
-}
-
-.orangeBox {
-    background-image: url("/assets/images/ball-6.png");
-    background-color: orange
-}
-
-.darkBlueBox {
-    background-image: url("/assets/images/ball-7.png");
-    background-color: darkblue
-}
-
-.marronBox {
-    background-image: url("/assets/images/ball-8.png");
-    background-color: maroon
-}
-
-.purpleBox {
-    background-image: url("/assets/images/ball-9.png");
-    background-color: purple
-}
 
 .emptyBox {
     background-image: url("/assets/images/empty-ball.png");
@@ -150,19 +123,51 @@
     }
 }
 
+.delete-button {
+    display: flex;
+    width: 115px;
+    height: 56px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background: #DBDDDF;
+    border: none;
+}
 
-@media (max-width:1200px) {
+@media (max-width:768px) {
     .flexbox-container {
         gap: 5px;
+
+        &.drawBalls {
+            gap: 6px;
+            max-width: 100%;
+            width: auto;
+        }
+
+        &.jackpot {
+            gap: 18px;
+
+            .box {
+                width: 51px;
+                height: 51px;
+            }
+
+        }
+
     }
 
     .box {
-        width: 25px;
-        height: 25px;
-        margin: 0;
+        width: 78px;
+        height: 78px;
     }
 
     .ballnbr {
         font-size: 16px;
     }
+
+    .delete-button {
+        width: 160px;
+        height: 80px;
+    }
+
 }

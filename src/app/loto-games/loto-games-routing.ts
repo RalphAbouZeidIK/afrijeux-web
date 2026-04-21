@@ -10,7 +10,7 @@ const routes: Routes = [
         path: '',
         component: LotoGamesCoreComponent,
         children: [
-            { path: '', component: HomepageComponent, data: { showLink: false, shouldBeLoggedIn: true, title: 'routerLinks.Sports.viewTickets' } },
+            { path: '', component: HomepageComponent, data: { showLink: false, shouldBeLoggedIn: true, title: 'Winbig' } },
         ]
     },
 ]

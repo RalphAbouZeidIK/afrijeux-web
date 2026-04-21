@@ -47,6 +47,8 @@ export class HeaderComponent implements OnInit {
 
   selectedLanguage = { code: 'en', name: 'English' }; // Default language
 
+  hideHeader = false
+
   languages = [
     { code: 'fr', name: 'Français' },
     { code: 'en', name: 'English' }

@@ -52,6 +52,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAndroidApp = false
 
+  hideHeader = false
+
 
   private resizeTimeout: any;
 
@@ -140,9 +142,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isAndroidApp) {
       this.pageTitleService.init();
     }
-
+    this.updateHeaderVisibility()
   }
 
+  updateHeaderVisibility() {
+    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot")
+
+  }
 
   /**
    * Set loading flag after the view init
@@ -168,6 +174,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           this.router.navigate([''])
         }
         document.body.classList.remove("show-mobile-menu")
+         this.updateHeaderVisibility()
       }
 
       if (event instanceof NavigationError) {

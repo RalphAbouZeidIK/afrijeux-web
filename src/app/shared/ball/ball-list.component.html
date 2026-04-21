@@ -1,12 +1,14 @@
 <div class="flexbox-container wrap {{cssClass}}">
     <ng-container *ngFor="let chosenball of chosenBallsArray; let i=index">
-        <div class="box"
-            [ngClass]="(shouldEmit ? ' clickable' : '') +
+        <div class="box" [ngClass]="(shouldEmit ? ' clickable' : '') +
                      ((chosenball.isSelected && shouldHighlight) ||
                       (selectedBall && chosenball.id === selectedBall.id) ?
-                       ' highlight' : '')"
-            (click)="shouldEmit && ballClicked.emit(chosenball)">
+                       ' highlight' : '')" (click)="shouldEmit && ballClicked.emit(chosenball)">
             <p class="ballnbr">{{chosenball.number}}</p>
         </div>
+
     </ng-container>
+    <button (click)="deleteLastBall()" *ngIf="showDeleteButton" class="delete-button">
+        <img src="assets/images/backspace.svg" alt="Delete last selected ball">
+    </button>
 </div>

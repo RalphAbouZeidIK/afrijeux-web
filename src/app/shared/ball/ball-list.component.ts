@@ -17,6 +17,16 @@ export class BallListComponent implements OnInit {
 
   @Input() cssClass: any = null
 
+  @Input() showDeleteButton = false;
+
+  @Output() ballDeleted = new EventEmitter<void>();
+
+  deleteLastBall() {
+    if (this.chosenBallsArray.length > 0) {
+      this.ballDeleted.emit();
+    }
+  }
+
   // ball object that should be treated as currently selected/highlighted
   @Input() selectedBall: any;
 

@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, interval, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
@@ -82,7 +83,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input() allEvents: any = []
 
+  countdownTime: string = ''
+
   private configCache = new Map<number, any>()
+  private countdownSubscription: Subscription | null = null
+  private destroy$ = new Subject<void>()
 
   constructor(
     private gnrcSrv: GenericService,
@@ -135,6 +140,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+    if (this.countdownSubscription) {
+      this.countdownSubscription.unsubscribe();
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   @HostListener('window:resize')
@@ -261,6 +271,50 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.slotSelections = new Array(numberOfSelectedBalls).fill(null);
     console.log(this.listOfBalls)
     console.log(this.selectedBalls)
+
+    // Start countdown timer for this event
+    this.startCountdown(raceItem);
+  }
+
+  private startCountdown(event: any): void {
+    // Stop existing countdown if any
+    if (this.countdownSubscription) {
+      this.countdownSubscription.unsubscribe();
+    }
+
+    // Start new countdown
+    this.countdownSubscription = interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateCountdown(event);
+      });
+
+    // Calculate immediately
+    this.updateCountdown(event);
+  }
+
+  private updateCountdown(event: any): void {
+    const eventDate = new Date(event.EventDate || event.GameEventDate);
+    const now = new Date();
+    const diff = eventDate.getTime() - now.getTime();
+
+    if (diff <= 0) {
+      this.countdownTime = 'Event started';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const parts: string[] = [];
+    if (days > 0) parts.push(`${days}d`);
+    if (hours > 0) parts.push(`${hours}h`);
+    parts.push(`${minutes}m`);
+    parts.push(`${seconds}s`);
+
+    this.countdownTime = parts.join(' ');
   }
 
   generateBallObjects(x: number) {
@@ -385,6 +439,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
           found.selected = true;
         }
       });
+      this.currentPickIndex = this.selectedBalls.length
 
       this.isQuickPick = true;
 
@@ -407,13 +462,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.showBallPicker = true
   }
 
-  selectBall(ball: any, index = 0) {
+  selectBall(ball: any) {
     this.isQuickPick = false
 
     if (this.isPickXGame) {
       // record the choice for that slot so the corresponding child component
       // can highlight it
-      this.selectPickXBall(ball, index)
+      this.selectPickXBall(ball)
     }
     else {
       this.selectLotoBall(ball)
@@ -421,20 +476,25 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     console.log(this.selectedBalls)
   }
 
-  selectPickXBall(ball: any, index: any) {
-    console.log(ball);
-    // if this slot already has the same ball selected, deselect it
-    const currently = this.slotSelections[index];
-    if (currently && currently.id === ball.id) {
-      this.slotSelections[index] = null;
-      // mark as unselected placeholder
-      this.selectedBalls[index] = { number: 'X', id: index, isSelected: false };
-    } else {
-      this.slotSelections[index] = ball;
-      this.selectedBalls[index] = { ...ball, isSelected: true, id: this.ballToChangeId };
+  currentPickIndex = 0;
+  selectPickXBall(ball: any) {
+    // If all slots are filled → stop or reset (your choice)
+    if (this.currentPickIndex >= this.slotSelections.length) {
+      return;
     }
 
-    this.showBallPicker = false;    // hide the ball list after selection
+    // assign ball to current slot
+    this.slotSelections[this.currentPickIndex] = ball;
+
+    this.selectedBalls[this.currentPickIndex] = {
+      ...ball,
+      isSelected: true,
+      id: this.currentPickIndex
+    };
+
+    // move to next slot
+    this.currentPickIndex++;
+
     console.log(this.selectedBalls);
   }
 
@@ -454,6 +514,44 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
 
     this.updateLotoPrice()
+    this.generateDisplayBalls();
+  }
+
+  deleteLastBall() {
+    // nothing to delete
+    if (this.currentPickIndex === 0) return;
+
+    // move back to previous slot
+    this.currentPickIndex--;
+
+    // clear that slot
+    this.slotSelections[this.currentPickIndex] = null;
+
+    this.selectedBalls[this.currentPickIndex] = {
+      number: 'X',
+      id: this.currentPickIndex,
+      isSelected: false
+    };
+
+    console.log(this.selectedBalls);
+  }
+
+  deleteLastLotoBall() {
+    if (this.selectedNumbers.length === 0) return;
+
+    // get last selected number
+    const lastNumber = this.selectedNumbers[this.selectedNumbers.length - 1];
+
+    // remove it from array
+    this.selectedNumbers.pop();
+
+    // find the ball object and unselect it
+    const ball = this.listOfBalls.find(b => b.number === lastNumber);
+    if (ball) {
+      ball.isSelected = false;
+    }
+
+    this.updateLotoPrice();
     this.generateDisplayBalls();
   }
 
@@ -487,6 +585,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   addToBet(refreshEventDetails = true) {
+    this.currentPickIndex = 0; // reset for next time
     let pickItem: any
     const gameName = this.getGameNameForBet();
 

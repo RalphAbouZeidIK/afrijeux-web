@@ -204,26 +204,6 @@ app-option-list {
     display: block;
 }
 
-// ═══════════════════════════════════════════════════════
-//  Responsive
-// ═══════════════════════════════════════════════════════
-@media (max-width: 1024px) {
-    .bp-page {
-        gap: 40px;
-    }
-
-    .bp-sections {
-        gap: 40px;
-    }
-}
-
-@media (max-width: 768px) {
-    .bp-benefits {
-        flex-direction: column;
-        align-items: center;
-        gap: 28px;
-    }
-}
 
 
 @media all and (min-width:1400px) {
@@ -404,7 +384,8 @@ app-option-list {
         .form-header {
             margin-bottom: 30px;
         }
-        .form-btns{
+
+        .form-btns {
             margin-top: 40px;
         }
     }
@@ -1074,7 +1055,46 @@ app-odd-item:nth-of-type(3n) {
 
 }
 
+.results-shared-header {
+    text-align: left;
+    padding: 0;
+
+}
+
+.results-shared-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.results-shared-controls {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-top: 1.1rem;
+}
+
+.results-shared-pill {
+    font-size: 12px;
+    padding: 8px 20px;
+    opacity: 0.6;
+
+    &.active {
+        opacity: 1;
+    }
+}
+
 @media all and (max-width:1200px) {
+
+    .bp-page {
+        gap: 40px;
+    }
+
+    .bp-sections {
+        gap: 40px;
+    }
 
     app-game-banner {
         display: none !important;
@@ -1128,7 +1148,9 @@ app-odd-item:nth-of-type(3n) {
         margin-top: 70px;
         padding-bottom: 90px;
     }
-
+    .no-header{
+        margin-top: 0 !important;
+    }
     .hidden-mobile {
         display: none !important;
     }
@@ -1222,33 +1244,15 @@ app-odd-item:nth-of-type(3n) {
 
 }
 
-.results-shared-header {
-    text-align: left;
-    padding: 0;
-
-}
-
-.results-shared-filter-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.results-shared-controls {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    justify-content: space-between;
-    margin-top: 1.1rem;
-}
-
-.results-shared-pill {
-    font-size: 12px;
-    padding: 8px 20px;
-    opacity: 0.6;
-
-    &.active {
-        opacity: 1;
+@media (max-width: 768px) {
+    .bp-benefits {
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+    }
+    .loto-game-container{
+        padding:0;
+        border:none;
+         
     }
 }
