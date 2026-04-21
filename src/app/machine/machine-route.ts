@@ -14,7 +14,7 @@ export const machineMenuRoutes: Route[] = [
         }
     },
     {
-        path: 'Home', component: HomeComponent,
+        path: 'Games', component: HomeComponent,
         data: {
             showLink: false,
             title: 'routerLinks.MachineTitle.Home'

@@ -140,7 +140,7 @@ export class LoginBackupComponent implements OnChanges, OnInit {
         this.gnrcSrv.setModalData(true, false, respoonse.message)
       }
       else {
-        this.router.navigate(['Machine/Home'])
+        this.router.navigate(['Machine/Games'])
       }
       ////console.log(respoonse)
     }

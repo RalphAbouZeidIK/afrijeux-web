@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export interface NavItem {
   templateUrl: './app-nav.component.html',
   styleUrl: './app-nav.component.scss'
 })
-export class AppNavComponent implements OnInit, OnDestroy {
+export class AppNavComponent implements OnInit, OnDestroy, OnChanges {
   @Input() isLoggedIn: boolean = false;
 
   showNavigation: boolean = true;
@@ -27,7 +27,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
       id: 'games',
       label: 'Games',
       icon: 'rectangle-group',
-      route: '/games',
+      route: '/Games',
       active: true
     },
     {
@@ -35,14 +35,14 @@ export class AppNavComponent implements OnInit, OnDestroy {
       label: 'Prize Details',
       icon: 'prize-details',
       route: '/prize-details',
-      active: false
+      active: true
     },
     {
       id: 'scan',
       label: 'Scan',
       icon: 'scan',
       route: '/scan',
-      active: false
+      active: true
     }
   ];
 
@@ -62,6 +62,13 @@ export class AppNavComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isLoggedIn']) {
+      console.log('isLoggedIn changed:', changes['isLoggedIn'].currentValue);
+      this.updateNavigationVisibility(this.router.url);
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
@@ -75,8 +82,7 @@ export class AppNavComponent implements OnInit, OnDestroy {
       '/prize-details',
       '/scan',
       '/home',
-      '/dashboard',
-      '/Machine'
+      '/dashboard'
     ];
 
     // Hide navigation on auth routes, modals, etc.

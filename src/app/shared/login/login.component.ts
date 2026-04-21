@@ -211,7 +211,7 @@ export class LoginComponent implements OnChanges, OnInit {
       }
       else {
         this.successfullLogin()
-        this.router.navigate(['Machine/Home'])
+        this.router.navigate(['Machine/Games'])
       }
       ////console.log(respoonse)
     }

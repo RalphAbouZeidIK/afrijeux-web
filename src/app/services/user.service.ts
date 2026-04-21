@@ -226,7 +226,6 @@ export class UserService {
    * Remove user data and sign out 
    */
   signOut() {
-    alert()
     this.localStorageSrv.setItem('isLoggedIn', 'false')
     this.localStorageSrv.removeItem('user_data');
     this.localStorageSrv.removeItem('expiryDate');
