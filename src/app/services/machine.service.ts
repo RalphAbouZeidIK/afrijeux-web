@@ -1089,7 +1089,6 @@ export class MachineService {
       UserOnlineStatus: true,
     }
     let gameEventsResponse = await this.handleApiResponse(game?.RouteName, `${game?.RouteName}/GetEventConfiguration`, 'POST', params)
-    console.trace(gameEventsResponse)
     return gameEventsResponse
   }
 

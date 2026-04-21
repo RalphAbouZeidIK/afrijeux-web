@@ -1,17 +1,42 @@
-<div [class]="isGamePage ? 'game-page' : ''">
-    <div class="button-group">
-        <button *ngFor="let pickX of pickXEvents" class="pick-button"
-            [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isSelectedPickX(pickX)}"
-            [attr.data-option]="pickX.id" [routerLink]="isAndroidApp ? '/Machine/PickX' : '/PickX'"
-            [queryParams]="{ gameEventId: pickX.GameEventId }">
-            Pick {{ pickX.ConfigurationVersionId }}
-         
-        </button>
-        <button *ngFor="let jackpot of jackpotEvents" class="pick-button"
-            [ngClass]="{'btn btn-primary': isGamePage === true,'pick-button': isGamePage !== true, 'selected-pick': isJackpotRoute()}"
-            [attr.data-option]="jackpot.id" [routerLink]="isAndroidApp ? '/Machine/Jackpot' : '/Jackpot'">
-            Jackpot
-        </button>
+<h2 *ngIf="isListingPage">All Games</h2>
+<div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
+    <div *ngFor="let game of allGames" class="game-card" [class.selected]="isGameSelected(game)">
+        <!-- Game Header with Image -->
+        <div class="game-header" *ngIf="isListingPage">
+            <div class="game-image" *ngIf="game.imageUrl">
+                <img [src]="game.imageUrl" [alt]="game.name">
+            </div>
+            <div class="game-info">
+                <!-- Game Title and Badge -->
+                <div class="game-title-row">
+                    <h3 class="game-title">{{ game.name }}</h3>
+                    <span class="game-badge" *ngIf="game.badgeText">{{ game.badgeText }}</span>
+                </div>
 
+                <!-- Prize Information -->
+                <div class="prize-row">
+                    <p class="prize-text">
+                        <span>Prize: </span>
+                        <span class="prize-amount">{{ game.prize | number:'1.0-0' }}</span>
+                    </p>
+                    <span class="currency-icon">₲</span>
+                </div>
+
+                <!-- Draw Information -->
+                <p class="draw-info">Draw: {{ game.drawDate | date:'MMM d, y - hh:mm a' }}</p>
+            </div>
+        </div>
+
+        <!-- Play Button -->
+        <button [ngClass]="{'play-button':isListingPage,'pick-button':isBanner,'btn btn-primary':isGamePage}" [routerLink]="game.route"
+            [queryParams]="{ gameEventId: game.GameEventId }">
+            <ng-container *ngIf="isListingPage">
+                <span>Play /</span>
+                <span class="price-tag">₲{{ game.playPrice }}</span>
+            </ng-container>
+            <ng-container *ngIf="!isListingPage">
+                <span>{{ game.name }}</span>
+            </ng-container>
+        </button>
     </div>
 </div>

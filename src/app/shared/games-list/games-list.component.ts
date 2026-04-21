@@ -1,6 +1,20 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
+
+interface GameCard {
+  id: string;
+  name: string;
+  badgeText?: string;
+  prize: number;
+  drawDate: Date;
+  imageUrl?: string;
+  route: string;
+  GameEventId: number;
+  playPrice: number;
+  gameType: 'pickX' | 'jackpot';
+}
 
 @Component({
   selector: 'app-games-links',
@@ -8,49 +22,79 @@ import { GenericService } from 'src/app/services/generic.service';
   templateUrl: './games-list.component.html',
   styleUrl: './games-list.component.scss'
 })
-export class GamesLinksComponent implements OnChanges {
+export class GamesLinksComponent implements OnInit {
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
   pickXEvents: any;
-
   jackpotEvents: any;
+  allGames: GameCard[] = [];
 
-  @Input() allEvents: any;
+  @Input() isListingPage = false;
   @Input() isGamePage = false;
+  @Input() isBanner = false;
   @Input() selectedGameEventId: number | string | null = null;
 
-  constructor(private gnrcSrv: GenericService, private router: Router) { }
+  constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService) { }
 
-  getGameEvents() {
-    console.log(this.allEvents)
-    this.pickXEvents = Array.isArray(this.allEvents?.pickXGames)
-      ? [...this.allEvents.pickXGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+  async getGameEvents() {
+    const allEvents = await this.gamesSrv.getAllLotoGames();
+    this.pickXEvents = Array.isArray(allEvents?.pickXGames)
+      ? [...allEvents.pickXGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
     console.log('PickX Events:', this.pickXEvents);
-    this.jackpotEvents = Array.isArray(this.allEvents?.jackpotGames)
-      ? [...this.allEvents.jackpotGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+    this.jackpotEvents = Array.isArray(allEvents?.jackpotGames)
+      ? [...allEvents.jackpotGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
     console.log('Jackpot Events:', this.jackpotEvents);
+    this.buildGameCards();
   }
 
-  // ngOnInit() {
-  //   this.getGameEvents();
-  // }
+  private buildGameCards(): void {
+    this.allGames = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['allEvents']) {
-      this.getGameEvents();
+    // Add PickX games
+    this.pickXEvents.forEach((game: any) => {
+      this.allGames.push({
+        id: `pickx-${game.id}`,
+        name: `${game.EventName}`,
+        badgeText: `Pick ${game.ConfigurationVersionId} Balls`,
+        prize: game.Prize || 0,
+        drawDate: game.GameEventDate ? new Date(game.GameEventDate) : new Date(),
+        imageUrl: game.ImageUrl || 'assets/images/game-icon.svg',
+        route: this.isAndroidApp ? '/Machine/PickX' : '/PickX',
+        GameEventId: game.GameEventId,
+        playPrice: game.PlayPrice || 5,
+        gameType: 'pickX'
+      });
+    });
+
+    // Add Jackpot games
+    this.jackpotEvents.forEach((game: any) => {
+      this.allGames.push({
+        id: `jackpot-${game.id}`,
+        name: `${game.EventName}`,
+        badgeText: `Pick 6 Balls`,
+        prize: game.Prize || 0,
+        drawDate: game.GameEventDate ? new Date(game.GameEventDate) : new Date(),
+        imageUrl: game.ImageUrl || 'assets/images/game-icon.svg',
+        route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
+        GameEventId: game.GameEventId,
+        playPrice: game.PlayPrice || 5,
+        gameType: 'jackpot'
+      });
+    });
+  }
+
+  ngOnInit(): void {
+    this.getGameEvents();
+  }
+
+  isGameSelected(game: GameCard): boolean {
+    if (game.gameType === 'pickX') {
+      return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId);
+    } else {
+      return this.router.url.includes('/Jackpot');
     }
   }
 
-  isSelectedPickX(pickX: any): boolean {
-    if (this.selectedGameEventId == null) {
-      return false;
-    }
-    return Number(this.selectedGameEventId) === Number(pickX?.GameEventId);
-  }
-
-  isJackpotRoute(): boolean {
-    return this.router.url.includes('/Jackpot');
-  }
 }

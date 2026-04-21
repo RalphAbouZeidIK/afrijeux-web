@@ -1,4 +1,5 @@
-<app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId" [allEvents]="allEvents" *ngIf="!isAndroidApp"></app-games-links>
+<app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId"
+    *ngIf="!isAndroidApp"></app-games-links>
 <div class="container-fluid page-holder" *ngIf="showEventDetails">
     <main>
         <div class="loto-game-container" #gameBlock>
@@ -23,7 +24,8 @@
                         <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
                             [shouldHighlight]="false"></app-ball-list>
 
-                        <div class="option-list-holder" *ngIf="isPickXGame" (click)="showOptionsList = !showOptionsList">
+                        <div class="option-list-holder" *ngIf="isPickXGame"
+                            (click)="showOptionsList = !showOptionsList">
                             <span class="selected-option">{{ selectedType?.TicketTypeName }}</span>
                             <app-option-list *ngIf="showOptionsList" [options]="selectedEvent.fixedConfig"
                                 [selectedValue]="selectedResultFilter"
@@ -90,5 +92,5 @@
         <app-game-banner [style.height.px]="cartHeight" *ngIf="!showCart" [prizePoolLabel]="'Pick 2 Prize Pool'"
             [prizePoolAmount]="'3.65M'"></app-game-banner>
         <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"></app-shared-cart>
-    </aside> 
+    </aside>
 </div>

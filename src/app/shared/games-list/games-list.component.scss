@@ -1,10 +1,233 @@
 @use '/src/variables' as *;
 
+// Game card container
+.games-container {
+    display: flex;
+    gap: 16px;
+}
+
+// Game card styling
+.listing-block {
+    flex-direction: column;
+
+    .game-card {
+        background: #1d1c1c;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 20px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(164, 246, 117, 0.1);
+        }
+
+        &.selected {
+            border-color: #a4f675;
+            box-shadow: 0 0 20px rgba(164, 246, 117, 0.2);
+        }
+    }
+}
+
+
+// Game header with image and info
+.game-header {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+// Game image
+.game-image {
+    width: 84px;
+    height: 71px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// Game information section
+.game-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+// Title row with badge
+.game-title-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.game-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 18px;
+    letter-spacing: -0.28px;
+    margin: 0;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+}
+
+// Game badge
+.game-badge {
+    background: rgba(99, 146, 71, 0.5);
+    border: 0.5px solid #639247;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    padding: 2px 8px;
+    border-radius: 30px;
+    white-space: nowrap;
+    font-family: 'SF UI Display', sans-serif;
+}
+
+// Prize row
+.prize-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    .prize-text {
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 0;
+        color: #ffffff;
+        letter-spacing: -0.32px;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+
+        span:first-child {
+            color: #ffffff;
+        }
+    }
+
+    .prize-amount {
+        color: #a4f675;
+        font-weight: 800;
+    }
+
+    .currency-icon {
+        width: 14px;
+        height: 12px;
+        flex-shrink: 0;
+        font-size: 12px;
+        color: #a4f675;
+    }
+}
+
+// Draw info
+.draw-info {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #9f9f9f;
+    letter-spacing: -0.24px;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    max-width: 213px;
+}
+
+// Play button
+.play-button {
+    background: #a4f675;
+    border: none;
+    border-radius: 30px;
+    padding: 8px 20px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #000000;
+    text-align: center;
+    font-family: 'SF UI Display', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    &:hover {
+        background: #92e055;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(164, 246, 117, 0.3);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(164, 246, 117, 0.2);
+    }
+
+    span:first-child {
+        font-weight: 500;
+    }
+
+    .price-tag {
+        font-weight: 500;
+    }
+}
+
+h2 {
+    font-size: 18px;
+    padding-bottom: 15px;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .game-card {
+        padding: 16px 12px;
+        gap: 16px;
+    }
+
+    .game-header {
+        gap: 12px;
+    }
+
+    .game-image {
+        width: 72px;
+        height: 60px;
+    }
+
+    .game-title {
+        font-size: 13px;
+        line-height: 16px;
+    }
+
+    .prize-row .prize-text {
+        font-size: 14px;
+    }
+
+    .play-button {
+        padding: 6px 16px;
+        font-size: 14px;
+    }
+}
+
+// Legacy button styles (kept for backward compatibility if needed elsewhere)
 .game-page {
     margin-bottom: 25px;
+    justify-content: center;
 
-    .button-group {
-        justify-content: center;
+    .selected button {
+        opacity: 1;
+        cursor: default;
+        pointer-events: none;
     }
 }
 
@@ -18,7 +241,6 @@
         gap: 12px;
     }
 }
-
 
 .pick-button {
     border: 1px solid $white;
@@ -52,8 +274,6 @@
         min-width: 65px;
     }
 }
-
-
 
 .btn {
     opacity: 0.6;
