@@ -14,6 +14,8 @@ interface GameCard {
   GameEventId: number;
   playPrice: number;
   gameType: 'pickX' | 'jackpot';
+  Prize: number;
+  Stake: number;
 }
 
 @Component({
@@ -64,7 +66,9 @@ export class GamesLinksComponent implements OnInit {
         route: this.isAndroidApp ? '/Machine/PickX' : '/PickX',
         GameEventId: game.GameEventId,
         playPrice: game.PlayPrice || 5,
-        gameType: 'pickX'
+        gameType: 'pickX',
+        Prize: game.Prize || 0,
+        Stake: game.Stake || 0
       });
     });
 
@@ -80,7 +84,9 @@ export class GamesLinksComponent implements OnInit {
         route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
         GameEventId: game.GameEventId,
         playPrice: game.PlayPrice || 5,
-        gameType: 'jackpot'
+        gameType: 'jackpot',
+        Prize: game.Prize || 0,
+        Stake: game.Stake || 0
       });
     });
   }

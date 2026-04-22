@@ -17,7 +17,7 @@
                 <div class="prize-row">
                     <p class="prize-text">
                         <span>Prize: </span>
-                        <span class="prize-amount">{{ game.prize | number:'1.0-0' }}</span>
+                        <span class="prize-amount">{{ game.Prize | number:'1.0-0' }}</span>
                     </p>
                     <span class="currency-icon">₲</span>
                 </div>
@@ -32,7 +32,7 @@
             [queryParams]="{ gameEventId: game.GameEventId }">
             <ng-container *ngIf="isListingPage">
                 <span>Play /</span>
-                <span class="price-tag">₲{{ game.playPrice }}</span>
+                <span class="price-tag">₲{{ game.Stake }}</span>
             </ng-container>
             <ng-container *ngIf="!isListingPage">
                 <span>{{ game.name }}</span>
