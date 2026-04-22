@@ -20,9 +20,7 @@ export class ModalComponent implements OnDestroy {
 
   private modalRef: NgbModalRef | null = null;
 
-  isSuccess = false
-
-  msgCode = ''
+  private closeTimeout: any = null;
 
   constructor(
     config: NgbModalConfig,
