@@ -68,7 +68,7 @@ export class GamesLinksComponent implements OnInit {
         playPrice: game.PlayPrice || 5,
         gameType: 'pickX',
         Prize: game.Prize || 0,
-        Stake: game.Stake || 0
+        Stake: game.Stake || 5
       });
     });
 
@@ -86,7 +86,7 @@ export class GamesLinksComponent implements OnInit {
         playPrice: game.PlayPrice || 5,
         gameType: 'jackpot',
         Prize: game.Prize || 0,
-        Stake: game.Stake || 0
+        Stake: game.Stake || 5
       });
     });
   }

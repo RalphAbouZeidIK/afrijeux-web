@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, timer } from 'rxjs';
 
 /**
  * Service to show/hide the loader
@@ -18,6 +18,16 @@ export class LoaderService {
   private httpLoading$ = new ReplaySubject<boolean>(1);
 
   /**
+   * Timestamp when loader was last shown
+   */
+  private loaderShownTime: number = 0;
+
+  /**
+   * Minimum time to show loader in milliseconds
+   */
+  private readonly MIN_LOADER_TIME = 1000;
+
+  /**
    * Service to show loader on each API call
    */
   constructor() { }
@@ -34,7 +44,25 @@ export class LoaderService {
    * Pass the loading status
    * @returns 
    */
-  setHttpProgressStatus(inprogess: boolean) {
-    this.httpLoading$.next(inprogess);
+  setHttpProgressStatus(inprogress: boolean) {
+    if (inprogress) {
+      // Show loader immediately
+      this.loaderShownTime = Date.now();
+      this.httpLoading$.next(true);
+    } else {
+      // Check if minimum time has passed
+      const elapsedTime = Date.now() - this.loaderShownTime;
+      const remainingTime = this.MIN_LOADER_TIME - elapsedTime;
+
+      if (remainingTime > 0) {
+        // Delay hiding the loader
+        timer(remainingTime).subscribe(() => {
+          this.httpLoading$.next(false);
+        });
+      } else {
+        // Hide immediately
+        this.httpLoading$.next(false);
+      }
+    }
   }
 }

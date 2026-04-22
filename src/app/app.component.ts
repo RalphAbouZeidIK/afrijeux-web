@@ -159,15 +159,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setLoader()
     }, 1);
     this.router.events.subscribe((event: Event) => {
-      // if (event instanceof NavigationStart) {
-      //   if (this.usrSrv.getUserToken()) {
-      //     this.refreshToken()
-      //   }
-
-
-      // }
+      if (event instanceof NavigationStart) {
+        // Show loader during navigation
+        this.loaderService.setHttpProgressStatus(true);
+      }
 
       if (event instanceof NavigationEnd) {
+        // Hide loader after navigation completes
+        this.loaderService.setHttpProgressStatus(false);
 
         if (this.usrSrv.sessionExpired()) {
           this.usrSrv.signOut()
@@ -178,6 +177,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       if (event instanceof NavigationError) {
+        // Hide loader on navigation error
+        this.loaderService.setHttpProgressStatus(false);
         ////console.log(event.error);
       }
     });

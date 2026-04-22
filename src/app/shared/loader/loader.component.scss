@@ -1,52 +1,99 @@
 @use '/src/variables' as *;
 /*CUSTOM PRELOADER*/
-.loader-bg{
-    position: fixed;
-    z-index: 999999;
-    background: rgba(0,0,0,0.9);
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-  }
-  .loader-p{
-    border: 0 solid transparent;
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    top: calc(50vh - 75px);
-    left: calc(50vw - 75px);
-  }
-  
-  .loader-p:before, .loader-p:after{
-    content: '';
-    border: 1em solid $lightGreen;
-    border-radius: 50%;
-    width: inherit;
-    height: inherit;
-    position: absolute;
-    top: 0;
-    left: 0;
-    animation: loader 2s linear infinite;
+.loader-bg {
+  position: fixed;
+  z-index: 999999;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+}
+
+.desktop-loader {
+  display: block;
+}
+.mobile-loader {
+  display: none;
+}
+
+// Existing desktop loader styles
+.loader-p {
+  border: 0 solid transparent;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  top: calc(50vh - 75px);
+  left: calc(50vw - 75px);
+}
+.loader-p:before, .loader-p:after {
+  content: '';
+  border: 1em solid $lightGreen;
+  border-radius: 50%;
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: loader 2s linear infinite;
+  opacity: 0;
+}
+.loader-p:before {
+  animation-delay: 0.5s;
+}
+@keyframes loader {
+  0% {
+    transform: scale(0);
     opacity: 0;
   }
-  
-  .loader-p:before{
-    animation-delay: 0.5s;
+  50% {
+    opacity: 1;
   }
-  
-  @keyframes loader{
-    0%{
-      transform: scale(0);
-      opacity: 0;
-    }
-    50%{
-      opacity: 1;
-    }
-    100%{
-      transform: scale(1);
-      opacity: 0;
-    }
+  100% {
+    transform: scale(1);
+    opacity: 0;
   }
+}
+
+// Mobile loader (4 rotating dots)
+.mobile-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 40px;
+}
+.mobile-loader .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: $lightGreen;
+  animation: dot-rotate 1s linear infinite;
+}
+.mobile-loader .dot:nth-child(1) { animation-delay: 0s; }
+.mobile-loader .dot:nth-child(2) { animation-delay: 0.25s; }
+.mobile-loader .dot:nth-child(3) { animation-delay: 0.5s; }
+.mobile-loader .dot:nth-child(4) { animation-delay: 0.75s; }
+
+@keyframes dot-rotate {
+  0% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+@media (max-width: 767px) {
+  .loader-bg{
+    background:transparent
+  }
+  .desktop-loader {
+    display: none;
+  }
+  .mobile-loader {
+    display: flex;
+  }
+}
   /*end of custom preloader*/
