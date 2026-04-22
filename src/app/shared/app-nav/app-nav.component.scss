@@ -6,7 +6,7 @@
 .nav-content {
     position: fixed;
     width: calc(100% - 30px);
-    bottom: 20px;
+    bottom: 15px;
     left: 15px;
     display: flex;
     align-items: center;
@@ -16,6 +16,7 @@
     border-radius: 25px;
     background: #2B3422;
     box-shadow: 0 4px 4px 0 rgba(146, 145, 145, 0.25) inset, 0 10px 30px 0 rgba(0, 0, 0, 0.08);
+    z-index: 10;
 }
 
 .nav-item {

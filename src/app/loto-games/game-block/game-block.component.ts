@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription, interval, Subject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, interval, Subject, race } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
@@ -81,9 +81,17 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
+
   @Input() allEvents: any = []
 
   countdownTime: string = ''
+  countdownDays: number = 0
+  countdownHours: number = 0
+  countdownMinutes: number = 0
+  countdownSeconds: number = 0
+
+  numberOfBallChoice: any
 
   private configCache = new Map<number, any>()
   private countdownSubscription: Subscription | null = null
@@ -93,7 +101,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     private gnrcSrv: GenericService,
     private cartSrv: CartService,
     private gamesSrv: GamesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
@@ -197,10 +206,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
           this.eventsList.push(eventItem)
         }
       });
-
+      console.log(this.eventsList)
       if (this.eventsList.length > 0) {
         let selectedEvent = this.eventsList[0];
-
+        console.log(selectedEvent)
         if (this.isPickXGame) {
           const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
           const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
@@ -226,6 +235,12 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
         this.composeEventDetails(selectedEvent)
       }
+      else {
+        if (this.isAndroidApp) {
+          this.gnrcSrv.setModalData(true, false, 'No active games available at the moment. Please check back later.');
+          this.router.navigate(['/Machine/Games'])
+        }
+      }
     }
     else {
       this.showEventDetails = false
@@ -234,6 +249,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   async composeEventDetails(raceItem: any) {
+    console.log(raceItem)
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
     if (this.configCache.has(configId)) {
       this.fixedConfig = this.configCache.get(configId);
@@ -242,6 +258,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       this.configCache.set(configId, this.fixedConfig);
     }
     let numberOfSelectedBalls = (this.isPickXGame) ? this.fixedConfig[0].NumberOfBalls : 6
+    this.numberOfBallChoice = numberOfSelectedBalls
     let numberOfBalls = (this.isPickXGame) ? 10 : this.fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
     console.log(raceItem)
     console.log(this.fixedConfig)
@@ -262,7 +279,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     // if we have bet types available and none chosen yet, pick the first one
     if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length) {
       this.selectedType = this.fixedConfig[0];
-      this.onTypeChanged(this.selectedType);
+      this.onFilterChange(this.selectedType);
     }
 
     this.selectedBalls = this.generateDrawBalls(numberOfSelectedBalls)
@@ -300,21 +317,29 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     if (diff <= 0) {
       this.countdownTime = 'Event started';
+      this.countdownDays = 0;
+      this.countdownHours = 0;
+      this.countdownMinutes = 0;
+      this.countdownSeconds = 0;
       return;
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    this.countdownDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    this.countdownHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    this.countdownMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    this.countdownSeconds = Math.floor((diff % (1000 * 60)) / 1000);
 
     const parts: string[] = [];
-    if (days > 0) parts.push(`${days}d`);
-    if (hours > 0) parts.push(`${hours}h`);
-    parts.push(`${minutes}m`);
-    parts.push(`${seconds}s`);
+    if (this.countdownDays > 0) parts.push(`${this.countdownDays}d`);
+    if (this.countdownHours > 0) parts.push(`${this.countdownHours}h`);
+    parts.push(`${this.countdownMinutes}m`);
+    parts.push(`${this.countdownSeconds}s`);
 
     this.countdownTime = parts.join(' ');
+  }
+
+  padNumber(num: number): string {
+    return num.toString().padStart(2, '0');
   }
 
   generateBallObjects(x: number) {
@@ -636,6 +661,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (refreshEventDetails) {
       this.composeEventDetails(this.selectedEvent)
     }
+  }
+
+  clearSelections() {
+    this.currentPickIndex = 0;
+    this.composeEventDetails(this.selectedEvent)
   }
 
   async issue100Tickets() {

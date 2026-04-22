@@ -525,6 +525,7 @@ export class MachineService {
     else if (validateTicketResponse.dataToPrint) {
       validateTicketResponse.dataToPrint = validateTicketResponse.dataToPrint.replace(/;/g, "\n");
     }
+    console.log(validateTicketResponse)
     return validateTicketResponse
   }
 

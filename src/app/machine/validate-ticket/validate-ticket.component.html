@@ -39,7 +39,7 @@
                     <input type="text" class="form-control" [value]="payTicketResponse.WinningAmount" disabled />
                 </div>
 
-                <div [innerText]="payTicketResponse.dataToPrint" class="report-holder" *ngIf="!showCancelPage"></div>
+                <div [innerText]="getFormattedDataToPrint()" class="report-holder" *ngIf="!showCancelPage"></div>
 
                 <div class="form-btns d-flex">
 

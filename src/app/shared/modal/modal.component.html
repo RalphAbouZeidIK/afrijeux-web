@@ -1,5 +1,5 @@
 <ng-template #content>
-	<div class="toast-parent" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+	<div class="toast-parent" [ngClass]="{'success': isSuccess, 'error': !isSuccess}" (click)="close()">
 		<div class="toast-icon" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
 			<img [src]="isSuccess ? 'assets/images/success-icon.svg' : 'assets/images/error-icon.svg'" alt="">
 		</div>

@@ -27,22 +27,22 @@ export class AppNavComponent implements OnInit, OnDestroy, OnChanges {
       id: 'games',
       label: 'Games',
       icon: 'rectangle-group',
-      route: '/Games',
+      route: '/Machine/Games',
       active: true
     },
     {
       id: 'prize-details',
       label: 'Prize Details',
       icon: 'prize-details',
-      route: '/prize-details',
-      active: true
+      route: '/Machine/Prize-Details',
+      active: false
     },
     {
       id: 'scan',
       label: 'Scan',
       icon: 'scan',
-      route: '/scan',
-      active: true
+      route: '/Machine/ValidateTicket',
+      active: false
     }
   ];
 

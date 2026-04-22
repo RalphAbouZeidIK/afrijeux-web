@@ -908,6 +908,10 @@ app-odd-item:nth-of-type(3n) {
     padding: 30px;
     margin-bottom: 40px;
 
+    // background-image:url('assets/images/game-box-bg.png');
+    // background-repeat: no-repeat;
+    // background-position: center;
+    // background-size: cover;
     .inner-container {
         width: 690px;
         max-width: 100%;
@@ -943,7 +947,7 @@ app-odd-item:nth-of-type(3n) {
     }
 
     .input-bg {
-        border-radius: 35px;
+        border-radius: 25px;
         border: 1px solid #C2D4E1;
         background: $lightBg;
         display: flex;
@@ -964,6 +968,8 @@ app-odd-item:nth-of-type(3n) {
 
         &.selected-balls-type {
             margin-bottom: 20px;
+            display: block;
+            min-width: 320px;
         }
     }
 
@@ -1030,12 +1036,17 @@ app-odd-item:nth-of-type(3n) {
         width: 270px;
         max-width: 100%;
         margin-bottom: 0;
-
+        justify-content: space-between;
+        span{
+            font-size:14px
+        }
         input {
             text-align: center;
             font-size: 14px;
             border: none;
             line-height: 19px;
+            width: auto;
+            background: transparent
         }
 
         .btn {
@@ -1050,7 +1061,7 @@ app-odd-item:nth-of-type(3n) {
         text-align: center;
         font-size: 14px;
         display: block;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
 }
@@ -1083,6 +1094,91 @@ app-odd-item:nth-of-type(3n) {
 
     &.active {
         opacity: 1;
+    }
+}
+
+.selected-balls-type .options-container {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(159, 159, 159, 0.50);
+}
+
+.options-container {
+    color: #B7B7B7;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .option-item {
+        display: block;
+        cursor: pointer;
+        position: relative;
+        padding-left: 20px;
+
+        input {
+            display: none;
+        }
+
+        &.selected {
+            color: $lightGreen;
+
+            &:before {
+                border-radius: 4px;
+                border: 1px solid $lightGreen;
+                background-color: #639247;
+                background-image: url(/assets/images/check.svg);
+                background-position: center;
+            }
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid #D0D5DD;
+            background-color: #1D1C1C;
+        }
+
+        input {
+            margin-right: 5px;
+            border-radius: 25px;
+        }
+    }
+}
+
+.selected-balls-type {
+    .top-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.mobile-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .quickpick-mobile,
+    .clear-mobile {
+
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            display: block;
+            width: 14px
+        }
     }
 }
 
@@ -1148,9 +1244,11 @@ app-odd-item:nth-of-type(3n) {
         margin-top: 70px;
         padding-bottom: 90px;
     }
-    .no-header{
+
+    .no-header {
         margin-top: 0 !important;
     }
+
     .hidden-mobile {
         display: none !important;
     }
@@ -1242,6 +1340,13 @@ app-odd-item:nth-of-type(3n) {
         height: auto !important
     }
 
+    .android-app {
+
+        .confirm-button,
+        .mobile-cart-toggle {
+            bottom: 92px !important
+        }
+    }
 }
 
 @media (max-width: 768px) {
@@ -1250,9 +1355,21 @@ app-odd-item:nth-of-type(3n) {
         align-items: center;
         gap: 28px;
     }
-    .loto-game-container{
-        padding:0;
-        border:none;
-         
+
+    .loto-game-container {
+        padding: 0;
+        border: none;
+
+    }
+
+    .loto-game-container .input-bg {
+        width: 100%;
+        padding: 10px 15px;
+        background: transparent
+    }
+
+    .btn.btn-primary:hover {
+        background-color: $lightGreen;
+        color: #000
     }
 }

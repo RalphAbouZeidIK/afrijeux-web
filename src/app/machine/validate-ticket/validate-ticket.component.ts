@@ -71,6 +71,7 @@ export class ValidateTicketComponent {
     if (validateTicketReponse.status == true) {
       this.getCancelPermission()
       this.payTicketResponse = validateTicketReponse
+      console.log(this.payTicketResponse)
       this.isPaying = true
       if (validateTicketReponse.dataToPrint.trim() == '') {
         this.showCancelPage = true
@@ -110,6 +111,12 @@ export class ValidateTicketComponent {
       this.isPaying = false
       this.fullTicketId = ''
     }
+  }
+
+  getFormattedDataToPrint(): string {
+    if (!this.payTicketResponse?.dataToPrint) return '';
+    // Convert escaped newlines (\n) to actual newlines for proper display
+    return this.payTicketResponse.dataToPrint.replace(/\\n/g, '\n');
   }
 
 }

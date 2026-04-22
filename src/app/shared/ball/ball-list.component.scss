@@ -15,6 +15,8 @@
         row-gap: 0;
 
         column-gap: 8px;
+        justify-content: flex-start;
+
 
         .box {
             width: 34px;
@@ -57,6 +59,10 @@
 
     &.drawBalls {
         justify-content: center;
+
+        .box {
+            border-radius: 10px;
+        }
     }
 
     &.pickx {
@@ -83,7 +89,7 @@
     display: flex;
     background-image: none !important;
     background-color: #F8FAFC;
-    border-radius: 10px;
+    border-radius: 20px;
 
     &.clickable {
         cursor: pointer;
@@ -142,32 +148,42 @@
             gap: 6px;
             max-width: 100%;
             width: auto;
+            justify-content: space-between;
+            padding: 0 15px;
+
+            .box {
+                width: 63px;
+                height: 63px;
+            }
         }
 
         &.jackpot {
-            gap: 18px;
+            padding: 0;
+
+            .delete-button {
+                display: flex;
+                width: 104px;
+                height: 47px;
+            }
 
             .box {
-                width: 51px;
-                height: 51px;
+                width: 47px;
+                height: 47px;
             }
 
         }
 
     }
 
-    .box {
-        width: 78px;
-        height: 78px;
-    }
+
 
     .ballnbr {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .delete-button {
-        width: 160px;
-        height: 80px;
+        width: 143px;
+        height: 63px;
     }
 
 }

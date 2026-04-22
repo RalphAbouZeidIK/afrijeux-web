@@ -1,6 +1,10 @@
-<div class="countdown-display" *ngIf="isAndroidApp">
+<div class="countdown-display" *ngIf="isAndroidApp && showEventDetails">
     <span class="countdown-label">Time to Draw:</span>
-    <span class="countdown-value">{{ countdownTime }}</span>
+    <div class="countdown-parts">
+        <span class="countdown-part" *ngIf="countdownHours > 0">{{ padNumber(countdownHours) }}</span>
+        <span class="countdown-part">{{ padNumber(countdownMinutes) }}</span>
+        <span class="countdown-part">{{ padNumber(countdownSeconds) }}</span>
+    </div>
 </div>
 <app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId"
     *ngIf="!isAndroidApp"></app-games-links>
@@ -21,29 +25,58 @@
                 </ng-container>
 
                 <ng-container *ngIf="showEventDetails">
-                    <h5>
-                        {{selectedEvent.EventName}} / {{selectedEvent.EventDate || selectedEvent.GameEventDate}}
-                    </h5>
+                    <div class="draw-header">
+                        <h5>
+                            {{selectedEvent.EventName}} <span class="event-date"> / {{selectedEvent.EventDate ||
+                                selectedEvent.GameEventDate}}</span>
+                        </h5>
+                        <span class="game-note">
+                            <ng-container *ngIf="isPickXGame">
+                                Choose any {{numberOfBallChoice}} digits from 0 to 9 (digits may be repeated).
+                            </ng-container>
+                            <ng-container *ngIf="isJackpotGame">
+                                Choose from 6 to 9 digits.
+                            </ng-container>
+                        </span>
+                    </div>
 
-                    <div class="selected-balls-type d-flex input-bg">
-                        <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
-                            [shouldHighlight]="false" [shouldEmit]="false"></app-ball-list>
+                    <div class="selected-balls-type input-bg">
+                        <div class="top-section">
+                            <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
+                                [shouldHighlight]="false" [shouldEmit]="false"></app-ball-list>
+                            <div class="mobile-controls" *ngIf="!isDesktop">
+                                <a (click)="quickPick()" class="quickpick-mobile">
+                                    <img src="assets/images/qp-icon.svg" alt="Quick Pick">
+                                </a>
+                                <a (click)="clearSelections()" class="clear-mobile">
+                                    <img src="assets/images/delete-icon.svg" alt="Clear Selections">
+                                </a>
+                            </div>
+                        </div>
 
-                        <div class="option-list-holder" *ngIf="isPickXGame"
+
+                        <!-- <div class="option-list-holder" *ngIf="isPickXGame"
                             (click)="showOptionsList = !showOptionsList">
                             <span class="selected-option">{{ selectedType?.TicketTypeName }}</span>
                             <app-option-list *ngIf="showOptionsList" [options]="selectedEvent.fixedConfig"
                                 [selectedValue]="selectedResultFilter"
                                 (optionChange)="onFilterChange($event)"></app-option-list>
+
+
+
+                        </div> -->
+                        <div class="options-container single-checkbox" *ngIf="isPickXGame">
+                            <label *ngFor="let option of selectedEvent.fixedConfig" class="option-item"
+                                [ngClass]="{ 'selected': selectedResultFilter === option.TicketTypeId }">
+                                <input type="radio" name="optionsGroup" [value]="selectedResultFilter"
+                                    [checked]="selectedResultFilter === option.TicketTypeId"
+                                    (change)="onFilterChange(option)" />
+                                {{ option.TicketTypeName }}
+                            </label>
                         </div>
                     </div>
                     <div class="balls-list-holder">
-                        <h2>Select Your Numbers</h2>
-                        <span class="game-note">
-                            <ng-container *ngIf="isPickXGame">
-                                Select any two digits from 0 to 9 (digits may be repeated).
-                            </ng-container>
-                        </span>
+
                         <!-- for PickX games we render one ball-list per configured ball -->
                         <ng-container *ngIf="isPickXGame; else singleBall">
                             <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectPickXBall($event)"
@@ -61,21 +94,26 @@
                     <div class="bottom-section d-flex">
                         <div class="form-group stake-block">
                             <div class="input-bg stake-block">
-                                <a (click)="updateMultiplier(false)" class="sign-button" *ngIf="isPickXGame">
+
+                                <span class="ticket-price">
+                                    Ticket Price:
+                                </span>
+                                <span>{{ Stake }} AED</span>
+                                <!-- <a (click)="updateMultiplier(false)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/minus.svg" alt="Minus">
                                 </a>
                                 <input #stakeInput type="number" class="form-control" [(ngModel)]="Stake"
                                     (ngModelChange)="onStakeInputChange($event, stakeInput)"
                                     [min]="selectedType?.MinStake" [max]="selectedType?.MaxStake" placeholder="Stake"
-                                    [disabled]="!isPickXGame" />
+                                    [disabled]="true" />
                                 <a (click)="updateMultiplier(true)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/plus.svg" alt="Plus">
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                         <div class="btns-holder d-flex">
-                            <a class="btn btn-primary" (click)="quickPick()">Quick Pick</a>
-                            <a class="btn btn-success" (click)="addToBet()">Confirm Selections</a>
+                            <a class="btn qp-button" (click)="quickPick()" *ngIf="isDesktop">Quick Pick</a>
+                            <a class="btn btn-primary confirm-button" (click)="addToBet()">Confirm Selections</a>
                             <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
                                 {{ isBulkIssueInProgress ? 'Issuing...' : 'Issue 100 Tickets' }}
                             </a>
@@ -98,3 +136,5 @@
         <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"></app-shared-cart>
     </aside>
 </div>
+
+<div class="buttons-bg" [ngClass]="{'androidApp': isAndroidApp}"></div>

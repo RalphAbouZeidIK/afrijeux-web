@@ -240,24 +240,32 @@
 }
 
 @media all and (max-width:1200px) {
+    ::ng-deep .android-app {
+        .confirm-button {
+            bottom: 70px
+        }
+    }
+
     .mobile-cart-toggle {
         position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 12px;
+        right: 15px;
+        bottom: 15px;
         z-index: 3;
-        height: 48px;
+        height: 39px;
         border: 0;
-        background: $lightGreen;
-        color: $darkBg;
+        color: $lightGreen;
         font-size: 14px;
-        font-weight: 700;
-        font-family: $font-bold;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+        border-radius: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.20);
+        background: var(--Black-Green, #0B1705);
+        padding: 10px 14px;
+        width: calc(50% - 20px);
+
     }
 
     .mobile-cart-count {
@@ -529,7 +537,8 @@
         margin-bottom: 0;
         line-height: 16px;
     }
-    .cart-container.loto-cart .bet-item{
+
+    .cart-container.loto-cart .bet-item {
         align-items: center;
     }
 }

@@ -1,9 +1,10 @@
 <div class="overlay" (click)="hideMenus()" [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
 
-<button class="mobile-cart-toggle" *ngIf="listOfBets && listOfBets.length > 0 && !showOnClickMobile"
-    (click)="openCartOnMobile()" type="button">
-    <span>Bet Slip</span>
-    <span class="mobile-cart-count">{{totalBets || listOfBets.length}}</span>
+<button class="mobile-cart-toggle" *ngIf="!showOnClickMobile" (click)="openCartOnMobile()" type="button">
+    <img src="assets/images/cart-btn-icon.svg" alt="Cart Icon">
+    <span>Pick Details</span>
+    <img src="assets/images/arrow.svg" alt="Arrow Icon">
+    <!-- <span class="mobile-cart-count">{{totalBets || listOfBets.length}}</span> -->
 </button>
 
 <div class="cart-container"
