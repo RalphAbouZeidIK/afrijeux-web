@@ -97,7 +97,7 @@ input[type='number'] {
 
     .btns-holder a {
         flex: 1;
-        padding: 11px 10px
+        padding: 8px 10px
     }
 
     .buttons-bg {
@@ -119,15 +119,15 @@ input[type='number'] {
         }
     }
 
-    .confirm-button {
-        left: 15px;
-        bottom: 15px;
-        width: calc(50% - 20px);
-        z-index: 3;
-        position: fixed;
-        border: none;
-        font-size: 13px;
-    }
+    // .confirm-button {
+    //     left: 15px;
+    //     bottom: 15px;
+    //     width: calc(50% - 20px);
+    //     z-index: 3;
+    //     position: fixed;
+    //     border: none;
+    //     font-size: 13px;
+    // }
 
 }
 

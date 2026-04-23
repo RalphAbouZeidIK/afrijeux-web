@@ -49,7 +49,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isQuickPick = false
 
-  ticketItem: any = []
+  isQuickPickDisabled = false
 
 
   isPickXGame = false
@@ -83,6 +83,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   isDesktop: any = this.gnrcSrv.getIsDesktopView()
 
   @Input() allEvents: any = []
+
+  isMobile: any = this.gnrcSrv.getIsMobileView()
 
   countdownTime: string = ''
   countdownDays: number = 0
@@ -427,7 +429,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
-  quickPick() {
+  quickPick(index: number | null = null) {
+    if (this.isQuickPickDisabled) {
+      return;
+    }
+
+    this.isQuickPickDisabled = true;
+
     if (this.isJackpotGame) {
       // Select 6 random numbers for Jackpot game
       this.selectedNumbers = [];
@@ -470,6 +478,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
       console.log(this.selectedBalls);
     }
+    setTimeout(() => {
+      this.isQuickPickDisabled = false;
+      this.addToBet(true, index)
+    }, 500);
+
   }
 
   isBallSelected(ball: any): boolean {
@@ -609,7 +622,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     return 'Jackpot';
   }
 
-  addToBet(refreshEventDetails = true) {
+  addToBet(refreshEventDetails = true, index: number | null = null) {
     this.currentPickIndex = 0; // reset for next time
     let pickItem: any
     const gameName = this.getGameNameForBet();
@@ -633,7 +646,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
         gameName: gameName,
         stake: this.Stake,
-        id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
+        id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
+        chosenBallsList: this.selectedBalls
       }
     }
 
@@ -651,12 +665,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         SelectedNumber: this.selectedBalls.map((b: any) => b.number),
         gameName: gameName,
         stake: this.Stake,
-        id: Math.random().toString(36).substring(2, 9) // generate a random id for the pick
+        id: Math.random().toString(36).substring(2, 9),
+        chosenBallsList: this.selectedBalls // generate a random id for the pick
       }
     }
     console.log(pickItem)
     this.Stake = 0
-    this.cartSrv.updateLotoList(pickItem)
+    this.cartSrv.updateLotoList(pickItem, index)
     this.selectedNumbers = [];
     if (refreshEventDetails) {
       this.composeEventDetails(this.selectedEvent)
@@ -755,5 +770,14 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       await new Promise((resolve) => setTimeout(resolve, delayMs));
     }
     return false;
+  }
+
+  onQuickPickBetItem(event: any) {
+    const { betItem, index } = event;
+    this.quickPick(event.index)
+    console.log(event)
+
+    // Update the cart service with the modified bet item
+    //this.cartSrv.updateLotoList(betItem);
   }
 }

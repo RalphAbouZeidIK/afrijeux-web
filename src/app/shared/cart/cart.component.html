@@ -1,15 +1,11 @@
-<div class="overlay" (click)="hideMenus()" [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
+<div class="overlay {{cssClass}}" (click)="hideMenus()" *ngIf="shouldShow"
+    [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
 
-<button class="mobile-cart-toggle" *ngIf="!showOnClickMobile" (click)="openCartOnMobile()" type="button">
-    <img src="assets/images/cart-btn-icon.svg" alt="Cart Icon">
-    <span>Pick Details</span>
-    <img src="assets/images/arrow.svg" alt="Arrow Icon">
-    <!-- <span class="mobile-cart-count">{{totalBets || listOfBets.length}}</span> -->
-</button>
 
-<div class="cart-container"
+
+<div class="cart-container {{cssClass}}"
     [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
-    <div class="cart-header" (click)="OnclickIsMobile()">
+    <div class="cart-header" (click)="OnclickIsMobile()" *ngIf="shouldShow">
         <span class="mobileOnly rect-bar"></span>
         <p class="cart-title">Bet Slip </p>
         <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
@@ -61,25 +57,50 @@
 
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && (isPickXGame || isJackpotGame)">
         <div class="list-of-bets">
-            <ng-container *ngFor="let betItem of listOfBets, let i = index">
+            <ng-container *ngFor="let betItem of listOfBets.slice().reverse(), let i = index">
                 <div class="bet-item">
 
-                    <a class="close-icon" (click)="removeLotoItemFormSlip(betItem,i)">
-                        <img src="assets/images/close-icon-grey.svg" />
-                    </a>
-                    <div class="title-odd">
-                        <span class="greyText">
-                            {{betItem.gameName}}
+                    <ng-container *ngIf="!shouldShow">
+                        <span class="arrow-holder">
+                            <span class="letter">{{betItem.ticketTypeName.charAt(0)}}</span>
+                            <img src="/assets/images/mobile-balls-list-arrow.svg" alt="">
                         </span>
-                        <span>
-                            Balls Chosen: {{betItem.displayBalls}}
-                        </span>
-                        <span class="greyText" *ngIf="isPickXGame">
-                            Bet Type: {{betItem.ticketTypeName}}
-                        </span>
-                    </div>
+                        <div class="balls-list">
+                            <span *ngFor="let ball of betItem.chosenBallsList"
+                                class="visible-mobile-ball">{{ball.number}}
+                            </span>
+                        </div>
+                        <div class="mobile-controls" *ngIf="!isDesktop">
+                            <a class="quickpick-mobile" (click)="quickPickForBetItem(betItem,i)">
+                                QP
+                            </a>
+                            <a (click)="removeLotoItemFormSlip(betItem,i)" class="clear-mobile">
+                                <img src="assets/images/delete-icon.svg" alt="Clear Selections">
+                            </a>
+                        </div>
 
-                    <span class="odd">{{betItem.stake | number:'1.0-3'}} AED</span>
+                    </ng-container>
+
+
+                    <ng-container *ngIf="shouldShow">
+                        <a class="close-icon" (click)="removeLotoItemFormSlip(betItem,i)">
+                            <img src="assets/images/close-icon-grey.svg" />
+                        </a>
+                        <div class="title-odd">
+                            <span class="greyText">
+                                {{betItem.gameName}}
+                            </span>
+                            <span>
+                                Balls Chosen: {{betItem.displayBalls}}
+                            </span>
+                            <span class="greyText" *ngIf="isPickXGame">
+                                Bet Type: {{betItem.ticketTypeName}}
+                            </span>
+                        </div>
+
+                        <span class="odd">{{betItem.stake | number:'1.0-3'}} AED</span>
+                    </ng-container>
+
 
 
                 </div>
@@ -92,8 +113,12 @@
             <span>Total Price:</span>
             <span>{{listOfBets.TicketPrice | number:'1.0-3'}} AED</span>
         </div>
-        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket" [disabled]="stake == 0"
-            (click)="issueTicket()">Place
+        <button class="btn btn-primary" (click)="openCartOnMobile()" *ngIf="!shouldShow"
+            type="button">
+            <span>Confirm & Print</span>
+        </button>
+        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket && shouldShow"
+            [disabled]="stake == 0" (click)="issueTicket()">Place
             Bets</button>
     </div>
 

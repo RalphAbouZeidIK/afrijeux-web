@@ -24,6 +24,7 @@ export class GenericService {
     return `${month}${day}${year}${hours}${minutes}${seconds}${milliseconds}`;
   }
 
+
   /**
      * Get url's first path
      * @returns 
@@ -49,6 +50,10 @@ export class GenericService {
    * login status subscriber
    */
   private isDesktop$ = new Subject();
+
+  getIsMobileView() {
+    return window.innerWidth < 768;
+  }
 
   getIsDesktopView() {
     return window.innerWidth > 1200;

@@ -247,10 +247,7 @@
     }
 
     .mobile-cart-toggle {
-        position: fixed;
-        right: 15px;
-        bottom: 15px;
-        z-index: 3;
+        position: static;
         height: 39px;
         border: 0;
         color: $lightGreen;
@@ -264,7 +261,7 @@
         border: 1px solid rgba(255, 255, 255, 0.20);
         background: var(--Black-Green, #0B1705);
         padding: 10px 14px;
-        width: calc(50% - 20px);
+        width:50%;
 
     }
 
@@ -522,6 +519,20 @@
             visibility: visible;
             pointer-events: auto;
         }
+
+        &.mobile-visible-cart {
+            position: static;
+            height: auto;
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            max-height: unset;
+            width: 100%;
+            pointer-events: auto;
+        }
     }
 
     .cart-container input {
@@ -540,5 +551,82 @@
 
     .cart-container.loto-cart .bet-item {
         align-items: center;
+    }
+}
+
+.cart-container.mobile-visible-cart {
+    position: static;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    max-height: unset;
+    width: 100%;
+    pointer-events: auto;
+    margin-top: 25px;
+    .bet-item {
+        padding: 0;
+    }
+
+    .close-icon {
+        margin-left: auto;
+    }
+
+    .bet-item {
+        margin-bottom: 12px;
+    }
+    .price-submit{
+        gap:10px;
+        align-items: center;
+    }
+    .info-item {
+        width: 100%;
+        border-radius: 25px;
+        border: 1px solid #C2D4E1;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        font-size:14px;
+        width:50%;
+        margin-bottom: 0;
+    }
+}
+
+.visible-mobile-ball {
+    width: 34px;
+    height: 34px;
+    background-image: url(/assets/images/ball-icon.png) !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000 !important;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+.balls-list {
+    row-gap: 8px;
+    column-gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.arrow-holder {
+    margin-right: 8px;
+    font-size: 10px;
+    color: #000;
+    position: relative;
+
+    .letter {
+        color: #000 !important;
+        position: absolute;
+        top: 1px;
+        right: 7px;
     }
 }

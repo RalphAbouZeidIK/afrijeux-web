@@ -1207,10 +1207,15 @@ app-odd-item:nth-of-type(3n) {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-left: auto;
 
     .quickpick-mobile,
     .clear-mobile {
-
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        text-decoration: none;
+        color: $white;
         cursor: pointer;
         width: 20px;
         height: 20px;
@@ -1225,10 +1230,11 @@ app-odd-item:nth-of-type(3n) {
     }
 }
 
-.btn.scan-button, .btn.scan-button:hover {
-    color:$lightGreen!important;
-    border: 1px solid $lightGreen!important;
-    background: #232E1E!important;
+.btn.scan-button,
+.btn.scan-button:hover {
+    color: $lightGreen !important;
+    border: 1px solid $lightGreen !important;
+    background: #232E1E !important;
 }
 
 @media all and (max-width:1200px) {
@@ -1372,8 +1378,8 @@ app-odd-item:nth-of-type(3n) {
     .loto-game-container {
         padding: 15px;
 
-        .bottom-section {
-            flex-direction: column;
+        .bottom-section > * {
+            width: 50%!important
         }
 
         .inner-container {

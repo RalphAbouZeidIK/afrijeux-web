@@ -40,7 +40,15 @@ export class CartService {
 
   private resetOtherEvents$ = new Subject();
 
+  private showOnClickMobile$ = new Subject();
 
+  getShowOnClickMobileListener() {
+    return this.showOnClickMobile$;
+  }
+
+  setShowOnClickMobile(data: any) {
+    this.showOnClickMobile$.next(data)
+  }
 
 
   /**
@@ -290,10 +298,19 @@ export class CartService {
     return Array.isArray(legacy) ? legacy : [];
   }
 
-  updateLotoList(pickItem: any) {
+  updateLotoList(pickItem: any, index: any = null) {
+
     const storageKey = pickItem?.gameEventId != null
       ? this.getLotoStorageKey(`gameevent_${pickItem.gameEventId}`)
       : this.getLotoStorageKey(pickItem?.gameName);
+    if (index != null) {
+      let storageData = this.storageSrv.getItem(storageKey) || []
+      storageData[index] = pickItem
+      this.listOfLotoBets = [...storageData]
+      this.storageSrv.setItem(storageKey, storageData)
+      this.addCartData$.next(storageData);
+      return
+    }
     this.listOfLotoBets = this.storageSrv.getItem(storageKey) || []
     this.listOfLotoBets.push(pickItem)
     console.log(this.listOfLotoBets)

@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -19,9 +19,13 @@ import { UserService } from 'src/app/services/user.service';
   standalone: false
 })
 export class CartComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() cssClass: any = ''
+  shouldShow: any = true
 
   @Input() listOfBets: any = []
   @Input() selectedEvent: any = null
+
+  @Output() quickPickBetItem = new EventEmitter<{ betItem: any; index: number }>();
 
   cartSubscription: Subscription
 
@@ -49,7 +53,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
    */
   isLoggedIn: any = false
 
-  showOnClickMobile = false
+  showOnClickMobile:any = false
 
   stake = 200
 
@@ -81,6 +85,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
+  showOnClickMobileSubscription: Subscription;
+
   //stakeSubscription: Subscription
 
   constructor(
@@ -90,6 +96,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     private gnrcSrv: GenericService,
     private machineSrv: MachineService
   ) {
+
+
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
       this.isDesktop = isDesktop;
@@ -111,9 +119,16 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
     });
+
+    this.showOnClickMobileSubscription = this.cartSrv.getShowOnClickMobileListener().subscribe((showOnClickMobile) => {
+      this.showOnClickMobile = showOnClickMobile;
+    });
   }
 
   async ngOnInit() {
+    if (this.cssClass == 'mobile-visible-cart') {
+      this.shouldShow = false
+    }
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (this.isAndroidApp) {
       this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
@@ -231,6 +246,10 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSrv.removeLotoBetItem(betItem, index, this.selectedEvent)
   }
 
+  quickPickForBetItem(betItem: any, index: any) {
+    this.quickPickBetItem.emit({ betItem, index });
+  }
+
   OnclickIsMobile() {
     if (!this.isDesktop) {
       this.showOnClickMobile = !this.showOnClickMobile
@@ -239,12 +258,12 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   openCartOnMobile() {
     if (!this.isDesktop && this.listOfBets?.length > 0) {
-      this.showOnClickMobile = true
+      this.cartSrv.setShowOnClickMobile(true)
     }
   }
 
   hideMenus() {
-    this.showOnClickMobile = false
+    this.cartSrv.setShowOnClickMobile(false)
   }
 
   async issueTicket() {
