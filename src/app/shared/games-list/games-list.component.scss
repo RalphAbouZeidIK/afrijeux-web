@@ -223,7 +223,7 @@ h2 {
 .game-page {
     margin-bottom: 25px;
     justify-content: center;
-
+    flex-wrap: wrap;
     .selected button {
         opacity: 1;
         cursor: default;

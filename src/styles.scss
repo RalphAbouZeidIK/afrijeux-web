@@ -46,6 +46,12 @@
     --bs-gutter-x: 6.5rem;
 }
 
+html,
+body {
+    -webkit-overflow-scrolling: touch;
+    /* momentum scrolling */
+    scroll-behavior: smooth;
+}
 
 body {
     background-color: $darkBg;
@@ -1037,9 +1043,11 @@ app-odd-item:nth-of-type(3n) {
         max-width: 100%;
         margin-bottom: 0;
         justify-content: space-between;
-        span{
-            font-size:14px
+
+        span {
+            font-size: 14px
         }
+
         input {
             text-align: center;
             font-size: 14px;
