@@ -1,5 +1,5 @@
-<div class="form-holder" [ngClass]="{'machine-layout': isAndroidApp}" *ngIf="showLoginPage">
-    <div class="form-bg">
+<div class="form-holder login-form" [ngClass]="{'machine-layout': isAndroidApp}" *ngIf="showLoginPage">
+    <div class="form-bg ">
         <div class="form-header">
             <ng-container *ngIf="!isAndroidApp">
                 <h2 *ngIf="isSignup">{{ 'shared.login.signUpTitle' | translate }}</h2>

@@ -26,6 +26,9 @@
 
                 <ng-container *ngIf="showEventDetails">
                     <div class="draw-header">
+                        <a class="back-arrow">
+                            <img src="assets/images/back-arrow.svg" alt="Back" (click)="backButton()">
+                        </a>
                         <h5>
                             {{selectedEvent.EventName}} <span class="event-date"> / {{selectedEvent.EventDate ||
                                 selectedEvent.GameEventDate}}</span>
@@ -116,10 +119,12 @@
                             <a class="btn btn-primary confirm-button" (click)="addToBet()">Confirm Selections</a>
                             <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
                                 {{ isBulkIssueInProgress ? 'Issuing...' : 'Issue 100 Tickets' }}
-                            </a>
-                            <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress" (click)="issue100TicketsSeparately()">
-                                {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 100 Separate Tickets' }}
-                            </a> -->
+                            </a> 
+                            <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
+                                (click)="issue100TicketsSeparately()">
+                                {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 100 Separate
+                                Tickets' }}
+                            </a>-->
                         </div>
 
                     </div>

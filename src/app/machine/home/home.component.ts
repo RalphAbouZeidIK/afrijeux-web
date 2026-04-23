@@ -162,7 +162,6 @@ export class HomeComponent implements OnInit {
   async logout() {
     this.usrSrv.signOut()
     await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
-    this.router.navigate(['/Machine']);
   }
 }
 

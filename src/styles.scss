@@ -378,7 +378,41 @@ app-option-list {
         .form-bg {
             border-radius: 0;
             padding: 0;
-            padding-bottom: 30%;
+
+
+        }
+
+        &:not(.login-form) {
+            background: #000;
+
+            .form-header {
+                margin-bottom: 15px;
+            }
+
+            .form-btns {
+                margin-top: 30px;
+                margin-bottom: 0;
+            }
+
+            .form-bg {
+                background-color: $darkBg;
+                padding: 20px 16px;
+                border-radius: 15px;
+                border: 1px solid rgba(159, 159, 159, 0.50);
+            }
+
+
+            h2 {
+                font-size: 20px;
+                line-height: 35px;
+            }
+        }
+
+        .login-form {
+            .form-bg {
+                padding-bottom: 30%;
+            }
+
         }
 
         h2 {
@@ -507,7 +541,8 @@ mat-form-field {
 }
 
 .form-control,
-.form-control:focus {
+.form-control:focus,
+.form-control:disabled {
     background-color: $lightBg;
     border-color: $lightBg;
     padding: 10px 20px;
@@ -1190,6 +1225,12 @@ app-odd-item:nth-of-type(3n) {
     }
 }
 
+.btn.scan-button, .btn.scan-button:hover {
+    color:$lightGreen!important;
+    border: 1px solid $lightGreen!important;
+    background: #232E1E!important;
+}
+
 @media all and (max-width:1200px) {
 
     .bp-page {
@@ -1379,5 +1420,9 @@ app-odd-item:nth-of-type(3n) {
     .btn.btn-primary:hover {
         background-color: $lightGreen;
         color: #000
+    }
+
+    .modal-dialog {
+        width: calc(100% - 15px);
     }
 }

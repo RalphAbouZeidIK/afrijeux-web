@@ -2,7 +2,7 @@
 
   <div class="overlay" (click)="hideMenus()"></div>
   <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()" *ngIf="!isAndroidApp"></a>
-  <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="['/']" />
+  <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="[(isAndroidApp)?'/Machine/Login':'/']" />
 
   <div class="header-container">
 

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CacheService } from 'src/app/services/cache.service';
+import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
 import { NativeBridgeService } from 'src/app/services/native-bridge.service';
 
@@ -25,17 +26,28 @@ export class ValidateTicketComponent {
 
   showCancelPage: boolean = false
 
+  showForm = true
+
   constructor(
     private machineSrv: MachineService,
     private nativeBridge: NativeBridgeService,
-    private cacheService: CacheService
+    private cacheService: CacheService,
+    private gnrcSrv:GenericService
   ) {
     this.nativeBridge.scanResult$.subscribe(result => {
-      this.fullTicketId = result;
+      if (result != 'Scan canceled or failed') {
+        this.fullTicketId = result;
+      }
+      else{
+        this.gnrcSrv.setModalData(true, false, `Scan canceled or failed`)
+      }
+      this.showForm = true
+
     });
   }
 
   async ngOnInit() {
+    //this.scanCode()
     this.fullTicketId = ''
     this.canPayTicket = await this.machineSrv.getMachinePermission('TerminalCanPayTicket');
 

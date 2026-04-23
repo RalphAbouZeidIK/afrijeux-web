@@ -82,6 +82,13 @@ input[type='number'] {
     }
 }
 
+.back-arrow {
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 10px;
+    top: 7px;
+}
 
 @media all and (max-width: 1200px) {
     main {
@@ -127,7 +134,15 @@ input[type='number'] {
 
 
 @media all and (max-width: 768px) {
+
+    .back-arrow {
+        display: block;
+    }
+
     .draw-header {
+        position: relative;
+        padding-left: 15px;
+
         * {
             text-align: left;
         }

@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, filter, firstValueFrom, Subject } from 'rxjs';
-
+import { Location } from '@angular/common';
 declare global {
   interface Window {
     PrintChannel?: {
@@ -13,6 +14,7 @@ declare global {
       postMessage: (message: string) => void;
     };
     handleScanResult?: (result: string) => void;
+    handleScanTimeout?: (result: string) => void;
     handleGetSerialResult?: (result: string) => void;
     triggerPrint?: () => void;
   }
@@ -58,13 +60,19 @@ export class NativeBridgeService {
   ticketUpdated$ = this.ticketUpdatedSource.asObservable();
 
 
-  constructor(private ngZone: NgZone) {
+  constructor(private ngZone: NgZone, private router: Router,private location: Location) {
     //console.log("🧩 BridgeService initialized:", this);
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
       this.ngZone.run(() => {
         //////console.log("Received from Flutter:", result);
         this.scanResultSource.next(result); // ✅ makes it reactive
+      });
+    };
+
+    window['handleScanTimeout'] = (result: string) => {
+      this.ngZone.run(() => {
+        console.log("Received from Flutter:", result);
       });
     };
 
@@ -235,7 +243,8 @@ export class NativeBridgeService {
     }
   }
 
-  async getDeviceIpFromFlutter(): Promise<string> {``
+  async getDeviceIpFromFlutter(): Promise<string> {
+    ``
     return new Promise<string>((resolve) => {
       // Prepare a one-time listener for the callback
       (window as any).onDeviceIp = (ip: string) => {

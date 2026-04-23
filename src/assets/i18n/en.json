@@ -256,14 +256,14 @@
     },
     "machine": {
         "routerLinks": {
-            "validateTicketTitle": "Validate Ticket",
+            "verifyTicketTitle": "Verify Ticket",
             "reports": "Reports",
             "checkResults": "Check Results"
         },
         "generic": {
             "scan": "Scan",
             "ticket": "Ticket",
-            "validate": "Validate",
+            "verify": "Verify",
             "back": "Back",
             "submit": "Submit",
             "print": "Print",

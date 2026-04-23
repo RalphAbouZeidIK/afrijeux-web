@@ -146,7 +146,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateHeaderVisibility() {
-    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot")
+    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot") || window.location.href.includes("Machine/ValidateTicket")
 
   }
 

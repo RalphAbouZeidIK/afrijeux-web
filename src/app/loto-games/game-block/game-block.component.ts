@@ -5,9 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 import { CartService } from 'src/app/services/cart.service';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { CartComponent } from 'src/app/shared/cart/cart.component';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-game-block',
   standalone: false,
@@ -102,7 +101,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     private cartSrv: CartService,
     private gamesSrv: GamesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location,
   ) {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
@@ -661,6 +661,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (refreshEventDetails) {
       this.composeEventDetails(this.selectedEvent)
     }
+  }
+
+  backButton() {
+    this.location.back();
   }
 
   clearSelections() {

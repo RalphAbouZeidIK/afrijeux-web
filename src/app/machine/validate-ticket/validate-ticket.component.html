@@ -1,26 +1,30 @@
-<div class="form-holder machine-layout">
+<div class="form-holder machine-layout" *ngIf="showForm">
     <div class="form-bg">
-        <h2>{{'machine.routerLinks.validateTicketTitle' | translate}}</h2>
+        <div class="form-header">
+            <h2>{{'machine.routerLinks.verifyTicketTitle' | translate}}</h2>
+            <p>Enter ticket number or scan again.</p>
+        </div>
+
         <div class=" form-content">
             <ng-container *ngIf="!isPaying">
                 <div class="form-group">
                     <label class="title-label">{{'machine.fullTicketId' | translate}}</label>
-                    <input type="text" class="form-control" [(ngModel)]="fullTicketId" pattern="[0-9]*"
-                        inputmode="numeric" />
+                    <input placeholder="Ticket number" type="text" class="form-control" [(ngModel)]="fullTicketId"
+                        pattern="[0-9]*" inputmode="numeric" />
                 </div>
 
                 <div class="form-btns d-flex">
 
-                    <button class="btn btn-primary" (click)="scanCode()">
+                    <button class="btn btn-primary scan-button" (click)="scanCode()">
+                        <img src="/assets/images/scan-icon-filled.svg" alt="Scan Icon"/>
                         {{'machine.generic.scan' | translate}}
-                        {{'machine.generic.ticket' | translate}}
                     </button>
                     <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
-                        {{'machine.generic.validate' | translate}}
+                        {{'machine.generic.verify' | translate}}
                     </button>
-                    <button class="btn btn-primary" routerLink="/Machine/Games">
+                    <!-- <button class="btn btn-primary" routerLink="/Machine/Games">
                         {{'machine.generic.back' | translate}}
-                    </button>
+                    </button> -->
                 </div>
             </ng-container>
 

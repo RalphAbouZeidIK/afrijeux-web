@@ -26,7 +26,7 @@ export const machineMenuRoutes: Route[] = [
         component: ValidateTicketComponent,
         data: {
             showLink: true,
-            title: 'machine.routerLinks.validateTicketTitle',
+            title: 'machine.routerLinks.verifyTicketTitle',
             PermissionName: 'TerminalCanValidateTicket',
             AllowHybrid: false
         },

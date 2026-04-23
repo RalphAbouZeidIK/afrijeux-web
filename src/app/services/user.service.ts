@@ -229,7 +229,7 @@ export class UserService {
     this.localStorageSrv.setItem('isLoggedIn', 'false')
     this.localStorageSrv.removeItem('user_data');
     this.localStorageSrv.removeItem('expiryDate');
-    this.router.navigate(['']);
+    this.router.navigate((this.isAndroidApp) ? ['/Machine/Login'] : ['/']);
     this.setLoginStatus(false);
   }
 
