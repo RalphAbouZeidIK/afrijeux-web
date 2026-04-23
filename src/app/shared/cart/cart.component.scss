@@ -261,7 +261,7 @@
         border: 1px solid rgba(255, 255, 255, 0.20);
         background: var(--Black-Green, #0B1705);
         padding: 10px 14px;
-        width:50%;
+        width: 50%;
 
     }
 
@@ -554,6 +554,10 @@
     }
 }
 
+h4 {
+    font-size: 18px;
+}
+
 .cart-container.mobile-visible-cart {
     position: static;
     height: auto;
@@ -567,6 +571,7 @@
     width: 100%;
     pointer-events: auto;
     margin-top: 25px;
+
     .bet-item {
         padding: 0;
     }
@@ -578,10 +583,12 @@
     .bet-item {
         margin-bottom: 12px;
     }
-    .price-submit{
-        gap:10px;
+
+    .price-submit {
+        gap: 10px;
         align-items: center;
     }
+
     .info-item {
         width: 100%;
         border-radius: 25px;
@@ -589,9 +596,9 @@
         background: transparent;
         display: flex;
         align-items: center;
-        padding: 10px 15px;
-        font-size:14px;
-        width:50%;
+        padding: 10px;
+        font-size: 14px;
+        width: 50%;
         margin-bottom: 0;
     }
 }

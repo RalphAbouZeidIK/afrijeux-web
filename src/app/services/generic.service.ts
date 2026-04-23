@@ -51,8 +51,18 @@ export class GenericService {
    */
   private isDesktop$ = new Subject();
 
+  private isMobile$ = new Subject();
+
   getIsMobileView() {
     return window.innerWidth < 768;
+  }
+
+  getIsMobileViewListener() {
+    return this.isMobile$;
+  }
+
+  setIsMobileView(value: boolean) {
+    this.isMobile$.next(value);
   }
 
   getIsDesktopView() {

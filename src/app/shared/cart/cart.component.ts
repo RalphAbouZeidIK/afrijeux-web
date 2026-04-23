@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -24,8 +24,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() listOfBets: any = []
   @Input() selectedEvent: any = null
-
-  @Output() quickPickBetItem = new EventEmitter<{ betItem: any; index: number }>();
+  @Output() quickPickBetItem = new EventEmitter<{ betItem: any, index: any }>();
 
   cartSubscription: Subscription
 
@@ -247,7 +246,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   quickPickForBetItem(betItem: any, index: any) {
-    this.quickPickBetItem.emit({ betItem, index });
+    this.quickPickBetItem.emit({ betItem, index })
   }
 
   OnclickIsMobile() {
@@ -324,6 +323,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
+    this.cartSrv.clearAllLotoBets()
     this.isDesktopSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
     this.loginStatusSubscription.unsubscribe();

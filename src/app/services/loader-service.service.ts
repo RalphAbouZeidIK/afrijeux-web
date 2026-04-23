@@ -25,7 +25,7 @@ export class LoaderService {
   /**
    * Minimum time to show loader in milliseconds
    */
-  private readonly MIN_LOADER_TIME = 1000;
+  private readonly MIN_LOADER_TIME = 1;
 
   /**
    * Service to show loader on each API call

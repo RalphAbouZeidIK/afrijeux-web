@@ -64,6 +64,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('resize')
 
       this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200);
+      this.gnrcSrv.setIsMobileView(window.innerWidth <= 768)
     }, 300);
   }
 

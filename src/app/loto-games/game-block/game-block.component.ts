@@ -115,6 +115,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.showCart = false
       }
     })
+
+    this.gnrcSrv.getIsMobileViewListener().subscribe((isMobile) => {
+      this.isMobile = isMobile;
+    });
   }
 
   ngOnInit(): void {
@@ -250,7 +254,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     console.log(this.eventsList)
   }
 
-  async composeEventDetails(raceItem: any) {
+  async composeEventDetails(raceItem: any,keepSameType = false) {
     console.log(raceItem)
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
     if (this.configCache.has(configId)) {
@@ -279,8 +283,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     setTimeout(() => this.updateCartHeight());
 
     // if we have bet types available and none chosen yet, pick the first one
-    if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length) {
-      this.selectedType = this.fixedConfig[0];
+    if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length > 0) {
+      this.selectedType = (!keepSameType) ? this.fixedConfig[0] : this.selectedType;
       this.onFilterChange(this.selectedType);
     }
 
@@ -481,7 +485,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     setTimeout(() => {
       this.isQuickPickDisabled = false;
       this.addToBet(true, index)
-    }, 500);
+    }, 200);
 
   }
 
@@ -674,7 +678,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.cartSrv.updateLotoList(pickItem, index)
     this.selectedNumbers = [];
     if (refreshEventDetails) {
-      this.composeEventDetails(this.selectedEvent)
+      this.composeEventDetails(this.selectedEvent,true)
     }
   }
 
@@ -684,7 +688,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   clearSelections() {
     this.currentPickIndex = 0;
-    this.composeEventDetails(this.selectedEvent)
+    this.composeEventDetails(this.selectedEvent,true)
   }
 
   async issue100Tickets() {

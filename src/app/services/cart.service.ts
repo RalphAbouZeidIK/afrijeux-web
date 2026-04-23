@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GamesService } from './games.service';
+import { GenericService } from './generic.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class CartService {
   constructor(
     private storageSrv: LocalStorageService,
     private translate: TranslateService,
-    private gamesSrv: GamesService
+    private gamesSrv: GamesService,
+    private gnrcSrv: GenericService
   ) { }
 
   listOfBets: any = this.storageSrv.getItem('sbCartData') || []
@@ -41,6 +43,8 @@ export class CartService {
   private resetOtherEvents$ = new Subject();
 
   private showOnClickMobile$ = new Subject();
+
+  isAndroidApp = this.gnrcSrv.isMachineApp()
 
   getShowOnClickMobileListener() {
     return this.showOnClickMobile$;
@@ -298,14 +302,17 @@ export class CartService {
     return Array.isArray(legacy) ? legacy : [];
   }
 
-  updateLotoList(pickItem: any, index: any = null) {
+  updateLotoList(pickItem: any, id: any = null) {
 
     const storageKey = pickItem?.gameEventId != null
       ? this.getLotoStorageKey(`gameevent_${pickItem.gameEventId}`)
       : this.getLotoStorageKey(pickItem?.gameName);
-    if (index != null) {
+    if (id != null) {
       let storageData = this.storageSrv.getItem(storageKey) || []
-      storageData[index] = pickItem
+      const index = storageData.findIndex((item: any) => item.id === id);
+      if (index !== -1) {
+        storageData[index] = pickItem;
+      }
       this.listOfLotoBets = [...storageData]
       this.storageSrv.setItem(storageKey, storageData)
       this.addCartData$.next(storageData);
@@ -314,6 +321,9 @@ export class CartService {
     this.listOfLotoBets = this.storageSrv.getItem(storageKey) || []
     this.listOfLotoBets.push(pickItem)
     console.log(this.listOfLotoBets)
+    if(!this.isAndroidApp){
+      this.storageSrv.setItem(storageKey, this.listOfLotoBets)
+    }
     this.storageSrv.setItem(storageKey, this.listOfLotoBets)
     this.addCartData$.next(this.listOfLotoBets);
     console.log(this.listOfLotoBets)

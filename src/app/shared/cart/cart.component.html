@@ -57,11 +57,12 @@
 
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && (isPickXGame || isJackpotGame)">
         <div class="list-of-bets">
+            <h4 *ngIf="!shouldShow">Tickets List ({{listOfBets.length}})</h4>
             <ng-container *ngFor="let betItem of listOfBets.slice().reverse(), let i = index">
                 <div class="bet-item">
 
                     <ng-container *ngIf="!shouldShow">
-                        <span class="arrow-holder">
+                        <span class="arrow-holder" *ngIf="isPickXGame">
                             <span class="letter">{{betItem.ticketTypeName.charAt(0)}}</span>
                             <img src="/assets/images/mobile-balls-list-arrow.svg" alt="">
                         </span>
@@ -71,7 +72,7 @@
                             </span>
                         </div>
                         <div class="mobile-controls" *ngIf="!isDesktop">
-                            <a class="quickpick-mobile" (click)="quickPickForBetItem(betItem,i)">
+                            <a class="quickpick-mobile" (click)="quickPickForBetItem(betItem,betItem.id)">
                                 QP
                             </a>
                             <a (click)="removeLotoItemFormSlip(betItem,i)" class="clear-mobile">
@@ -118,8 +119,7 @@
             <span>Confirm & Print</span>
         </button>
         <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket && shouldShow"
-            [disabled]="stake == 0" (click)="issueTicket()">Place
-            Bets</button>
+            [disabled]="stake == 0" (click)="issueTicket()"> Print Ticket</button>
     </div>
 
 </div>
