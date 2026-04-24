@@ -50,8 +50,8 @@
     }
 }
 
-/* responsive */
-@media all and (max-width: 1200px) {
+
+@media all and (max-width: 992px) {
     .howto-container {
         padding: 80px 60px;
     }
@@ -59,9 +59,7 @@
     .content-inner {
         gap: 100px;
     }
-}
 
-@media all and (max-width: 768px) {
     .howto-container {
         padding: 60px 20px;
     }

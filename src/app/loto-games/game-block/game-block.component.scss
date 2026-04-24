@@ -73,7 +73,7 @@ input[type='number'] {
         width: 35px;
         justify-content: center;
         letter-spacing: 1px;
-        color:$lightGreen;
+        color: $lightGreen;
     }
 
     .countdown-unit {
@@ -91,7 +91,7 @@ input[type='number'] {
     top: 7px;
 }
 
-@media all and (max-width: 1200px) {
+@media all and (max-width: 992px) {
     main {
         width: 100%
     }
@@ -120,22 +120,6 @@ input[type='number'] {
         }
     }
 
-    // .confirm-button {
-    //     left: 15px;
-    //     bottom: 15px;
-    //     width: calc(50% - 20px);
-    //     z-index: 3;
-    //     position: fixed;
-    //     border: none;
-    //     font-size: 13px;
-    // }
-
-}
-
-
-
-@media all and (max-width: 768px) {
-
     .back-arrow {
         display: block;
     }
@@ -162,6 +146,5 @@ input[type='number'] {
     .game-note {
         font-size: 12px
     }
-
 
 }

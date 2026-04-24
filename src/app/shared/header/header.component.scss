@@ -260,7 +260,7 @@ header {
     }
 }
 
-@media all and (max-width:1200px) {
+@media all and (max-width:992px) {
     .overlay {
         content: '';
         height: calc(100vh - 60px);

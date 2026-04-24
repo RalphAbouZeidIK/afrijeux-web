@@ -125,7 +125,8 @@
     .currency-icon {
         max-height: 20px;
         flex-shrink: 0;
-        img{
+
+        img {
             display: block;
         }
     }
@@ -190,34 +191,6 @@ h2 {
     padding-bottom: 15px;
 }
 
-// Responsive design
-@media (max-width: 768px) {
-    .game-card {
-        padding: 16px 12px;
-        gap: 16px;
-    }
-
-    .game-header {
-        gap: 12px;
-    }
-
-    .game-image {
-        width: 72px;
-        height: 60px;
-    }
-
-    .game-title {
-        font-size: 13px;
-        line-height: 16px;
-    }
-
-
-    .play-button {
-        padding: 6px 16px;
-        font-size: 16px;
-    }
-}
-
 // Legacy button styles (kept for backward compatibility if needed elsewhere)
 .game-page {
     margin-bottom: 25px;
@@ -237,9 +210,6 @@ h2 {
     justify-content: flex-start;
     flex-wrap: wrap;
 
-    @media (max-width: 768px) {
-        gap: 12px;
-    }
 }
 
 .pick-button {
@@ -268,11 +238,6 @@ h2 {
         background-color: rgba($lightGreen, 0.2);
     }
 
-    @media (max-width: 768px) {
-        font-size: 11px;
-        padding: 2px 14px;
-        min-width: 65px;
-    }
 }
 
 .btn {
@@ -282,5 +247,44 @@ h2 {
         opacity: 1;
         cursor: default;
         pointer-events: none;
+    }
+}
+
+
+// Responsive design
+@media (max-width: 992px) {
+    .pick-button {
+        font-size: 11px;
+        padding: 2px 14px;
+        min-width: 65px;
+    }
+
+    .button-group {
+        gap: 12px;
+    }
+
+    .game-card {
+        padding: 16px 12px;
+        gap: 16px;
+    }
+
+    .game-header {
+        gap: 12px;
+    }
+
+    .game-image {
+        width: 72px;
+        height: 60px;
+    }
+
+    .game-title {
+        font-size: 13px;
+        line-height: 16px;
+    }
+
+
+    .play-button {
+        padding: 6px 16px;
+        font-size: 16px;
     }
 }

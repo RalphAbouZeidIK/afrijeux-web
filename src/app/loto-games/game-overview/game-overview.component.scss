@@ -8,11 +8,11 @@
   justify-content: center;
 
   /* responsive padding */
-  @media all and (max-width: 1200px) {
+  @media all and (max-width: 992px) {
     padding: 50px 60px 80px;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 992px) {
     padding: 30px 20px 60px;
   }
 }
@@ -24,11 +24,11 @@
   width: 100%;
   gap: 235px;
 
-  @media all and (max-width: 1200px) {
+  @media all and (max-width: 992px) {
     gap: 100px;
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 992px) {
     flex-direction: column;
     gap: 40px;
   }
@@ -47,7 +47,7 @@
     transform: scaleY(-1) rotate(180deg); /* flip as in figma */
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 992px) {
     .icon {
       width: 120px;
       height: 128px;
@@ -79,7 +79,7 @@
     }
   }
 
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 992px) {
     align-items: center;
     text-align: center;
 

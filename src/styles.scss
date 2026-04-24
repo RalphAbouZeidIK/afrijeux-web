@@ -220,7 +220,7 @@ app-option-list {
 
 }
 
-@media all and (min-width:1200px) {
+@media all and (min-width:992px) {
 
     .menu-with-sub-nav {
         .body-holder {
@@ -313,15 +313,6 @@ app-option-list {
     gap: 78px;
     margin: 0 auto;
 
-    @media (max-width: 1200px) {
-        gap: 40px;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: 768px) {
-        gap: 15px;
-        grid-template-columns: repeat(1, 1fr);
-    }
 }
 
 .container-fluid .container-fluid {
@@ -1237,7 +1228,11 @@ app-odd-item:nth-of-type(3n) {
     background: #232E1E !important;
 }
 
-@media all and (max-width:1200px) {
+@media all and (max-width:992px) {
+    .grid {
+        gap: 15px;
+        grid-template-columns: repeat(1, 1fr);
+    }
 
     .bp-page {
         gap: 40px;
@@ -1378,8 +1373,8 @@ app-odd-item:nth-of-type(3n) {
     .loto-game-container {
         padding: 15px;
 
-        .bottom-section > * {
-            width: 50%!important
+        .bottom-section>* {
+            width: 50% !important
         }
 
         .inner-container {
@@ -1402,9 +1397,7 @@ app-odd-item:nth-of-type(3n) {
             bottom: 92px !important
         }
     }
-}
 
-@media (max-width: 768px) {
     .bp-benefits {
         flex-direction: column;
         align-items: center;

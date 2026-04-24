@@ -55,7 +55,7 @@ img{
         gap: 8px;
         flex-shrink: 0;
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             width: 100%;
 
             .btn {
@@ -71,7 +71,7 @@ img{
         gap: 30px;
         align-items: start;
 
-        @media (max-width: 1200px) {
+        @media (max-width: 992px) {
             grid-template-columns: 1fr;
             gap: 40px;
         }
@@ -545,7 +545,7 @@ img{
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .wallet-section {
         padding: 20px;
 

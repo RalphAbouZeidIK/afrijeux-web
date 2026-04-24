@@ -60,7 +60,7 @@ export class GenericService {
   private isMobile$ = new Subject();
 
   getIsMobileView() {
-    return window.innerWidth < 768;
+    return window.innerWidth < 992;
   }
 
   getIsMobileViewListener() {
@@ -72,7 +72,7 @@ export class GenericService {
   }
 
   getIsDesktopView() {
-    return window.innerWidth > 1200;
+    return window.innerWidth > 992;
   }
 
   getIsDesktopViewListener() {

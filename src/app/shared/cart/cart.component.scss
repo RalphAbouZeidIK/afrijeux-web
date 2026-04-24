@@ -30,6 +30,10 @@
         font-weight: 300;
         text-decoration-line: underline;
         cursor: pointer;
+
+        &.back-button {
+            display: none;
+        }
     }
 
     .cart-title {
@@ -239,7 +243,11 @@
     }
 }
 
-@media all and (max-width:1200px) {
+@media all and (max-width:992px) {
+    .clear-btn.back-button {
+        display: block;
+    }
+
     ::ng-deep .android-app {
         .confirm-button {
             bottom: 70px

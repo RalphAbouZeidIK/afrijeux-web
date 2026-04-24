@@ -63,8 +63,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resizeTimeout = setTimeout(() => {
       console.log('resize')
 
-      this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200);
-      this.gnrcSrv.setIsMobileView(window.innerWidth <= 768)
+      this.gnrcSrv.setIsDesktopView(window.innerWidth > 992);
+      this.gnrcSrv.setIsMobileView(window.innerWidth <= 992)
     }, 300);
   }
 
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
-    this.gnrcSrv.setIsDesktopView(window.innerWidth > 1200)
+    this.gnrcSrv.setIsDesktopView(window.innerWidth > 992)
     this.getMenuItems()
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (!this.isAndroidApp) {

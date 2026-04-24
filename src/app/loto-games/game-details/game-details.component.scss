@@ -55,7 +55,7 @@
     }
 }
 
-@media all and (max-width: 1200px) {
+@media all and (max-width: 992px) {
     .details-container {
         padding: 50px 60px;
     }
@@ -63,9 +63,7 @@
     .details-inner {
         gap: 60px;
     }
-}
 
-@media all and (max-width: 768px) {
     .details-container {
         padding: 30px 20px;
     }

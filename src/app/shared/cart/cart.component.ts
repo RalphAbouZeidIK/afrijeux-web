@@ -52,7 +52,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
    */
   isLoggedIn: any = false
 
-  showOnClickMobile:any = false
+  showOnClickMobile: any = false
 
   stake = 200
 
@@ -323,7 +323,10 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.cartSrv.clearAllLotoBets()
+    if (this.isAndroidApp) {
+      this.cartSrv.clearAllLotoBets()
+    }
+
     this.isDesktopSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
     this.loginStatusSubscription.unsubscribe();

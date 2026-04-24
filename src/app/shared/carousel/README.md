@@ -127,7 +127,7 @@ To customize the appearance, override the SCSS variables in your component or gl
 ## Responsive Breakpoints
 
 - **Desktop**: Aspect ratio 16:9, max-height 500px, 25px border radius
-- **Tablet (≤768px)**: Aspect ratio 4:3, max-height 400px, 20px border radius
+- **Tablet (≤992px)**: Aspect ratio 4:3, max-height 400px, 20px border radius
 - **Mobile (≤480px)**: Aspect ratio 3:2, max-height 300px, 16px border radius
 
 ## Accessibility

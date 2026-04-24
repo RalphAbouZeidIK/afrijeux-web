@@ -19,11 +19,6 @@
     aspect-ratio: 16 / 9;
     max-height: 500px;
 
-    @media (max-width: 768px) {
-        aspect-ratio: 4 / 3;
-        max-height: 400px;
-    }
-
     @media (max-width: 480px) {
         aspect-ratio: 3 / 2;
         max-height: 300px;
@@ -94,7 +89,7 @@
         transform: translateY(-50%) scale(0.95);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
         width: 40px;
         height: 40px;
 
@@ -119,7 +114,7 @@
 .carousel-arrow-prev {
     left: 16px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
         left: 12px;
     }
 
@@ -131,9 +126,6 @@
 .carousel-arrow-next {
     right: 16px;
 
-    @media (max-width: 768px) {
-        right: 12px;
-    }
 
     @media (max-width: 480px) {
         right: 8px;

@@ -7,7 +7,7 @@
     [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0 && shouldShow,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
     <div class="cart-header" (click)="OnclickIsMobile()" *ngIf="shouldShow">
         <span class="mobileOnly rect-bar"></span>
-        <a class="clear-btn" *ngIf="showCartButtons && shouldShow">Back</a>
+        <a class="clear-btn back-button" *ngIf="showCartButtons && shouldShow">Back</a>
         <p class="cart-title">Ticket Details </p>
         <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
         <a class="clear-btn" *ngIf="showCartButtons" (click)="$event.stopPropagation(); clearBets()">Clear all</a>

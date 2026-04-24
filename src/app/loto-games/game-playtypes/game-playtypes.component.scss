@@ -66,8 +66,8 @@
   }
 }
 
-/* responsive adjustments */
-@media all and (max-width: 1200px) {
+
+@media all and (max-width: 992px) {
   .playtypes-container {
     padding: 50px 60px;
   }
@@ -75,9 +75,7 @@
   .rules-row {
     gap: 40px;
   }
-}
 
-@media all and (max-width: 768px) {
   .playtypes-container {
     padding: 30px 20px;
   }
