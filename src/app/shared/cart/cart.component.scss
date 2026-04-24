@@ -293,16 +293,6 @@
         }
     }
 
-    .clear-btn {
-        overflow: hidden;
-        width: 0;
-        -webkit-transition: width 0.5s ease-in-out;
-        -moz-transition: width 0.5s ease-in-out;
-        -ms-transition: width 0.5s ease-in-out;
-        -o-transition: width 0.5s ease-in-out;
-        transition: width 0.5s ease-in-out;
-        white-space: nowrap;
-    }
 
     .mobile-close-btn {
         display: inline-flex;
@@ -437,7 +427,6 @@
 
         .info-item {
             font-size: 12px;
-            margin-bottom: 5px;
         }
 
         .ticket-infos {

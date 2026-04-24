@@ -3,6 +3,7 @@ import { ApiService } from './api.service';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
+import { LoaderService } from './loader-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,12 @@ import { Observable, Subject } from 'rxjs';
 export class GenericService {
   private openModal$ = new Subject();
 
-  constructor(private apiSrv: ApiService, private usrSrv: UserService, private router: Router) { }
+  constructor(
+    private apiSrv: ApiService,
+    private usrSrv: UserService,
+    private router: Router,
+    private loaderService: LoaderService
+  ) { }
 
   getFormattedToday() {
     const date = new Date();
@@ -191,5 +197,24 @@ export class GenericService {
   setModalStatus(status: any) {
     this.openModal$.next(status);
   }
+
+  private loaderStartTime: number | null = null;
+
+  toggleLoader(value: boolean) {
+    if (value) {
+      // Show loader - record start time
+      this.loaderStartTime = Date.now();
+      this.loaderService.setHttpProgressStatus(value);
+    } else {
+      // Hide loader - calculate duration
+      if (this.loaderStartTime) {
+        const duration = Date.now() - this.loaderStartTime;
+        console.log(`Loader was shown for ${duration}ms`);
+        this.loaderStartTime = null;
+      }
+      this.loaderService.setHttpProgressStatus(value);
+    }
+  }
+
 
 }

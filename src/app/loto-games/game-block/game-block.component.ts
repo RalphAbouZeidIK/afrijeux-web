@@ -122,11 +122,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnInit(): void {
-
+    this.gnrcSrv.toggleLoader(true);
     this.generateDisplayBalls();
     this.isPickXGame = window.location.href.includes("PickX")
     this.isJackpotGame = window.location.href.includes("Jackpot")
-    console.log(this.isPickXGame)
     this.getEvents()
   }
 
@@ -251,6 +250,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     else {
       this.showEventDetails = false
     }
+    
+    
     console.log(this.eventsList)
   }
 
@@ -296,6 +297,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     console.log(this.selectedBalls)
 
     // Start countdown timer for this event
+    this.gnrcSrv.toggleLoader(false);
     this.startCountdown(raceItem);
   }
 

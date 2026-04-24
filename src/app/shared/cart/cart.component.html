@@ -4,10 +4,11 @@
 
 
 <div class="cart-container {{cssClass}}"
-    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
+    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0 && shouldShow,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
     <div class="cart-header" (click)="OnclickIsMobile()" *ngIf="shouldShow">
         <span class="mobileOnly rect-bar"></span>
-        <p class="cart-title">Bet Slip </p>
+        <a class="clear-btn" *ngIf="showCartButtons && shouldShow">Back</a>
+        <p class="cart-title">Ticket Details </p>
         <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
         <a class="clear-btn" *ngIf="showCartButtons" (click)="$event.stopPropagation(); clearBets()">Clear all</a>
     </div>
@@ -114,8 +115,7 @@
             <span>Total Price:</span>
             <span>{{listOfBets.TicketPrice | number:'1.0-3'}} AED</span>
         </div>
-        <button class="btn btn-primary" (click)="openCartOnMobile()" *ngIf="!shouldShow"
-            type="button">
+        <button class="btn btn-primary" (click)="openCartOnMobile()" *ngIf="!shouldShow" type="button">
             <span>Confirm & Print</span>
         </button>
         <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket && shouldShow"

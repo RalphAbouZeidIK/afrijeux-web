@@ -91,8 +91,10 @@ export class GamesLinksComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.getGameEvents();
+  async ngOnInit(): Promise<void> {
+    this.gnrcSrv.toggleLoader(true);
+    await this.getGameEvents();
+    this.gnrcSrv.toggleLoader(false);
   }
 
   isGameSelected(game: GameCard): boolean {

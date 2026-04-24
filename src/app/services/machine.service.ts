@@ -53,8 +53,8 @@ export class MachineService {
     private translate: TranslateService
   ) {
     (window as any).handleNativeBack = () => {
-      ////console.log("🔙 Native back pressed");
-      this.location.back(); // redirect to your chosen route
+      //console.log("🔙 Native back pressed");
+      this.router.navigate(['/Machine/Games']); // redirect to your chosen route
     };
 
     this.bridge.printerStatusSource.subscribe((error) => {
