@@ -26,28 +26,29 @@ export class ValidateTicketComponent {
 
   showCancelPage: boolean = false
 
-  showForm = true
+  showForm = false
 
   constructor(
     private machineSrv: MachineService,
     private nativeBridge: NativeBridgeService,
     private cacheService: CacheService,
-    private gnrcSrv:GenericService
+    private gnrcSrv: GenericService
   ) {
     this.nativeBridge.scanResult$.subscribe(result => {
       if (result != 'Scan canceled or failed') {
         this.fullTicketId = result;
+        this.validateTicket()
       }
-      else{
+      else {
         this.gnrcSrv.setModalData(true, false, `Scan canceled or failed`)
+        this.showForm = true
       }
-      this.showForm = true
 
     });
   }
 
   async ngOnInit() {
-    //this.scanCode()
+    this.scanCode()
     this.fullTicketId = ''
     this.canPayTicket = await this.machineSrv.getMachinePermission('TerminalCanPayTicket');
 
@@ -78,6 +79,7 @@ export class ValidateTicketComponent {
   }
 
   async validateTicket() {
+    this.gnrcSrv.toggleLoader(true);
 
     let validateTicketReponse = await this.machineSrv.validateTicket(this.fullTicketId)
     if (validateTicketReponse.status == true) {
@@ -89,10 +91,11 @@ export class ValidateTicketComponent {
         this.showCancelPage = true
       }
 
+      this.showForm = true
 
 
     }
-
+    this.gnrcSrv.toggleLoader(false)
     ////console.log(validateTicketReponse)
   }
 

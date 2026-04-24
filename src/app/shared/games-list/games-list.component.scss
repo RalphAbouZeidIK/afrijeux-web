@@ -37,7 +37,7 @@
 .game-header {
     display: flex;
     gap: 10px;
-    align-items: flex-start;
+    align-items: center;
 }
 
 // Game image
@@ -123,11 +123,11 @@
     }
 
     .currency-icon {
-        width: 14px;
-        height: 12px;
+        max-height: 20px;
         flex-shrink: 0;
-        font-size: 12px;
-        color: #a4f675;
+        img{
+            display: block;
+        }
     }
 }
 
@@ -180,6 +180,8 @@
 
     .price-tag {
         font-weight: 500;
+        display: flex;
+        gap: 3px;
     }
 }
 
@@ -209,13 +211,10 @@ h2 {
         line-height: 16px;
     }
 
-    .prize-row .prize-text {
-        font-size: 14px;
-    }
 
     .play-button {
         padding: 6px 16px;
-        font-size: 14px;
+        font-size: 16px;
     }
 }
 
@@ -224,6 +223,7 @@ h2 {
     margin-bottom: 25px;
     justify-content: center;
     flex-wrap: wrap;
+
     .selected button {
         opacity: 1;
         cursor: default;
