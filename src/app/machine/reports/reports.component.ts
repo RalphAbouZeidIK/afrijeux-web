@@ -38,7 +38,7 @@ export class ReportsComponent implements OnInit {
     let machineData = await this.machineSrv.getMachineData()
     this.gamesList = machineData?.Games
     this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
-    //console.log(this.gamesList)
+    console.log(this.gamesList)
   }
 
   selectedGamesChange(event: any) {

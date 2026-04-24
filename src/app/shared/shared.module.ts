@@ -30,6 +30,7 @@ import { ResultsComponent } from './results/results.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { CarouselComponent } from './carousel/carousel.component';
 import { AppNavComponent } from './app-nav/app-nav.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 
 // Custom date formats
@@ -64,7 +65,8 @@ export const MY_FORMATS = {
     ResultsComponent,
     ContactUsComponent,
     CarouselComponent,
-    AppNavComponent
+    AppNavComponent,
+    AdminPageComponent
   ],
   exports: [
     HeaderComponent,

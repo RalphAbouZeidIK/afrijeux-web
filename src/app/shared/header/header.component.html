@@ -2,7 +2,21 @@
 
   <div class="overlay" (click)="hideMenus()"></div>
   <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()" *ngIf="!isAndroidApp"></a>
+
+
+
   <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="[(isAndroidApp)?'/Machine/Login':'/']" />
+  <a *ngIf="isAndroidApp">
+    <img src="assets/images/menu-dots.svg" alt="Show Admin Menu" class="admin-menu-toggle" *ngIf="!showAdminMenu"
+      (click)="showAdminMenu= true" />
+
+    <img src="assets/images/close-icon-white.svg" alt="Close Admin Menu" class="admin-menu-toggle" *ngIf="showAdminMenu"
+      (click)="showAdminMenu = false" />
+  </a>
+
+
+  <app-admin-page *ngIf="showAdminMenu"></app-admin-page>
+
 
   <div class="header-container">
 

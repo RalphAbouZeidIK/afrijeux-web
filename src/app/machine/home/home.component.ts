@@ -13,14 +13,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrl: './home.component.scss',
   standalone: false
 })
-export class HomeComponent implements OnInit {
-  machineMenu: any = [];
-
-  games: any = []
-
-  isOnline = navigator.onLine
-
-  isLoading = false
+export class HomeComponent {
 
   carouselImages = [
     { id: '1', url: 'assets/images/carousel-1.png', alt: 'Carousel Image 1' },
@@ -28,140 +21,8 @@ export class HomeComponent implements OnInit {
     // { id: '3', url: 'assets/images/carousel-3.jpg', alt: 'Carousel Image 3' }
   ];
 
-  constructor(
-    private cacheSrv: CacheService,
-    private router: Router,
-    private machineSrv: MachineService,
-    private gnrcSrv: GenericService,
-    private cacheService: CacheService,
-    private usrSrv: UserService
-  ) {
-    this.getMenu()
+  constructor() {
 
-  }
-
-  async ngOnInit() {
-    let machineData = await this.machineSrv.getMachineData()
-    let games = machineData?.Games
-    games.forEach((gameItem: any) => {
-      gameItem.ShowGame = false
-      if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
-        gameItem.ShowGame = true
-      }
-    });
-    //console.log(games)
-    this.games = games.filter((gameItem: any) => gameItem.ShowGame)
-  }
-
-  async getMenu() {
-    //console.log(machineMenuRoutes)
-    machineMenuRoutes.forEach(async (routeItem: any) => {
-      if ((this.isOnline) || (!this.isOnline && routeItem.AllowHybrid)) {
-        if (routeItem.data.PermissionName) {
-          if (await this.machineSrv.getMachinePermission(routeItem.data.PermissionName) && routeItem.data.showLink) {
-            //console.log(routeItem)
-            this.machineMenu.push(routeItem)
-          }
-        }
-        else if (routeItem.data.showLink) {
-          this.machineMenu.push(routeItem)
-        }
-      }
-
-    })
-    //console.log(this.machineMenu)
-  }
-
-  selectGame(game: any) {
-    //console.log(game)
-    let url = game.GameApi.split('/')[1]
-    this.router.navigate([`/Machine/${url}`])
-  }
-
-  async syncTickets() {
-    this.isLoading = true;
-    //console.log('syncing offline tickets from DB...');
-    const tickets = await this.cacheService.getTicketsFromFlutter({ IsSync: 0, IsOffline: 1 });
-    if (tickets.length === 0) {
-      this.isLoading = false;
-      this.gnrcSrv.setModalData(true, true, 'All Tickets are already synced.');
-      return;
-    }
-    await this.machineSrv.syncOfflineTickets(tickets);
-    this.isLoading = false;
-  }
-
-  async offlineReport() {
-    let offlineGames = this.games.filter((gameItem: any) => gameItem.AllowHybrid)
-    //console.log(offlineGames)
-    offlineGames.forEach(async (gameItem: any) => {
-      let tickets = await this.cacheService.getTicketsFromFlutter({
-        GameId: gameItem.GameId,
-        IsOffline: 1,
-        columns: ['FullTicketId', 'GameEventId', 'IsCanceled', 'IsSync']
-      });
-
-      let reportParamsArray = await this.groupByGameEvent(tickets, gameItem)
-      //console.log(reportParamsArray)
-      await this.machineSrv.sendOfflineReport(reportParamsArray)
-    })
-    // this.isLoading = true;
-    // 
-  }
-
-  async groupByGameEvent(tickets: any[], gameItem: any): Promise<any[]> {
-    // Group by GameEventId
-    const groupedTickets = tickets.reduce((groups: any, ticket: any) => {
-      const gameEventId = ticket.GameEventId;
-      if (!groups[gameEventId]) {
-        groups[gameEventId] = [];
-      }
-      groups[gameEventId].push(ticket);
-      return groups;
-    }, {});
-
-    const groupedArray = Object.entries(groupedTickets).map(([gameEventId, groupTickets]) => ({
-      gameEventId,
-      tickets: groupTickets
-    }));
-
-    const reportParamsArray = groupedArray.map((group: any) => ({
-      TotalTickets: group.tickets.length,
-      TicketsToCancel: group.tickets.filter((t: any) => t.IsCanceled == 1).length,
-      GameId: gameItem.GameId,
-      GameEventId: group.gameEventId,
-      GameRoute: gameItem.RouteName
-    }));
-
-    return reportParamsArray;
-  }
-
-
-  triggerAppUpdate() {
-    try {
-      if ((window as any).OfflineCache?.postMessage) {
-        const message = JSON.stringify({ action: 'force_update' });
-        (window as any).OfflineCache.postMessage(message);
-        //console.log('🚀 Requested Flutter to update Angular app');
-      } else {
-        console.warn('⚠️ OfflineCache bridge not found');
-        alert('OfflineCache bridge not available.');
-      }
-    } catch (err) {
-      console.error('❌ Error sending update request:', err);
-    }
-  }
-
-
-  clearFlutterOfflineCache() {
-    this.cacheSrv.clearFlutterOfflineCache()
-  }
-
-
-
-  async logout() {
-    this.usrSrv.signOut()
-    await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
   }
 }
 

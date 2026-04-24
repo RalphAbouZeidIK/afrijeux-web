@@ -1228,7 +1228,25 @@ app-odd-item:nth-of-type(3n) {
     background: #232E1E !important;
 }
 
+
+
+app-admin-page {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    background-color: #0b1705;
+    height: calc(100% - 70px);
+    width: 100%;
+    background-color: $darkBg
+}
+
+
+
 @media all and (max-width:992px) {
+    .balls-list-holder {
+        margin-top: 30px;
+    }
+
     .grid {
         gap: 15px;
         grid-template-columns: repeat(1, 1fr);

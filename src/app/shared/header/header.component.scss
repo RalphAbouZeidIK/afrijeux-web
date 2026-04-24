@@ -255,6 +255,8 @@ header {
 .android-app {
     background-color: $darkBg;
     padding:20px 15px;
+    display: flex;
+    justify-content: space-between;
     .logo {
         margin: 0;
     }

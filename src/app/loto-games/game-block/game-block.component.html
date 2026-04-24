@@ -80,6 +80,10 @@
                     </div>
 
 
+                    <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
+                        (quickPickBetItem)="onQuickPickBetItem($event)"
+                        cssClass="mobile-visible-cart"></app-shared-cart>
+
                     <div class="balls-list-holder">
 
                         <!-- for PickX games we render one ball-list per configured ball -->
@@ -130,9 +134,7 @@
                         </div>
 
                     </div>
-                    <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
-                        (quickPickBetItem)="onQuickPickBetItem($event)"
-                        cssClass="mobile-visible-cart"></app-shared-cart>
+
 
 
                 </ng-container>
@@ -143,6 +145,7 @@
     <aside class="cart" [style.height.px]="cartHeight">
         <app-game-banner [style.height.px]="cartHeight" *ngIf="!showCart" [prizePoolLabel]="'Pick 2 Prize Pool'"
             [prizePoolAmount]="'3.65M'"></app-game-banner>
-        <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent" (quickPickBetItem)="onQuickPickBetItem($event)"></app-shared-cart>
+        <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"
+            (quickPickBetItem)="onQuickPickBetItem($event)"></app-shared-cart>
     </aside>
 </div>

@@ -59,7 +59,7 @@
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && (isPickXGame || isJackpotGame)">
         <div class="list-of-bets">
             <h4 *ngIf="!shouldShow">Tickets List ({{listOfBets.length}})</h4>
-            <ng-container *ngFor="let betItem of listOfBets.slice().reverse(), let i = index">
+            <ng-container *ngFor="let betItem of listOfBets, let i = index">
                 <div class="bet-item">
 
                     <ng-container *ngIf="!shouldShow">

@@ -49,6 +49,8 @@ export class HeaderComponent implements OnInit {
 
   hideHeader = false
 
+  showAdminMenu = false
+
   languages = [
     { code: 'fr', name: 'Français' },
     { code: 'en', name: 'English' }
@@ -93,7 +95,7 @@ export class HeaderComponent implements OnInit {
     this.route.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-        //console.log(this.menu);
+      this.showAdminMenu = false
       });
 
     await this.getMenu();

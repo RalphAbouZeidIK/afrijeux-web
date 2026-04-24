@@ -1,19 +1,2 @@
 <app-carousel [images]="carouselImages" [showArrows]="false" [showIndicators]="true"></app-carousel>
 <app-games-links [isListingPage]="true"></app-games-links>
- <a class="btn btn-primary logout-btn" (click)="logout();">Logout</a>
-<!-- <div class="machine-home">
-    <div class="main-btns">
-        <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">
-            {{routerItem.data.title | translate}}
-        </a>
-        <ng-container *ngFor="let game of games">
-            <a class="btn btn-primary" (click)="selectGame(game)">{{game.Name.toLowerCase()}}</a>
-        </ng-container>
-        <a class="btn btn-primary" (click)="syncTickets()" *ngIf="isOnline">Sync Data</a>
-        <button class="btn btn-primary" (click)="triggerAppUpdate()" *ngIf="isOnline">Force App Update</button>
-        <a class="btn btn-primary" (click)="offlineReport()">Offline Report</a>
-        <a class="btn btn-primary" (click)="clearFlutterOfflineCache()">Clear Cache</a>
-    </div>
-
-   
-</div> -->
