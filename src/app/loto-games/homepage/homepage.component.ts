@@ -42,7 +42,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
-    console.log(this.allLotoEvents)
+    //console.log(this.allLotoEvents)
     this.queryParamsSubscription = this.route.queryParamMap.subscribe(async () => {
       await this.applySelectedContent();
 

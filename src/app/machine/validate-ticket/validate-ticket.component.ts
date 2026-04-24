@@ -57,13 +57,13 @@ export class ValidateTicketComponent {
 
   async getLatestTicket() {
     let gameId = this.fullTicketId?.substring(0, 3);
-    console.log(gameId)
+    //console.log(gameId)
     const tickets = await this.cacheService.getTicketsFromFlutter({ GameId: gameId, latestOnly: true });
-    console.log("🎟️ Tickets from cache:", tickets);
+    //console.log("🎟️ Tickets from cache:", tickets);
 
     if (tickets.length > 0) {
       // ✅ Ready to use immediately
-      console.log(tickets)
+      //console.log(tickets)
       if (tickets[0].FullTicketId != this.fullTicketId) {
         this.canFlagToCancel = false
       }
@@ -85,7 +85,7 @@ export class ValidateTicketComponent {
     if (validateTicketReponse.status == true) {
       this.getCancelPermission()
       this.payTicketResponse = validateTicketReponse
-      console.log(this.payTicketResponse)
+      //console.log(this.payTicketResponse)
       this.isPaying = true
       if (validateTicketReponse.dataToPrint.trim() == '') {
         this.showCancelPage = true
@@ -96,7 +96,7 @@ export class ValidateTicketComponent {
 
     }
     this.gnrcSrv.toggleLoader(false)
-    ////console.log(validateTicketReponse)
+    //console.log(validateTicketReponse)
   }
 
   async payTicket() {
@@ -105,7 +105,7 @@ export class ValidateTicketComponent {
       this.fullTicketId = ''
       this.isPaying = false
     }
-    ////console.log(payTicketReponse)
+    //console.log(payTicketReponse)
   }
 
   async getCancelPermission() {

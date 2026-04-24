@@ -37,7 +37,7 @@ export class ModalComponent implements OnDestroy {
 
     /** Subscribe to modal status */
     this.modalSubbscription = this.gnrcSrv.getModalStatus().subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       if (data.openModal) {
         // Clear any existing timeout before opening new modal
         if (this.closeTimeout) {

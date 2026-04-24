@@ -165,7 +165,7 @@ export class UserService {
    */
   async isUserLoggedIn() {
     let isLoggedIn: any = (await this.getUserToken() == '') ? false : true
-    console.log(isLoggedIn)
+    //console.log(isLoggedIn)
     return isLoggedIn;
 
   }
@@ -217,7 +217,7 @@ export class UserService {
   gettUserId() {
     let token = this.localStorageSrv.getItem('user_data', true)?.token
     let decoded: any = jwtDecode(token);
-    ////console.log(decoded)
+    //console.log(decoded)
     return decoded.PersonId
   }
 

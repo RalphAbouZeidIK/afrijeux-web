@@ -43,6 +43,6 @@ export class BallListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Chosen Balls Array:', this.chosenBallsArray);
+    //console.log('Chosen Balls Array:', this.chosenBallsArray);
   }
 }

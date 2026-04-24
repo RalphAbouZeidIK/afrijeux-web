@@ -92,6 +92,6 @@ export class BpProductListComponent implements OnInit {
     this.productQuantities[product.id] = 1;
 
     // Show visual feedback (optional)
-    console.log(`Added ${quantity}x ${product.title} to cart`);
+    //console.log(`Added ${quantity}x ${product.title} to cart`);
   }
 }

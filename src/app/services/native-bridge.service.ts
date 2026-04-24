@@ -65,14 +65,14 @@ export class NativeBridgeService {
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
       this.ngZone.run(() => {
-        //////console.log("Received from Flutter:", result);
+        //console.log("Received from Flutter:", result);
         this.scanResultSource.next(result); // ✅ makes it reactive
       });
     };
 
     window['handleScanTimeout'] = (result: string) => {
       this.ngZone.run(() => {
-        console.log("Received from Flutter:", result);
+        //console.log("Received from Flutter:", result);
       });
     };
 
@@ -93,7 +93,7 @@ export class NativeBridgeService {
 
     (window as any).handlePrinterSuccess = () => {
       this.ngZone.run(() => {
-        console.log('✅ Printer completed successfully');
+        //console.log('✅ Printer completed successfully');
         this.printerStatusSource.next(true);
       });
     };
@@ -101,13 +101,13 @@ export class NativeBridgeService {
 
     (window as any).handleDeviceInfo = (info: { hasSim: boolean; airplaneMode: boolean }) => {
       this.ngZone.run(() => {
-        ////console.log('Device info received from Flutter:', info);
+        //console.log('Device info received from Flutter:', info);
         this.deviceInfoSource.next(info); // emit value
       });
     };
 
     (window as any).handleTodaySum = (sum: any) => {
-      ////console.log('✅ Today printed sum:', sum);
+      //console.log('✅ Today printed sum:', sum);
       this.todaySumSource.next(sum); // Optional BehaviorSubject
     };
 
@@ -115,7 +115,7 @@ export class NativeBridgeService {
       this.ngZone.run(() => {
         try {
           const tickets = JSON.parse(ticketsJson);
-          console.log("🎟️ Tickets received from Flutter:", tickets);
+          //console.log("🎟️ Tickets received from Flutter:", tickets);
           this.ticketsSource.next(tickets);
         } catch (err) {
           console.error("❌ Failed to parse tickets:", err);
@@ -125,7 +125,7 @@ export class NativeBridgeService {
 
     (window as any).onTicketUpdated = (id: string) => {
       this.ngZone.run(() => {
-        console.log("✅ Ticket updated in DB:", id);
+        //console.log("✅ Ticket updated in DB:", id);
         this.ticketUpdatedSource.next({ FullTicketId: id });
       });
     };
@@ -203,7 +203,7 @@ export class NativeBridgeService {
     const message = JSON.stringify({ type, value, sender, fullTicketId });
 
     if (window.PrintChannel?.postMessage) {
-      ////console.log(message)
+      //console.log(message)
       window.PrintChannel.postMessage(message);
     } else {
       //alert("PrintChannel is not available.");
@@ -248,7 +248,7 @@ export class NativeBridgeService {
     return new Promise<string>((resolve) => {
       // Prepare a one-time listener for the callback
       (window as any).onDeviceIp = (ip: string) => {
-        console.log("📡 Received device IP:", ip);
+        //console.log("📡 Received device IP:", ip);
         resolve(ip);
         delete (window as any).onDeviceIp; // Clean up after resolving
       };
@@ -256,7 +256,7 @@ export class NativeBridgeService {
       // Send message to Flutter asking for the IP
       const message = JSON.stringify({ action: "get_ip" });
       if ((window as any).OfflineCache?.postMessage) {
-        console.log("📨 Sent get_ip to Flutter");
+        //console.log("📨 Sent get_ip to Flutter");
         (window as any).OfflineCache.postMessage(message);
       } else {
         //console.warn("⚠️ OfflineCache bridge not available");

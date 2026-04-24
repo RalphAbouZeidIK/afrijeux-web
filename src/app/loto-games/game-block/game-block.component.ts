@@ -130,7 +130,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges triggered');
+    //console.log('ngOnChanges triggered');
     // Only re-process if allEvents reference has changed (avoids redundant API calls)
     if (changes['allEvents'] && changes['allEvents'].currentValue !== changes['allEvents'].previousValue) {
       this.getEvents();
@@ -202,19 +202,19 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   async getEvents() {
-    console.log(this.allEvents)
+    //console.log(this.allEvents)
     let gameEventsResponse = (this.isPickXGame) ? this.allEvents?.pickXGames : this.allEvents?.jackpotGames;
-    console.log(gameEventsResponse)
+    //console.log(gameEventsResponse)
     if (gameEventsResponse != null && gameEventsResponse !== undefined) {
       gameEventsResponse.forEach((eventItem: any) => {
         if (!eventItem.IsSalesStopped) {
           this.eventsList.push(eventItem)
         }
       });
-      console.log(this.eventsList)
+      //console.log(this.eventsList)
       if (this.eventsList.length > 0) {
         let selectedEvent = this.eventsList[0];
-        console.log(selectedEvent)
+        //console.log(selectedEvent)
         if (this.isPickXGame) {
           const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
           const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
@@ -252,11 +252,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
     
     
-    console.log(this.eventsList)
+    //console.log(this.eventsList)
   }
 
   async composeEventDetails(raceItem: any,keepSameType = false) {
-    console.log(raceItem)
+    //console.log(raceItem)
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
     if (this.configCache.has(configId)) {
       this.fixedConfig = this.configCache.get(configId);
@@ -267,8 +267,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     let numberOfSelectedBalls = (this.isPickXGame) ? this.fixedConfig[0].NumberOfBalls : 6
     this.numberOfBallChoice = numberOfSelectedBalls
     let numberOfBalls = (this.isPickXGame) ? 10 : this.fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
-    console.log(raceItem)
-    console.log(this.fixedConfig)
+    //console.log(raceItem)
+    //console.log(this.fixedConfig)
 
     raceItem.fixedConfig = this.fixedConfig
     this.selectedEvent = raceItem
@@ -293,8 +293,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.listOfBalls = this.generateBallObjects(numberOfBalls)
     // reset the per-slot selection array
     this.slotSelections = new Array(numberOfSelectedBalls).fill(null);
-    console.log(this.listOfBalls)
-    console.log(this.selectedBalls)
+    //console.log(this.listOfBalls)
+    //console.log(this.selectedBalls)
 
     // Start countdown timer for this event
     this.gnrcSrv.toggleLoader(false);
@@ -383,16 +383,16 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
 
   onFilterChange(option: any) {
-    console.log(option)
+    //console.log(option)
     this.selectedType = option
     this.Stake = option.MinStake
     this.clampStakeToTypeLimits()
     this.selectedResultFilter = option.TicketTypeId;
-    console.log('filter', option.TicketTypeId);
+    //console.log('filter', option.TicketTypeId);
   }
 
   onTypeChanged(event: any) {
-    console.log(event);
+    //console.log(event);
     this.selectedType = event
     this.Stake = event.MinStake
     this.clampStakeToTypeLimits()
@@ -482,7 +482,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
       this.isQuickPick = true;
 
-      console.log(this.selectedBalls);
+      //console.log(this.selectedBalls);
     }
     setTimeout(() => {
       this.isQuickPickDisabled = false;
@@ -501,7 +501,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   chooseNumber(ball: any) {
-    console.log(ball)
+    //console.log(ball)
     this.ballToChangeId = ball.id
     this.showBallPicker = true
   }
@@ -517,7 +517,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     else {
       this.selectLotoBall(ball)
     }
-    console.log(this.selectedBalls)
+    //console.log(this.selectedBalls)
   }
 
   currentPickIndex = 0;
@@ -539,7 +539,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     // move to next slot
     this.currentPickIndex++;
 
-    console.log(this.selectedBalls);
+    //console.log(this.selectedBalls);
   }
 
   selectLotoBall(ball: any) {
@@ -577,7 +577,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       isSelected: false
     };
 
-    console.log(this.selectedBalls);
+    //console.log(this.selectedBalls);
   }
 
   deleteLastLotoBall() {
@@ -634,7 +634,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     const gameName = this.getGameNameForBet();
 
     if (this.isPickXGame) {
-      console.log(this.selectedType)
+      //console.log(this.selectedType)
       if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedType == null) {
         this.gnrcSrv.setModalData(true, false, 'Please select all balls and a type.');
         return
@@ -675,7 +675,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         chosenBallsList: this.selectedBalls // generate a random id for the pick
       }
     }
-    console.log(pickItem)
+    //console.log(pickItem)
     this.Stake = 0
     this.cartSrv.updateLotoList(pickItem, index)
     this.selectedNumbers = [];
@@ -781,7 +781,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   onQuickPickBetItem(event: any) {
     const { betItem, index } = event;
     this.quickPick(event.index)
-    console.log(event)
+    //console.log(event)
 
     // Update the cart service with the modified bet item
     //this.cartSrv.updateLotoList(betItem);

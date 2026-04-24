@@ -47,17 +47,17 @@ export class MachineCoreComponent implements OnInit {
       VersionCode: '1.0.0'
     }
 
-    console.log("Params:", params)
+    //console.log("Params:", params)
     const apiResponse = await this.machineSrv.registerMachine(params);
-    console.log("API Response:", apiResponse);
-    ////console.log(apiResponse)
+    //console.log("API Response:", apiResponse);
+    //console.log(apiResponse)
     if (apiResponse?.CommunicationKey) {
       this.isAppRegistered = true
     }
 
     const ip = await this.bridge.getDeviceIpFromFlutter();
     this.machineSrv.setDeviceIp(ip);
-    console.log("Device IP:", ip);
+    //console.log("Device IP:", ip);
 
 
   }

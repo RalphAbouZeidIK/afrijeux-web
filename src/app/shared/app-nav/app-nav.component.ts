@@ -64,7 +64,7 @@ export class AppNavComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isLoggedIn']) {
-      console.log('isLoggedIn changed:', changes['isLoggedIn'].currentValue);
+      //console.log('isLoggedIn changed:', changes['isLoggedIn'].currentValue);
       this.updateNavigationVisibility(this.router.url);
     }
   }
@@ -94,9 +94,9 @@ export class AppNavComponent implements OnInit, OnDestroy, OnChanges {
 
     const shouldHide = hideRoutes.some(route => currentUrl.includes(route));
     const shouldShow = showRoutes.some(route => currentUrl.includes(route)) || currentUrl === '/';
-    console.log('Current URL:', currentUrl, 'Show Navigation:', shouldShow, 'Hide Navigation:', shouldHide);
+    //console.log('Current URL:', currentUrl, 'Show Navigation:', shouldShow, 'Hide Navigation:', shouldHide);
     this.showNavigation = this.isLoggedIn && !shouldHide && (shouldShow || currentUrl.startsWith('/'));
-    console.log('Navigation visibility set to:', this.isLoggedIn, this.showNavigation);
+    //console.log('Navigation visibility set to:', this.isLoggedIn, this.showNavigation);
   }
 
   private updateActiveState(currentUrl: string): void {

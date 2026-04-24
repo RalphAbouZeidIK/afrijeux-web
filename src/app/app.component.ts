@@ -61,7 +61,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   onResize() {
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      console.log('resize')
+      //console.log('resize')
 
       this.gnrcSrv.setIsDesktopView(window.innerWidth > 992);
       this.gnrcSrv.setIsMobileView(window.innerWidth <= 992)
@@ -85,7 +85,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
-      console.log('Login status changed:', loggedIn);
+      //console.log('Login status changed:', loggedIn);
       this.isLoggedIn = loggedIn;
       this.getMenuItems()
     });
@@ -94,10 +94,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
       this.loginPopupStatusSubscription = this.usrSrv.getLoginPopupStatus().subscribe((data) => {
-        ////console.log(data)
+        //console.log(data)
         this.loginObject = data
       });
-      ////console.log(this.isLoggedIn)
+      //console.log(this.isLoggedIn)
 
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
@@ -155,7 +155,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
    * Set loading flag after the view init
    */
   ngAfterViewInit() {
-    //window.////console.log = () => { }
+    //window.//console.log = () => { }
     setTimeout(() => {
       this.setLoader()
     }, 1);
@@ -177,7 +177,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (event instanceof NavigationError) {
         // Hide loader on navigation error
-        ////console.log(event.error);
+        //console.log(event.error);
       }
     });
   }
@@ -201,9 +201,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.isAndroidApp) {
       let machineData = await this.machineSrv.getMachineData()
-      console.log(machineData)
+      //console.log(machineData)
       let games = machineData?.Games
-      console.log(games)
+      //console.log(games)
       if (games) {
         games.forEach((gameItem: any) => {
           this.navList.push(gameItem)

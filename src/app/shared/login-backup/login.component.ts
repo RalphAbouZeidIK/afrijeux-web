@@ -78,7 +78,7 @@ export class LoginBackupComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.isSignup = (changes['loginObject'].currentValue.type == 'signup');
-    ////console.log(changes['loginObject'].currentValue)
+    //console.log(changes['loginObject'].currentValue)
   }
 
   preventTyping(event: KeyboardEvent) {
@@ -135,19 +135,19 @@ export class LoginBackupComponent implements OnChanges, OnInit {
     let loginParams = this.loginForm.value
     if (this.isAndroidApp) {
       let respoonse = await this.machineSrv.loginMachine(loginParams)
-      console.log(respoonse)
+      //console.log(respoonse)
       if (respoonse.status == false) {
         this.gnrcSrv.setModalData(true, false, respoonse.message)
       }
       else {
         this.router.navigate(['Machine/Games'])
       }
-      ////console.log(respoonse)
+      //console.log(respoonse)
     }
     else {
       try {
         const loginResponse = await this.login(loginParams)
-        ////console.log(loginResponse)
+        //console.log(loginResponse)
         if (loginResponse.IsSuccess) {
           this.successfullLogin(loginResponse.UserInfo, loginResponse.UserInfo.Token)
         }
@@ -164,7 +164,7 @@ export class LoginBackupComponent implements OnChanges, OnInit {
   }
 
   async submitSignUp() {
-    ////console.log(this.signupForm)
+    //console.log(this.signupForm)
     if (this.signupForm.invalid) {
       this.showErrorMessage = true
       return
@@ -176,7 +176,7 @@ export class LoginBackupComponent implements OnChanges, OnInit {
     }
     try {
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
-      ////console.log(signupResponse)
+      //console.log(signupResponse)
       if (signupResponse.isSuccess) {
       }
 

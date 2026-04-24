@@ -20,12 +20,12 @@ export class UofComponent implements OnInit, OnDestroy {
     this.signalR.start();
     this.sub = this.signalR.events$.subscribe(msg => {
       if (msg) {
-        console.log(msg)
+        //console.log(msg)
         // keep a short list, newest first
         this.messages.unshift(msg);
         if (this.messages.length > 100) {
           this.messages.length = 100;
-          console.log(this.messages)
+          //console.log(this.messages)
         }
       }
     });

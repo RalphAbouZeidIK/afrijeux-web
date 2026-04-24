@@ -40,7 +40,7 @@ export class GamesService {
         "reunion": country
       }
     }
-    ////console.log(params)
+    //console.log(params)
 
     let gameEventsResponse = await this.apiSrv.makeApi(`OnlineMaster`, `HPBPMU/GetEventConfiguration`, 'POST', params)
     return gameEventsResponse
@@ -55,10 +55,10 @@ export class GamesService {
         "gameId": this.gameObject.GameId,
       }
     }
-    ////console.log(params)
+    //console.log(params)
 
     let resultsResponse = await this.apiSrv.makeApi(`OnlineMaster`, `HPBPMU/GetEventResult`, 'POST', params)
-    ////console.log(resultsResponse)
+    //console.log(resultsResponse)
     resultsResponse.forEach((eventItem: any) => {
       eventItem.horsesArray = eventItem.horsesResults.map((resultItem: any) => Object.values(resultItem))
     })
@@ -173,7 +173,7 @@ export class GamesService {
     else {
       apiResponse = await this.apiSrv.makeApi('OnlineMaster', 'AfrijeuxSportsBetting/GetBonusRules', 'GET', {})
     }
-    ////console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse
   }
 
@@ -181,7 +181,8 @@ export class GamesService {
   async getGamesEvents(gameName?: any) {
     let apiResponse: any = []
     if (this.isAndroidApp) {
-      let gameEventsResponse = await this.machineSrv.getGamesEvents(gameName)
+      let gameEventsResponse = await this.machineSrv.getAllEvents()
+      //console.log(gameEventsResponse)
       if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
         apiResponse = gameEventsResponse.GameConfiguration.EventConfiguration
       }
@@ -194,10 +195,24 @@ export class GamesService {
   }
 
   async getAllLotoGames() {
-    let pickXGames: any = await this.getGamesEvents('PickX');
-    console.log('Fetched PickX games:', pickXGames);
-    let jackpotGames: any = await this.getGamesEvents('Jackpot');
-    console.log('Fetched Jackpot games:', jackpotGames);
+    let pickXGames: any
+    let jackpotGames: any
+    if (this.isAndroidApp) {
+      let gameEventsResponse = await this.machineSrv.getAllEvents()
+      //console.log(gameEventsResponse)
+      pickXGames = gameEventsResponse.data.find((event: any) => event.GameId == 35).EventConfiguration
+       //console.log('Fetched machine PickX games:', pickXGames);
+      jackpotGames = gameEventsResponse.data.find((event: any) => event.GameId == 38).EventConfiguration
+       //console.log('Fetched machine jackpot games:', jackpotGames);
+   
+    }
+    else {
+      pickXGames = await this.getGamesEvents('PickX');
+      //console.log('Fetched PickX games:', pickXGames);
+      jackpotGames = await this.getGamesEvents('Jackpot');
+      //console.log('Fetched Jackpot games:', jackpotGames);
+    }
+
     return { pickXGames, jackpotGames };
   }
 
@@ -251,5 +266,6 @@ export class GamesService {
     apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Results/GetEventResultIds?GameId=${gameId}`, 'GET', {});
     return apiResponse
   }
+
 
 }

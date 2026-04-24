@@ -116,7 +116,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   removeItemFormSlip(betItem: any) {
-    ////console.log('removing')
+    //console.log('removing')
     this.listOfBets = this.listOfBets.filter((item: any) => item.id !== betItem.id)
     if (this.listOfBets.length > 0) {
       this.calculateTicketPrice()
@@ -140,7 +140,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   onPriceChange(event: any) {
-    ////console.log(event)
+    //console.log(event)
   }
 
   orderTypeChange(event: any) {
@@ -210,7 +210,7 @@ export class CartComponent implements OnInit, OnDestroy {
           this.cartSrv.setResetOtherEvents(data)
         }
       }
-      ////console.log(this.betItem)
+      //console.log(this.betItem)
     }
 
     else {
@@ -239,8 +239,8 @@ export class CartComponent implements OnInit, OnDestroy {
     }
 
     if (this.IsDouble) {
-      ////console.log(betItem)
-      ////console.log(betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses)
+      //console.log(betItem)
+      //console.log(betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses)
       if (betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses) {
         this.combinations = betItem.find((eventItems: any) => eventItems.IsDoubleMain == false)?.BaseHorses?.length
       }
@@ -252,7 +252,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
     let betItemVar = this.betItem[0]
-    ////console.log(betItemVar)
+    //console.log(betItemVar)
     switch (betItemVar.FieldChoice) {
       case 2:
         firstLength = betItemVar.AssociatedHorses.length
@@ -273,7 +273,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.combinations = this.gnrcSrv.calculateCombinations(firstLength, secondLength, betItem[0]?.SelectedFixedConfig?.HorsesNumberTelpo, this.IsAllOrder)
 
 
-    ////console.log(this.combinations)
+    //console.log(this.combinations)
   }
 
   calculateTicketPrice() {
@@ -437,7 +437,7 @@ export class CartComponent implements OnInit, OnDestroy {
                 BaseHorses += '00,'
               }
             }
-            ////console.log(BaseHorses)
+            //console.log(BaseHorses)
             break
           case 2:
             BaseHorses = betItem[0].BaseHorses.map((horse: any) => horse.HorseName).join(',')
@@ -517,7 +517,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.pickDetailsArray = []
 
     this.IsAllOrder = false
-    console.log(this.listOfBets)
+    //console.log(this.listOfBets)
     this.storageSrv.setItem('cartData', this.listOfBets)
     this.showCartButtons = this.listOfBets.length > 0
     this.cartSrv.setPmuBets(betItem, true)

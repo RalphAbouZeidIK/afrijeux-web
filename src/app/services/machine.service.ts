@@ -58,8 +58,8 @@ export class MachineService {
     };
 
     this.bridge.printerStatusSource.subscribe((error) => {
-      console.log("⚠️ can print:", error);
-      console.log(this.valuesToPrint)
+      //console.log("⚠️ can print:", error);
+      //console.log(this.valuesToPrint)
       this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
       this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
       if (!error && this.valuesToPrint.thirdValue.IsOffline == 0) {
@@ -122,7 +122,7 @@ export class MachineService {
           machineData = await this.getMachineData();
         }
         let encryptionPass = machineData?.CommunicationKey || 'default';
-        ////////console.log(`Encryption Pass ${encryptionPass}`)
+        //console.log(`Encryption Pass ${encryptionPass}`)
         encryptData = xxtea.encrypt(xxtea.toBytes(objectToEncrypt), xxtea.toBytes(encryptionPass));
 
 
@@ -147,7 +147,7 @@ export class MachineService {
 
 
 
-    console.log(body)
+    //console.log(body)
 
     return {
       body
@@ -186,7 +186,7 @@ export class MachineService {
       let encryptionPass = machineData?.CommunicationKey || 'default';
       decrypted = xxtea.toString(xxtea.decrypt(base64String, xxtea.toBytes(encryptionPass)));
     }
-    console.log(JSON.parse(decrypted))
+    //console.log(JSON.parse(decrypted))
     return JSON.parse(decrypted);
   }
 
@@ -204,7 +204,7 @@ export class MachineService {
         personId = this.gnrcSrv.gettUserId()
       }
 
-      console.log(personId)
+      //console.log(personId)
 
       params = {
         ...params,
@@ -214,7 +214,7 @@ export class MachineService {
         MachineId: (machineData) ? machineData.MachineId : null
       }
     }
-    console.log(params)
+    //console.log(params)
     let paramsBeforeEncryption = params
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
     params = await this.encryptedRequest(params, (apiRoute === 'RegisterMachine') ? true : false, (apiRoute.includes('ProcessTickets')) ? true : false);
@@ -227,7 +227,7 @@ export class MachineService {
 
     if (navigator.onLine) {
       // Save full API response exactly
-      //////console.log(`${apiRoute} api route from navigator online`)
+      //console.log(`${apiRoute} api route from navigator online`)
       apiResponse = await this.apiSrv.makeApi(subRoute, apiRoute, method, params, true)
       if ((subRoute == 'PMUHybrid' || subRoute == 'GameCooksAuth') && (!apiRoute.includes('IssueTicket'))) {
         this.cacheSrv.saveToFlutterOfflineCache(cacheKey, apiResponse);
@@ -261,7 +261,7 @@ export class MachineService {
         this.valuesToPrint.thirdValue = paramsBeforeEncryption
 
       }
-      ////console.log(decryptedResponse)
+      //console.log(decryptedResponse)
       if (Array.isArray(decryptedResponse)) {
         return {
           data: decryptedResponse,
@@ -335,7 +335,7 @@ export class MachineService {
 
   getGameRoute() {
     let route = this.router.url.split('/')[2]?.split('?')[0]
-    ////console.log(this.router.url)
+    //console.log(this.router.url)
     return route
   }
 
@@ -349,7 +349,7 @@ export class MachineService {
     else {
       game = await this.gnrcSrv.getGame(this.gnrcSrv.getGameRoute())
     }
-    console.log(game)
+    //console.log(game)
     return (gameIdOnly) ? game.GameId : game
   }
 
@@ -384,7 +384,7 @@ export class MachineService {
     }
 
     let gameEventsResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/${canUseOffline ? 'GetOfflineEventConfiguration' : 'GetEventConfiguration'}`, 'POST', params)
-    console.log(gameEventsResponse)
+    //console.log(gameEventsResponse)
     this.gameEventsList = gameEventsResponse.GameConfiguration
     if (this.isOnline) {
       this.updateMachineTicketId(gameId, gameEventsResponse.GameConfiguration.MachineTicketId);
@@ -420,7 +420,7 @@ export class MachineService {
     let gameId: any = null
 
     let userId: any = (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId()
-    console.log(userId)
+    //console.log(userId)
 
     gameId = await this.getGameId()
 
@@ -454,7 +454,7 @@ export class MachineService {
       Printed: isPrintedFlag,
       GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null
     }
-    console.log(ticketBody)
+    //console.log(ticketBody)
 
     let params = {
       GameId: gameId,
@@ -463,7 +463,7 @@ export class MachineService {
       LoyalityReferenceId: 0,
       IsOffline: this.isOnline ? 0 : 1
     }
-    console.log(params)
+    //console.log(params)
 
     if (this.isAndroidApp) {
       if (!this.isOnline) {
@@ -486,7 +486,7 @@ export class MachineService {
 
       try {
         const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-        console.log(apiResponse)
+        //console.log(apiResponse)
         if (apiResponse.DataToPrint) {
           this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
 
@@ -495,9 +495,9 @@ export class MachineService {
           this.gnrcSrv.setModalData(true, false, apiResponse.message)
         }
         return apiResponse
-        //////console.log(apiResponse)
+        //console.log(apiResponse)
       } catch (error) {
-        //////console.log(error)
+        //console.log(error)
       }
     }
 
@@ -516,7 +516,7 @@ export class MachineService {
     }
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
-    ////console.log(validateTicketResponse)
+    //console.log(validateTicketResponse)
 
     if (validateTicketResponse.status == false) {
       this.gnrcSrv.setModalData(true, false, validateTicketResponse.message)
@@ -525,7 +525,7 @@ export class MachineService {
     else if (validateTicketResponse.dataToPrint) {
       validateTicketResponse.dataToPrint = validateTicketResponse.dataToPrint.replace(/;/g, "\n");
     }
-    console.log(validateTicketResponse)
+    //console.log(validateTicketResponse)
     return validateTicketResponse
   }
 
@@ -567,7 +567,7 @@ export class MachineService {
   async cancelTicket(params: any) {
 
     let cancelTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/FlagToCancelTicket`, 'POST', params)
-    ////console.log(cancelTicketResponse)
+    //console.log(cancelTicketResponse)
     if (cancelTicketResponse) {
       this.gnrcSrv.setModalData(true, cancelTicketResponse.status, cancelTicketResponse.message)
     }
@@ -619,7 +619,7 @@ export class MachineService {
 
   async getBonusRules() {
     let apiResponse = await this.handleApiResponse('AfrijeuxSportsBetting', `AfrijeuxSportsBetting/GetBonusRules`, 'POST', {})
-    ////console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse
   }
 
@@ -629,7 +629,7 @@ export class MachineService {
       this.gnrcSrv.setModalData(true, false, apiResponse.message)
       return null
     }
-    ////console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse
   }
 
@@ -753,7 +753,7 @@ export class MachineService {
 
     // ✅ Simulated global settings (replace with real storage)
     const globalSettings = await this.getMachineTicketId(gameId);
-    console.log('blobal settings value' + globalSettings)
+    //console.log('blobal settings value' + globalSettings)
     let machineTicketId = globalSettings ?? 1;
 
     if (machineTicketId === 9999) {
@@ -778,7 +778,7 @@ export class MachineService {
       this.pad(randomInt, 4);
 
     fullTicketId = fullTicketIdBuilder;
-    console.log(machineTicketId)
+    //console.log(machineTicketId)
 
     // Save new machine ticket ID
     this.updateMachineTicketId(gameId, machineTicketId);
@@ -804,8 +804,8 @@ export class MachineService {
 
   private async updateMachineTicketId(gameId: number, value: number): Promise<void> {
     let machineTicketData = await this.cacheSrv.getFromFlutterOfflineCache('machine_ticket_data');
-    // console.log('fetched machine data')
-    // console.log(machineTicketData)
+    // //console.log('fetched machine data')
+    // //console.log(machineTicketData)
     // Initialize if not existing
     if (!machineTicketData) {
       machineTicketData = { MachineTicketIds: {} };
@@ -814,8 +814,8 @@ export class MachineService {
     }
 
     machineTicketData.MachineTicketIds[gameId] = value;
-    console.log('updating machine data')
-    console.log(machineTicketData)
+    //console.log('updating machine data')
+    //console.log(machineTicketData)
     // Save updated data back to its own cache key
     this.cacheSrv.saveToFlutterOfflineCache('machine_ticket_data', machineTicketData);
 
@@ -985,7 +985,7 @@ export class MachineService {
   async syncOfflineTickets(tickets: any) {
     let machineData = await this.getMachineData();
     let encryptedTickets: any = '';
-    console.log(tickets)
+    //console.log(tickets)
     tickets.forEach((ticketItem: any) => {
       ticketItem.EncryptedDTO = ticketItem.IssueTicketRequestObject;
       ticketItem.Printed = ticketItem.IsPrinted;
@@ -1016,7 +1016,7 @@ export class MachineService {
     let apiResponse = await this.handleApiResponse('PMUHybrid', 'PMUHybrid/ProcessTickets', 'POST', params)
     await this.updateTicketsInDb(apiResponse.data)
     this.gnrcSrv.setModalData(true, true, 'All Tickets are  synced.');
-    console.log(apiResponse)
+    //console.log(apiResponse)
   }
 
   async updateTicketsInDb(tickets: any[]): Promise<void> {
@@ -1027,7 +1027,7 @@ export class MachineService {
       return;
     }
 
-    console.log("📤 Sending update_ticket messages for", tickets.length, "tickets...");
+    //console.log("📤 Sending update_ticket messages for", tickets.length, "tickets...");
 
     return new Promise<void>((resolve) => {
       const totalTickets = tickets.length;
@@ -1037,10 +1037,10 @@ export class MachineService {
         .pipe(filter(update => !!update?.FullTicketId))
         .subscribe((update: any) => {
           updatedCount++;
-          console.log(`✅ Ticket updated: ${update.FullTicketId} (${updatedCount}/${totalTickets})`);
+          //console.log(`✅ Ticket updated: ${update.FullTicketId} (${updatedCount}/${totalTickets})`);
 
           if (updatedCount >= totalTickets) {
-            console.log("🎉 All tickets updated successfully!");
+            //console.log("🎉 All tickets updated successfully!");
             subscription.unsubscribe();
             resolve();
           }
@@ -1052,21 +1052,21 @@ export class MachineService {
           data: { FullTicketId: ticket.FullTicketId }
         });
         (window as any).OfflineCache.postMessage(message);
-        console.log("📨 Sent update_ticket:", message);
+        //console.log("📨 Sent update_ticket:", message);
       });
     });
   }
 
   async issueCorruptedTicket() {
 
-    console.log(this.valuesToPrint)
+    //console.log(this.valuesToPrint)
     let params = {
       TicketRequestId: this.valuesToPrint.thirdValue.TicketRequestId,
       EncryptedIssueTicketRequest: this.valuesToPrint.secondValue.EncryptedRequestDTO,
       GameId: this.valuesToPrint.thirdValue.GameId,
     }
     const apiResponse = await this.handleApiResponse('CommonApi', `CommonApi/CorruptedTicket`, 'POST', params)
-    console.log(apiResponse)
+    //console.log(apiResponse)
   }
 
   async sendOfflineReport(params: any) {
@@ -1074,7 +1074,7 @@ export class MachineService {
       paramItem.ReportDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
       paramItem.MachineId = (await this.getMachineData())?.MachineId || null
     });
-    console.log(params)
+    //console.log(params)
     const apiResponse = await this.handleApiResponse(params[0].GameRoute, `${params[0].GameRoute}/SendReports`, 'POST', params)
   }
 
@@ -1083,7 +1083,7 @@ export class MachineService {
   async getGamesEvents(gameName: any) {
     let machineData: any = await this.getMachineData()
     let game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === gameName)
-    console.log(machineData, game)
+    //console.log(machineData, game)
     let params: any = {
       GameId: game?.GameId,
       GameConfiguration: [],
@@ -1093,5 +1093,16 @@ export class MachineService {
     return gameEventsResponse
   }
 
+  async getAllEvents() {
+    let params: any = {
+      GameId: 31,
+      GameConfiguration: [],
+      UserOnlineStatus: true,
+    }
+    let apiResponse: any
+    apiResponse = await this.handleApiResponse(`Master`, `Configuration/GetAllEventConfiguration`, 'POST', params);
+    return apiResponse
+
+  }
 
 }

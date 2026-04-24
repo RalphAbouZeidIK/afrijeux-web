@@ -62,9 +62,9 @@ export class TicketsComponent implements OnInit {
   async toggleTicket(ticket: any): Promise<void> {
     if (!ticket._subTickets || ticket._subTickets.length === 0) {
       let picksList = await this.getTicketPicks(ticket);
-      console.log(picksList)
+      //console.log(picksList)
       ticket._subTickets = picksList.length > 0 ? picksList : this.extractSubTickets(ticket);
-      console.log('Sub-tickets for ticket', ticket._ticketUiId, ':', ticket._subTickets);
+      //console.log('Sub-tickets for ticket', ticket._ticketUiId, ':', ticket._subTickets);
     }
     const ticketId = ticket?._ticketUiId;
     if (!ticketId) {
@@ -130,7 +130,7 @@ export class TicketsComponent implements OnInit {
       .map((n: string) => n.trim())
       .filter((n: string) => n !== '')
       .map((n: string) => ({ number: Number(n) }));
-    console.log(returnedNumbers)
+    //console.log(returnedNumbers)
     return returnedNumbers;
   }
 
@@ -149,7 +149,7 @@ export class TicketsComponent implements OnInit {
   }
 
   getSubTicketStatusLabel(subTicket: any): string {
-    console.log(subTicket)
+    //console.log(subTicket)
     const status = this.getSubTicketStatus(subTicket);
     return status.charAt(0).toUpperCase() + status.slice(1);
   }
@@ -171,7 +171,7 @@ export class TicketsComponent implements OnInit {
     // Try modern Clipboard API first
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(ticketId).then(() => {
-        console.log('Ticket ID copied:', ticketId);
+        //console.log('Ticket ID copied:', ticketId);
       }).catch((err) => {
         console.error('Failed to copy ticket ID:', err);
         this.copyViaExecCommand(ticketId);
@@ -191,7 +191,7 @@ export class TicketsComponent implements OnInit {
     textarea.select();
     try {
       document.execCommand('copy');
-      console.log('Ticket ID copied (fallback):', text);
+      //console.log('Ticket ID copied (fallback):', text);
     } catch (err) {
       console.error('Failed to copy ticket ID:', err);
     } finally {

@@ -47,7 +47,7 @@ export class PreviousResultsComponent implements OnInit {
 
   async getPreviousResults() {
     this.results = await this.gamesSrv.getPreviousResults();
-    console.log(this.results)
+    //console.log(this.results)
   }
 
   // placeholder for search/filter logic
@@ -66,7 +66,7 @@ export class PreviousResultsComponent implements OnInit {
 
     try {
       const apiResponse = await this.gamesSrv.checkTicket(ticketValue);
-      console.log('checkTicket response', apiResponse);
+      //console.log('checkTicket response', apiResponse);
 
       this.searchResult = apiResponse[0];
       this.searchError = apiResponse ? '' : 'No details found for this ticket.';
@@ -91,7 +91,7 @@ export class PreviousResultsComponent implements OnInit {
   }
 
   async onFilterChange(option: string) {
-    console.log('filter', option);
+    //console.log('filter', option);
   }
 
   getResultBalls(result: any): Array<{ number: number | string }> {

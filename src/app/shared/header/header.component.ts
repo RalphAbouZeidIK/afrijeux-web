@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
     });
 
     this.balanceSubsription = this.usrSrv.getUserBalance().subscribe((data) => {
-      ////console.log(data)
+      //console.log(data)
       this.userBalance = data
     });
     this.translate.use(this.selectedLanguage.code);
@@ -80,7 +80,7 @@ export class HeaderComponent implements OnInit {
     // AppComponent) may be asynchronously mutating router.config.  deferring
     // ensures getMenu() sees the fully‑updated config and stored token.
     this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
-      console.log('Header detected login status change:', loggedIn);
+      //console.log('Header detected login status change:', loggedIn);
       // clear the existing menu first so that the change is visible
       this.menu = [];
       setTimeout(() => {
@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit {
     this.route.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-        console.log(this.menu);
+        //console.log(this.menu);
       });
 
     await this.getMenu();
@@ -111,9 +111,9 @@ export class HeaderComponent implements OnInit {
   }
 
   async getMenu() {
-    console.log('Header calling getMenu');
+    //console.log('Header calling getMenu');
     const newMenu = await this.menuSvc.getMenu();
-    console.log('Header menu result:', newMenu);
+    //console.log('Header menu result:', newMenu);
     this.menu = newMenu;
     // menuSvc's call may resolve outside Angular zone; ensure view updates
     this.cdRef.detectChanges();
@@ -194,7 +194,7 @@ export class HeaderComponent implements OnInit {
         title: translations[item.title] || item.title
       }));
     });
-    console.log(this.personNavList)
+    //console.log(this.personNavList)
   }
 
   changeLanguage(language: { code: string, name: string }) {

@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let userData = this.usrSrv.getUserData()
-    console.log(userData)
+    //console.log(userData)
     this.userName = userData?.Email || userData?.Phone || '';
     this.balanceSubscription = this.usrSrv.getUserBalance().subscribe((data) => {
       this.userBalance = data;

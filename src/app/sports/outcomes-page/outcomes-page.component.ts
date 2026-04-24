@@ -46,7 +46,7 @@ export class OutcomesPageComponent implements OnInit {
       IsFavorite: this.isFavorite
     }
 
-    ////console.log(params)
+    //console.log(params)
 
     const apiResponse = await this.gamesSrv.getOutcomesListByMatchId(params)
     //console.log(apiResponse)
@@ -58,7 +58,7 @@ export class OutcomesPageComponent implements OnInit {
       }
 
       this.OutcomesList = apiResponse
-      console.log(this.OutcomesList)
+      //console.log(this.OutcomesList)
     }
   }
 
@@ -78,7 +78,7 @@ export class OutcomesPageComponent implements OnInit {
         EventId: this.MatchId
       }
       this.OutcomesList = apiResponse
-      console.log(this.OutcomesList)
+      //console.log(this.OutcomesList)
     }
     else {
       setTimeout(() => {

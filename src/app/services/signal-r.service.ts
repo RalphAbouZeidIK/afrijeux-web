@@ -34,7 +34,7 @@ export class SignalRService {
     this.hubConnection
       .start()
       .then(() => {
-        console.log('SignalR connected');
+        //console.log('SignalR connected');
         this.registerHandlers();
       })
       .catch(err => console.error('SignalR start error:', err));

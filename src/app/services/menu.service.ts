@@ -59,7 +59,7 @@ export class MenuService {
     // should have been hidden.  This was the source of the "buggy" menu.
     const isLoggedIn = await this.userService.isUserLoggedIn();
 
-    console.log(this.router.config);
+    //console.log(this.router.config);
     for (const r of this.router.config) {
       const data = r.data || {};
 
@@ -109,7 +109,7 @@ export class MenuService {
 
       menuItems.push(item);
     }
-    console.log(menuItems)
+    //console.log(menuItems)
     // Translate titles in bulk
     if (menuItems.length === 0) return [];
     const keys = menuItems.flatMap(i => [

@@ -30,7 +30,7 @@ export class SportsCoreComponent {
       this.composeRoutes()
     });
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
-      console.log('isDesktopView', isDesktop);
+      //console.log('isDesktopView', isDesktop);
       this.isDesktop = isDesktop;
     });
   }

@@ -38,23 +38,23 @@ function restoreV1(mainFile, v1OriginalFile) {
 }
 
 if (buildVersion === 'v1') {
-  console.log('🔧 Setting up routing for VERSION 1 (Homepage as default)...');
+  //console.log('🔧 Setting up routing for VERSION 1 (Homepage as default)...');
   
   if (restoreV1(appRoutingMain, appRoutingV1)) {
-    console.log('✅ Restored app-routing.module.ts to v1');
+    //console.log('✅ Restored app-routing.module.ts to v1');
   }
   if (restoreV1(staticPagesRoutingMain, staticPagesRoutingV1)) {
-    console.log('✅ Restored static-pages-routing.ts to v1');
+    //console.log('✅ Restored static-pages-routing.ts to v1');
   }
   
 } else if (buildVersion === 'v2') {
-  console.log('🔧 Setting up routing for VERSION 2 (Branded Products as default)...');
+  //console.log('🔧 Setting up routing for VERSION 2 (Branded Products as default)...');
   
   if (swapFiles(appRoutingMain, appRoutingBackup, appRoutingV1)) {
-    console.log('✅ Swapped app-routing.module.ts to v2 backup');
+    //console.log('✅ Swapped app-routing.module.ts to v2 backup');
   }
   if (swapFiles(staticPagesRoutingMain, staticPagesRoutingBackup, staticPagesRoutingV1)) {
-    console.log('✅ Swapped static-pages-routing.ts to v2 backup (redirects to branded-products)');
+    //console.log('✅ Swapped static-pages-routing.ts to v2 backup (redirects to branded-products)');
   }
   
 } else {
@@ -62,4 +62,4 @@ if (buildVersion === 'v1') {
   process.exit(1);
 }
 
-console.log(`✅ Routing setup complete for ${buildVersion}`);
+//console.log(`✅ Routing setup complete for ${buildVersion}`);

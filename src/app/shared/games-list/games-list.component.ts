@@ -39,15 +39,20 @@ export class GamesLinksComponent implements OnInit {
   constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService) { }
 
   async getGameEvents() {
+    //await this.gamesSrv.getAllEvents()
     const allEvents = await this.gamesSrv.getAllLotoGames();
     this.pickXEvents = Array.isArray(allEvents?.pickXGames)
-      ? [...allEvents.pickXGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+      ? [...allEvents.pickXGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
-    console.log('PickX Events:', this.pickXEvents);
+    //console.log('PickX Events:', this.pickXEvents);
     this.jackpotEvents = Array.isArray(allEvents?.jackpotGames)
-      ? [...allEvents.jackpotGames].filter((e: any) => !e?.IsSalesStopped).sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
+      ? [...allEvents.jackpotGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
-    console.log('Jackpot Events:', this.jackpotEvents);
+    //console.log('Jackpot Events:', this.jackpotEvents);
+    if(!this.isAndroidApp){
+      this.pickXEvents = this.pickXEvents.filter((e: any) => !e?.IsSalesStopped);
+      this.jackpotEvents = this.jackpotEvents.filter((e: any) => !e?.IsSalesStopped);
+    }
     this.buildGameCards();
   }
 

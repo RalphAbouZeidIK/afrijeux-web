@@ -124,7 +124,7 @@ export class LoginComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     this.isSignup = (changes['loginObject'].currentValue.type == 'signup');
     this.isLogin = !this.isSignup
-    ////console.log(changes['loginObject'].currentValue)
+    //console.log(changes['loginObject'].currentValue)
   }
 
   preventTyping(event: KeyboardEvent) {
@@ -205,7 +205,7 @@ export class LoginComponent implements OnChanges, OnInit {
     let loginParams = this.loginForm.value
     if (this.isAndroidApp) {
       let respoonse = await this.machineSrv.loginMachine(loginParams)
-      console.log(respoonse)
+      //console.log(respoonse)
       if (respoonse.status == false) {
         this.gnrcSrv.setModalData(true, false, respoonse.message)
       }
@@ -213,7 +213,7 @@ export class LoginComponent implements OnChanges, OnInit {
         this.successfullLogin()
         this.router.navigate(['Machine/Games'])
       }
-      ////console.log(respoonse)
+      //console.log(respoonse)
     }
 
     else {
@@ -287,7 +287,7 @@ export class LoginComponent implements OnChanges, OnInit {
     const params = {
       body: this.resetPasswordForm.value
     };
-    console.log(params)
+    //console.log(params)
     try {
       const resetPasswordResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/ChangePassword', 'POST', params);
       if (resetPasswordResponse.IsSuccess) {
@@ -305,7 +305,7 @@ export class LoginComponent implements OnChanges, OnInit {
 
 
   async submitSignUp() {
-    ////console.log(this.signupForm)
+    //console.log(this.signupForm)
     if (this.signupForm.invalid) {
       this.showErrorMessage = true
       return
@@ -329,7 +329,7 @@ export class LoginComponent implements OnChanges, OnInit {
     try {
       this.showErrorMessage = false
       const signupResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Authenticate/Register', 'POST', params);
-      ////console.log(signupResponse)
+      //console.log(signupResponse)
       if (signupResponse.IsSuccess) {
         this.userId = signupResponse.UserId
         this.showOtpForm = true
@@ -433,7 +433,7 @@ export class LoginComponent implements OnChanges, OnInit {
     if (this.otpForm.invalid) return;
 
     const otpValue = Object.values(this.otpForm.value).join('');
-    console.log('Entered OTP:', otpValue);
+    //console.log('Entered OTP:', otpValue);
 
     let params = {
       body: {

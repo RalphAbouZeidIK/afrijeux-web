@@ -39,7 +39,7 @@ export class CacheService {
   }
 
   saveTicketToDb(response: any, params: any, paramsBeforeEncryption: any) {
-    console.log('💾 Saving ticket to OfflineCache DB...', response, params, paramsBeforeEncryption);
+    //console.log('💾 Saving ticket to OfflineCache DB...', response, params, paramsBeforeEncryption);
 
     let isOfflineFlag = 1
     if (navigator.onLine) {
@@ -72,7 +72,7 @@ export class CacheService {
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
         //sub.unsubscribe();
-        //////console.log(`💾 Saved to OfflineCache with key: ${key}`);
+        //console.log(`💾 Saved to OfflineCache with key: ${key}`);
       } else {
         //console.warn('⚠️ OfflineCache channel not found');
       }
@@ -89,7 +89,7 @@ export class CacheService {
       // Send request to Flutter
       if ((window as any).OfflineCache?.postMessage) {
         const message = JSON.stringify({ action: 'get_tickets', filters });
-        console.log("📨 Sent get_tickets to Flutter with filters:", filters);
+        //console.log("📨 Sent get_tickets to Flutter with filters:", filters);
         (window as any).OfflineCache.postMessage(message);
       } else {
         console.warn("⚠️ OfflineCache channel not available");
@@ -183,7 +183,7 @@ export class CacheService {
           key: key
         };
         (window as any).OfflineCache.postMessage(JSON.stringify(message));
-        //////console.log(`🗑️ Requested delete for key: ${key}`);
+        //console.log(`🗑️ Requested delete for key: ${key}`);
         resolve();
       } else {
         console.warn("⚠️ OfflineCache channel not found");

@@ -45,7 +45,7 @@ export class HomepageComponent implements OnInit {
 
     if (this.isAndroidApp) {
       gameEventsResponse = await this.machineSrv.getGamesEvents('khamsa')
-      console.log(gameEventsResponse)
+      //console.log(gameEventsResponse)
       if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
         gameEventsResponse.GameConfiguration.EventConfiguration.forEach((eventItem: any) => {
           if (!eventItem.IsSalesStopped) {
@@ -63,7 +63,7 @@ export class HomepageComponent implements OnInit {
     this.selectedEvent = raceItem
     this.showEventDetails = true
     this.listOfBalls = this.generateBallObjects(90)
-    console.log(this.listOfBalls)
+    //console.log(this.listOfBalls)
   }
 
   groupGameSettings(settings: any) {
@@ -113,7 +113,7 @@ export class HomepageComponent implements OnInit {
     this.selectedBalls = []
     this.Stake = this.selectedNap.MinimumStake
     this.multiplier = 1
-    console.log(this.selectedNap)
+    //console.log(this.selectedNap)
   }
 
   generateBallObjects(x: number) {
@@ -147,7 +147,7 @@ export class HomepageComponent implements OnInit {
     // Step 2: map numbers to ball objects
     this.selectedBalls = this.listOfBalls
       .filter((ball: any) => randomNumbers.includes(ball.number));
-    console.log(this.selectedBalls)
+    //console.log(this.selectedBalls)
   }
 
   isBallSelected(ball: any): boolean {
@@ -199,8 +199,8 @@ export class HomepageComponent implements OnInit {
   }
 
   addToBet(){
-    console.log(this.selectedNap)
-    console.log(this.selectedBalls)
+    //console.log(this.selectedNap)
+    //console.log(this.selectedBalls)
     let pickItem = {
       BallNumber :this.selectedNap.balls
     }

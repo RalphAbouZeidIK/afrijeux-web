@@ -99,7 +99,7 @@ export class CartService {
   //////////////////////////////HPB BETTING METHODS START//////////////////////////////////////////////////
 
   setPmuBets(race: any, eventFromCart?: true) {
-    //////console.log(race)
+    //console.log(race)
     if (eventFromCart) {
       this.eventFromCart$.next(race);
       return
@@ -122,9 +122,9 @@ export class CartService {
   setCartDataListener(cartData: any) {
     let totalBets = 0
     let totalMultiplier = 0
-    ////console.log(cartData)
+    //console.log(cartData)
     cartData.forEach((element: any) => {
-      ////console.log(element.Multiplier)
+      //console.log(element.Multiplier)
       if (element.ShowRace) {
         totalBets++
         totalMultiplier += element.Multiplier
@@ -154,10 +154,10 @@ export class CartService {
       }
 
       else if (existingMatch.OutcomeId != betItem.OutcomeId || (existingMatch.OutcomeId == betItem.OutcomeId) && (existingMatch.Specifiers != betItem.Specifiers)) {
-        ////console.log('same market different odd')
+        //console.log('same market different odd')
         const existingMatchIndex = this.listOfBets.findIndex((match: any) => match.MatchId === betItem.MatchId);
         this.listOfBets.splice(existingMatchIndex, 1)
-        ////console.log(this.listOfBets)
+        //console.log(this.listOfBets)
         betItem.StakeFromSearch = StakeFromSearch
         this.listOfBets.push(betItem)
       }
@@ -174,7 +174,7 @@ export class CartService {
       this.listOfBets.push(betItem)
     }
 
-    ////console.log(this.listOfBets)
+    //console.log(this.listOfBets)
     //console.log(betItem)
     this.setSBCartDataListener(this.listOfBets)
     this.storageSrv.setItem('sbCartData', this.listOfBets)
@@ -193,7 +193,7 @@ export class CartService {
 
     minimumOddRequired = this.bonusRules[0].MinOddRequiered
     //minimumOddRequired = 2
-    ////console.log(minimumOddRequired)
+    //console.log(minimumOddRequired)
     let multipliedOdds = 1
     let totalBets = 0
     cartData.forEach((element: any) => {
@@ -207,15 +207,15 @@ export class CartService {
 
     this.storageSrv.setItem('TotaldOdds', multipliedOdds.toString())
     this.storageSrv.setItem('totalBets', totalBets.toString())
-    ////console.log('cart data')
-    ////console.log(cartData)
+    //console.log('cart data')
+    //console.log(cartData)
     this.addSBCartData$.next(cartData);
   }
 
 
   async getBonusRules() {
     const apiResponse = await this.gamesSrv.getBonusRules()
-    ////console.log(apiResponse)
+    //console.log(apiResponse)
     return apiResponse
   }
 
@@ -320,13 +320,13 @@ export class CartService {
     }
     this.listOfLotoBets = this.storageSrv.getItem(storageKey) || []
     this.listOfLotoBets.push(pickItem)
-    console.log(this.listOfLotoBets)
+    //console.log(this.listOfLotoBets)
     if(!this.isAndroidApp){
       this.storageSrv.setItem(storageKey, this.listOfLotoBets)
     }
     this.storageSrv.setItem(storageKey, this.listOfLotoBets)
     this.addCartData$.next(this.listOfLotoBets);
-    console.log(this.listOfLotoBets)
+    //console.log(this.listOfLotoBets)
   }
 
 

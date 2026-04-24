@@ -42,8 +42,8 @@ export class GenericService {
 
   getGameRoute() {
     let route = this.router.url.split('/')[1]?.split('?')[0]
-    console.log(route)
-    ////console.log(this.router.url)
+    //console.log(route)
+    //console.log(this.router.url)
     return route
   }
 
@@ -85,7 +85,7 @@ export class GenericService {
 
   gettUserId() {
     let userId = this.usrSrv.gettUserId()
-    console.log(userId)
+    //console.log(userId)
     return userId
   }
 
@@ -95,18 +95,18 @@ export class GenericService {
    * @returns 
    */
   async getGame(apiRout: any) {
-    console.log(apiRout)
+    //console.log(apiRout)
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetOnlineGames', 'GET', {});
-    console.log(apiResponse)
+    //console.log(apiResponse)
     const game = apiResponse.find((item: any) => item.APIRout == apiRout);
-    ////console.log(game)
+    //console.log(game)
     return game
   }
 
   async getBalance() {
     if (!this.isMachineApp()) {
       let balance = await this.apiSrv.makeApi(`OnlineMaster`, `UserInfo/GetBalance`, 'GET', {})
-      ////console.log(balance)
+      //console.log(balance)
       return balance
     }
 

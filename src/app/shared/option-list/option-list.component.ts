@@ -25,7 +25,7 @@ export class OptionListComponent implements OnChanges {
   constructor(private router: Router) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('OptionListComponent changes:', changes);
+    //console.log('OptionListComponent changes:', changes);
     if ((changes['options'] || changes['selectedValue']) && this.selectedValue == null && this.options.length > 0) {
       this.selectedValue = this.options[0].TicketTypeId;
     }

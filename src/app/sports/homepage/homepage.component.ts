@@ -51,11 +51,11 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {
 
     this.route.params.subscribe(params => {
-      ////console.log(params); // Log route params to check if they are correctly captured
+      //console.log(params); // Log route params to check if they are correctly captured
     });
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
-      console.log('isDesktopView', isDesktop);
+      //console.log('isDesktopView', isDesktop);
       this.isDesktop = isDesktop;
     });
 
@@ -121,7 +121,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   async getMatchOutcome(event: any) {
-    ////console.log(event)
+    //console.log(event)
     // let firstPath = (!this.isDesktop) ? `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}` : this.router.url.split('/')[1]
     let firstPath = `${this.router.url.split('/')[1]}/${this.router.url.split('/')[2]}`
     this.router.navigate([`${firstPath}/${event.SportId}/Categories/${event.CategoryId}/Tournaments/${event.TournamentId}/Outcomes/${event.MatchId}`])

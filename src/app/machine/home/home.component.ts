@@ -49,17 +49,17 @@ export class HomeComponent implements OnInit {
         gameItem.ShowGame = true
       }
     });
-    //////console.log(games)
+    //console.log(games)
     this.games = games.filter((gameItem: any) => gameItem.ShowGame)
   }
 
   async getMenu() {
-    ////console.log(machineMenuRoutes)
+    //console.log(machineMenuRoutes)
     machineMenuRoutes.forEach(async (routeItem: any) => {
       if ((this.isOnline) || (!this.isOnline && routeItem.AllowHybrid)) {
         if (routeItem.data.PermissionName) {
           if (await this.machineSrv.getMachinePermission(routeItem.data.PermissionName) && routeItem.data.showLink) {
-            ////console.log(routeItem)
+            //console.log(routeItem)
             this.machineMenu.push(routeItem)
           }
         }
@@ -69,18 +69,18 @@ export class HomeComponent implements OnInit {
       }
 
     })
-    ////console.log(this.machineMenu)
+    //console.log(this.machineMenu)
   }
 
   selectGame(game: any) {
-    ////console.log(game)
+    //console.log(game)
     let url = game.GameApi.split('/')[1]
     this.router.navigate([`/Machine/${url}`])
   }
 
   async syncTickets() {
     this.isLoading = true;
-    console.log('syncing offline tickets from DB...');
+    //console.log('syncing offline tickets from DB...');
     const tickets = await this.cacheService.getTicketsFromFlutter({ IsSync: 0, IsOffline: 1 });
     if (tickets.length === 0) {
       this.isLoading = false;
@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit {
 
   async offlineReport() {
     let offlineGames = this.games.filter((gameItem: any) => gameItem.AllowHybrid)
-    console.log(offlineGames)
+    //console.log(offlineGames)
     offlineGames.forEach(async (gameItem: any) => {
       let tickets = await this.cacheService.getTicketsFromFlutter({
         GameId: gameItem.GameId,
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
       });
 
       let reportParamsArray = await this.groupByGameEvent(tickets, gameItem)
-      console.log(reportParamsArray)
+      //console.log(reportParamsArray)
       await this.machineSrv.sendOfflineReport(reportParamsArray)
     })
     // this.isLoading = true;
@@ -142,7 +142,7 @@ export class HomeComponent implements OnInit {
       if ((window as any).OfflineCache?.postMessage) {
         const message = JSON.stringify({ action: 'force_update' });
         (window as any).OfflineCache.postMessage(message);
-        console.log('🚀 Requested Flutter to update Angular app');
+        //console.log('🚀 Requested Flutter to update Angular app');
       } else {
         console.warn('⚠️ OfflineCache bridge not found');
         alert('OfflineCache bridge not available.');
