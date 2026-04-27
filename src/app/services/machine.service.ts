@@ -214,6 +214,7 @@ export class MachineService {
         MachineId: (machineData) ? machineData.MachineId : null
       }
     }
+    console.log(params)
     //console.log(params)
     let paramsBeforeEncryption = params
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
@@ -428,9 +429,9 @@ export class MachineService {
     ticketRequestId = ("00000000000000000000000000000000000" + ticketRequestId).substring(ticketRequestId.length);
 
 
+    let dateOfOperation = await this.getDateOfOperation(this.getGameRoute())
 
-
-    let date = new Date()
+    let date = dateOfOperation
 
 
     let ticketBody = {
@@ -442,8 +443,8 @@ export class MachineService {
       MachineId: machineData.MachineId,
       PersonId: userId,
       MachineTicketId: 0,
-      MachineDateIssued: date.toISOString(),
-      ServiceDateIssued: date.toISOString(),
+      MachineDateIssued: date,
+      ServiceDateIssued: date,
       TicketRequestId: ticketRequestId,
       GamePick: ticketObject,
       LoyalityReferenceId: 0,
@@ -1103,6 +1104,19 @@ export class MachineService {
     apiResponse = await this.handleApiResponse(`Master`, `Configuration/GetAllEventConfiguration`, 'POST', params);
     return apiResponse
 
+  }
+
+
+
+  /**
+   * Function to get the date of the operation
+   * @param gameName 
+   * @returns 
+   */
+  async getDateOfOperation(gameName: any) {
+    let dateOfOp = await this.apiSrv.makeApi('OnlineMaster', `Corporate/GetOperationDate/13`, "GET", {})
+    console.log(dateOfOp)
+  return dateOfOp.Date
   }
 
 }

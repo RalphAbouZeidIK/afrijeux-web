@@ -315,10 +315,10 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
       }
       else {
-        this.gnrcSrv.setModalData(true, false, apiResponse.Message || 'Failed to confirm betslip.')
+        this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
       }
     }
-
+    console.log(apiResponse);
 
   }
 
