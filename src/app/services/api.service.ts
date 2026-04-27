@@ -71,8 +71,15 @@ export class ApiService {
     isNormalApi: boolean = true,
   ): Promise<any> {
     if (this.userSrv.sessionExpired()) {
-      this.userSrv.signOut();
-      this.router.navigate(['']);
+      if (window.location.href.includes('Machine')) {
+        await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
+        this.router.navigate(['/Machine']);
+      }
+
+      else {
+        this.userSrv.signOut();
+        this.router.navigate(['']);
+      }
       return;
     }
 
