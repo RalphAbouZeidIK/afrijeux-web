@@ -4,6 +4,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { SharedGuard } from '../shared.guard';
 import { LoginComponent } from '../shared/login/login.component';
 import { HomeComponent } from './home/home.component';
+import { PrizeDetailsPageComponent } from '../static-pages/prize-details-page/prize-details-page.component';
 
 export const machineMenuRoutes: Route[] = [
     {
@@ -49,6 +50,17 @@ export const machineMenuRoutes: Route[] = [
         data: {
             showLink: true,
             title: 'machine.routerLinks.checkResults',
+            PermissionName: 'TerminalCanViewResult',
+            AllowHybrid: false
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'prize-details',
+        component: PrizeDetailsPageComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.prizeDetails',
             PermissionName: 'TerminalCanViewResult',
             AllowHybrid: false
         },

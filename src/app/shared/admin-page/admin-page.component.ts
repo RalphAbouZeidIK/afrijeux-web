@@ -136,7 +136,7 @@ export class AdminPageComponent {
         setTimeout(() => {
           this.gnrcSrv.toggleLoader(false);
           window.location.reload();
-        }, 10000);
+        }, 5000);
         //console.log('🚀 Requested Flutter to update Angular app');
       } else {
         console.warn('⚠️ OfflineCache bridge not found');

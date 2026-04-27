@@ -20,6 +20,7 @@ import { BrandingBenefitCardComponent } from './branded-products/components/bran
 import { BpHeroComponent } from './branded-products/components/bp-hero/bp-hero.component';
 import { BpProductListComponent } from './branded-products/components/bp-product-list/bp-product-list.component';
 import { EventBrandingComponent } from './event-branding/event-branding.component';
+import { PrizeDetailsPageComponent } from './prize-details-page/prize-details-page.component';
 
 
 
@@ -43,7 +44,8 @@ import { EventBrandingComponent } from './event-branding/event-branding.componen
     BrandingBenefitCardComponent,
     BpHeroComponent,
     BpProductListComponent,
-    EventBrandingComponent
+    EventBrandingComponent,
+    PrizeDetailsPageComponent
   ],
   imports: [
     routing,

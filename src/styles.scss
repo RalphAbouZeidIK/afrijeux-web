@@ -1240,7 +1240,20 @@ app-admin-page {
     background-color: $darkBg
 }
 
-
+// Game badge
+.game-badge {
+    background: rgba(99, 146, 71, 0.5);
+    border: 0.5px solid #639247;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    padding: 2px 8px;
+    border-radius: 30px;
+    white-space: nowrap;
+    font-family: 'SF UI Display', sans-serif;
+}
 
 @media all and (max-width:992px) {
     .balls-list-holder {

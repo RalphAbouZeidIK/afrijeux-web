@@ -34,7 +34,7 @@ export class AppNavComponent implements OnInit, OnDestroy, OnChanges {
       id: 'prize-details',
       label: 'Prize Details',
       icon: 'prize-details',
-      route: '/Machine/Prize-Details',
+      route: '/Machine/prize-details',
       active: false
     },
     {
