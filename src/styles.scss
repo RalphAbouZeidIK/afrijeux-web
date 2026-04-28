@@ -129,6 +129,7 @@ h2 {
             color: $black;
         }
     }
+
 }
 
 
@@ -561,7 +562,17 @@ select.form-controlو select.form-control:focus {
     .btn {
         width: 100%;
         padding: 10px 0;
+
+        &.btn-close {
+            border: 1px solid #4F584B;
+            background: #232E1E;
+            padding: 12px 0 14px;
+            opacity: 1;
+            color: $white;
+        }
     }
+
+
 }
 
 .d-flex {
@@ -810,12 +821,14 @@ header {
 
 
 .report-holder {
-    background-color: $darkBg;
-    padding: 20px;
-    border-radius: 5px;
+    background: #2B2B2B;
+    padding: 15px 30px;
+    border-radius: 10px;
     margin-bottom: 15px;
-    max-height: 200px;
+    max-height: 185px;
     overflow: auto;
+    text-align: center;
+    font-size: 14px;
 }
 
 .pagination {

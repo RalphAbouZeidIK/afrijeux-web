@@ -28,6 +28,14 @@ export class ValidateTicketComponent {
 
   showForm = false
 
+  formTitle = ''
+
+  showError = false
+
+  formDescription = ''
+
+  showWinningDetails = false
+
   constructor(
     private machineSrv: MachineService,
     private nativeBridge: NativeBridgeService,
@@ -79,28 +87,60 @@ export class ValidateTicketComponent {
   }
 
   async validateTicket() {
+    this.showError = false
+    this.showWinningDetails = false
+    this.formTitle = ''
+    this.formDescription = ''
     this.gnrcSrv.toggleLoader(true);
 
     let validateTicketReponse = await this.machineSrv.validateTicket(this.fullTicketId)
+    console.log(validateTicketReponse)
+
+    this.isPaying = true
+    this.showForm = true
     if (validateTicketReponse.status == true) {
-      this.getCancelPermission()
-      this.payTicketResponse = validateTicketReponse
-      //console.log(this.payTicketResponse)
-      this.isPaying = true
-      if (validateTicketReponse.dataToPrint.trim() == '') {
-        this.showCancelPage = true
+
+      if (validateTicketReponse.IsWinning == 0) {
+        this.formTitle = this.machineSrv.extractMessage(validateTicketReponse.message)
+        this.formDescription = `This ticket has not been validated yet.`
+        this.showError = true
+        return
+      }
+      else {
+        this.showWinningDetails = true
+        this.getCancelPermission()
+        this.payTicketResponse = validateTicketReponse
+        //console.log(this.payTicketResponse)
+        if (validateTicketReponse.dataToPrint.trim() == '') {
+          this.showCancelPage = true
+        }
+
       }
 
-      this.showForm = true
-
-
     }
+
+    if (validateTicketReponse.status == false) {
+      this.showError = true
+      let code = this.machineSrv.extractCode(validateTicketReponse.message)
+      
+      if (code == 'MX0000026') {
+        this.formDescription = `This is not a winning ticket.`
+      }
+      if (code == 'MX0000024') {
+        this.formDescription = `This ticket has already been paid.`
+      }
+      this.formTitle = this.machineSrv.extractMessage(validateTicketReponse.message)
+
+      this.showError = true
+    }
+
     this.gnrcSrv.toggleLoader(false)
     //console.log(validateTicketReponse)
   }
 
   async payTicket() {
     let payTicketReponse = await this.machineSrv.payTicket(this.fullTicketId)
+    console.log(payTicketReponse)
     if (payTicketReponse.DataToPrint) {
       this.fullTicketId = ''
       this.isPaying = false

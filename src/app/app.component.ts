@@ -143,7 +143,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isAndroidApp) {
       this.pageTitleService.init();
     }
-    this.updateHeaderVisibility()
+    //this.updateHeaderVisibility()
   }
 
   updateHeaderVisibility() {
@@ -172,7 +172,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           this.router.navigate([''])
         }
         document.body.classList.remove("show-mobile-menu")
-         this.updateHeaderVisibility()
+        //this.updateHeaderVisibility()
       }
 
       if (event instanceof NavigationError) {

@@ -517,13 +517,8 @@ export class MachineService {
     }
 
     let validateTicketResponse = await this.handleApiResponse(`CommonAPI`, `CommonAPI/ValidateTicket`, 'POST', params)
-    //console.log(validateTicketResponse)
 
-    if (validateTicketResponse.status == false) {
-      this.gnrcSrv.setModalData(true, false, validateTicketResponse.message)
-    }
-
-    else if (validateTicketResponse.dataToPrint) {
+    if (validateTicketResponse.dataToPrint) {
       validateTicketResponse.dataToPrint = validateTicketResponse.dataToPrint.replace(/;/g, "\n");
     }
     //console.log(validateTicketResponse)
@@ -1116,7 +1111,15 @@ export class MachineService {
   async getDateOfOperation(gameName: any) {
     let dateOfOp = await this.apiSrv.makeApi('OnlineMaster', `Corporate/GetOperationDate/13`, "GET", {})
     console.log(dateOfOp)
-  return dateOfOp.Date
+    return dateOfOp.Date
   }
 
+  extractMessage(input: string): string {
+    return input.replace(/^\[MX\d+\]-\s*/, '');
+  }
+
+  extractCode(input: string): string | null {
+    const match = input.match(/^\[(MX\d+)\]/);
+    return match ? match[1] : null;
+  }
 }

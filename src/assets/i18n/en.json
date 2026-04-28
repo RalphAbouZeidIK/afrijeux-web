@@ -276,7 +276,9 @@
             "search": "Search",
             "favoriteBets": "Favorite Bets",
             "allBets": "All Bets",
-            "eventCode": "Event Code"
+            "eventCode": "Event Code",
+            "close": "Close",
+            "won": "Won"
         },
         "fullTicketId": "Full Ticket Id",
         "chooseGames": "Choose Games",

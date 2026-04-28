@@ -1,0 +1,56 @@
+@use '/src/variables' as *;
+
+.error-block {
+    text-align: center;
+
+    h3 {
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 0;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 20px;
+        color: #9F9F9F;
+        margin-top: 0;
+        margin-bottom: 30px;
+    }
+
+    .error-icon {
+        margin-bottom: 15px;
+    }
+}
+
+.winning-ticket-block {
+    .d-flex {
+        margin-bottom: 20px;
+        font-size: 12px;
+        line-height: 25px;
+    }
+
+    .status {
+        font-size: 14px;
+        margin-bottom: 10px;
+
+        .value-label {
+            color: $lightGreen;
+        }
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+    h2 {
+        font-size: 18px;
+        line-height: 35px;
+        padding-bottom: 0;
+    }
+
+    .back-arrow {
+        width: 10px;
+    }
+}

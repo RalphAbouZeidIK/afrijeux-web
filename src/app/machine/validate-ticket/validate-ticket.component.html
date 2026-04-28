@@ -1,12 +1,13 @@
-<div class="form-holder machine-layout" *ngIf="showForm">
+<div class="form-holder machine-layout" *ngIf="showForm && !showWinningDetails">
     <div class="form-bg">
-        <div class="form-header">
-            <h2>{{'machine.routerLinks.verifyTicketTitle' | translate}}</h2>
-            <p>Enter ticket number or scan again.</p>
-        </div>
+
 
         <div class=" form-content">
             <ng-container *ngIf="!isPaying">
+                <div class="form-header">
+                    <h2>{{'machine.routerLinks.verifyTicketTitle' | translate}}</h2>
+                    <p>Enter ticket number or scan again.</p>
+                </div>
                 <div class="form-group">
                     <label class="title-label">{{'machine.fullTicketId' | translate}}</label>
                     <input placeholder="Ticket number" type="text" class="form-control" [(ngModel)]="fullTicketId"
@@ -16,7 +17,7 @@
                 <div class="form-btns d-flex">
 
                     <button class="btn btn-primary scan-button" (click)="scanCode()">
-                        <img src="/assets/images/scan-icon-filled.svg" alt="Scan Icon"/>
+                        <img src="/assets/images/scan-icon-filled.svg" alt="Scan Icon" />
                         {{'machine.generic.scan' | translate}}
                     </button>
                     <button class="btn btn-primary" (click)="validateTicket()" [disabled]="(!fullTicketId)?true:false">
@@ -28,40 +29,61 @@
                 </div>
             </ng-container>
 
-            <ng-container *ngIf="isPaying">
-                <div class="form-group">
-                    <label class="title-label">{{'machine.generic.gameName' | translate}}</label>
-                    <input type="text" class="form-control" [value]="payTicketResponse.GameName" disabled />
-                </div>
-                <div class="form-group">
-                    <label class="title-label">{{'machine.generic.status' | translate}}</label>
-                    <input type="text" class="form-control"
-                        [value]="(payTicketResponse.IsWinning == 1)?'Winner':'Not Validated Yet'" disabled />
-                </div>
-                <div class="form-group" *ngIf="!showCancelPage">
-                    <label class="title-label">{{'machine.generic.amount' | translate}}</label>
-                    <input type="text" class="form-control" [value]="payTicketResponse.WinningAmount" disabled />
-                </div>
 
-                <div [innerText]="getFormattedDataToPrint()" class="report-holder" *ngIf="!showCancelPage"></div>
+
+            <ng-container *ngIf="isPaying && showError">
+
+                <div class="error-block">
+                    <img src="assets/images/error-triangle.svg" alt="Error Icon" class="error-icon">
+                    <h3>{{ formTitle }}</h3>
+                    <p>{{ formDescription || '' }}</p>
+                </div>
 
                 <div class="form-btns d-flex">
 
-                    <button class="btn btn-primary" (click)="payTicket()" *ngIf="canPayTicket && !showCancelPage">
-                        {{'machine.generic.pay' | translate}}
-                        {{'machine.generic.ticket' | translate}}
-                    </button>
-                    <button class="btn btn-primary" (click)="cancelTicket()" [disabled]="(!fullTicketId)?true:false"
-                        *ngIf="canFlagToCancel && showCancelPage">
-                        {{'machine.generic.cancel' | translate}} {{'machine.generic.ticket' | translate}}
-                    </button>
-                    <button class="btn btn-primary" (click)="isPaying = false">
-                        {{'machine.generic.back' | translate}}
+                    <button class="btn btn-primary btn-close" (click)="isPaying = false">
+                        {{'machine.generic.close' | translate}}
                     </button>
                 </div>
+
             </ng-container>
 
 
         </div>
     </div>
+</div>
+
+<div *ngIf="showWinningDetails" class="winning-ticket-block">
+    <div class="header">
+        <a class="back-arrow" (click)="showForm = true; showWinningDetails = false; isPaying = false;">
+            <img src="assets/images/back-arrow.svg" alt="Back">
+        </a>
+        <h2>{{'machine.routerLinks.verifyTicketTitle' | translate}}</h2>
+    </div>
+
+    <div class="d-flex status" *ngIf="!showCancelPage">
+        <span class="title-label">{{'machine.generic.ticket' | translate}} {{'machine.generic.status' |
+            translate}}</span>
+        <span class="value-label">{{'machine.generic.won' | translate}}</span>
+    </div>
+    <div class="d-flex" *ngIf="!showCancelPage">
+        <span class="title-label">{{'machine.generic.amount' | translate}}</span>
+        <span class="value-label">{{ payTicketResponse.WinningAmount | number}}</span>
+    </div>
+
+    <div [innerText]="getFormattedDataToPrint()" class="report-holder" *ngIf="!showCancelPage"></div>
+
+    <div class="form-btns d-flex">
+
+        <button class="btn btn-primary" (click)="payTicket()" *ngIf="canPayTicket && !showCancelPage">
+            {{'machine.generic.pay' | translate}}
+            {{'machine.generic.ticket' | translate}}
+        </button>
+        <button class="btn btn-primary" (click)="cancelTicket()" [disabled]="(!fullTicketId)?true:false"
+            *ngIf="canFlagToCancel && showCancelPage">
+            {{'machine.generic.cancel' | translate}} {{'machine.generic.ticket' | translate}}
+        </button>
+
+    </div>
+
 </div>

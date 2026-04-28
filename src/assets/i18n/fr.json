@@ -276,7 +276,9 @@
             "search": "Rechercher",
             "favoriteBets": "Paris favoris",
             "allBets": "Tous les paris",
-            "eventCode": "Code de l’événement"
+            "eventCode": "Code de l’événement",
+            "close": "Fermer",
+            "won": "Gagné"
         },
         "fullTicketId": "Numéro complet du billet",
         "chooseGames": "Choisir des jeux",

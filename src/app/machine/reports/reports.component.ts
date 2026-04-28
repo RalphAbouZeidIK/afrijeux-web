@@ -42,7 +42,7 @@ export class ReportsComponent implements OnInit {
   }
 
   selectedGamesChange(event: any) {
-    //console.log(event)
+    console.log(this.selectedGames)
   }
 
   onDateChange(event: any, field: keyof ReportsComponent) {

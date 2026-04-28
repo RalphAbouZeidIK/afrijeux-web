@@ -12,6 +12,15 @@
                     <option *ngFor="let game of gamesList" [ngValue]="game">{{ game.Name }}</option>
                 </select>
 
+                <div class="options-container single-checkbox">
+                    <label *ngFor="let game of gamesList" class="option-item">
+                        <input type="checkbox" name="optionsGroup" [value]="selectedGames"
+                            (change)="selectedGamesChange(game)" />
+                        {{ game.Name }}
+                    </label>
+                </div>
+
+
                 <!-- <p *ngIf="selectedGames.length > 0">Selected games :
                     <span *ngFor="let game of selectedGames, let i = index">
                         {{game.Name.toLowerCase()}} <ng-container
