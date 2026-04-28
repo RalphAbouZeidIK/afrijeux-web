@@ -18,6 +18,8 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     aspect-ratio: 16 / 9;
     max-height: 500px;
+    touch-action: pan-y;
+    user-select: none;
 
     @media (max-width: 480px) {
         aspect-ratio: 3 / 2;

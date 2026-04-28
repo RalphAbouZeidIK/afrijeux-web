@@ -3,6 +3,7 @@
     <div *ngFor="let game of allGames" class="game-card" [class.selected]="isGameSelected(game)">
         <!-- Game Header with Image -->
         <div class="game-header" *ngIf="isListingPage">
+            <app-countdown [event]="game" [smallTimer]="true"></app-countdown>
             <div class="game-image" *ngIf="game.imageUrl">
                 <img [src]="game.imageUrl" [alt]="game.name">
             </div>
@@ -23,7 +24,7 @@
                 </div>
 
                 <!-- Draw Information -->
-                <p class="draw-info">Draw: {{ game.drawDate | date:'MMM d, y - hh:mm a' }}</p>
+                <p class="draw-info">Draw: {{ game.GameEventDate | date:'MMM d, y - hh:mm a' }}</p>
             </div>
         </div>
 

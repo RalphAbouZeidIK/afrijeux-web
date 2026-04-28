@@ -8,7 +8,7 @@ interface GameCard {
   name: string;
   badgeText?: string;
   prize: number;
-  drawDate: Date;
+  GameEventDate: Date;
   imageUrl?: string;
   route: string;
   GameEventId: number;
@@ -44,11 +44,11 @@ export class GamesLinksComponent implements OnInit {
     this.pickXEvents = Array.isArray(allEvents?.pickXGames)
       ? [...allEvents.pickXGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
-    //console.log('PickX Events:', this.pickXEvents);
+    console.log('PickX Events:', this.pickXEvents);
     this.jackpotEvents = Array.isArray(allEvents?.jackpotGames)
       ? [...allEvents.jackpotGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
-    //console.log('Jackpot Events:', this.jackpotEvents);
+    console.log('Jackpot Events:', this.jackpotEvents);
     if(!this.isAndroidApp){
       this.pickXEvents = this.pickXEvents.filter((e: any) => !e?.IsSalesStopped);
       this.jackpotEvents = this.jackpotEvents.filter((e: any) => !e?.IsSalesStopped);
@@ -62,11 +62,11 @@ export class GamesLinksComponent implements OnInit {
     // Add PickX games
     this.pickXEvents.forEach((game: any) => {
       this.allGames.push({
-        id: `pickx-${game.id}`,
+        id: `pickx-${game.GameEventId}`,
         name: `${game.EventName}`,
         badgeText: `Pick ${game.ConfigurationVersionId} Balls`,
         prize: game.Prize || 0,
-        drawDate: game.GameEventDate ? new Date(game.GameEventDate) : new Date(),
+        GameEventDate: game.GameEventDate,
         imageUrl: game.ImageUrl || 'assets/images/game-icon.svg',
         route: this.isAndroidApp ? '/Machine/PickX' : '/PickX',
         GameEventId: game.GameEventId,
@@ -80,11 +80,11 @@ export class GamesLinksComponent implements OnInit {
     // Add Jackpot games
     this.jackpotEvents.forEach((game: any) => {
       this.allGames.push({
-        id: `jackpot-${game.id}`,
+        id: `jackpot-${game.GameEventId}`,
         name: `${game.EventName}`,
         badgeText: `Pick 6 Balls`,
         prize: game.Prize || 0,
-        drawDate: game.GameEventDate ? new Date(game.GameEventDate) : new Date(),
+        GameEventDate: game.GameEventDate,
         imageUrl: game.ImageUrl || 'assets/images/game-icon.svg',
         route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
         GameEventId: game.GameEventId,
@@ -103,11 +103,8 @@ export class GamesLinksComponent implements OnInit {
   }
 
   isGameSelected(game: GameCard): boolean {
-    if (game.gameType === 'pickX') {
-      return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId);
-    } else {
-      return this.router.url.includes('/Jackpot');
-    }
+    // Check if this game is selected by comparing gameEventId
+    return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId);
   }
 
 }

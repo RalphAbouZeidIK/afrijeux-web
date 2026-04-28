@@ -85,11 +85,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isMobile: any = this.gnrcSrv.getIsMobileView()
 
-  countdownTime: string = ''
-  countdownDays: number = 0
-  countdownHours: number = 0
-  countdownMinutes: number = 0
-  countdownSeconds: number = 0
 
   numberOfBallChoice: any
 
@@ -98,8 +93,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   totalPrice: any = 0
 
   private configCache = new Map<number, any>()
-  private countdownSubscription: Subscription | null = null
-  private destroy$ = new Subject<void>()
 
   constructor(
     private gnrcSrv: GenericService,
@@ -157,11 +150,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    if (this.countdownSubscription) {
-      this.countdownSubscription.unsubscribe();
-    }
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   @HostListener('window:resize')
@@ -218,26 +206,26 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (this.eventsList.length > 0) {
         let selectedEvent = this.eventsList[0];
         //console.log(selectedEvent)
-        if (this.isPickXGame) {
-          const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
-          const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
+        
+        // Handle gameEventId parameter for both PickX and Jackpot games
+        const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
+        const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
 
-          if (gameEventId) {
-            this.selectedGameEventId = Number(gameEventId);
-            const matchedEvent = this.eventsList.find(
-              (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
-            );
-            if (matchedEvent) {
-              selectedEvent = matchedEvent;
-            }
-          } else if (legacyGameType) {
-            // Backward compatibility for old links that still pass gametype.
-            const matchedEvent = this.eventsList.find(
-              (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(legacyGameType)
-            );
-            if (matchedEvent) {
-              selectedEvent = matchedEvent;
-            }
+        if (gameEventId) {
+          this.selectedGameEventId = Number(gameEventId);
+          const matchedEvent = this.eventsList.find(
+            (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
+          );
+          if (matchedEvent) {
+            selectedEvent = matchedEvent;
+          }
+        } else if (legacyGameType && this.isPickXGame) {
+          // Backward compatibility for old links that still pass gametype (PickX only).
+          const matchedEvent = this.eventsList.find(
+            (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(legacyGameType)
+          );
+          if (matchedEvent) {
+            selectedEvent = matchedEvent;
           }
         }
 
@@ -275,9 +263,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     raceItem.fixedConfig = this.fixedConfig
     this.selectedEvent = raceItem
-    if (this.isPickXGame) {
-      this.selectedGameEventId = Number(raceItem?.GameEventId);
-    }
+    
+    // Set gameEventId for both PickX and Jackpot games
+    this.selectedGameEventId = Number(raceItem?.GameEventId);
 
     const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
     this.showCart = Array.isArray(lotoCartData) && lotoCartData.length > 0;
@@ -301,57 +289,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     // Start countdown timer for this event
     this.gnrcSrv.toggleLoader(false);
-    this.startCountdown(raceItem);
   }
 
-  private startCountdown(event: any): void {
-    // Stop existing countdown if any
-    if (this.countdownSubscription) {
-      this.countdownSubscription.unsubscribe();
-    }
-
-    // Start new countdown
-    this.countdownSubscription = interval(1000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.updateCountdown(event);
-      });
-
-    // Calculate immediately
-    this.updateCountdown(event);
-  }
-
-  private updateCountdown(event: any): void {
-    const eventDate = new Date(event.EventDate || event.GameEventDate);
-    const now = new Date();
-    const diff = eventDate.getTime() - now.getTime();
-
-    if (diff <= 0) {
-      this.countdownTime = 'Event started';
-      this.countdownDays = 0;
-      this.countdownHours = 0;
-      this.countdownMinutes = 0;
-      this.countdownSeconds = 0;
-      return;
-    }
-
-    this.countdownDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-    this.countdownHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    this.countdownMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    this.countdownSeconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    const parts: string[] = [];
-    if (this.countdownDays > 0) parts.push(`${this.countdownDays}d`);
-    if (this.countdownHours > 0) parts.push(`${this.countdownHours}h`);
-    parts.push(`${this.countdownMinutes}m`);
-    parts.push(`${this.countdownSeconds}s`);
-
-    this.countdownTime = parts.join(' ');
-  }
-
-  padNumber(num: number): string {
-    return num.toString().padStart(2, '0');
-  }
 
   generateBallObjects(x: number) {
     return Array.from({ length: x }, (_, i) => ({

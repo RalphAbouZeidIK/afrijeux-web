@@ -22,6 +22,8 @@ export class CarouselComponent implements OnInit, OnDestroy {
   @Input() showArrows: boolean = true;
 
   currentIndex: number = 0;
+  touchStartX: number | null = null;
+  private readonly swipeThreshold = 50;
   private destroy$ = new Subject<void>();
   private autoPlaySubscription: any;
 
@@ -51,6 +53,33 @@ export class CarouselComponent implements OnInit, OnDestroy {
       this.currentIndex = index;
       this.resetAutoPlay();
     }
+  }
+
+  onPointerDown(event: PointerEvent): void {
+    this.touchStartX = event.clientX;
+  }
+
+  onPointerUp(event: PointerEvent): void {
+    if (this.touchStartX === null) {
+      return;
+    }
+
+    const deltaX = event.clientX - this.touchStartX;
+    this.touchStartX = null;
+
+    if (Math.abs(deltaX) < this.swipeThreshold) {
+      return;
+    }
+
+    if (deltaX > 0) {
+      this.previous();
+    } else {
+      this.next();
+    }
+  }
+
+  onPointerCancel(): void {
+    this.touchStartX = null;
   }
 
   private startAutoPlay(): void {

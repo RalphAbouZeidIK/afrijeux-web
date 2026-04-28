@@ -998,7 +998,7 @@ app-odd-item:nth-of-type(3n) {
         background: $lightBg;
         display: flex;
         align-items: center;
-
+        padding:15px;
         select.form-control,
         select.form-control:focus {
             width: auto;

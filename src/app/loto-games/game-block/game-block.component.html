@@ -1,11 +1,5 @@
-<div class="countdown-display" *ngIf="isAndroidApp && showEventDetails">
-    <span class="countdown-label">Time to Draw:</span>
-    <div class="countdown-parts">
-        <span class="countdown-part" *ngIf="countdownHours > 0">{{ padNumber(countdownHours) }}</span>
-        <span class="countdown-part">{{ padNumber(countdownMinutes) }}</span>
-        <span class="countdown-part">{{ padNumber(countdownSeconds) }}</span>
-    </div>
-</div>
+
+<app-countdown *ngIf="isAndroidApp && showEventDetails" [event]="selectedEvent"></app-countdown>
 <app-games-links [isGamePage]="true" [selectedGameEventId]="selectedGameEventId"
     *ngIf="!isAndroidApp"></app-games-links>
 <div class="container-fluid page-holder" *ngIf="showEventDetails">
