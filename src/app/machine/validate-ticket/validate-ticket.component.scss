@@ -38,19 +38,3 @@
         }
     }
 }
-
-.header {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 20px;
-    h2 {
-        font-size: 18px;
-        line-height: 35px;
-        padding-bottom: 0;
-    }
-
-    .back-arrow {
-        width: 10px;
-    }
-}

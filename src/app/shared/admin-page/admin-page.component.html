@@ -1,14 +1,35 @@
 <div class="admin-page">
     <div class="main-btns">
         <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">
-            {{routerItem.data.title | translate}}
+            <div class="icon-holder">
+                <img [src]="routerItem.data.iconLink" [alt]="routerItem.data.title | translate" />
+            </div>
+            <div class="text-holder">
+               <h2> {{routerItem.data.title | translate}}</h2>
+                <p *ngIf="routerItem.data.description">{{routerItem.data.description | translate}}</p>
+            </div>
+
         </a>
 
         <!-- <a class="btn btn-primary" (click)="syncTickets()" *ngIf="isOnline">Sync Data</a> -->
-        <button class="btn btn-primary" (click)="triggerAppUpdate()" *ngIf="isOnline">Force App Update</button>
+        <button class="btn btn-primary" (click)="triggerAppUpdate()" *ngIf="isOnline">
+            <div class="icon-holder">
+                <img src="assets/images/update-icon.svg" [alt]="'admin.forceAppUpdate' | translate" />
+            </div>
+            <div class="text-holder">
+                <h2>Force App Update</h2>
+            </div>
+        </button>
         <!-- <a class="btn btn-primary" (click)="offlineReport()">Offline Report</a>
         <a class="btn btn-primary" (click)="clearFlutterOfflineCache()">Clear Cache</a> -->
-         <a class="btn btn-primary logout-btn" (click)="logout();">Logout</a>
+        <a class="btn btn-primary logout-btn" (click)="logout();">
+            <div class="icon-holder">
+                <img src="assets/images/logout-icon.svg" [alt]="'admin.logout' | translate" />
+            </div>
+            <div class="text-holder">
+                <h2>Logout</h2>
+            </div>
+        </a>
     </div>
 
 

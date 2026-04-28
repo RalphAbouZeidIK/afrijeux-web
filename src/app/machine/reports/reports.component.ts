@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MachineService } from 'src/app/services/machine.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private machineSrv: MachineService,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private router: Router
   ) {
 
   }
@@ -36,13 +38,31 @@ export class ReportsComponent implements OnInit {
 
   async getGames() {
     let machineData = await this.machineSrv.getMachineData()
-    this.gamesList = machineData?.Games
+    this.gamesList = machineData?.Games.filter((game: any) => game.GameId != 49)
     this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
     console.log(this.gamesList)
   }
 
-  selectedGamesChange(event: any) {
-    console.log(this.selectedGames)
+  selectedGamesChange(game: any, event: any) {
+    const isChecked = event.target.checked;
+    const index = this.selectedGames.indexOf(game);
+
+    if (this.isCheckResults) {
+      // Radio button behavior: only one selection allowed
+      if (isChecked) {
+        this.selectedGames = [game];
+      }
+    } else {
+      // Checkbox behavior: multiple selections allowed
+      if (isChecked && index === -1) {
+        // Add game to selectedGames if checked and not already there
+        this.selectedGames.push(game);
+      } else if (!isChecked && index > -1) {
+        // Remove game from selectedGames if unchecked
+        this.selectedGames.splice(index, 1);
+      }
+    }
+    console.log(this.selectedGames);
   }
 
   onDateChange(event: any, field: keyof ReportsComponent) {
@@ -84,5 +104,9 @@ export class ReportsComponent implements OnInit {
 
     }
 
+  }
+
+  onBackClick() {
+    this.router.navigate(['/Machine/Games'])
   }
 }

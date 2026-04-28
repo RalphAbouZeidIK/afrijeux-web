@@ -26,10 +26,11 @@ export const machineMenuRoutes: Route[] = [
         path: 'ValidateTicket',
         component: ValidateTicketComponent,
         data: {
-            showLink: true,
+            showLink: false,
             title: 'machine.routerLinks.verifyTicketTitle',
             PermissionName: 'TerminalCanValidateTicket',
-            AllowHybrid: false
+            AllowHybrid: false,
+            iconLink: 'assets/images/verify-ticket-icon.png'
         },
         canActivate: [SharedGuard]
     },
@@ -39,8 +40,10 @@ export const machineMenuRoutes: Route[] = [
         data: {
             showLink: true,
             title: 'machine.routerLinks.reports',
+            description: 'Generate an report of printed receipts, expected cash, & tickets.',
             PermissionName: 'TerminalCanViewReport',
-            AllowHybrid: false
+            AllowHybrid: false,
+            iconLink: 'assets/images/report-icon.svg'
         },
         canActivate: [SharedGuard]
     },
@@ -50,8 +53,10 @@ export const machineMenuRoutes: Route[] = [
         data: {
             showLink: true,
             title: 'machine.routerLinks.checkResults',
+            description: 'View Results of previous draws.',
             PermissionName: 'TerminalCanViewResult',
-            AllowHybrid: false
+            AllowHybrid: false,
+            iconLink: 'assets/images/report-icon.svg'
         },
         canActivate: [SharedGuard]
     },
@@ -62,7 +67,8 @@ export const machineMenuRoutes: Route[] = [
             showLink: false,
             title: 'machine.routerLinks.prizeDetails',
             PermissionName: 'TerminalCanViewResult',
-            AllowHybrid: false
+            AllowHybrid: false,
+            iconLink: 'assets/images/report-icon.svg'
         },
         canActivate: [SharedGuard]
     }

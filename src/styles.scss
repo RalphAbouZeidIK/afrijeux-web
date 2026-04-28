@@ -436,11 +436,12 @@ app-option-list {
 }
 
 .mat-mdc-form-field-infix {
-    width: auto !important
+    width: auto !important;
+    font-size: 14px;
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-    background-color: $darkBg !important
+    background-color: #2B2B2B !important
 }
 
 .mat-mdc-form-field-subscript-wrapper {
@@ -1267,6 +1268,25 @@ app-admin-page {
     white-space: nowrap;
     font-family: 'SF UI Display', sans-serif;
 }
+
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+
+    h2 {
+        font-size: 18px;
+        line-height: 35px;
+        padding-bottom: 0;
+    }
+
+    .back-arrow {
+        width: 10px;
+    }
+}
+
 
 @media all and (max-width:992px) {
     .balls-list-holder {
