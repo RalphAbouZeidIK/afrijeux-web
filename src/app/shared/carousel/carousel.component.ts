@@ -55,6 +55,10 @@ export class CarouselComponent implements OnInit, OnDestroy {
     }
   }
 
+  get trackTransform(): string {
+    return `translateX(-${this.currentIndex * 100}%)`;
+  }
+
   onPointerDown(event: PointerEvent): void {
     this.touchStartX = event.clientX;
   }

@@ -5,10 +5,9 @@
       (pointercancel)="onPointerCancel()"
       (pointerleave)="onPointerCancel()">
     <!-- Images -->
-    <div class="carousel-track">
+    <div class="carousel-track" [style.transform]="trackTransform">
       <div *ngFor="let image of images; let i = index" 
-        class="carousel-slide" 
-        [class.active]="i === currentIndex">
+        class="carousel-slide">
         <img [src]="image.url" [alt]="image.alt || 'Carousel image ' + (i + 1)" class="carousel-image">
       </div>
     </div>
