@@ -147,4 +147,16 @@ input[type='number'] {
         font-size: 12px
     }
 
+    .flex-on-mobile{
+        display: flex;
+        flex-direction: column;
+        margin-top: 25px;
+        .balls-list-holder{
+            order:2;
+        }
+        .total-confirm{
+            order:3;
+            margin-top: 40px;
+        }
+    }
 }

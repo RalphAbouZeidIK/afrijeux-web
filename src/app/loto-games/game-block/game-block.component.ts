@@ -80,7 +80,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
-  isDesktop: any = this.gnrcSrv.getIsDesktopView()
 
   @Input() allEvents: any = []
 
@@ -93,6 +92,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   countdownSeconds: number = 0
 
   numberOfBallChoice: any
+
+  openCartOnMobileFlag = false
+
+  totalPrice: any = 0
 
   private configCache = new Map<number, any>()
   private countdownSubscription: Subscription | null = null
@@ -250,12 +253,12 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     else {
       this.showEventDetails = false
     }
-    
-    
+
+
     //console.log(this.eventsList)
   }
 
-  async composeEventDetails(raceItem: any,keepSameType = false) {
+  async composeEventDetails(raceItem: any, keepSameType = false) {
     //console.log(raceItem)
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
     if (this.configCache.has(configId)) {
@@ -680,7 +683,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.cartSrv.updateLotoList(pickItem, index)
     this.selectedNumbers = [];
     if (refreshEventDetails) {
-      this.composeEventDetails(this.selectedEvent,true)
+      this.composeEventDetails(this.selectedEvent, true)
     }
   }
 
@@ -690,7 +693,20 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   clearSelections() {
     this.currentPickIndex = 0;
-    this.composeEventDetails(this.selectedEvent,true)
+    this.composeEventDetails(this.selectedEvent, true)
+  }
+
+  onTotalPriceChange(totalPrice: number) {
+    // Handle total price change if needed
+    this.totalPrice = totalPrice;
+  }
+
+  openMobileCart() {
+    this.openCartOnMobileFlag = true;
+    // Reset flag after a short delay so it can be triggered again on next click
+    setTimeout(() => {
+      this.openCartOnMobileFlag = false;
+    }, 100);
   }
 
   async issue100Tickets() {

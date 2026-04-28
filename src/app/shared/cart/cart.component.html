@@ -1,13 +1,13 @@
-<div class="overlay {{cssClass}}" (click)="hideMenus()" *ngIf="shouldShow"
+<div class="overlay {{cssClass}}" (click)="hideMenus()" *ngIf="isMainCart"
     [ngClass]="{'show-cart':showOnClickMobile && listOfBets.length > 0}"></div>
 
 
 
 <div class="cart-container {{cssClass}}"
-    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0 && shouldShow,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
-    <div class="cart-header" (click)="OnclickIsMobile()" *ngIf="shouldShow">
+    [ngClass]="{'show-cart':showOnClickMobile,'has-bets':listOfBets && listOfBets.length > 0 && isMainCart,'loto-cart':isPickXGame || isJackpotGame, 'sport-betting-cart':isSportsBetting}">
+    <div class="cart-header" (click)="OnclickIsMobile()" *ngIf="isMainCart">
         <span class="mobileOnly rect-bar"></span>
-        <a class="clear-btn back-button" *ngIf="showCartButtons && shouldShow">Back</a>
+        <a class="clear-btn back-button" *ngIf="showCartButtons && isMainCart">Back</a>
         <p class="cart-title">Ticket Details </p>
         <span class="yellow-circle mobileOnly" *ngIf="totalBets > 0">{{totalBets}}</span>
         <a class="clear-btn" *ngIf="showCartButtons" (click)="$event.stopPropagation(); clearBets()">Clear all</a>
@@ -58,11 +58,11 @@
 
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && (isPickXGame || isJackpotGame)">
         <div class="list-of-bets">
-            <h4 *ngIf="!shouldShow">Tickets List ({{listOfBets.length}})</h4>
+            <h4 *ngIf="!isMainCart">Tickets List ({{listOfBets.length}})</h4>
             <ng-container *ngFor="let betItem of listOfBets, let i = index">
                 <div class="bet-item">
 
-                    <ng-container *ngIf="!shouldShow">
+                    <ng-container *ngIf="!isMainCart">
                         <span class="arrow-holder" *ngIf="isPickXGame">
                             <span class="letter">{{betItem.ticketTypeName.charAt(0)}}</span>
                             <img src="/assets/images/mobile-balls-list-arrow.svg" alt="">
@@ -84,7 +84,7 @@
                     </ng-container>
 
 
-                    <ng-container *ngIf="shouldShow">
+                    <ng-container *ngIf="isMainCart">
                         <a class="close-icon" (click)="removeLotoItemFormSlip(betItem,i)">
                             <img src="assets/images/close-icon-grey.svg" />
                         </a>
@@ -110,15 +110,15 @@
         </div>
 
     </div>
-    <div class="price-submit">
+    <div class="price-submit" *ngIf="isMainCart">
         <div class="info-item">
             <span>Total Price:</span>
             <span>{{listOfBets.TicketPrice | number:'1.0-3'}} AED</span>
         </div>
-        <button class="btn btn-primary" (click)="openCartOnMobile()" *ngIf="!shouldShow" type="button">
+        <button class="btn btn-primary" (click)="openCartOnMobile()" *ngIf="!isMainCart" type="button">
             <span>Confirm & Print</span>
         </button>
-        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket && shouldShow"
+        <button class="btn btn-primary" type="submit" *ngIf="showCartButtons && canIssueTicket && isMainCart"
             [disabled]="stake == 0" (click)="issueTicket()"> Print Ticket</button>
     </div>
 

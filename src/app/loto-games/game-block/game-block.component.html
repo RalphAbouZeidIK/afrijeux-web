@@ -47,7 +47,7 @@
                         <div class="top-section">
                             <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
                                 [shouldHighlight]="false" [shouldEmit]="false"></app-ball-list>
-                            <div class="mobile-controls" *ngIf="!isDesktop">
+                            <div class="mobile-controls" *ngIf="isMobile">
                                 <a (click)="quickPick()" class="quickpick-mobile">
                                     QP
                                 </a>
@@ -81,34 +81,36 @@
 
 
                     <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
-                        (quickPickBetItem)="onQuickPickBetItem($event)"
+                        (quickPickBetItem)="onQuickPickBetItem($event)" (totalPriceChange)="onTotalPriceChange($event)"
                         cssClass="mobile-visible-cart"></app-shared-cart>
 
-                    <div class="balls-list-holder">
+                    <div class="flex-on-mobile">
+                        <div class="balls-list-holder">
 
-                        <!-- for PickX games we render one ball-list per configured ball -->
-                        <ng-container *ngIf="isPickXGame; else singleBall">
-                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectPickXBall($event)"
-                                (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx" [showDeleteButton]="true">
-                            </app-ball-list>
-                        </ng-container>
-                        <ng-template #singleBall>
-                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectBall($event)"
-                                (ballDeleted)="deleteLastLotoBall()" cssClass="drawBalls jackpot"
-                                [showDeleteButton]="true">
-                            </app-ball-list>
-                        </ng-template>
-                    </div>
+                            <!-- for PickX games we render one ball-list per configured ball -->
+                            <ng-container *ngIf="isPickXGame; else singleBall">
+                                <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectPickXBall($event)"
+                                    (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx"
+                                    [showDeleteButton]="true">
+                                </app-ball-list>
+                            </ng-container>
+                            <ng-template #singleBall>
+                                <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectBall($event)"
+                                    (ballDeleted)="deleteLastLotoBall()" cssClass="drawBalls jackpot"
+                                    [showDeleteButton]="true">
+                                </app-ball-list>
+                            </ng-template>
+                        </div>
 
-                    <div class="bottom-section d-flex">
-                        <div class="form-group stake-block">
-                            <div class="input-bg stake-block">
+                        <div class="bottom-section d-flex">
+                            <div class="form-group stake-block">
+                                <div class="input-bg stake-block">
 
-                                <span class="ticket-price">
-                                    Ticket Price:
-                                </span>
-                                <span>{{ Stake }} AED</span>
-                                <!-- <a (click)="updateMultiplier(false)" class="sign-button" *ngIf="isPickXGame">
+                                    <span class="ticket-price">
+                                        Ticket Price:
+                                    </span>
+                                    <span>{{ Stake }} AED</span>
+                                    <!-- <a (click)="updateMultiplier(false)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/minus.svg" alt="Minus">
                                 </a>
                                 <input #stakeInput type="number" class="form-control" [(ngModel)]="Stake"
@@ -118,12 +120,12 @@
                                 <a (click)="updateMultiplier(true)" class="sign-button" *ngIf="isPickXGame">
                                     <img src="assets/images/plus.svg" alt="Plus">
                                 </a> -->
+                                </div>
                             </div>
-                        </div>
-                        <div class="btns-holder d-flex">
-                            <a class="btn qp-button" (click)="quickPick()" *ngIf="isDesktop">Quick Pick</a>
-                            <a class="btn btn-primary confirm-button" (click)="addToBet()">Confirm Selections</a>
-                            <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
+                            <div class="btns-holder d-flex">
+                                <a class="btn qp-button" (click)="quickPick()" *ngIf="!isMobile">Quick Pick</a>
+                                <a class="btn btn-primary confirm-button" (click)="addToBet()">Confirm Selections</a>
+                                <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
                                 {{ isBulkIssueInProgress ? 'Issuing...' : 'Issue 100 Tickets' }}
                             </a> 
                             <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
@@ -131,9 +133,26 @@
                                 {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 100 Separate
                                 Tickets' }}
                             </a>-->
-                        </div>
+                            </div>
 
+                        </div>
+                        <div class="bottom-section d-flex total-confirm" *ngIf="totalPrice > 0 && isMobile">
+                            <div class="form-group stake-block">
+                                <div class="input-bg stake-block">
+
+                                    <span class="ticket-price">
+                                        Total Price:
+                                    </span>
+                                    <span>{{ totalPrice }} AED</span>
+                                </div>
+                            </div>
+                            <div class="btns-holder d-flex">
+                                <a class="btn btn-primary confirm-button" (click)="openMobileCart()">Confirm & Print</a>
+                            </div>
+
+                        </div>
                     </div>
+
 
 
 
@@ -146,6 +165,8 @@
         <app-game-banner [style.height.px]="cartHeight" *ngIf="!showCart" [prizePoolLabel]="'Pick 2 Prize Pool'"
             [prizePoolAmount]="'3.65M'"></app-game-banner>
         <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"
-            (quickPickBetItem)="onQuickPickBetItem($event)"></app-shared-cart>
+            [openMobileCartFlag]="openCartOnMobileFlag" (quickPickBetItem)="onQuickPickBetItem($event)"
+            (totalPriceChange)="onTotalPriceChange($event)">
+        </app-shared-cart>
     </aside>
 </div>

@@ -20,11 +20,14 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class CartComponent implements OnInit, OnDestroy, OnChanges {
   @Input() cssClass: any = ''
-  shouldShow: any = true
+  isMainCart: any = true
 
   @Input() listOfBets: any = []
   @Input() selectedEvent: any = null
   @Output() quickPickBetItem = new EventEmitter<{ betItem: any, index: any }>();
+  @Output() totalPriceChange = new EventEmitter<any>();
+
+  @Input() openMobileCartFlag: any = false
 
   cartSubscription: Subscription
 
@@ -110,6 +113,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
     else {
       this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
+
         this.cartInitialize(data)
       });
     }
@@ -126,7 +130,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   async ngOnInit() {
     if (this.cssClass == 'mobile-visible-cart') {
-      this.shouldShow = false
+      this.isMainCart = false
     }
     this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
     if (this.isAndroidApp) {
@@ -149,6 +153,9 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedEvent'] && !this.isSportsBetting) {
       this.loadLotoCartDataFromContext();
+    }
+    if (changes['openMobileCartFlag'] && changes['openMobileCartFlag'].currentValue === true) {
+      this.showOnClickMobile = true;
     }
   }
 
@@ -180,6 +187,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         this.listOfBets.TicketPrice += ticketItem.stake
       })
     }
+    this.totalPriceChange.emit(this.listOfBets.TicketPrice)
+
     //console.log(this.listOfBets)
   }
 
