@@ -143,11 +143,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isAndroidApp) {
       this.pageTitleService.init();
     }
-    //this.updateHeaderVisibility()
+    this.updateHeaderVisibility()
   }
 
   updateHeaderVisibility() {
-    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot") || window.location.href.includes("Machine/ValidateTicket")
+    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot")
 
   }
 
@@ -169,10 +169,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (this.usrSrv.sessionExpired()) {
           this.usrSrv.signOut()
-          this.router.navigate([''])
+          this.router.navigate((this.isAndroidApp) ? ['/Machine/Login'] : [''])
         }
         document.body.classList.remove("show-mobile-menu")
-        //this.updateHeaderVisibility()
+        this.updateHeaderVisibility()
       }
 
       if (event instanceof NavigationError) {

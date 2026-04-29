@@ -5,24 +5,25 @@
 
     <div class="games-list">
         <!-- Dynamic Games Loop -->
-        <div class="game-card" *ngFor="let game of games" [class.expanded]="expandedGame === game.id">
-            <div class="game-header" (click)="toggleGame(game.id)">
+        <div class="game-card" *ngFor="let game of games" [class.expanded]="expandedGame === game.PickTypeId">
+            <div class="game-header" (click)="toggleGame(game.PickTypeId)">
                 <div class="game-info">
-                    <img src="assets/images/game-icon.svg" [alt]="game.title" class="game-icon">
+                    <img src="assets/images/game-icon.svg" [alt]="game.PickTypeName" class="game-icon">
                     <div class="game-title-section">
-                        <span class="game-title">{{ game.title }}</span>
-                        <span class="game-badge" *ngIf="game.badge">{{ game.badge }}</span>
+                        <span class="game-title">{{ game.PickTypeName }}</span>
+                        <span class="game-badge" *ngIf="game.NumberOfBalls">Pick {{ game.NumberOfBalls }} Balls</span>
                     </div>
                 </div>
-                <div class="chevron" [class.rotated]="expandedGame === game.id">
+                <div class="chevron" [class.rotated]="expandedGame === game.PickTypeId">
                     <img src="assets/images/arrow-down-white.svg" alt="Arrow Icon">
                 </div>
             </div>
 
-            <div class="game-content" *ngIf="expandedGame === game.id">
+            <div class="game-content" *ngIf="expandedGame === game.PickTypeId">
                 <!-- Dynamic Play Types Loop -->
-                <div class="play-type" *ngFor="let playType of game.playTypes">
-                    <h3>{{ playType.name }}</h3>
+                <div class="play-type" *ngFor="let playType of game.TicketTypes
+">
+                    <h3>{{ playType.TicketTypeName }}</h3>
                     <!-- <p class="description">{{ playType.description }}</p> -->
                     <table class="prize-table">
                         <thead>
@@ -34,20 +35,20 @@
                         </thead>
                         <tbody>
                             <!-- Dynamic Prizes Loop -->
-                            <ng-container *ngFor="let prize of playType.prizes;let i =index ">
+                            <ng-container *ngFor="let prize of playType.Details;let i =index ">
                                 <tr>
-                                    <td>{{ prize.rank }}</td>
-                                    <td>{{ prize.matches }}</td>
+                                    <td>{{ i+1 }}</td>
+                                    <td>{{ prize.Hits}}</td>
                                     <td>
                                         <div class="icon-amount">
                                             <span class="dirham-symbol"><img
                                                     src="assets/images/UAE_Dirham_Symbol-white.svg" alt=""></span>
-                                            <span class="amount">{{ prize.amount | number }}</span>
+                                            <span class="amount">{{ prize.Odds || prize.PrizeValue | number }}</span>
                                         </div>
 
                                     </td>
                                 </tr>
-                                <tr class="border" *ngIf="i < playType.prizes.length - 1">
+                                <tr class="border" *ngIf="i < playType.Details.length - 1">
                                     <td colspan="3"></td>
                                 </tr>
                             </ng-container>

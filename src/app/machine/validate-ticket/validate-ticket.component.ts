@@ -104,7 +104,6 @@ export class ValidateTicketComponent {
         this.formTitle = this.machineSrv.extractMessage(validateTicketReponse.message)
         this.formDescription = `This ticket has not been validated yet.`
         this.showError = true
-        return
       }
       else {
         this.showWinningDetails = true
@@ -124,7 +123,7 @@ export class ValidateTicketComponent {
       let code = this.machineSrv.extractCode(validateTicketReponse.message)
       
       if (code == 'MX0000026') {
-        this.formDescription = `This is not a winning ticket. Try again and good luck!`
+        this.formDescription = `You're one step close to your win `
       }
       if (code == 'MX0000024') {
         this.formDescription = `This ticket has already been paid.`

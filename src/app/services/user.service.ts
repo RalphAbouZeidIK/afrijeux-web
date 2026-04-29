@@ -210,6 +210,14 @@ export class UserService {
     return (userData != '' && userData !== undefined) ? userData.userInfo : '';
   }
 
+  isTestingUser() {
+    const userData = this.localStorageSrv.getItem('user_data', true);
+    if(!userData || !userData.userInfo || !userData.userInfo.Email){
+      return false
+    }
+    return userData?.userInfo.Email == 'cn@hotmail.com' || false;
+  }
+
 
   /**
    * Get user id from token
@@ -225,7 +233,10 @@ export class UserService {
   /**
    * Remove user data and sign out 
    */
-  signOut() {
+  async signOut() {
+    if (this.isAndroidApp) {
+      await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
+    }
     this.localStorageSrv.setItem('isLoggedIn', 'false')
     this.localStorageSrv.removeItem('user_data');
     this.localStorageSrv.removeItem('expiryDate');

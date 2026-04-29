@@ -7,6 +7,7 @@ import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { CartComponent } from 'src/app/shared/cart/cart.component';
 import { Location } from '@angular/common';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-game-block',
   standalone: false,
@@ -14,6 +15,7 @@ import { Location } from '@angular/common';
   styleUrl: './game-block.component.scss'
 })
 export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
+  isTestingUser = false
 
   selectedGameEventId: number | null = null
 
@@ -101,6 +103,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
+    private usrSrv: UserService
   ) {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
@@ -118,6 +121,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnInit(): void {
+    if (!this.isAndroidApp) {
+      this.isTestingUser = this.usrSrv.isTestingUser()
+    }
     this.gnrcSrv.toggleLoader(true);
     this.generateDisplayBalls();
     this.isPickXGame = window.location.href.includes("PickX")
@@ -206,7 +212,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       if (this.eventsList.length > 0) {
         let selectedEvent = this.eventsList[0];
         //console.log(selectedEvent)
-        
+
         // Handle gameEventId parameter for both PickX and Jackpot games
         const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
         const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
@@ -228,8 +234,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
             selectedEvent = matchedEvent;
           }
         }
-
+        console.log(selectedEvent)
         this.composeEventDetails(selectedEvent)
+
       }
       else {
         if (this.isAndroidApp) {
@@ -253,6 +260,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       this.fixedConfig = this.configCache.get(configId);
     } else {
       this.fixedConfig = await this.gamesSrv.getFixedConfig(configId)
+      console.log(this.fixedConfig)
       this.configCache.set(configId, this.fixedConfig);
     }
     let numberOfSelectedBalls = (this.isPickXGame) ? this.fixedConfig[0].NumberOfBalls : 6
@@ -263,7 +271,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     raceItem.fixedConfig = this.fixedConfig
     this.selectedEvent = raceItem
-    
+
     // Set gameEventId for both PickX and Jackpot games
     this.selectedGameEventId = Number(raceItem?.GameEventId);
 
@@ -697,7 +705,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         return;
       }
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 7000; i++) {
         this.quickPick();
 
         if (this.isPickXGame && this.selectedType) {
@@ -723,7 +731,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
-  private async waitForSharedCart(maxRetries = 30, delayMs = 50): Promise<boolean> {
+  private async waitForSharedCart(maxRetries = 30, delayMs = 100): Promise<boolean> {
     for (let retry = 0; retry < maxRetries; retry++) {
       if (this.sharedCart) {
         return true;

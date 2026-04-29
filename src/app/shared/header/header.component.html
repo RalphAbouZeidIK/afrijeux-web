@@ -6,7 +6,7 @@
 
 
   <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="[(isAndroidApp)?'/Machine/Login':'/']" />
-  <a *ngIf="isAndroidApp">
+  <a *ngIf="isAndroidApp && isLoggedIn">
     <img src="assets/images/menu-dots.svg" alt="Show Admin Menu" class="admin-menu-toggle" *ngIf="!showAdminMenu"
       (click)="showAdminMenu= true" />
 

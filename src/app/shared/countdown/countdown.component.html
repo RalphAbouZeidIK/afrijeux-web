@@ -1,9 +1,9 @@
 <div class="countdown-display" [ngClass]="{'small-timer':smallTimer}">
     <span class="countdown-label" *ngIf="!smallTimer">Time to Draw:</span>
     <div class="countdown-parts">
-        <span class="countdown-part" *ngIf="countdownDays > 0">{{ padNumber(countdownDays) }}<ng-container *ngIf="smallTimer">d</ng-container> </span>
-        <span class="countdown-part" *ngIf="countdownHours > 0">{{ padNumber(countdownHours) }}<ng-container *ngIf="smallTimer">h</ng-container> </span>
-        <span class="countdown-part">{{ padNumber(countdownMinutes) }}<ng-container *ngIf="smallTimer">m</ng-container> </span>
-        <span class="countdown-part">{{ padNumber(countdownSeconds) }}<ng-container *ngIf="smallTimer">s</ng-container> </span>
+        <span class="countdown-part" *ngIf="countdownDays > 0">{{ padNumber(countdownDays) }}<ng-container *ngIf="smallTimer">:</ng-container> </span>
+        <span class="countdown-part" *ngIf="countdownHours > 0">{{ padNumber(countdownHours) }}<ng-container *ngIf="smallTimer">:</ng-container> </span>
+        <span class="countdown-part">{{ padNumber(countdownMinutes) }}<ng-container *ngIf="smallTimer">:</ng-container> </span>
+        <span class="countdown-part">{{ padNumber(countdownSeconds) }}</span>
     </div>
 </div>

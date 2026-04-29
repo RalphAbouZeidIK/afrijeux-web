@@ -156,6 +156,5 @@ export class AdminPageComponent {
 
   async logout() {
     this.usrSrv.signOut()
-    await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
   }
 }

@@ -24,7 +24,7 @@
       <router-outlet></router-outlet>
     </div>
 
-    <mobile-app-nav [isLoggedIn]="isLoggedIn"></mobile-app-nav>
+    <mobile-app-nav [isLoggedIn]="isLoggedIn" *ngIf="isLoggedIn"></mobile-app-nav>
   </ng-container>
 
   <app-loader *ngIf="isLoading"></app-loader>

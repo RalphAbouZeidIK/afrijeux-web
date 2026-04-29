@@ -49,7 +49,7 @@ export class GamesLinksComponent implements OnInit {
       ? [...allEvents.jackpotGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
     console.log('Jackpot Events:', this.jackpotEvents);
-    if(!this.isAndroidApp){
+    if (!this.isAndroidApp) {
       this.pickXEvents = this.pickXEvents.filter((e: any) => !e?.IsSalesStopped);
       this.jackpotEvents = this.jackpotEvents.filter((e: any) => !e?.IsSalesStopped);
     }
@@ -67,7 +67,7 @@ export class GamesLinksComponent implements OnInit {
         badgeText: `Pick ${game.ConfigurationVersionId} Balls`,
         prize: game.Prize || 0,
         GameEventDate: game.GameEventDate,
-        imageUrl: game.ImageUrl || 'assets/images/game-icon.svg',
+        imageUrl: `assets/images/pick${game.ConfigurationVersionId}.svg`,
         route: this.isAndroidApp ? '/Machine/PickX' : '/PickX',
         GameEventId: game.GameEventId,
         playPrice: game.PlayPrice || 5,
@@ -85,7 +85,7 @@ export class GamesLinksComponent implements OnInit {
         badgeText: `Pick 6 Balls`,
         prize: game.Prize || 0,
         GameEventDate: game.GameEventDate,
-        imageUrl: game.ImageUrl || 'assets/images/game-icon.svg',
+        imageUrl: `assets/images/jackpot.svg`,
         route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
         GameEventId: game.GameEventId,
         playPrice: game.PlayPrice || 5,

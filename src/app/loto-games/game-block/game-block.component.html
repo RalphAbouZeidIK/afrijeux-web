@@ -121,12 +121,12 @@
                                 <a class="btn btn-primary confirm-button" (click)="addToBet()">Confirm Selections</a>
                                 <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
                                 {{ isBulkIssueInProgress ? 'Issuing...' : 'Issue 100 Tickets' }}
-                            </a> 
-                            <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
+                            </a> -->
+                            <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress" *ngIf="isTestingUser"
                                 (click)="issue100TicketsSeparately()">
-                                {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 100 Separate
+                                {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 7000 Separate
                                 Tickets' }}
-                            </a>-->
+                            </a>
                             </div>
 
                         </div>
