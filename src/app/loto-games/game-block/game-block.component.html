@@ -69,11 +69,11 @@
 
 
                         </div> -->
-                        <div class="options-container single-checkbox" *ngIf="isPickXGame">
+                        <div class="options-container multi-checkbox" *ngIf="isPickXGame">
                             <label *ngFor="let option of selectedEvent.fixedConfig" class="option-item"
-                                [ngClass]="{ 'selected': selectedResultFilter === option.TicketTypeId }">
-                                <input type="radio" name="optionsGroup" [value]="selectedResultFilter"
-                                    [checked]="selectedResultFilter === option.TicketTypeId"
+                                [ngClass]="{ 'selected': selectedResultFilters.includes(option.TicketTypeId) }">
+                                <input type="checkbox" [value]="option.TicketTypeId"
+                                    [checked]="selectedResultFilters.includes(option.TicketTypeId)"
                                     (change)="onFilterChange(option)" />
                                 {{ option.TicketTypeName }}
                             </label>

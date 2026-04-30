@@ -64,7 +64,7 @@
 
                     <ng-container *ngIf="!isMainCart">
                         <span class="arrow-holder" *ngIf="isPickXGame">
-                            <span class="letter">{{betItem.ticketTypeName.charAt(0)}}</span>
+                            <span class="letter">{{ getTicketTypeInitials(betItem.ticketTypeName) }}</span>
                             <img src="/assets/images/mobile-balls-list-arrow.svg" alt="">
                         </span>
                         <div class="balls-list">

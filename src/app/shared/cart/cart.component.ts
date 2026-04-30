@@ -331,6 +331,17 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
+  getTicketTypeInitials(ticketTypeName: string): string {
+    if (!ticketTypeName || typeof ticketTypeName !== 'string') {
+      return '';
+    }
+    return ticketTypeName
+      .split(' ')
+      .filter(word => word.trim().length > 0)
+      .map(word => word.trim().charAt(0).toUpperCase())
+      .join('');
+  }
+
   ngOnDestroy(): void {
     if (this.isAndroidApp) {
       this.cartSrv.clearAllLotoBets()

@@ -27,6 +27,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   selectedType: any = null
 
+  selectedTypes: any[] = []
+
   maxBalls = 9;              // absolute maximum allowed
   initialBallCount = 6;      // comes from configVersionId
 
@@ -72,7 +74,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   cartSubscription: Subscription
 
-  selectedResultFilter: string | number | null = 1;
+  selectedResultFilters: number[] = [];
 
   showOptionsList = false
 
@@ -288,8 +290,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     // if we have bet types available and none chosen yet, pick the first one
     if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length > 0) {
-      this.selectedType = (!keepSameType) ? this.fixedConfig[0] : this.selectedType;
-      this.onFilterChange(this.selectedType);
+      if (!keepSameType || this.selectedTypes.length === 0) {
+        this.selectedTypes = [this.fixedConfig[0]];
+        this.selectedResultFilters = [this.fixedConfig[0].TicketTypeId];
+        this.Stake = this.fixedConfig[0].MinStake;
+        this.clampStakeToTypeLimits();
+      }
+      this.selectedType = this.selectedTypes[0]; // for backward compatibility
     }
 
     this.selectedBalls = this.generateDrawBalls(numberOfSelectedBalls)
@@ -338,11 +345,19 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   onFilterChange(option: any) {
     //console.log(option)
-    this.selectedType = option
-    this.Stake = option.MinStake
-    this.clampStakeToTypeLimits()
-    this.selectedResultFilter = option.TicketTypeId;
-    //console.log('filter', option.TicketTypeId);
+    const index = this.selectedTypes.findIndex(t => t.TicketTypeId === option.TicketTypeId);
+    if (index > -1) {
+      this.selectedTypes.splice(index, 1);
+    } else {
+      this.selectedTypes.push(option);
+      if (this.selectedTypes.length === 1) {
+        this.Stake = option.MinStake;
+        this.clampStakeToTypeLimits();
+      }
+    }
+    this.selectedResultFilters = this.selectedTypes.map(t => t.TicketTypeId);
+    this.selectedType = this.selectedTypes.length > 0 ? this.selectedTypes[0] : null; // for backward compatibility
+    //console.log('filters', this.selectedResultFilters);
   }
 
   onTypeChanged(event: any) {
@@ -451,7 +466,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   getSelectedBallsText(): string {
     if (!this.selectedBalls.length) return '';
-    return 'Selected Balls: ' + this.selectedBalls.map((b: any) => b.number).join(', ');
+    return 'Selected numbers: ' + this.selectedBalls.map((b: any) => b.number).join(', ');
   }
 
   chooseNumber(ball: any) {
@@ -583,7 +598,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   addToBet(refreshEventDetails = true, index: number | null = null) {
-    if(this.cartData && this.cartData.length == 10) {
+    if (this.cartData && this.cartData.length >= 10) {
       this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
       return
     }
@@ -592,32 +607,39 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     const gameName = this.getGameNameForBet();
 
     if (this.isPickXGame) {
-      //console.log(this.selectedType)
-      if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedType == null) {
-        this.gnrcSrv.setModalData(true, false, 'Please select all balls and a type.');
+      //console.log(this.selectedTypes)
+      if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedTypes.length === 0) {
+        this.gnrcSrv.setModalData(true, false, 'Please select all numbers and at least one type.');
         return
       }
 
-      pickItem = {
-        pickTypeId: this.selectedType.PickTypeId,
-        pickTypeName: this.selectedType.PickTypeName,
-        ticketTypeId: this.selectedType.TicketTypeId,
-        ticketTypeName: this.selectedType.TicketTypeName,
-        IsQuickPick: this.isQuickPick,
-        gameEventId: this.selectedEvent.GameEventId,
-        eventName: this.selectedEvent.EventName,
-        displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
-        Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
-        gameName: gameName,
-        stake: this.Stake,
-        id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
-        chosenBallsList: this.selectedBalls
+      for (let type of this.selectedTypes) {
+        if (this.cartData.length >= 10) {
+          this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
+          break;
+        }
+        let pickItem = {
+          pickTypeId: type.PickTypeId,
+          pickTypeName: type.PickTypeName,
+          ticketTypeId: type.TicketTypeId,
+          ticketTypeName: type.TicketTypeName,
+          IsQuickPick: this.isQuickPick,
+          gameEventId: this.selectedEvent.GameEventId,
+          eventName: this.selectedEvent.EventName,
+          displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
+          Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
+          gameName: gameName,
+          stake: type.MinStake,
+          id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
+          chosenBallsList: this.selectedBalls
+        }
+        this.cartSrv.updateLotoList(pickItem, index)
       }
     }
 
     else {
       if (this.selectedNumbers.length < 6 || this.selectedNumbers.length > 9) {
-        this.gnrcSrv.setModalData(true, false, 'Please select between 6 and 9 balls.');
+        this.gnrcSrv.setModalData(true, false, 'Please select between 6 and 9 numbers.');
         return
       }
       this.updateLotoPrice()
@@ -626,16 +648,16 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         gameEventId: this.selectedEvent.GameEventId,
         eventName: this.selectedEvent.EventName,
         displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
-        SelectedNumber: this.selectedBalls.map((b: any) => b.number),
+        SelectedNumber: this.selectedNumbers,
         gameName: gameName,
         stake: this.Stake,
         id: Math.random().toString(36).substring(2, 9),
         chosenBallsList: this.selectedBalls // generate a random id for the pick
       }
+      this.cartSrv.updateLotoList(pickItem, index)
     }
     //console.log(pickItem)
     this.Stake = 0
-    this.cartSrv.updateLotoList(pickItem, index)
     this.selectedNumbers = [];
     if (refreshEventDetails) {
       this.composeEventDetails(this.selectedEvent, true)

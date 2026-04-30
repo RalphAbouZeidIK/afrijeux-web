@@ -614,6 +614,7 @@ h4 {
     column-gap: 8px;
     display: flex;
     flex-wrap: wrap;
+    max-width: 250px;
 }
 
 .arrow-holder {
@@ -626,6 +627,8 @@ h4 {
         color: #000 !important;
         position: absolute;
         top: 1px;
-        right: 7px;
+        right: calc(50% - 5px);
+        width: 10px;
+        text-align: center;
     }
 }
