@@ -660,10 +660,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         id: Math.random().toString(36).substring(2, 9),
         chosenBallsList: this.selectedBalls // generate a random id for the pick
       }
+          this.Stake = 0
       this.cartSrv.updateLotoList(pickItem, index)
     }
     //console.log(pickItem)
-    this.Stake = 0
+
     this.selectedNumbers = [];
     if (refreshEventDetails) {
       this.composeEventDetails(this.selectedEvent, true)
@@ -800,10 +801,21 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       return;
     }
 
+    const newNumber = ball.number;
+    const currentNumbers = Array.isArray(this.editingCartItem.SelectedNumber) ? [...this.editingCartItem.SelectedNumber] : [];
+    const originalNumber = this.editingBall?.number;
+    const isDuplicate = currentNumbers.includes(newNumber) && newNumber !== originalNumber;
+    if (isDuplicate) {
+      this.gnrcSrv.setModalData(true, false, 'That number is already on this ticket. Choose another number.');
+      return;
+    }
+
     this.selectedEditBall = ball;
 
-    const newNumber = ball.number;
     this.editingCartItem.chosenBallsList[this.editingBallIndex].number = newNumber;
+    if (Array.isArray(this.editingCartItem.SelectedNumber) && this.editingCartItem.SelectedNumber.length > this.editingBallIndex) {
+      this.editingCartItem.SelectedNumber[this.editingBallIndex] = newNumber;
+    }
     this.editingCartItem.displayBalls = this.editingCartItem.chosenBallsList.map((b: any) => b.number).join(', ');
     this.editingCartItem.Balls = this.editingCartItem.chosenBallsList.map((b: any) => b.number).join('+');
     this.cartSrv.updateLotoList(this.editingCartItem, this.editingCartItem.id);
@@ -817,5 +829,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.editingBall = null;
     this.selectedEditBall = null;
     this.isEditingCartBall = false;
+  }
+
+  getEditingDisabledBallNumbers(): any[] {
+    if (!this.isEditingCartBall || !this.editingCartItem || !Array.isArray(this.editingCartItem.SelectedNumber)) {
+      return [];
+    }
+    const originalNumber = this.editingBall?.number;
+    return this.editingCartItem.SelectedNumber.filter((num: any) => num !== originalNumber);
   }
 }

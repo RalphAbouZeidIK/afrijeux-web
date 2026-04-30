@@ -26,7 +26,7 @@
                             {{selectedEvent.EventName}} <span class="event-date"> / {{selectedEvent.EventDate ||
                                 selectedEvent.GameEventDate}}
                             </span>
-                            <span *ngIf="isMobile"> | Ticket Price: {{ Stake }} AED</span>
+                            <span *ngIf="isMobile" class="ticket-price"> Ticket Price: {{ Stake }} AED</span>
                         </h5>
                         <span class="game-note">
                             <ng-container *ngIf="isPickXGame">
@@ -46,7 +46,7 @@
 
 
                     <div class="selected-balls-type input-bg">
-                        <div class="top-section">
+                        <div class="top-section" *ngIf="!isEditingCartBall">
                             <app-ball-list [cssClass]="'selectedBalls'" [chosenBallsArray]="selectedBalls"
                                 [shouldHighlight]="false" [shouldEmit]="false"></app-ball-list>
                             <div class="mobile-controls" *ngIf="isMobile">
@@ -59,8 +59,8 @@
                             </div>
                         </div>
                         <div class="edit-instruction" *ngIf="isEditingCartBall">
-                            <span>Editing ball {{ editingBall?.number }} from cart. Pick a replacement number from the main grid below.</span>
-                            <button type="button" class="btn btn-secondary" (click)="cancelBallEdit()">Cancel</button>
+                            <span>Editing number {{ editingBall?.number }} from cart. Pick a replacement number from the main grid below.</span>
+                            <button type="button" (click)="cancelBallEdit()">Cancel</button>
                         </div>
 
 
@@ -93,6 +93,7 @@
                             <app-ball-list [chosenBallsArray]="listOfBalls"
                                 [selectedBall]="selectedEditBall"
                                 [shouldHighlight]="true"
+                                [disabledBallNumbers]="isEditingCartBall ? getEditingDisabledBallNumbers() : []"
                                 (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectPickXBall($event)"
                                 (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx" [showDeleteButton]="true">
                             </app-ball-list>
@@ -101,6 +102,7 @@
                             <app-ball-list [chosenBallsArray]="listOfBalls"
                                 [selectedBall]="selectedEditBall"
                                 [shouldHighlight]="true"
+                                [disabledBallNumbers]="isEditingCartBall ? getEditingDisabledBallNumbers() : []"
                                 (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectBall($event)"
                                 (ballDeleted)="deleteLastLotoBall()" cssClass="drawBalls jackpot"
                                 [showDeleteButton]="true">

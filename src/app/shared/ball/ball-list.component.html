@@ -3,7 +3,9 @@
         <div class="box" [ngClass]="(shouldEmit ? ' clickable' : '') +
                      ((chosenball.isSelected && shouldHighlight) ||
                       (selectedBall && chosenball.id === selectedBall.id) ?
-                       ' highlight' : '')" (click)="shouldEmit && ballClicked.emit(chosenball)">
+                       ' highlight' : '') +
+                     (isBallDisabled(chosenball) ? ' disabled' : '')"
+             (click)="shouldEmit && !isBallDisabled(chosenball) && ballClicked.emit(chosenball)">
             <p class="ballnbr">{{chosenball.number}}</p>
         </div>
 

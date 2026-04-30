@@ -19,6 +19,8 @@ export class BallListComponent implements OnInit {
 
   @Input() showDeleteButton = false;
 
+  @Input() disabledBallNumbers: any[] = [];
+
   @Output() ballDeleted = new EventEmitter<void>();
 
   deleteLastBall() {
@@ -40,6 +42,13 @@ export class BallListComponent implements OnInit {
     const classes = ['yellowBox', 'purpleBox', 'orangeBox', 'greenBox', 'blueBox', 'redBox', 'darkBlueBox', 'marronBox', 'purpleBox'];
 
     return classes[group] || '';
+  }
+
+  isBallDisabled(ball: any): boolean {
+    if (!this.disabledBallNumbers || this.disabledBallNumbers.length === 0) {
+      return false;
+    }
+    return this.disabledBallNumbers.includes(ball.number);
   }
 
   ngOnInit() {

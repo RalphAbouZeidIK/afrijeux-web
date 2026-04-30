@@ -318,7 +318,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     else {
       apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
     }
-
+    
+    console.log(this.listOfBets)
     if (this.isAndroidApp && apiResponse.DataToPrint) {
       this.clearBets()
       this.gnrcSrv.setModalData(true, true, apiResponse.message)
