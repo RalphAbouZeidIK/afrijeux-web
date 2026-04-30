@@ -94,6 +94,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   totalPrice: any = 0
 
+  cartData: any = []
+
   private configCache = new Map<number, any>()
 
   constructor(
@@ -107,6 +109,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   ) {
 
     this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
+      this.cartData = data;
+
       if (data && data.length > 0) {
         this.showCart = true
       }
@@ -579,6 +583,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   addToBet(refreshEventDetails = true, index: number | null = null) {
+    if(this.cartData && this.cartData.length == 10) {
+      this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
+      return
+    }
     this.currentPickIndex = 0; // reset for next time
     let pickItem: any
     const gameName = this.getGameNameForBet();
@@ -705,7 +713,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         return;
       }
 
-      for (let i = 0; i < 7000; i++) {
+      for (let i = 0; i < 1000; i++) {
         this.quickPick();
 
         if (this.isPickXGame && this.selectedType) {

@@ -248,12 +248,6 @@
         display: block;
     }
 
-    ::ng-deep .android-app {
-        .confirm-button {
-            bottom: 70px
-        }
-    }
-
     .mobile-cart-toggle {
         position: static;
         height: 39px;
@@ -567,7 +561,8 @@ h4 {
     max-height: unset;
     width: 100%;
     pointer-events: auto;
-    margin-top: 25px;
+    margin-top: 15px;
+    margin-bottom: 5px;
 
     .bet-item {
         padding: 0;

@@ -1437,10 +1437,9 @@ app-admin-page {
     .loto-game-container {
         padding: 15px;
 
-        .bottom-section>* {
-            width: 50% !important
+        .btns-holder{
+                width: 100%;
         }
-
         .inner-container {
             width: 100%;
         }
@@ -1452,14 +1451,6 @@ app-admin-page {
 
     .page-holder>aside.cart {
         height: auto !important
-    }
-
-    .android-app {
-
-        .confirm-button,
-        .mobile-cart-toggle {
-            bottom: 92px !important
-        }
     }
 
     .bp-benefits {
