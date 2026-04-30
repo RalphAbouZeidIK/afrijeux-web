@@ -24,10 +24,14 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() listOfBets: any = []
   @Input() selectedEvent: any = null
-  @Output() quickPickBetItem = new EventEmitter<{ betItem: any, index: any }>();
-  @Output() totalPriceChange = new EventEmitter<any>();
+  @Output() editBallInCart = new EventEmitter<{ betItem: any, ballIndex: number, ball: any }>();
+
+  @Input() editingCartItemId: any = null
+  @Input() editingBallIndex: number | null = null
 
   @Input() openMobileCartFlag: any = false
+  @Output() totalPriceChange = new EventEmitter<number>();
+  @Output() quickPickBetItem = new EventEmitter<any>();
 
   cartSubscription: Subscription
 
@@ -254,6 +258,10 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSrv.removeLotoBetItem(betItem, index, this.selectedEvent)
   }
 
+  isEditingBall(betItem: any, index: number): boolean {
+    return this.editingCartItemId != null && this.editingBallIndex === index && betItem?.id === this.editingCartItemId;
+  }
+
   quickPickForBetItem(betItem: any, index: any) {
     this.quickPickBetItem.emit({ betItem, index })
   }
@@ -340,6 +348,11 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
       .filter(word => word.trim().length > 0)
       .map(word => word.trim().charAt(0).toUpperCase())
       .join('');
+  }
+
+  onBallClick(betItem: any, ballIndex: number, ball: any) {
+    console.log('Ball clicked:', { betItem, ballIndex, ball });
+    this.editBallInCart.emit({ betItem, ballIndex, ball });
   }
 
   ngOnDestroy(): void {

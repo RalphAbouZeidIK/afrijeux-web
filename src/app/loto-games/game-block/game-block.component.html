@@ -40,8 +40,9 @@
                     </div>
 
                     <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
+                        [editingCartItemId]="editingCartItem?.id" [editingBallIndex]="editingBallIndex"
                         (quickPickBetItem)="onQuickPickBetItem($event)" (totalPriceChange)="onTotalPriceChange($event)"
-                        cssClass="mobile-visible-cart"></app-shared-cart>
+                        (editBallInCart)="onEditBallInCart($event)" cssClass="mobile-visible-cart"></app-shared-cart>
 
 
                     <div class="selected-balls-type input-bg">
@@ -56,6 +57,10 @@
                                     <img src="assets/images/delete-icon.svg" alt="Clear Selections">
                                 </a>
                             </div>
+                        </div>
+                        <div class="edit-instruction" *ngIf="isEditingCartBall">
+                            <span>Editing ball {{ editingBall?.number }} from cart. Pick a replacement number from the main grid below.</span>
+                            <button type="button" class="btn btn-secondary" (click)="cancelBallEdit()">Cancel</button>
                         </div>
 
 
@@ -85,12 +90,18 @@
 
                         <!-- for PickX games we render one ball-list per configured ball -->
                         <ng-container *ngIf="isPickXGame; else singleBall">
-                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectPickXBall($event)"
+                            <app-ball-list [chosenBallsArray]="listOfBalls"
+                                [selectedBall]="selectedEditBall"
+                                [shouldHighlight]="true"
+                                (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectPickXBall($event)"
                                 (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx" [showDeleteButton]="true">
                             </app-ball-list>
                         </ng-container>
                         <ng-template #singleBall>
-                            <app-ball-list [chosenBallsArray]="listOfBalls" (ballClicked)="selectBall($event)"
+                            <app-ball-list [chosenBallsArray]="listOfBalls"
+                                [selectedBall]="selectedEditBall"
+                                [shouldHighlight]="true"
+                                (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectBall($event)"
                                 (ballDeleted)="deleteLastLotoBall()" cssClass="drawBalls jackpot"
                                 [showDeleteButton]="true">
                             </app-ball-list>
@@ -163,8 +174,9 @@
         <app-game-banner [style.height.px]="cartHeight" *ngIf="!showCart" [prizePoolLabel]="'Pick 2 Prize Pool'"
             [prizePoolAmount]="'3.65M'"></app-game-banner>
         <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"
-            [openMobileCartFlag]="openCartOnMobileFlag" (quickPickBetItem)="onQuickPickBetItem($event)"
-            (totalPriceChange)="onTotalPriceChange($event)">
+            [openMobileCartFlag]="openCartOnMobileFlag" [editingCartItemId]="editingCartItem?.id"
+            [editingBallIndex]="editingBallIndex" (quickPickBetItem)="onQuickPickBetItem($event)"
+            (editBallInCart)="onEditBallInCart($event)">
         </app-shared-cart>
     </aside>
 </div>

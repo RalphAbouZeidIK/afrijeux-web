@@ -98,6 +98,12 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   cartData: any = []
 
+  editingCartItem: any = null
+  editingBallIndex: number | null = null
+  editingBall: any = null
+  selectedEditBall: any = null
+  isEditingCartBall = false
+
   private configCache = new Map<number, any>()
 
   constructor(
@@ -673,7 +679,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.composeEventDetails(this.selectedEvent, true)
   }
 
-  onTotalPriceChange(totalPrice: number) {
+  onTotalPriceChange(totalPrice: any) {
     // Handle total price change if needed
     this.totalPrice = totalPrice;
   }
@@ -778,5 +784,38 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     // Update the cart service with the modified bet item
     //this.cartSrv.updateLotoList(betItem);
+  }
+
+  onEditBallInCart(event: any) {
+    const { betItem, ballIndex, ball } = event;
+    this.editingCartItem = betItem;
+    this.editingBallIndex = ballIndex;
+    this.editingBall = ball;
+    this.selectedEditBall = null;
+    this.isEditingCartBall = true;
+  }
+
+  onEditSelectedBall(ball: any) {
+    if (!this.isEditingCartBall || this.editingCartItem == null || this.editingBallIndex === null) {
+      return;
+    }
+
+    this.selectedEditBall = ball;
+
+    const newNumber = ball.number;
+    this.editingCartItem.chosenBallsList[this.editingBallIndex].number = newNumber;
+    this.editingCartItem.displayBalls = this.editingCartItem.chosenBallsList.map((b: any) => b.number).join(', ');
+    this.editingCartItem.Balls = this.editingCartItem.chosenBallsList.map((b: any) => b.number).join('+');
+    this.cartSrv.updateLotoList(this.editingCartItem, this.editingCartItem.id);
+
+    this.cancelBallEdit();
+  }
+
+  cancelBallEdit() {
+    this.editingCartItem = null;
+    this.editingBallIndex = null;
+    this.editingBall = null;
+    this.selectedEditBall = null;
+    this.isEditingCartBall = false;
   }
 }

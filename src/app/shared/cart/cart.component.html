@@ -68,8 +68,10 @@
                             <img src="/assets/images/mobile-balls-list-arrow.svg" alt="">
                         </span>
                         <div class="balls-list">
-                            <span *ngFor="let ball of betItem.chosenBallsList"
-                                class="visible-mobile-ball">{{ball.number}}
+                            <span *ngFor="let ball of betItem.chosenBallsList; let ballIndex = index"
+                                class="visible-mobile-ball"
+                                [ngClass]="{ 'editing-ball': isEditingBall(betItem, ballIndex) }"
+                                (click)="onBallClick(betItem, ballIndex, ball)">{{ball.number}}
                             </span>
                         </div>
                         <div class="mobile-controls" *ngIf="!isDesktop">
