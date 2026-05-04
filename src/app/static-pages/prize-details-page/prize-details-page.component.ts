@@ -24,10 +24,14 @@ export class PrizeDetailsPageComponent implements OnInit {
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetPrizeDetails', 'GET', {});
 
     this.games = apiResponse.PickX
+    this.games.forEach((game: any) => {
+      game.iconName = `pick${game.NumberOfBalls}.svg`
+    });
+    
     let jackpotGame = apiResponse.Jackpot
     let counter = 6
     console.log(jackpotGame)
-    jackpotGame.forEach((element:any) => {
+    jackpotGame.forEach((element: any) => {
       element.Hits = counter
       counter--
     });
@@ -35,6 +39,7 @@ export class PrizeDetailsPageComponent implements OnInit {
       PickTypeId: jackpotGame.PickTypeId,
       PickTypeName: 'Jackpot',
       NumberOfBalls: 6,
+      iconName: 'jackpot.svg',
       TicketTypes: [
         {
           "TicketTypeId": 1,

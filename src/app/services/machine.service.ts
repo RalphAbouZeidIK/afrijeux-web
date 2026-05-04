@@ -422,7 +422,7 @@ export class MachineService {
 
     let userId: any = (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId()
     //console.log(userId)
-
+    console.log(machineData)
     gameId = await this.getGameId()
 
     ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userId.toString() + this.gnrcSrv.getFormattedToday() + gameId
@@ -455,7 +455,8 @@ export class MachineService {
       Printed: isPrintedFlag,
       GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null
     }
-    //console.log(ticketBody)
+    console.log(ticketBody)
+
 
     let params = {
       GameId: gameId,
@@ -464,7 +465,7 @@ export class MachineService {
       LoyalityReferenceId: 0,
       IsOffline: this.isOnline ? 0 : 1
     }
-    //console.log(params)
+    console.log(params)
 
     if (this.isAndroidApp) {
       if (!this.isOnline) {
@@ -1109,9 +1110,17 @@ export class MachineService {
    * @returns 
    */
   async getDateOfOperation(gameName: any) {
-    let dateOfOp = await this.apiSrv.makeApi('OnlineMaster', `Corporate/GetOperationDate/13`, "GET", {})
+    let dateOfOp: any
+    if (this.isAndroidApp) {
+      dateOfOp = await this.apiSrv.makeApi('master', `MasterBackend/GetOperationDate/2`, "GET", {})
+
+    }
+    else {
+      dateOfOp = await this.apiSrv.makeApi('OnlineMaster', `Corporate/GetOperationDate/13`, "GET", {})
+
+    }
     console.log(dateOfOp)
-    return dateOfOp.Date
+    return dateOfOp.Date || dateOfOp.date
   }
 
   extractMessage(input: string): string {

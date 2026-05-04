@@ -8,7 +8,7 @@
         <div class="game-card" *ngFor="let game of games" [class.expanded]="expandedGame === game.PickTypeId">
             <div class="game-header" (click)="toggleGame(game.PickTypeId)">
                 <div class="game-info">
-                    <img src="assets/images/game-icon.svg" [alt]="game.PickTypeName" class="game-icon">
+                    <img src="assets/images/{{ game.iconName }}" [alt]="game.PickTypeName" class="game-icon">
                     <div class="game-title-section">
                         <span class="game-title">{{ game.PickTypeName }}</span>
                         <span class="game-badge" *ngIf="game.NumberOfBalls">Pick {{ game.NumberOfBalls }} Balls</span>
@@ -21,8 +21,7 @@
 
             <div class="game-content" *ngIf="expandedGame === game.PickTypeId">
                 <!-- Dynamic Play Types Loop -->
-                <div class="play-type" *ngFor="let playType of game.TicketTypes
-">
+                <div class="play-type" *ngFor="let playType of game.TicketTypes">
                     <h3>{{ playType.TicketTypeName }}</h3>
                     <!-- <p class="description">{{ playType.description }}</p> -->
                     <table class="prize-table">

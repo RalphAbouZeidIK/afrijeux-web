@@ -59,7 +59,8 @@
                             </div>
                         </div>
                         <div class="edit-instruction" *ngIf="isEditingCartBall">
-                            <span>Editing number {{ editingBall?.number }} from cart. Pick a replacement number from the main grid below.</span>
+                            <span>Editing number {{ editingBall?.number }} from cart. Pick a replacement number from the
+                                main grid below.</span>
                             <button type="button" (click)="cancelBallEdit()">Cancel</button>
                         </div>
 
@@ -90,8 +91,7 @@
 
                         <!-- for PickX games we render one ball-list per configured ball -->
                         <ng-container *ngIf="isPickXGame; else singleBall">
-                            <app-ball-list [chosenBallsArray]="listOfBalls"
-                                [selectedBall]="selectedEditBall"
+                            <app-ball-list [chosenBallsArray]="listOfBalls" [selectedBall]="selectedEditBall"
                                 [shouldHighlight]="true"
                                 [disabledBallNumbers]="isEditingCartBall ? getEditingDisabledBallNumbers() : []"
                                 (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectPickXBall($event)"
@@ -99,8 +99,7 @@
                             </app-ball-list>
                         </ng-container>
                         <ng-template #singleBall>
-                            <app-ball-list [chosenBallsArray]="listOfBalls"
-                                [selectedBall]="selectedEditBall"
+                            <app-ball-list [chosenBallsArray]="listOfBalls" [selectedBall]="selectedEditBall"
                                 [shouldHighlight]="true"
                                 [disabledBallNumbers]="isEditingCartBall ? getEditingDisabledBallNumbers() : []"
                                 (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectBall($event)"
@@ -136,14 +135,14 @@
                             <a class="btn btn-primary confirm-button" (click)="openMobileCart()"
                                 *ngIf="isMobile">Confirm &
                                 Print</a>
+                            <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
+                                *ngIf="isTestingUser" (click)="issue100TicketsSeparately()">
+                                {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 7000 Separate Tickets' }}
+                            </a>
                             <!-- <a class="btn btn-warning" [class.disabled]="isBulkIssueInProgress" (click)="issue100Tickets()">
                                 {{ isBulkIssueInProgress ? 'Issuing...' : 'Issue 100 Tickets' }}
                             </a> 
-                                <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
-                                    *ngIf="isTestingUser" (click)="issue100TicketsSeparately()">
-                                    {{ isBulkSeparateIssueInProgress ? 'Issuing Separately...' : 'Issue 7000 Separate
-                                    Tickets' }}
-                                </a>-->
+                                -->
                         </div>
 
                     </div>

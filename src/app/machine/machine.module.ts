@@ -7,6 +7,7 @@ import { PopupComponent } from "src/app/shared/popup/popup.component";
 import { HomeComponent } from './home/home.component';
 import { ValidateTicketComponent } from './validate-ticket/validate-ticket.component';
 import { ReportsComponent } from './reports/reports.component';
+import { RapidGamesComponent } from './rapid-games/rapid-games.component';
 
 
 
@@ -15,7 +16,8 @@ import { ReportsComponent } from './reports/reports.component';
     MachineCoreComponent,
     HomeComponent,
     ValidateTicketComponent,
-    ReportsComponent
+    ReportsComponent,
+    RapidGamesComponent
   ],
   imports: [
     routing,

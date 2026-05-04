@@ -47,7 +47,7 @@ export class MachineCoreComponent implements OnInit {
       VersionCode: '1.0.0'
     }
 
-    //console.log("Params:", params)
+    console.log("Params:", params)
     const apiResponse = await this.machineSrv.registerMachine(params);
     //console.log("API Response:", apiResponse);
     //console.log(apiResponse)

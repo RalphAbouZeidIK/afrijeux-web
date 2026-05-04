@@ -1,0 +1,33 @@
+<div class="rapid-games">
+    <div class="page-header">
+        <a class="back-arrow" (click)="onBackClick()">
+            <img src="assets/images/back-arrow.svg" alt="Back">
+        </a>
+        <h2>
+            {{ ((isRapid) ? 'routerLinks.appTitle.rapidGames' : 'routerLinks.appTitle.kenoGames') | translate }}
+        </h2>
+        <span class="game-badge">
+            System Generated
+        </span>
+    </div>
+
+    <div class="page-body">
+        <p *ngIf="isRapid">
+            Compare the animals in the rows with the animals at the top.<br>
+            When you find a matching animal, look at the printed below it.<br> 
+            If you find no match, the ticket does not win.
+        </p>
+        <p *ngIf="isKeno">
+            Match any single number in Row 1 or full rows 2–5 to win.<br>
+            Compare your rows to the 16 result numbers — Row 1 needs one match, Rows 2–5 need complete matches.<br>
+            Find matching numbers; Row 1 pays for one match, rows 2–5 pay when fully matched.
+        </p>
+        <div class="input-bg stake-block">
+            <span class="ticket-price"> Ticket Price </span><span>5 AED</span>
+        </div>
+    </div>
+
+    <a class="btn btn-primary" (click)="issueTicket()">
+        Generate & Print
+    </a>
+</div>

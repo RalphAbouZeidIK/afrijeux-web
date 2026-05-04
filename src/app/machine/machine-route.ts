@@ -5,6 +5,7 @@ import { SharedGuard } from '../shared.guard';
 import { LoginComponent } from '../shared/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { PrizeDetailsPageComponent } from '../static-pages/prize-details-page/prize-details-page.component';
+import { RapidGamesComponent } from './rapid-games/rapid-games.component';
 
 export const machineMenuRoutes: Route[] = [
     {
@@ -71,5 +72,26 @@ export const machineMenuRoutes: Route[] = [
             iconLink: 'assets/images/report-icon.svg'
         },
         canActivate: [SharedGuard]
+    },
+    {
+        path: 'AfrijeuxKeno',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.keno',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'AfrijeuxRapid',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
     }
+
 ];
