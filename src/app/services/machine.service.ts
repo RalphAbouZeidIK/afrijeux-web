@@ -488,7 +488,7 @@ export class MachineService {
 
       try {
         const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-        //console.log(apiResponse)
+        console.log(apiResponse)
         if (apiResponse.DataToPrint) {
           this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
 
@@ -1112,7 +1112,7 @@ export class MachineService {
   async getDateOfOperation(gameName: any) {
     let dateOfOp: any
     if (this.isAndroidApp) {
-      dateOfOp = await this.apiSrv.makeApi('master', `MasterBackend/GetOperationDate/2`, "GET", {})
+      dateOfOp = await this.apiSrv.makeApi('master', `MasterBackend/GetOperationDate/13`, "GET", {})
 
     }
     else {

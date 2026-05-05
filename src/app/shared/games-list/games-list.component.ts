@@ -8,14 +8,15 @@ interface GameCard {
   name: string;
   badgeText?: string;
   prize: number;
-  GameEventDate: Date;
+  GameEventDate: Date | null;
   imageUrl?: string;
   route: string;
-  GameEventId: number;
+  GameEventId: number | null;
   playPrice: number;
-  gameType: 'pickX' | 'jackpot';
+  gameType: 'pickX' | 'jackpot' | 'RAPID';
   Prize: number;
   Stake: number;
+  IsSalesStopped?: boolean;
 }
 
 @Component({
@@ -70,10 +71,11 @@ export class GamesLinksComponent implements OnInit {
         imageUrl: `assets/images/pick${game.ConfigurationVersionId}.svg`,
         route: this.isAndroidApp ? '/Machine/PickX' : '/PickX',
         GameEventId: game.GameEventId,
-        playPrice: game.PlayPrice || 5,
+        playPrice: 3,
         gameType: 'pickX',
         Prize: game.Prize || 0,
-        Stake: game.Stake || 5
+        Stake: game.Stake || 5,
+        IsSalesStopped: game.IsSalesStopped
       });
     });
 
@@ -91,10 +93,47 @@ export class GamesLinksComponent implements OnInit {
         playPrice: game.PlayPrice || 5,
         gameType: 'jackpot',
         Prize: game.Prize || 0,
-        Stake: game.Stake || 5
+        Stake: game.Stake || 5,
+        IsSalesStopped: game.IsSalesStopped
       });
     });
+
+    if (this.isAndroidApp) {
+      this.allGames.push({
+        id: `keno`,
+        name: `KENO`,
+        badgeText: `Instant`,
+        prize: 0,
+        GameEventDate: null,
+        imageUrl: `assets/images/keno.svg`,
+        route: '/Machine/WinBigKeno',
+        GameEventId: null,
+        playPrice: 3,
+        gameType: 'RAPID',
+        Prize: 0,
+        Stake: 3,
+        IsSalesStopped: false
+      })
+
+       this.allGames.push({
+        id: `rapid`,
+        name: `RAPID`,
+        badgeText: `Instant`,
+        prize: 0,
+        GameEventDate: null,
+        imageUrl: `assets/images/rapid.svg`,
+        route: '/Machine/WinBigRapid',
+        GameEventId: null,
+        playPrice: 3,
+        gameType: 'RAPID',
+        Prize: 0,
+        Stake: 3,
+        IsSalesStopped: false
+      })
+    }
+
   }
+
 
   async ngOnInit(): Promise<void> {
     this.gnrcSrv.toggleLoader(true);

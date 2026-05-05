@@ -10,9 +10,9 @@ import { MachineService } from 'src/app/services/machine.service';
 })
 export class RapidGamesComponent {
 
-  isKeno = window.location.href.includes('AfrijeuxKeno')
+  isKeno = window.location.href.includes('WinBigKeno')
 
-  isRapid = window.location.href.includes('AfrijeuxRapid')
+  isRapid = window.location.href.includes('WinBigRapid')
 
   constructor(
     private machineSrv: MachineService,
@@ -26,7 +26,7 @@ export class RapidGamesComponent {
 
   async issueTicket() {
     let listOfBets: any = []
-    listOfBets.TicketPrice = 100
+    listOfBets.TicketPrice = 3
     let apiResponse = await this.machineSrv.issueTicket(listOfBets)
     console.log('issue ticket', apiResponse)
   }

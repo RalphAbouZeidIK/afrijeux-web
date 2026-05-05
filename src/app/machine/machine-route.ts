@@ -74,7 +74,7 @@ export const machineMenuRoutes: Route[] = [
         canActivate: [SharedGuard]
     },
     {
-        path: 'AfrijeuxKeno',
+        path: 'WinBigKeno',
         component: RapidGamesComponent,
         data: {
             showLink: false,
@@ -84,7 +84,7 @@ export const machineMenuRoutes: Route[] = [
         canActivate: [SharedGuard]
     },
     {
-        path: 'AfrijeuxRapid',
+        path: 'WinBigRapid',
         component: RapidGamesComponent,
         data: {
             showLink: false,
