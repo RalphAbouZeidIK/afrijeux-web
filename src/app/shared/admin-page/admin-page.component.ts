@@ -28,6 +28,7 @@ export class AdminPageComponent {
   ) {
     this.getMenu()
 
+
   }
 
   async ngOnInit() {
@@ -155,6 +156,7 @@ export class AdminPageComponent {
 
 
   async logout() {
+    this.machineSrv.setAdminPopupStatus(false, false);
     this.usrSrv.signOut()
   }
 }

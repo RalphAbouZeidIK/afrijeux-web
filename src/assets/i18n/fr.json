@@ -292,6 +292,10 @@
         "errorMessages": {
             "noOutcomesAvailable": "Aucun résultat disponible",
             "noMatchesAvailable": "Aucun match disponible"
+        },
+        "adminLogin": {
+            "title": "Connexion Admin",
+            "adminLoginMessage": "Veuillez vous connecter ici pour accéder aux rapports et paramètres de la machine"
         }
     },
     "khamsa": {

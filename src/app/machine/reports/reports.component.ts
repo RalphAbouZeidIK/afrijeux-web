@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MachineService } from 'src/app/services/machine.service';
 
@@ -9,7 +9,7 @@ import { MachineService } from 'src/app/services/machine.service';
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
   gamesList: any = []
   selectedGames: any = []
   FromDate: any
@@ -22,15 +22,28 @@ export class ReportsComponent implements OnInit {
 
   canPrintReport = false
 
+  isAdminLoggedIn = false
+
+  shouldPrint = false
+
+  //adminLoginStatusSubscription: any
+
   constructor(
     private machineSrv: MachineService,
     public datepipe: DatePipe,
     private router: Router
   ) {
-
+    // this.adminLoginStatusSubscription = this.machineSrv.getAdminLoginStatus().subscribe((status) => {
+    //   this.isAdminLoggedIn = status;
+    //   if (status.isLoggedIn && !status.shouldShowAdminPage) {
+    //     this.getReports()
+    //   }
+    // });
   }
 
   async ngOnInit() {
+    this.machineSrv.setAdminLoginStatus(false);
+
     this.canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', null)
     this.getGames()
     this.genericDate = this.datepipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS');
@@ -82,6 +95,10 @@ export class ReportsComponent implements OnInit {
     //console.log((this as any)[field]);
   }
 
+  showAdminPopup(shouldPrint = false) {
+    this.shouldPrint = shouldPrint
+    this.machineSrv.setAdminPopupStatus(true, false);
+  }
 
   async getReports(shouldPrint = false) {
     //console.log(this.selectedGames)
@@ -108,5 +125,9 @@ export class ReportsComponent implements OnInit {
 
   onBackClick() {
     this.router.navigate(['/Machine/Games'])
+  }
+
+  ngOnDestroy() {
+    //this.adminLoginStatusSubscription.unsubscribe();
   }
 }

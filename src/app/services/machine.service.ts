@@ -23,7 +23,38 @@ export class MachineService {
   }
 
   /** modal status subscriber */
-  private openModal$ = new Subject();
+  private adminLogin$ = new Subject();
+
+  private adminPopupStatus$ = new Subject();
+
+  getAdminLoginStatus(): Observable<any> {
+    return this.adminLogin$;
+  }
+
+  getAdminPopupStatus(): Observable<any> {
+    return this.adminPopupStatus$;
+  }
+
+  setAdminLoginStatus(status: any, shouldShowAdminPage = false) {
+    let value = {
+      showAdminPage: shouldShowAdminPage,
+      isLoggedIn: status
+    }
+    this.adminLogin$.next(value);
+  }
+
+  setAdminPopupStatus(showPopup: any, shouldShowAdminPage = false) {
+    let value = {
+      showPopup: showPopup,
+      showAdminPage: shouldShowAdminPage,
+    }
+    console.log(value)
+    this.adminPopupStatus$.next(value);
+    if (!showPopup) {
+      this.setAdminLoginStatus(false);
+    }
+  }
+
 
   isOnline = navigator.onLine
 
@@ -344,6 +375,8 @@ export class MachineService {
     let game: any = null
     if (this.isAndroidApp) {
       let machineData: any = await this.getMachineData()
+      console.log(machineData)
+      console.log(this.getGameRoute())
       game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
     }
 

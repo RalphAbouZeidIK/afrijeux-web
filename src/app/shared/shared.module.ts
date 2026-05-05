@@ -32,6 +32,7 @@ import { CarouselComponent } from './carousel/carousel.component';
 import { AppNavComponent } from './app-nav/app-nav.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { CountdownComponent } from './countdown/countdown.component';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
 
 
 // Custom date formats
@@ -68,7 +69,8 @@ export const MY_FORMATS = {
     CarouselComponent,
     AppNavComponent,
     AdminPageComponent,
-    CountdownComponent
+    CountdownComponent,
+    AdminLoginComponent
   ],
   exports: [
     HeaderComponent,
@@ -95,7 +97,9 @@ export const MY_FORMATS = {
     ContactUsComponent,
     CarouselComponent,
     AppNavComponent,
-    CountdownComponent
+    CountdownComponent,
+    AdminLoginComponent,
+    AdminPageComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,

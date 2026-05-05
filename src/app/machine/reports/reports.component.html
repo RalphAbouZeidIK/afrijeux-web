@@ -38,9 +38,8 @@
 
         <div class="form-group d-flex input-holder">
             <div class="form-group event-id" *ngIf="isCheckResults">
-                <input type="number" class="form-control" [title]="'machine.generic.eventId' | translate" 
-               [placeholder]="'machine.generic.eventId' | translate"
-                    [(ngModel)]="EventId" />
+                <input type="number" class="form-control" [title]="'machine.generic.eventId' | translate"
+                    [placeholder]="'machine.generic.eventId' | translate" [(ngModel)]="EventId" />
             </div>
             <div class="date-holder">
                 <app-datepicker label="Date From" (dateChangeEvent)="onDateChange($event,'FromDate')"></app-datepicker>

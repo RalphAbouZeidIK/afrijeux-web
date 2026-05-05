@@ -195,16 +195,28 @@ export class GamesService {
   }
 
   async getAllLotoGames() {
-    let pickXGames: any
-    let jackpotGames: any
+    let pickXGames: any = []
+    let jackpotGames: any = []
+    let pickXData: any
     if (this.isAndroidApp) {
       let gameEventsResponse = await this.machineSrv.getAllEvents()
-      //console.log(gameEventsResponse)
-      pickXGames = gameEventsResponse.data.find((event: any) => event.GameId == 35).EventConfiguration
-       //console.log('Fetched machine PickX games:', pickXGames);
+      console.log(gameEventsResponse)
+      pickXData = gameEventsResponse.data.filter((event: any) => event.GameId == 66 || event.GameId == 67 || event.GameId == 68)
+      pickXData.forEach((event: any) => {
+        if (event.EventConfiguration && event.EventConfiguration.length > 0) {
+          pickXGames.push(
+            ...event.EventConfiguration.map((config: any) => ({
+              ...config,
+              GameId: event.GameId,
+              pickTypePerGame: event.GameId === 66 ? '3' : event.GameId === 67 ? '4' : event.GameId === 68 ? '5' : ''
+            }))
+          );
+        }
+      });
+      //console.log('Fetched machine PickX games:', pickXGames);
       jackpotGames = gameEventsResponse.data.find((event: any) => event.GameId == 38).EventConfiguration
-       //console.log('Fetched machine jackpot games:', jackpotGames);
-   
+      //console.log('Fetched machine jackpot games:', jackpotGames);
+
     }
     else {
       pickXGames = await this.getGamesEvents('PickX');

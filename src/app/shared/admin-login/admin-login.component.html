@@ -1,0 +1,35 @@
+<div class="form-holder machine-layout admin-login">
+    <div class="form-bg ">
+        <div class="form-header">
+            <h2>{{ 'machine.adminLogin.title' | translate }}</h2>
+
+            <p>{{ 'machine.adminLogin.adminLoginMessage' | translate }}</p>
+
+            <a class="close-icon" (click)="hidePopup()">
+                <img src="assets/images/close-icon.svg" alt="close">
+            </a>
+            <span class="text-danger" *ngIf="showErrorMessage">
+                {{ errorMsg }}
+            </span>
+        </div>
+
+        <!-- ================= LOGIN FORM ================= -->
+        <form class="form-content" [formGroup]="loginForm">
+
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'machine.shared.password' | translate }}
+                </label>
+
+                <input type="password" class="form-control" title="Admin Password" formControlName="Password"
+                    placeholder="Admin Password" />
+            </div>
+        </form>
+
+        <div class="form-btns">
+            <button class="btn btn-primary" (click)="submitLogin()" [disabled]="loginForm.invalid">
+                {{ 'machine.generic.submit' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

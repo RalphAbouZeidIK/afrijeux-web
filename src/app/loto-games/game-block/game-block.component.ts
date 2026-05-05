@@ -138,7 +138,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
     this.gnrcSrv.toggleLoader(true);
     this.generateDisplayBalls();
-    this.isPickXGame = window.location.href.includes("PickX")
+    this.isPickXGame = window.location.href.includes("PickX") || window.location.href.includes("WinBig3") || window.location.href.includes("WinBig4") || window.location.href.includes("WinBig5")
     this.isJackpotGame = window.location.href.includes("Jackpot")
     this.getEvents()
   }
@@ -414,7 +414,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (this.isQuickPickDisabled) {
       return;
     }
-
     this.isQuickPickDisabled = true;
 
     if (this.isJackpotGame) {

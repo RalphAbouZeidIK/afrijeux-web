@@ -85,7 +85,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   isJackpotGame = this.currentUrl.includes("Jackpot")
 
-  isPickXGame = this.currentUrl.includes("PickX")
+  isPickXGame = this.currentUrl.includes("PickX") || this.currentUrl.includes("WinBig3") || this.currentUrl.includes("WinBig4") || this.currentUrl.includes("WinBig5")
 
   lotoTotalPrice: any = 0
 
@@ -117,7 +117,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
     else {
       this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
-
+        console.log(data)
         this.cartInitialize(data)
       });
     }

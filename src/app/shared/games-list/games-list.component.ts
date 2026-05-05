@@ -59,17 +59,18 @@ export class GamesLinksComponent implements OnInit {
 
   private buildGameCards(): void {
     this.allGames = [];
-
+    
     // Add PickX games
     this.pickXEvents.forEach((game: any) => {
+
       this.allGames.push({
         id: `pickx-${game.GameEventId}`,
         name: `${game.EventName}`,
-        badgeText: `Pick ${game.ConfigurationVersionId} Balls`,
+        badgeText: `Pick ${game.pickTypePerGame} Balls`,
         prize: game.Prize || 0,
         GameEventDate: game.GameEventDate,
-        imageUrl: `assets/images/pick${game.ConfigurationVersionId}.svg`,
-        route: this.isAndroidApp ? '/Machine/PickX' : '/PickX',
+        imageUrl: `assets/images/pick${game.pickTypePerGame}.svg`,
+        route: this.isAndroidApp ? `/Machine/WinBig${game.pickTypePerGame}` : `/WinBig${game.pickTypePerGame}`,
         GameEventId: game.GameEventId,
         playPrice: 3,
         gameType: 'pickX',

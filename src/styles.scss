@@ -420,6 +420,11 @@ app-option-list {
         .form-btns {
             margin-top: 40px;
         }
+
+        .close-icon {
+            top: 15px;
+            right: 16px;
+        }
     }
 
     .form-header {
@@ -998,7 +1003,8 @@ app-odd-item:nth-of-type(3n) {
         background: $lightBg;
         display: flex;
         align-items: center;
-        padding:15px;
+        padding: 15px;
+
         select.form-control,
         select.form-control:focus {
             width: auto;
@@ -1251,7 +1257,8 @@ app-admin-page {
     background-color: #0b1705;
     height: calc(100% - 70px);
     width: 100%;
-    background-color: $darkBg
+    background-color: $darkBg;
+    z-index: 4;
 }
 
 // Game badge
@@ -1437,9 +1444,10 @@ app-admin-page {
     .loto-game-container {
         padding: 15px;
 
-        .btns-holder{
-                width: 100%;
+        .btns-holder {
+            width: 100%;
         }
+
         .inner-container {
             width: 100%;
         }

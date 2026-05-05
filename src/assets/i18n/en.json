@@ -19,7 +19,10 @@
             "Results": "Results",
             "PlayResponsibly": "Play Responsibly",
             "rapidGames": "Rapid Games",
-            "kenoGames": "Keno Games"
+            "kenoGames": "Keno Games",
+            "WinBig3": "Win3",
+            "WinBig4": "Win4",
+            "WinBig5": "Win5"
         },
         "HPBTitles": {
             "mesParies": "My Bets",
@@ -292,6 +295,10 @@
         "errorMessages": {
             "noOutcomesAvailable": "No Outcomes Available",
             "noMatchesAvailable": "No matches available"
+        },
+        "adminLogin": {
+            "title": "Admin Login",
+            "adminLoginMessage": "Please enter the admin password"
         }
     },
     "khamsa": {

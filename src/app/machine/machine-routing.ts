@@ -49,15 +49,36 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'PickX',
+                path: 'WinBig5',
                 loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
                 data: {
-                    breadcrumb: 'PickX',
+                    breadcrumb: 'WinBig5',
                     shouldBeLoggedIn: false,
                     showLink: true,
-                    title: 'routerLinks.appTitle.Pickx',
+                    title: 'routerLinks.appTitle.WinBig5',
                 }
-            }, {
+            },
+            {
+                path: 'WinBig3',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig3',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig3',
+                }
+            },
+            {
+                path: 'WinBig4',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig4',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig4',
+                }
+            },
+            {
                 path: 'Jackpot',
                 loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
                 canActivate: [SharedGuard],

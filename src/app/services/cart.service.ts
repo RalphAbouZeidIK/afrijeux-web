@@ -274,7 +274,7 @@ export class CartService {
       return this.getLotoStorageKey('jackpot');
     }
 
-    if (href.includes('PickX')) {
+    if (href.includes('PickX') || href.includes('WinBig3') || href.includes('WinBig4') || href.includes('WinBig5')) {
       const gameEventId = this.getGameEventIdFromUrl(href);
       if (gameEventId) {
         return this.getLotoStorageKey(`gameevent_${gameEventId}`);

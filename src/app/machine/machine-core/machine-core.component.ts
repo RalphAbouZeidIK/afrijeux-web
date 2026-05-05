@@ -20,10 +20,27 @@ export class MachineCoreComponent implements OnInit {
   scannedResult: any = '';
   isAppRegistered = false
 
+  showAdminPopup = false;
+
+  showAdminPage = false;
+
+  showAdminPageFlag = false
+
   constructor(
     private bridge: NativeBridgeService,
     private machineSrv: MachineService
-  ) { }
+  ) {
+    this.machineSrv.getAdminPopupStatus().subscribe(status => {
+      this.showAdminPopup = status.showPopup;
+      this.showAdminPageFlag = status.showAdminPage;
+    });
+
+    this.machineSrv.getAdminLoginStatus().subscribe(status => {
+      this.showAdminPage = status.showAdminPage;
+      this.showAdminPopup = false
+
+    })
+  }
 
   closePopup() {
     this.popup.close();
