@@ -59,7 +59,7 @@ export class CacheService {
           IsPrinted: paramsBeforeEncryption.Ticket.IsPrinted,
           IsCorrupted: !paramsBeforeEncryption.Ticket.IsPrinted,
           PersonId: paramsBeforeEncryption.PersonId,
-          GameEventId: paramsBeforeEncryption.Ticket.GamePick[0].GameEventId,
+          GameEventId: paramsBeforeEncryption.Ticket.GamePick[0]?.GameEventId || null,
           GameEventIds: paramsBeforeEncryption.Ticket.GamePick.map((pickItem: any) => pickItem.GameEventId).join(","),
           TicketRequestId: paramsBeforeEncryption.TicketRequestId,
           PromotionRequestId: '0',
