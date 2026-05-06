@@ -676,6 +676,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   clearSelections() {
     this.currentPickIndex = 0;
+    this.selectedNumbers = [];
     this.composeEventDetails(this.selectedEvent, true)
   }
 

@@ -24,10 +24,23 @@ export class RapidGamesComponent {
     this.router.navigate(['/Machine/Games'])
   }
 
+  isIssuing = false;
+
   async issueTicket() {
-    let listOfBets: any = []
-    listOfBets.TicketPrice = 3
-    let apiResponse = await this.machineSrv.issueTicket(listOfBets)
-    console.log('issue ticket', apiResponse)
+    if (this.isIssuing) return; // 🚫 prevent multiple clicks
+
+    this.isIssuing = true;
+
+    try {
+      let listOfBets: any = [];
+      listOfBets.TicketPrice = 3;
+
+      let apiResponse = await this.machineSrv.issueTicket(listOfBets);
+      console.log('issue ticket', apiResponse);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.isIssuing = false; // ✅ unlock after response
+    }
   }
 }

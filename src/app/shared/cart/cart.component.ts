@@ -282,7 +282,11 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSrv.setShowOnClickMobile(false)
   }
 
+  isIssuing = false;
+
   async issueTicket() {
+    if (this.isIssuing) return;
+
     if (!this.isLoggedIn) {
       this.usrSrv.setLoginPopupStatus({
         show: true,
@@ -291,53 +295,61 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
       return
     }
 
-    let apiResponse: any
-    if (this.isSportsBetting) {
-      this.listOfPicks = []
-      this.listOfBets.forEach((betItem: any) => {
-        this.listOfPicks.push({
-          Outcome: betItem,
-          Stake: this.stake / this.totalBets,
-          GameEventId: betItem.MatchId
-        })
-      });
+    this.isIssuing = true;
 
-      let ticketBody = {
-        IsVoucher: 0,
-        Stake: this.stake,
-        GamePick: this.listOfPicks,
-        TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
-        IsBouquet: false,
-        BonusId: this.BonusId,
-        WinAmount: this.WinAmount,
-        BonusAmount: this.bonus,
-        LoyalityReferenceId: 0
-      }
-      apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
-    }
-    else {
-      apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
-    }
-    
-    console.log(this.listOfBets)
-    if (this.isAndroidApp && apiResponse.DataToPrint) {
-      this.clearBets()
-      this.gnrcSrv.setModalData(true, true, apiResponse.message)
-    }
+    try {
+      let apiResponse: any
+      if (this.isSportsBetting) {
+        this.listOfPicks = []
+        this.listOfBets.forEach((betItem: any) => {
+          this.listOfPicks.push({
+            Outcome: betItem,
+            Stake: this.stake / this.totalBets,
+            GameEventId: betItem.MatchId
+          })
+        });
 
-    else {
-      //console.log(apiResponse)
-      if (apiResponse.Status == true || apiResponse == true) {
-        this.clearBets()
-        this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
-        this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
+        let ticketBody = {
+          IsVoucher: 0,
+          Stake: this.stake,
+          GamePick: this.listOfPicks,
+          TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
+          IsBouquet: false,
+          BonusId: this.BonusId,
+          WinAmount: this.WinAmount,
+          BonusAmount: this.bonus,
+          LoyalityReferenceId: 0
+        }
+        apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
       }
       else {
-        this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
+        apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
       }
-    }
-    console.log(apiResponse);
 
+      console.log(this.listOfBets)
+      if (this.isAndroidApp && apiResponse.DataToPrint) {
+        this.clearBets()
+        this.gnrcSrv.setModalData(true, true, apiResponse.message)
+      }
+
+      else {
+        //console.log(apiResponse)
+        if (apiResponse.Status == true || apiResponse == true) {
+          this.clearBets()
+          this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
+          this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
+        }
+        else {
+          this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
+        }
+      }
+      console.log(apiResponse);
+    } catch (err) {
+      console.error(err);
+      this.gnrcSrv.setModalData(true, false, 'Something went wrong.');
+    } finally {
+      this.isIssuing = false; // ✅ always release lock
+    }
   }
 
   getTicketTypeInitials(ticketTypeName: string): string {
