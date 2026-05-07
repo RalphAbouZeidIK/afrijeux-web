@@ -1,0 +1,41 @@
+<div class="form-holder machine-layout">
+    <div class="form-bg ">
+        <div class="form-header">
+            <h2>{{ 'machine.adminDeposit.title' | translate }}</h2>
+
+            <p>{{ 'machine.adminDeposit.message' | translate }}</p>
+
+            <a class="close-icon" routerLink="/Machine/Games">
+                <img src="assets/images/close-icon.svg" alt="close">
+            </a>
+           
+        </div>
+
+        <form class="form-content" [formGroup]="depositForm">
+
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'machine.shared.username' | translate }}
+                </label>
+
+                <input type="text" class="form-control" title="Username" formControlName="Username"
+                    placeholder="Username" />
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'machine.shared.Stake' | translate }}
+                </label>
+
+                <input type="number" class="form-control" title="Amount" formControlName="Stake"
+                    placeholder="Amount" />
+            </div>
+        </form>
+
+        <div class="form-btns">
+            <button class="btn btn-primary" (click)="issueTicket()" [disabled]="depositForm.invalid">
+                {{ 'machine.generic.Deposit' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

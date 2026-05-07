@@ -6,6 +6,8 @@ import { LoginComponent } from '../shared/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { PrizeDetailsPageComponent } from '../static-pages/prize-details-page/prize-details-page.component';
 import { RapidGamesComponent } from './rapid-games/rapid-games.component';
+import { AdminDepositComponent } from '../shared/admin-deposit/admin-deposit.component';
+import { AdminWithdrawComponent } from '../shared/admin-withdraw/admin-withdraw.component';
 
 export const machineMenuRoutes: Route[] = [
     {
@@ -92,6 +94,26 @@ export const machineMenuRoutes: Route[] = [
             AllowHybrid: false,
         },
         canActivate: [SharedGuard]
-    }
+    },
+    {
+        path: 'OnlineMaster/Deposit',
+        component: AdminDepositComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.deposit',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'OnlineMaster/Withdraw',
+        component: AdminWithdrawComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.withdraw',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
 
 ];

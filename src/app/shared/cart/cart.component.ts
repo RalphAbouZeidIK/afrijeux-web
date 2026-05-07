@@ -2,12 +2,11 @@ import { DecimalPipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { Subscription } from 'rxjs';
-import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
 import { GenericService } from 'src/app/services/generic.service';
-import { LoaderService } from 'src/app/services/loader-service.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MachineService } from 'src/app/services/machine.service';
+import { NativeBridgeService } from 'src/app/services/native-bridge.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -100,7 +99,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     private storageSrv: LocalStorageService,
     private usrSrv: UserService,
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private bridge: NativeBridgeService,
   ) {
 
 
@@ -130,6 +130,15 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.showOnClickMobileSubscription = this.cartSrv.getShowOnClickMobileListener().subscribe((showOnClickMobile) => {
       this.showOnClickMobile = showOnClickMobile;
     });
+
+    this.bridge.getPrintingStatus().subscribe((status) => {
+      console.log('Printing status updated:', status);
+      this.isIssuing = false;
+      if(!status) {
+        this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
+      }
+    })
+
   }
 
   async ngOnInit() {
@@ -338,17 +347,18 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
           this.clearBets()
           this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
           this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
+          this.isIssuing = false;
         }
         else {
           this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
+          this.isIssuing = false;
         }
       }
       console.log(apiResponse);
     } catch (err) {
       console.error(err);
       this.gnrcSrv.setModalData(true, false, 'Something went wrong.');
-    } finally {
-      this.isIssuing = false; // ✅ always release lock
+      this.isIssuing = false;
     }
   }
 

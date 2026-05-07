@@ -88,17 +88,23 @@ export class MachineService {
       this.router.navigate(['/Machine/Games']); // redirect to your chosen route
     };
 
-    this.bridge.printerStatusSource.subscribe((error) => {
-      //console.log("⚠️ can print:", error);
-      //console.log(this.valuesToPrint)
-      this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
-      this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
-      if (!error && this.valuesToPrint.thirdValue.IsOffline == 0) {
+    // this.bridge.printerStatusSource.subscribe((error) => {
+    //   //console.log("⚠️ can print:", error);
+    //   //console.log(this.valuesToPrint)
+    //   this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
+    //   this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
+    //   if (!error && this.valuesToPrint.thirdValue.IsOffline == 0) {
+    //     this.issueCorruptedTicket()
+    //   }
+    //   this.cacheSrv.saveTicketToDb(this.valuesToPrint.firstValue, this.valuesToPrint.secondValue, this.valuesToPrint.thirdValue);
+    //   // Example: save to DB or update UI
+    // });
+
+    this.bridge.getPrintingStatus().subscribe((status) => {
+      if (!status) {
         this.issueCorruptedTicket()
       }
-      this.cacheSrv.saveTicketToDb(this.valuesToPrint.firstValue, this.valuesToPrint.secondValue, this.valuesToPrint.thirdValue);
-      // Example: save to DB or update UI
-    });
+    })
   }
 
 
@@ -439,7 +445,7 @@ export class MachineService {
     return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
   }
 
-  async issueTicket(ticketObject: any, shouldHaveGameEventId = false) {
+  async issueTicket(ticketObject: any, shouldHaveGameEventId = false, customRoute: any = null) {
 
     let isPrintedFlag = 1;
 
@@ -486,7 +492,10 @@ export class MachineService {
       PromotionRuleId: 0,
       IsPrinted: isPrintedFlag,
       Printed: isPrintedFlag,
-      GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null
+      GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null,
+      User: ticketObject.User ? ticketObject.User : null,
+      Code: ticketObject.Code ? ticketObject.Code : null,
+      UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
     console.log(ticketBody)
 
@@ -496,7 +505,9 @@ export class MachineService {
       Ticket: ticketBody,
       TicketRequestId: ticketRequestId,
       LoyalityReferenceId: 0,
-      IsOffline: this.isOnline ? 0 : 1
+      IsOffline: this.isOnline ? 0 : 1,
+      Code: ticketObject.Code ? ticketObject.Code : null,
+      UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
     console.log(params)
 
@@ -520,7 +531,14 @@ export class MachineService {
 
 
       try {
-        const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
+        let apiResponse: any
+        if (customRoute) {
+          apiResponse = await this.handleApiResponse(customRoute.subRoute, `${customRoute.apiRoute}`, 'POST', params)
+        }
+        else {
+          apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
+
+        }
         console.log(apiResponse)
         if (apiResponse.DataToPrint) {
           this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);

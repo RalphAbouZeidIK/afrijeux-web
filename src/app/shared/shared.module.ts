@@ -33,6 +33,8 @@ import { AppNavComponent } from './app-nav/app-nav.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { CountdownComponent } from './countdown/countdown.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { AdminWithdrawComponent } from './admin-withdraw/admin-withdraw.component';
+import { AdminDepositComponent } from './admin-deposit/admin-deposit.component';
 
 
 // Custom date formats
@@ -70,7 +72,9 @@ export const MY_FORMATS = {
     AppNavComponent,
     AdminPageComponent,
     CountdownComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
+    AdminDepositComponent,
+    AdminWithdrawComponent
   ],
   exports: [
     HeaderComponent,

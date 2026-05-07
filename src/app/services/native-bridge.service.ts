@@ -59,8 +59,17 @@ export class NativeBridgeService {
   private ticketUpdatedSource = new Subject<any>();
   ticketUpdated$ = this.ticketUpdatedSource.asObservable();
 
+  private printingStatus$ = new Subject();
+  getPrintingStatus() {
+    return this.printingStatus$;
+  }
 
-  constructor(private ngZone: NgZone, private router: Router,private location: Location) {
+  setPrintingStatus(value: boolean) {
+    this.printingStatus$.next(value);
+  }
+
+
+  constructor(private ngZone: NgZone, private router: Router, private location: Location) {
     //console.log("🧩 BridgeService initialized:", this);
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
@@ -87,14 +96,14 @@ export class NativeBridgeService {
     (window as any).handlePrinterError = (error: string) => {
       this.ngZone.run(() => {
         console.error('🔥 Printer Error from Flutter:', error);
-        this.printerStatusSource.next(false);
+        this.setPrintingStatus(false);
       });
     };
 
     (window as any).handlePrinterSuccess = () => {
       this.ngZone.run(() => {
-        //console.log('✅ Printer completed successfully');
-        this.printerStatusSource.next(true);
+        console.log('✅ Printer completed successfully');
+        this.setPrintingStatus(true);
       });
     };
 

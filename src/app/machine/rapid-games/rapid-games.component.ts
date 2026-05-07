@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
+import { NativeBridgeService } from 'src/app/services/native-bridge.service';
 
 @Component({
   selector: 'app-rapid-games',
@@ -16,8 +18,19 @@ export class RapidGamesComponent {
 
   constructor(
     private machineSrv: MachineService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private bridge: NativeBridgeService,
+    private gnrcSrv: GenericService
+  ) {
+
+    this.bridge.getPrintingStatus().subscribe((status) => {
+      console.log('Printing status updated:', status);
+      this.isIssuing = false;
+      if (!status) {
+        this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
+      }
+    })
+  }
 
 
   onBackClick() {
@@ -39,8 +52,7 @@ export class RapidGamesComponent {
       console.log('issue ticket', apiResponse);
     } catch (err) {
       console.error(err);
-    } finally {
-      this.isIssuing = false; // ✅ unlock after response
+      this.isIssuing = false;
     }
   }
 }

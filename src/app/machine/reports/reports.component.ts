@@ -42,7 +42,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.machineSrv.setAdminLoginStatus(false);
 
     this.canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', null)
     this.getGames()
@@ -51,6 +50,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   async getGames() {
     let machineData = await this.machineSrv.getMachineData()
+    console.log(machineData)
     this.gamesList = machineData?.Games.filter((game: any) => game.GameId != 49)
     this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
     console.log(this.gamesList)

@@ -268,6 +268,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   async composeEventDetails(raceItem: any, keepSameType = false) {
     //console.log(raceItem)
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
+    console.log(raceItem, configId)
     if (this.configCache.has(configId)) {
       this.fixedConfig = this.configCache.get(configId);
     } else {
@@ -603,7 +604,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   addToBet(refreshEventDetails = true, index: number | null = null) {
-    if (this.cartData && this.cartData.length >= 10) {
+    if (this.cartData && this.cartData.length >= 10 && !this.isTestingUser) {
       this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
       return
     }
@@ -729,6 +730,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   async issue100TicketsSeparately() {
+    debugger
     if (this.isBulkSeparateIssueInProgress || !this.selectedEvent) {
       return;
     }
@@ -768,7 +770,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
-  private async waitForSharedCart(maxRetries = 30, delayMs = 100): Promise<boolean> {
+  private async waitForSharedCart(maxRetries = 30, delayMs = 250): Promise<boolean> {
     for (let retry = 0; retry < maxRetries; retry++) {
       if (this.sharedCart) {
         return true;

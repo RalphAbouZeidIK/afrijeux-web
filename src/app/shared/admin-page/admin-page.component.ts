@@ -18,6 +18,8 @@ export class AdminPageComponent {
   games: any = []
   isLoading = false
 
+  showDepositWithdrawButtons = false;
+
   constructor(
     private cacheSrv: CacheService,
     private router: Router,
@@ -34,10 +36,14 @@ export class AdminPageComponent {
   async ngOnInit() {
     let machineData = await this.machineSrv.getMachineData()
     let games = machineData?.Games
+    console.log('Machine Games:', games)
     games.forEach((gameItem: any) => {
       gameItem.ShowGame = false
-      if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
-        gameItem.ShowGame = true
+      // if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
+      //   gameItem.ShowGame = true
+      // }
+      if (gameItem.GameId == 49) {
+        this.showDepositWithdrawButtons = true
       }
     });
     //console.log(games)
@@ -60,7 +66,7 @@ export class AdminPageComponent {
       }
 
     })
-    //console.log(this.machineMenu)
+    console.log(this.machineMenu)
   }
 
   selectGame(game: any) {

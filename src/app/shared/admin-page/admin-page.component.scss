@@ -1,5 +1,11 @@
 @use '/src/variables' as *;
 
+.admin-page {
+    max-height: calc(100vh - 150px);
+    overflow: auto;
+    padding-bottom: 30px;
+}
+
 .btn {
     text-transform: capitalize;
     display: flex;
@@ -57,6 +63,6 @@ p {
     line-height: 18px;
 }
 
-.logout-btn{
+.logout-btn {
     margin-top: 40px;
 }

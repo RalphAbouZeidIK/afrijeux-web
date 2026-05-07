@@ -280,7 +280,10 @@
             "allBets": "Tous les paris",
             "eventCode": "Code de l’événement",
             "close": "Fermer",
-            "won": "Gagné"
+            "won": "Gagné",
+            "Withdraw": "Retrait",
+            "Deposit": "Dépôt"
+            
         },
         "fullTicketId": "Numéro complet du billet",
         "chooseGames": "Choisir des jeux",
@@ -296,6 +299,14 @@
         "adminLogin": {
             "title": "Connexion Admin",
             "adminLoginMessage": "Veuillez vous connecter ici pour accéder aux rapports et paramètres de la machine"
+        },
+        "adminDeposit": {
+            "title": "Dépôt Utilisateur en Ligne",
+            "message": "Veuillez entrer le nom d'utilisateur et le montant à déposer pour l'utilisateur en ligne"
+        },
+        "adminWithdraw": {
+            "title": "Retrait Utilisateur en Ligne",
+            "message": "Veuillez entrer le nom d'utilisateur et le code de billet pour le retrait de l'utilisateur en ligne"
         }
     },
     "khamsa": {

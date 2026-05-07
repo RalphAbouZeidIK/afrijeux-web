@@ -1,17 +1,37 @@
 <div class="admin-page">
     <div class="main-btns">
+
+
         <a class="btn btn-primary" *ngFor="let routerItem of machineMenu" [routerLink]="`/Machine/${routerItem.path}`">
             <div class="icon-holder">
                 <img [src]="routerItem.data.iconLink" [alt]="routerItem.data.title | translate" />
             </div>
             <div class="text-holder">
-               <h2> {{routerItem.data.title | translate}}</h2>
+                <h2> {{routerItem.data.title | translate}}</h2>
                 <p *ngIf="routerItem.data.description">{{routerItem.data.description | translate}}</p>
             </div>
 
         </a>
 
         <!-- <a class="btn btn-primary" (click)="syncTickets()" *ngIf="isOnline">Sync Data</a> -->
+        <ng-container *ngIf="showDepositWithdrawButtons">
+            <button class="btn btn-primary" routerLink="/Machine/OnlineMaster/Deposit" *ngIf="isOnline">
+                <div class="icon-holder">
+                    <img src="assets/images/deposit.svg" alt="Online User Deposit" />
+                </div>
+                <div class="text-holder">
+                    <h2>Online User Deposit</h2>
+                </div>
+            </button>
+            <button class="btn btn-primary" routerLink="/Machine/OnlineMaster/Withdraw" *ngIf="isOnline">
+                <div class="icon-holder">
+                    <img src="assets/images/withdraw-black.svg" alt="Online User Withdraw" />
+                </div>
+                <div class="text-holder">
+                    <h2>Online User Withdraw</h2>
+                </div>
+            </button>
+        </ng-container>
         <button class="btn btn-primary" (click)="triggerAppUpdate()" *ngIf="isOnline">
             <div class="icon-holder">
                 <img src="assets/images/update-icon.svg" [alt]="'admin.forceAppUpdate' | translate" />
@@ -21,7 +41,7 @@
             </div>
         </button>
         <!-- <a class="btn btn-primary" (click)="offlineReport()">Offline Report</a> -->
-        <a class="btn btn-primary" (click)="clearFlutterOfflineCache()">Clear Cache</a>
+        <!-- <a class="btn btn-primary" (click)="clearFlutterOfflineCache()">Clear Cache</a> -->
         <a class="btn btn-primary logout-btn" (click)="logout();">
             <div class="icon-holder">
                 <img src="assets/images/logout-icon.svg" [alt]="'admin.logout' | translate" />

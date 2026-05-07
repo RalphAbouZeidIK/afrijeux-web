@@ -161,7 +161,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 1);
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
-        // Show loader during navigation
+        if(this.isAndroidApp){
+           this.machineSrv.setAdminLoginStatus(false);
+        }
+      
       }
 
       if (event instanceof NavigationEnd) {
