@@ -203,12 +203,14 @@ export class GamesService {
       console.log(gameEventsResponse)
       pickXData = gameEventsResponse.data.filter((event: any) => event.GameId == 66 || event.GameId == 67 || event.GameId == 68)
       pickXData.forEach((event: any) => {
+        let pickType = event.GameId === 66 ? '3' : event.GameId === 67 ? '4' : event.GameId === 68 ? '5' : ''
         if (event.EventConfiguration && event.EventConfiguration.length > 0) {
           pickXGames.push(
             ...event.EventConfiguration.map((config: any) => ({
               ...config,
               GameId: event.GameId,
-              pickTypePerGame: event.GameId === 66 ? '3' : event.GameId === 67 ? '4' : event.GameId === 68 ? '5' : ''
+              pickTypePerGame: pickType,
+              GameRouteGenerated: `Winbig${pickType}`
             }))
           );
         }

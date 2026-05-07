@@ -60,7 +60,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isJackpotGame = false
 
-  path = this.gnrcSrv.getGameRoute()
+  path = this.router.url.split('/')[2]?.split('?')[0]
 
   /* height for sidebar cart; calculated from game block size */
   cartHeight = 0;
@@ -213,7 +213,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   async getEvents() {
     //console.log(this.allEvents)
     let gameEventsResponse = (this.isPickXGame) ? this.allEvents?.pickXGames : this.allEvents?.jackpotGames;
-    //console.log(gameEventsResponse)
+    console.log(gameEventsResponse)
     if (gameEventsResponse != null && gameEventsResponse !== undefined) {
       gameEventsResponse.forEach((eventItem: any) => {
         if (!eventItem.IsSalesStopped) {
@@ -230,10 +230,20 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
 
         if (gameEventId) {
+          console.log(this.path.toLowerCase())
           this.selectedGameEventId = Number(gameEventId);
-          const matchedEvent = this.eventsList.find(
-            (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
-          );
+          let matchedEvent;
+          if (this.isJackpotGame) {
+            matchedEvent = this.eventsList.find(
+              (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
+            );
+          }
+          else {
+            matchedEvent = this.eventsList.find(
+              (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId) && eventItem.GameRouteGenerated.toLowerCase() === this.path.toLowerCase()
+            );
+          }
+
           if (matchedEvent) {
             selectedEvent = matchedEvent;
           }
@@ -660,7 +670,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         id: Math.random().toString(36).substring(2, 9),
         chosenBallsList: this.selectedBalls // generate a random id for the pick
       }
-          this.Stake = 0
+      this.Stake = 0
       this.cartSrv.updateLotoList(pickItem, index)
     }
     //console.log(pickItem)
