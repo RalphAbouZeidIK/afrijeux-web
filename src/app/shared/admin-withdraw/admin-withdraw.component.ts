@@ -44,7 +44,7 @@ export class AdminWithdrawComponent {
         }
         let issueTicketResponse = await this.machineSrv.issueTicket(listOfBets, false, customRoute);
       }
-      console.log('issue ticket', apiResponse);
+      //console.log('issue ticket', apiResponse);
     } catch (err) {
       console.error(err);
     } finally {

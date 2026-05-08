@@ -102,7 +102,7 @@ export class NativeBridgeService {
 
     (window as any).handlePrinterSuccess = () => {
       this.ngZone.run(() => {
-        console.log('✅ Printer completed successfully');
+        //console.log('✅ Printer completed successfully');
         this.setPrintingStatus(true);
       });
     };

@@ -1295,6 +1295,24 @@ app-admin-page {
     }
 }
 
+.nav-holder {
+    display: flex;
+    align-items: center;
+    .games-container{
+        margin-right:14px;
+        gap:30px!important;
+    }
+    button {
+        border: none;
+        padding: 0;
+        box-shadow: none;
+        background: transparent;
+        font-weight: 400;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
 
 @media all and (max-width:992px) {
     .balls-list-holder {

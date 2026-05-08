@@ -17,6 +17,7 @@ interface GameCard {
   Prize: number;
   Stake: number;
   IsSalesStopped?: boolean;
+  GameRouteGenerated?: string
 }
 
 @Component({
@@ -36,20 +37,21 @@ export class GamesLinksComponent implements OnInit {
   @Input() isGamePage = false;
   @Input() isBanner = false;
   @Input() selectedGameEventId: number | string | null = null;
-
+  gameName = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
   constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService) { }
 
   async getGameEvents() {
     //await this.gamesSrv.getAllEvents()
     const allEvents = await this.gamesSrv.getAllLotoGames();
+    console.log('All Events Response:', allEvents);
     this.pickXEvents = Array.isArray(allEvents?.pickXGames)
       ? [...allEvents.pickXGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
-    console.log('PickX Events:', this.pickXEvents);
+    //console.log('PickX Events:', this.pickXEvents);
     this.jackpotEvents = Array.isArray(allEvents?.jackpotGames)
       ? [...allEvents.jackpotGames].sort((a, b) => Number(a?.ConfigurationVersionId) - Number(b?.ConfigurationVersionId))
       : [];
-    console.log('Jackpot Events:', this.jackpotEvents);
+    //console.log('Jackpot Events:', this.jackpotEvents);
     if (!this.isAndroidApp) {
       this.pickXEvents = this.pickXEvents.filter((e: any) => !e?.IsSalesStopped);
       this.jackpotEvents = this.jackpotEvents.filter((e: any) => !e?.IsSalesStopped);
@@ -59,7 +61,7 @@ export class GamesLinksComponent implements OnInit {
 
   private buildGameCards(): void {
     this.allGames = [];
-    
+
     // Add PickX games
     this.pickXEvents.forEach((game: any) => {
 
@@ -76,7 +78,8 @@ export class GamesLinksComponent implements OnInit {
         gameType: 'pickX',
         Prize: game.Prize || 0,
         Stake: game.Stake || 5,
-        IsSalesStopped: game.IsSalesStopped
+        IsSalesStopped: game.IsSalesStopped,
+        GameRouteGenerated: game.GameRouteGenerated
       });
     });
 
@@ -95,7 +98,8 @@ export class GamesLinksComponent implements OnInit {
         gameType: 'jackpot',
         Prize: game.Prize || 0,
         Stake: game.Stake || 5,
-        IsSalesStopped: game.IsSalesStopped
+        IsSalesStopped: game.IsSalesStopped,
+        GameRouteGenerated: game.GameRouteGenerated
       });
     });
 
@@ -116,7 +120,7 @@ export class GamesLinksComponent implements OnInit {
         IsSalesStopped: false
       })
 
-       this.allGames.push({
+      this.allGames.push({
         id: `rapid`,
         name: `RAPID`,
         badgeText: `Instant`,
@@ -144,7 +148,7 @@ export class GamesLinksComponent implements OnInit {
 
   isGameSelected(game: GameCard): boolean {
     // Check if this game is selected by comparing gameEventId
-    return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId);
+    return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId) && game.GameRouteGenerated?.toLowerCase() == this.gameName.toLowerCase();
   }
 
 }

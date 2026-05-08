@@ -48,7 +48,7 @@ export class MachineService {
       showPopup: showPopup,
       showAdminPage: shouldShowAdminPage,
     }
-    console.log(value)
+    //console.log(value)
     this.adminPopupStatus$.next(value);
     if (!showPopup) {
       this.setAdminLoginStatus(false);
@@ -251,7 +251,7 @@ export class MachineService {
         MachineId: (machineData) ? machineData.MachineId : null
       }
     }
-    console.log(params)
+    //console.log(params)
     //console.log(params)
     let paramsBeforeEncryption = params
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
@@ -381,8 +381,8 @@ export class MachineService {
     let game: any = null
     if (this.isAndroidApp) {
       let machineData: any = await this.getMachineData()
-      console.log(machineData)
-      console.log(this.getGameRoute())
+      //console.log(machineData)
+      //console.log(this.getGameRoute())
       game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
     }
 
@@ -461,7 +461,7 @@ export class MachineService {
 
     let userId: any = (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId()
     //console.log(userId)
-    console.log(machineData)
+    //console.log(machineData)
     gameId = await this.getGameId()
 
     ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userId.toString() + this.gnrcSrv.getFormattedToday() + gameId
@@ -497,7 +497,7 @@ export class MachineService {
       Code: ticketObject.Code ? ticketObject.Code : null,
       UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
-    console.log(ticketBody)
+    //console.log(ticketBody)
 
 
     let params = {
@@ -509,7 +509,7 @@ export class MachineService {
       Code: ticketObject.Code ? ticketObject.Code : null,
       UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
-    console.log(params)
+    //console.log(params)
 
     if (this.isAndroidApp) {
       if (!this.isOnline) {
@@ -539,7 +539,7 @@ export class MachineService {
           apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
 
         }
-        console.log(apiResponse)
+        //console.log(apiResponse)
         if (apiResponse.DataToPrint) {
           this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
 
@@ -1142,14 +1142,22 @@ export class MachineService {
   }
 
   async getAllEvents() {
-    let params: any = {
-      GameId: 31,
-      GameConfiguration: [],
-      UserOnlineStatus: true,
-    }
     let apiResponse: any
-    apiResponse = await this.handleApiResponse(`Master`, `Configuration/GetAllEventConfiguration`, 'POST', params);
-    return apiResponse
+    if (this.isAndroidApp) {
+      let params: any = {
+        GameId: 31,
+        GameConfiguration: [],
+        UserOnlineStatus: true,
+      }
+
+      apiResponse = await this.handleApiResponse(`Master`, `Configuration/GetAllEventConfiguration`, 'POST', params);
+      return apiResponse.data
+    }
+    else {
+      apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetAllEventConfiguration`, 'GET', {});
+      return apiResponse
+    }
+
 
   }
 
@@ -1170,7 +1178,7 @@ export class MachineService {
       dateOfOp = await this.apiSrv.makeApi('OnlineMaster', `Corporate/GetOperationDate/13`, "GET", {})
 
     }
-    console.log(dateOfOp)
+    //console.log(dateOfOp)
     return dateOfOp.Date || dateOfOp.date
   }
 

@@ -60,7 +60,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isJackpotGame = false
 
-  path = this.router.url.split('/')[2]?.split('?')[0]
+
 
   /* height for sidebar cart; calculated from game block size */
   cartHeight = 0;
@@ -84,6 +84,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
+  path = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
 
   @Input() allEvents: any = []
 
@@ -213,7 +214,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   async getEvents() {
     //console.log(this.allEvents)
     let gameEventsResponse = (this.isPickXGame) ? this.allEvents?.pickXGames : this.allEvents?.jackpotGames;
-    console.log(gameEventsResponse)
+    //console.log(gameEventsResponse)
     if (gameEventsResponse != null && gameEventsResponse !== undefined) {
       gameEventsResponse.forEach((eventItem: any) => {
         if (!eventItem.IsSalesStopped) {
@@ -230,7 +231,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
 
         if (gameEventId) {
-          console.log(this.path.toLowerCase())
+          //console.log(this.path.toLowerCase())
           this.selectedGameEventId = Number(gameEventId);
           let matchedEvent;
           if (this.isJackpotGame) {
@@ -256,7 +257,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
             selectedEvent = matchedEvent;
           }
         }
-        console.log(selectedEvent)
+        //console.log(selectedEvent)
         this.composeEventDetails(selectedEvent)
 
       }
@@ -278,12 +279,12 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   async composeEventDetails(raceItem: any, keepSameType = false) {
     //console.log(raceItem)
     let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
-    console.log(raceItem, configId)
+    //console.log(raceItem, configId)
     if (this.configCache.has(configId)) {
       this.fixedConfig = this.configCache.get(configId);
     } else {
       this.fixedConfig = await this.gamesSrv.getFixedConfig(configId)
-      console.log(this.fixedConfig)
+      //console.log(this.fixedConfig)
       this.configCache.set(configId, this.fixedConfig);
     }
     let numberOfSelectedBalls = (this.isPickXGame) ? this.fixedConfig[0].NumberOfBalls : 6

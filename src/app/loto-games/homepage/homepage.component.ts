@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GamesService } from 'src/app/services/games.service';
 import { PlayTypeRule } from '../game-playtypes/game-playtypes.component';
@@ -19,7 +19,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   private hasInitializedQueryParams = false;
   allLotoEvents: any = null;
 
-  constructor(private route: ActivatedRoute, private gamesSrv: GamesService, private gnrcSrv: GenericService) { }
+  constructor(private route: ActivatedRoute, private gamesSrv: GamesService, private gnrcSrv: GenericService, private router: Router) { }
 
   introTitle = '';
   introDescription = '';
@@ -39,6 +39,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
   examples: string[] = [];
 
   isAndroidApp = this.gnrcSrv.isMachineApp()
+
+  gameName = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
+
 
   async ngOnInit(): Promise<void> {
     this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
@@ -99,6 +102,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   private getPickContentKeyFromConfigurationVersion(gameType: number): LotoGameContentKey {
+    console.log(gameType)
     if (gameType === 2) {
       return 'pick2';
     }
@@ -126,9 +130,9 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
       const pickXEvents = Array.isArray(this.allLotoEvents?.pickXGames) ? this.allLotoEvents.pickXGames : [];
       const matchedEvent = pickXEvents.find(
-        (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
+        (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId) && eventItem.GameRouteGenerated?.toLowerCase() == this.gameName.toLowerCase()
       );
-
+      console.log(matchedEvent)
       return Number(matchedEvent?.ConfigurationVersionId);
     } catch (error) {
       console.warn(error);
@@ -137,6 +141,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   private async getDefaultPickXConfigurationVersion(): Promise<number> {
+    debugger
     try {
       if (!this.allLotoEvents) {
         this.allLotoEvents = await this.gamesSrv.getAllLotoGames();

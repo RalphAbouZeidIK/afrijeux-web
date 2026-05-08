@@ -117,7 +117,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
     else {
       this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
-        console.log(data)
+        //console.log(data)
         this.cartInitialize(data)
       });
     }
@@ -132,7 +132,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.bridge.getPrintingStatus().subscribe((status) => {
-      console.log('Printing status updated:', status);
+      //console.log('Printing status updated:', status);
       this.isIssuing = false;
       if(!status) {
         this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
@@ -335,7 +335,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
       }
 
-      console.log(this.listOfBets)
+      //console.log(this.listOfBets)
       if (this.isAndroidApp && apiResponse.DataToPrint) {
         this.clearBets()
         this.gnrcSrv.setModalData(true, true, apiResponse.message)
@@ -354,7 +354,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
           this.isIssuing = false;
         }
       }
-      console.log(apiResponse);
+      //console.log(apiResponse);
     } catch (err) {
       console.error(err);
       this.gnrcSrv.setModalData(true, false, 'Something went wrong.');
@@ -374,7 +374,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onBallClick(betItem: any, ballIndex: number, ball: any) {
-    console.log('Ball clicked:', { betItem, ballIndex, ball });
+    //console.log('Ball clicked:', { betItem, ballIndex, ball });
     this.editBallInCart.emit({ betItem, ballIndex, ball });
   }
 

@@ -70,14 +70,14 @@ export class PrizeDetailsPageComponent implements OnInit {
   async getPrizeDetails() {
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetPrizeDetails', 'GET', {});
     this.games = this.groupData(apiResponse);
-    console.log(this.games)
+    //console.log(this.games)
     this.games.forEach((game: any) => {
       game.iconName = game.gameId === 66 ? 'pick3' : game.gameId === 67 ? 'pick4' : game.gameId === 68 ? 'pick5' : 'jackpot';
       game.iconName = `${game.iconName}.svg`
     });
 
     this.toggleGame(this.games[0].gameId)
-    console.log(this.games)
+    //console.log(this.games)
   }
 
   toggleGame(game: string) {

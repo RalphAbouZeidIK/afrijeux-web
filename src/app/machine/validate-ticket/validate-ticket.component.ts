@@ -94,7 +94,7 @@ export class ValidateTicketComponent {
     this.gnrcSrv.toggleLoader(true);
 
     let validateTicketReponse = await this.machineSrv.validateTicket(this.fullTicketId)
-    console.log(validateTicketReponse)
+    //console.log(validateTicketReponse)
 
     this.isPaying = true
     this.showForm = true
@@ -139,7 +139,7 @@ export class ValidateTicketComponent {
 
   async payTicket() {
     let payTicketReponse = await this.machineSrv.payTicket(this.fullTicketId)
-    console.log(payTicketReponse)
+    //console.log(payTicketReponse)
     if (payTicketReponse.DataToPrint) {
       this.fullTicketId = ''
       this.isPaying = false

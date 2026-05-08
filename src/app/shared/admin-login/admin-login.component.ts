@@ -20,7 +20,7 @@ export class AdminLoginComponent implements OnChanges {
 
   constructor(private machineSrv: MachineService) {
     this.machineSrv.getAdminPopupStatus().subscribe(status => {
-      console.log(status)
+      //console.log(status)
     });
   }
 
@@ -45,7 +45,7 @@ export class AdminLoginComponent implements OnChanges {
     //console.log('ngOnChanges triggered');
     // Only re-process if allEvents reference has changed (avoids redundant API calls)
     if (changes['shouldShowAdminPage'] && changes['shouldShowAdminPage'].currentValue !== changes['shouldShowAdminPage'].previousValue) {
-      console.log(this.shouldShowAdminPage)
+      //console.log(this.shouldShowAdminPage)
     }
   }
 

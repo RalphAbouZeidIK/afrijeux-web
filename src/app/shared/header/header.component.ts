@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit {
 
     this.machineSrv.getAdminLoginStatus().subscribe(status => {
       this.showAdminPage = status.showAdminPage;
-      console.log(status)
+      //console.log(status)
     });
   }
 

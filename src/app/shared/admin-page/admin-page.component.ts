@@ -36,7 +36,7 @@ export class AdminPageComponent {
   async ngOnInit() {
     let machineData = await this.machineSrv.getMachineData()
     let games = machineData?.Games
-    console.log('Machine Games:', games)
+    //console.log('Machine Games:', games)
     games.forEach((gameItem: any) => {
       gameItem.ShowGame = false
       // if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
@@ -66,7 +66,7 @@ export class AdminPageComponent {
       }
 
     })
-    console.log(this.machineMenu)
+    //console.log(this.machineMenu)
   }
 
   selectGame(game: any) {

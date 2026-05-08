@@ -75,7 +75,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'WinBig3',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.WinBig3',
     }
   },
@@ -85,7 +85,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'WinBig4',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.WinBig4',
     }
   },
@@ -95,7 +95,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'WinBig5',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.WinBig5',
     }
   },
@@ -105,7 +105,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Jackpot',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Jackpot',
     }
   },
@@ -116,7 +116,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'My profile',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.User',
     },
   },

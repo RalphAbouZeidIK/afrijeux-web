@@ -50,10 +50,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   async getGames() {
     let machineData = await this.machineSrv.getMachineData()
-    console.log(machineData)
+    //console.log(machineData)
     this.gamesList = machineData?.Games.filter((game: any) => game.GameId != 49)
     this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
-    console.log(this.gamesList)
+    //console.log(this.gamesList)
   }
 
   selectedGamesChange(game: any, event: any) {
@@ -75,7 +75,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.selectedGames.splice(index, 1);
       }
     }
-    console.log(this.selectedGames);
+    //console.log(this.selectedGames);
   }
 
   onDateChange(event: any, field: keyof ReportsComponent) {
