@@ -30,12 +30,12 @@ interface ResultEventOption extends OptionListItem {
 })
 
 export class ResultsComponent implements OnInit {
-    filters = ['Pick 2', 'Pick 3', 'Pick 4', 'Pick 5', 'Jackpot'];
+    filters = ['Win 3', 'Win 4', 'Jackpot'];
     activeFilter = 'Jackpot';
     searchTerm = '';
     draws: ResultDraw[] = [];
     jackpotGameId = 38;
-    pickXGameId = 35;
+    pickXGameId = 66;
     currentGameId = this.jackpotGameId;
     eventOptions: ResultEventOption[] = [];
     selectedEventOption: ResultEventOption = {

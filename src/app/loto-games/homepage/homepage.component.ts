@@ -141,7 +141,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   private async getDefaultPickXConfigurationVersion(): Promise<number> {
-    debugger
     try {
       if (!this.allLotoEvents) {
         this.allLotoEvents = await this.gamesSrv.getAllLotoGames();

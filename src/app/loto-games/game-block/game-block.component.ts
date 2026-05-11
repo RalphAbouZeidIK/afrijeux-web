@@ -741,7 +741,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   async issue100TicketsSeparately() {
-    debugger
     if (this.isBulkSeparateIssueInProgress || !this.selectedEvent) {
       return;
     }

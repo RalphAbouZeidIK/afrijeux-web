@@ -17,7 +17,8 @@ interface GameCard {
   Prize: number;
   Stake: number;
   IsSalesStopped?: boolean;
-  GameRouteGenerated?: string
+  GameRouteGenerated?: string,
+  GameId?: number
 }
 
 @Component({
@@ -36,6 +37,7 @@ export class GamesLinksComponent implements OnInit {
   @Input() isListingPage = false;
   @Input() isGamePage = false;
   @Input() isBanner = false;
+  @Input() isHeader = false
   @Input() selectedGameEventId: number | string | null = null;
   gameName = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
   constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService) { }
@@ -61,7 +63,7 @@ export class GamesLinksComponent implements OnInit {
 
   private buildGameCards(): void {
     this.allGames = [];
-
+    console.log(this.allGames)
     // Add PickX games
     this.pickXEvents.forEach((game: any) => {
 
@@ -79,7 +81,8 @@ export class GamesLinksComponent implements OnInit {
         Prize: game.Prize || 0,
         Stake: game.Stake || 5,
         IsSalesStopped: game.IsSalesStopped,
-        GameRouteGenerated: game.GameRouteGenerated
+        GameRouteGenerated: game.GameRouteGenerated,
+        GameId: game.GameId
       });
     });
 
@@ -99,7 +102,8 @@ export class GamesLinksComponent implements OnInit {
         Prize: game.Prize || 0,
         Stake: game.Stake || 5,
         IsSalesStopped: game.IsSalesStopped,
-        GameRouteGenerated: game.GameRouteGenerated
+        GameRouteGenerated: 'Jackpot',
+        GameId: game.GameId
       });
     });
 
@@ -136,9 +140,24 @@ export class GamesLinksComponent implements OnInit {
         IsSalesStopped: false
       })
     }
-
+    if (this.isHeader) {
+      this.allGames = this.uniqueGames()
+      console.log(this.allGames)
+    }
   }
 
+  uniqueGames() {
+    const seen = new Set();
+
+    return this.allGames.filter((game: any) => {
+      if (seen.has(game.GameId)) {
+        return false;
+      }
+
+      seen.add(game.GameId);
+      return true;
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     this.gnrcSrv.toggleLoader(true);
@@ -148,7 +167,14 @@ export class GamesLinksComponent implements OnInit {
 
   isGameSelected(game: GameCard): boolean {
     // Check if this game is selected by comparing gameEventId
-    return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId) && game.GameRouteGenerated?.toLowerCase() == this.gameName.toLowerCase();
+    if (this.isHeader) {
+      let gameName = this.router.url.split('/')[1]?.split('?')[0]
+      return game.GameRouteGenerated?.toLowerCase() == gameName.toLowerCase()
+    }
+    else {
+      return this.selectedGameEventId != null && Number(this.selectedGameEventId) === Number(game.GameEventId) && game.GameRouteGenerated?.toLowerCase() == this.gameName.toLowerCase();
+
+    }
   }
 
 }

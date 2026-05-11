@@ -1298,10 +1298,17 @@ app-admin-page {
 .nav-holder {
     display: flex;
     align-items: center;
-    .games-container{
-        margin-right:14px;
-        gap:30px!important;
+
+    .games-container {
+        margin-right: 14px;
+        gap: 30px !important;
     }
+
+    .game-card.selected button {
+        font-weight: 700;
+        color: $lightGreen
+    }
+
     button {
         border: none;
         padding: 0;
