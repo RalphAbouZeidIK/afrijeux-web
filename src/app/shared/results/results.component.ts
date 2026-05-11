@@ -30,13 +30,29 @@ interface ResultEventOption extends OptionListItem {
 })
 
 export class ResultsComponent implements OnInit {
-    filters = ['Win 3', 'Win 4', 'Jackpot'];
-    activeFilter = 'Jackpot';
+    filters = [
+        {
+            gameName: 'Jackpot',
+            gameId: 38
+        },
+        {
+            gameName: 'Win 3',
+            gameId: 66
+        },
+        {
+            gameName: 'Win 4',
+            gameId: 67
+        },
+        {
+            gameName: 'Win 5',
+            gameId: 68
+        }
+    ];
+
+    activeFilter = this.filters[0];
     searchTerm = '';
     draws: ResultDraw[] = [];
-    jackpotGameId = 38;
-    pickXGameId = 66;
-    currentGameId = this.jackpotGameId;
+    currentGameId = this.activeFilter.gameId;
     eventOptions: ResultEventOption[] = [];
     selectedEventOption: ResultEventOption = {
         TicketTypeId: '',
@@ -73,17 +89,23 @@ export class ResultsComponent implements OnInit {
         }
     }
 
-    async getEventResultIds(gameId: number, versionId?: number): Promise<void> {
+    async getEventResultIds(gameId: number): Promise<void> {
         try {
             const response = await this.gamesSrv.getEventResultIds(gameId);
-            const normalizedOptions = this.normalizeEventOptions(response);
-            const filteredOptions = this.filterEventOptionsByVersion(normalizedOptions, versionId);
 
-            this.eventOptions = filteredOptions.sort((a, b) => this.getEventTimeValue(b.eventDate) - this.getEventTimeValue(a.eventDate));
+            this.eventOptions = this.normalizeEventOptions(response)
+                .sort((a, b) =>
+                    this.getEventTimeValue(b.eventDate) - this.getEventTimeValue(a.eventDate)
+                );
 
             if (this.eventOptions.length > 0) {
                 this.selectedEventOption = this.eventOptions[0];
-                await this.getResults(this.selectedEventOption.TicketTypeId, gameId);
+
+                await this.getResults(
+                    this.selectedEventOption.TicketTypeId,
+                    gameId
+                );
+
                 return;
             }
 
@@ -91,9 +113,12 @@ export class ResultsComponent implements OnInit {
                 TicketTypeId: '',
                 TicketTypeName: 'No events found'
             };
+
             this.draws = [];
+
         } catch (error) {
             console.error('Error fetching event result IDs:', error);
+
             this.eventOptions = [];
             this.draws = [];
         }
@@ -110,26 +135,19 @@ export class ResultsComponent implements OnInit {
     }
 
 
-    async setFilter(filter: string): Promise<void> {
+    async setFilter(filter: any): Promise<void> {
         this.activeFilter = filter;
         this.showEventOptions = false;
         await this.loadResultsForFilter(filter);
     }
 
     get filteredDraws(): ResultDraw[] {
-        const normalizedFilter = this.normalizeCompareText(this.activeFilter);
         const normalizedSearch = this.searchTerm.trim().toLowerCase();
 
         return this.draws.filter((draw) => {
-            const normalizedGameType = this.normalizeCompareText(draw.gameType);
-            const matchesFilter = normalizedFilter === 'all'
-                || normalizedGameType.includes(normalizedFilter)
-                || normalizedFilter.includes(normalizedGameType);
-            const matchesSearch = normalizedSearch.length === 0
+            return normalizedSearch.length === 0
                 || draw.eventName.toLowerCase().includes(normalizedSearch)
                 || draw.id.toLowerCase().includes(normalizedSearch);
-
-            return matchesFilter && matchesSearch;
         });
     }
 
@@ -193,13 +211,12 @@ export class ResultsComponent implements OnInit {
         const eventName = item?.EventName ?? item?.Name ?? item?.Label ?? item?.Description ?? fallbackName;
         const rawEventDate = item?.DrawDate ?? item?.EventDate ?? item?.GameEventDate;
         const eventDate = this.formatEventOptionDate(rawEventDate);
-        const parsedVersionId = this.parseVersionId(item?.VersionId ?? item?.ConfigurationVersionId ?? item?.VersionType);
+        //const parsedVersionId = this.parseVersionId(item?.VersionId ?? item?.ConfigurationVersionId ?? item?.VersionType);
 
         return {
             TicketTypeId: eventId,
             TicketTypeName: eventDate ? `${eventName} - ${eventDate}` : String(eventName),
-            eventDate: rawEventDate,
-            versionId: parsedVersionId
+            eventDate: rawEventDate
         };
     }
 
@@ -350,64 +367,35 @@ export class ResultsComponent implements OnInit {
         }).format(parsedDate);
     }
 
-    private async loadResultsForFilter(filter: string): Promise<void> {
-        const normalizedFilter = filter.toLowerCase();
+    private async loadResultsForFilter(filter: any): Promise<void> {
+        this.currentGameId = filter.gameId;
 
-        if (normalizedFilter === 'jackpot') {
-            this.currentGameId = this.jackpotGameId;
-            await this.getEventResultIds(this.jackpotGameId);
-            return;
-        }
-
-        const versionId = this.getVersionIdFromFilter(normalizedFilter);
-        this.currentGameId = this.pickXGameId;
-        await this.getEventResultIds(this.pickXGameId, versionId);
+        await this.getEventResultIds(filter.gameId);
     }
 
-    private getVersionIdFromFilter(normalizedFilter: string): number | undefined {
-        if (normalizedFilter === 'pick 2') {
-            return 2;
-        }
-        if (normalizedFilter === 'pick 3') {
-            return 3;
-        }
-        if (normalizedFilter === 'pick 4') {
-            return 4;
-        }
-        if (normalizedFilter === 'pick 5') {
-            return 5;
-        }
-        return undefined;
-    }
 
-    private filterEventOptionsByVersion(options: ResultEventOption[], versionId?: number): ResultEventOption[] {
-        if (!versionId) {
-            return options;
-        }
 
-        return options.filter((option) => Number(option.versionId) === Number(versionId));
-    }
 
-    private parseVersionId(value: any): number | undefined {
-        if (value === null || value === undefined || value === '') {
-            return undefined;
-        }
+    // private parseVersionId(value: any): number | undefined {
+    //     if (value === null || value === undefined || value === '') {
+    //         return undefined;
+    //     }
 
-        const numericValue = Number(value);
-        if (!Number.isNaN(numericValue)) {
-            return numericValue;
-        }
+    //     const numericValue = Number(value);
+    //     if (!Number.isNaN(numericValue)) {
+    //         return numericValue;
+    //     }
 
-        if (typeof value === 'string') {
-            const match = value.match(/(\d+)/);
-            if (match) {
-                const extracted = Number(match[1]);
-                return Number.isNaN(extracted) ? undefined : extracted;
-            }
-        }
+    //     if (typeof value === 'string') {
+    //         const match = value.match(/(\d+)/);
+    //         if (match) {
+    //             const extracted = Number(match[1]);
+    //             return Number.isNaN(extracted) ? undefined : extracted;
+    //         }
+    //     }
 
-        return undefined;
-    }
+    //     return undefined;
+    // }
 
     private getEventTimeValue(value: any): number {
         if (!value) {
