@@ -9,10 +9,10 @@
             <div class="game-header" (click)="toggleGame(game.gameId)">
                 <div class="game-info">
                     <img src="assets/images/{{ game.iconName }}" [alt]="game.gameName" class="game-icon">
-                    <div class="game-title-section">
+                    <!-- <div class="game-title-section">
                         <span class="game-title">{{ game.gameName }}</span>
                         <span class="game-badge" *ngIf="game.NumberOfBalls">Pick {{ game.NumberOfBalls }} Balls</span>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="chevron" [class.rotated]="expandedGame === game.gameId">
                     <img src="assets/images/arrow-down-white.svg" alt="Arrow Icon">
@@ -36,7 +36,8 @@
                             <!-- Dynamic Prizes Loop -->
                             <ng-container *ngFor="let prize of playType.items;let i =index ">
                                 <tr>
-                                    <td>{{ i+1 }}</td>
+                                    <td>
+                                        {{ (game.gameId == 38 && i == 0)? 'Jackpot' : i+1 }}</td>
                                     <td>{{ prize.Hits}}</td>
                                     <td>
                                         <div class="icon-amount">

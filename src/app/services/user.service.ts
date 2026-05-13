@@ -215,7 +215,7 @@ export class UserService {
     if(!userData || !userData.userInfo || !userData.userInfo.Email){
       return false
     }
-    return userData?.userInfo.Email == 'cn@hotmail.com' || false;
+    return userData?.userInfo.Email == 'cn@hotmail.com' || userData?.userInfo.Email == 'ghattasadib14@gmail.com' || false;
   }
 
 

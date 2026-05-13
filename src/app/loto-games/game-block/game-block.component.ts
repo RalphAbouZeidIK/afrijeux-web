@@ -608,7 +608,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     const configId = Number(this.selectedEvent?.ConfigurationVersionId);
     if (this.isPickXGame && !Number.isNaN(configId)) {
-      return `Pick${configId}`;
+      return `Win${configId}`;
     }
 
     return 'Jackpot';

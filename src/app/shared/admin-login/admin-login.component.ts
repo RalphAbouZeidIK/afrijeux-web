@@ -50,7 +50,7 @@ export class AdminLoginComponent implements OnChanges {
   }
 
   submitLogin() {
-    if (this.loginForm.value.Password?.toLowerCase() === 'sys') {
+    if (this.loginForm.value.Password?.toLowerCase() === 'admin123') {
       this.toggleAdminLogin(true);
     }
 

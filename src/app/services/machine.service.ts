@@ -509,8 +509,8 @@ export class MachineService {
       Code: ticketObject.Code ? ticketObject.Code : null,
       UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
-    //console.log(params)
-
+    console.log(params)
+    
     if (this.isAndroidApp) {
       if (!this.isOnline) {
         const canPrint = await this.checksBeforePrinting(ticketObject);
