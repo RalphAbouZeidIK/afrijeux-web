@@ -646,7 +646,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
           displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
           Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
           gameName: gameName,
-          stake: type.MinStake,
+          Stake: type.MinStake,
           id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
           chosenBallsList: this.selectedBalls
         }
@@ -660,14 +660,14 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         return
       }
       this.updateLotoPrice()
-      pickItem = {
+      pickItem = {  
         IsQuickPick: this.isQuickPick,
         gameEventId: this.selectedEvent.GameEventId,
         eventName: this.selectedEvent.EventName,
         displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
         SelectedNumber: this.selectedNumbers,
         gameName: gameName,
-        stake: this.Stake,
+        Stake: this.Stake,
         id: Math.random().toString(36).substring(2, 9),
         chosenBallsList: this.selectedBalls // generate a random id for the pick
       }

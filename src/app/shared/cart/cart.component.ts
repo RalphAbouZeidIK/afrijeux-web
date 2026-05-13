@@ -197,7 +197,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
       this.listOfBets.GameEventId = this.listOfBets[0].gameEventId
       this.listOfBets.TicketPrice = 0
       this.listOfBets.forEach((ticketItem: any) => {
-        this.listOfBets.TicketPrice += ticketItem.stake
+        this.listOfBets.TicketPrice += ticketItem.Stake
       })
     }
     this.totalPriceChange.emit(this.listOfBets.TicketPrice)

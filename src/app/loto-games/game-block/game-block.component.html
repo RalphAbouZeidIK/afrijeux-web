@@ -94,7 +94,7 @@
                             <app-ball-list [chosenBallsArray]="listOfBalls" [selectedBall]="selectedEditBall"
                                 [shouldHighlight]="true"
                                 [disabledBallNumbers]="isEditingCartBall ? getEditingDisabledBallNumbers() : []"
-                                (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectPickXBall($event)"
+                                (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectBall($event)"
                                 (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx" [showDeleteButton]="true">
                             </app-ball-list>
                         </ng-container>

@@ -9,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent {
 
   carouselImages = [
-    { id: '1', url: 'assets/images/carousel-1.png', alt: 'Carousel Image 1' },
-    { id: '2', url: 'assets/images/carousel-2.jpg', alt: 'Carousel Image 2' },
-    { id: '3', url: 'assets/images/carousel-3.jpg', alt: 'Carousel Image 3' }
+    { id: '1', url: 'assets/images/banner1.png', alt: 'Banner 1' },
+    { id: '2', url: 'assets/images/banner2.png', alt: 'Banner 2' },
+    { id: '3', url: 'assets/images/banner3.png', alt: 'Banner 3' },
+    { id: '4', url: 'assets/images/banner4.png', alt: 'Banner 4' },
+    { id: '5', url: 'assets/images/banner5.png', alt: 'Banner 5' }
   ];
 
   constructor() {
