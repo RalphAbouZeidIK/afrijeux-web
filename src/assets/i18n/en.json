@@ -300,7 +300,7 @@
         },
         "adminLogin": {
             "title": "Admin Login",
-            "adminLoginMessage": "Please enter the admin password"
+            "adminLoginMessage": "Please enter the admin credentials"
         },
         "adminDeposit": {
             "title": "Online User Deposit",

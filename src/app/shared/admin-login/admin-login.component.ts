@@ -15,6 +15,7 @@ export class AdminLoginComponent implements OnChanges {
   @Input() shouldShowAdminPage: any = true
 
   loginForm = new FormGroup({
+    Username: new FormControl('', [Validators.required]),
     Password: new FormControl('', [Validators.required])
   });
 
@@ -49,13 +50,20 @@ export class AdminLoginComponent implements OnChanges {
     }
   }
 
-  submitLogin() {
-    if (this.loginForm.value.Password?.toLowerCase() === 'admin123') {
+  async submitLogin() {
+    let loginParams = {
+      username: this.loginForm.value.Username,
+      password: this.loginForm.value.Password
+    }
+    let respoonse = await this.machineSrv.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', loginParams)
+    console.log(respoonse)
+
+    if (respoonse.status == true) {
       this.toggleAdminLogin(true);
     }
 
     else {
-      this.errorMsg = 'Incorrect Password';
+      this.errorMsg = 'Invalid credentials.';
       this.showErrorMessage = true;
     }
 

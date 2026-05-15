@@ -15,14 +15,21 @@
 
         <!-- ================= LOGIN FORM ================= -->
         <form class="form-content" [formGroup]="loginForm">
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'machine.shared.username' | translate }}
+                </label>
 
+                <input type="number" class="form-control" title="Admin Username" formControlName="Username"
+                    placeholder="Admin Username" />
+            </div>
             <div class="form-group">
                 <label class="title-label">
                     {{ 'machine.shared.password' | translate }}
                 </label>
 
                 <input type="password" class="form-control" title="Admin Password" formControlName="Password"
-                    placeholder="Admin Password" />
+                    [attr.inputmode]="'numeric'" [attr.pattern]=" '[0-9]*'" placeholder="Admin Password" />
             </div>
         </form>
 

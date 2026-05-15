@@ -136,6 +136,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   async ngOnInit(): Promise<void> {
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.gnrcSrv.setIsDesktopView(window.innerWidth > 992)
     this.getMenuItems()
@@ -161,10 +163,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 1);
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
-        if(this.isAndroidApp){
-           this.machineSrv.setAdminLoginStatus(false);
+        if (this.isAndroidApp) {
+          this.machineSrv.setAdminLoginStatus(false);
         }
-      
+
       }
 
       if (event instanceof NavigationEnd) {
