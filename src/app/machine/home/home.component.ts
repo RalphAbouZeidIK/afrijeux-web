@@ -13,7 +13,7 @@ export class HomeComponent {
     { id: '2', url: 'assets/images/banner2-new.png', alt: 'Banner 2' },
     { id: '3', url: 'assets/images/banner3-new.png', alt: 'Banner 3' },
     { id: '4', url: 'assets/images/banner4-new.png', alt: 'Banner 4' },
-    { id: '5', url: 'assets/images/banner5-new.png', alt: 'Banner 5' }
+    { id: '6', url: 'assets/images/banner6-new.png', alt: 'Banner 6' }
   ];
 
   constructor() {

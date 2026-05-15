@@ -107,39 +107,39 @@ export class GamesLinksComponent implements OnInit {
       });
     });
 
-    if (this.isAndroidApp) {
-      this.allGames.push({
-        id: `keno`,
-        name: `KENO`,
-        badgeText: `Instant`,
-        prize: 0,
-        GameEventDate: null,
-        imageUrl: `assets/images/keno.svg`,
-        route: '/Machine/WinBigKeno',
-        GameEventId: null,
-        playPrice: 3,
-        gameType: 'RAPID',
-        Prize: 0,
-        Stake: 3,
-        IsSalesStopped: false
-      })
+    // if (this.isAndroidApp) {
+    //   this.allGames.push({
+    //     id: `keno`,
+    //     name: `KENO`,
+    //     badgeText: `Instant`,
+    //     prize: 0,
+    //     GameEventDate: null,
+    //     imageUrl: `assets/images/keno.svg`,
+    //     route: '/Machine/WinBigKeno',
+    //     GameEventId: null,
+    //     playPrice: 3,
+    //     gameType: 'RAPID',
+    //     Prize: 0,
+    //     Stake: 3,
+    //     IsSalesStopped: false
+    //   })
 
-      this.allGames.push({
-        id: `rapid`,
-        name: `RAPID`,
-        badgeText: `Instant`,
-        prize: 0,
-        GameEventDate: null,
-        imageUrl: `assets/images/rapid.svg`,
-        route: '/Machine/WinBigRapid',
-        GameEventId: null,
-        playPrice: 3,
-        gameType: 'RAPID',
-        Prize: 0,
-        Stake: 3,
-        IsSalesStopped: false
-      })
-    }
+    //   this.allGames.push({
+    //     id: `rapid`,
+    //     name: `RAPID`,
+    //     badgeText: `Instant`,
+    //     prize: 0,
+    //     GameEventDate: null,
+    //     imageUrl: `assets/images/rapid.svg`,
+    //     route: '/Machine/WinBigRapid',
+    //     GameEventId: null,
+    //     playPrice: 3,
+    //     gameType: 'RAPID',
+    //     Prize: 0,
+    //     Stake: 3,
+    //     IsSalesStopped: false
+    //   })
+    // }
     if (this.isHeader) {
       this.allGames = this.uniqueGames()
       console.log(this.allGames)

@@ -29,7 +29,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   selectedTypes: any[] = []
 
-  maxBalls = 9;              // absolute maximum allowed
+  maxBalls = 6;              // absolute maximum allowed
   initialBallCount = 6;      // comes from configVersionId
 
   selectedNumbers: number[] = [];
@@ -656,7 +656,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     else {
       if (this.selectedNumbers.length < 6 || this.selectedNumbers.length > 9) {
-        this.gnrcSrv.setModalData(true, false, 'Please select between 6 and 9 numbers.');
+        this.gnrcSrv.setModalData(true, false, 'Please select between 6 numbers.');
         return
       }
       this.updateLotoPrice()
