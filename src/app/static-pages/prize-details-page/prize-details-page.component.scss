@@ -239,6 +239,9 @@
         width: 13px;
         display: flex;
         align-items: center;
+        img{
+            max-width: 100%;
+        }
     }
 
     .amount {

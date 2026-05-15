@@ -23,7 +23,7 @@
                             <span>Prize: </span>
                             <span class="prize-amount">{{ game.Prize | number:'1.0-0' }}</span>
                         </p>
-                        <span class="currency-icon"><img src="assets/images/UAE_Dirham_Symbol-yellow.svg" alt=""></span>
+                        <span class="currency-icon"><img src="assets/images/uae-symbol.png" alt=""></span>
                     </div>
 
                     <!-- Draw Information -->
@@ -38,7 +38,7 @@
                 [routerLink]="game.route" [queryParams]="{ gameEventId: game.GameEventId }">
                 <ng-container *ngIf="isListingPage">
                     <span>Pay /</span>
-                    <span class="price-tag"><img src="assets/images/UAE_Dirham_Symbol.svg" alt=""> {{ game.Stake
+                    <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt=""> {{ game.Stake
                         }}</span>
                 </ng-container>
                 <ng-container *ngIf="!isListingPage">

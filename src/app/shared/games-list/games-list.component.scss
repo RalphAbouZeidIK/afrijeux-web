@@ -110,6 +110,7 @@
 
         img {
             display: block;
+            height: 11px;
         }
     }
 }
@@ -165,6 +166,12 @@
         font-weight: 500;
         display: flex;
         gap: 3px;
+        align-items: center;
+
+        img {
+            display: block;
+            height: 11px
+        }
     }
 }
 
