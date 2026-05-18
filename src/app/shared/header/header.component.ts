@@ -16,6 +16,8 @@ import { MachineService } from 'src/app/services/machine.service';
   standalone: false
 })
 export class HeaderComponent implements OnInit {
+  @Input()isTesting = false
+
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
   type: any = ''

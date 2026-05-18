@@ -1,5 +1,5 @@
 <div class="app-holder">
-  <app-header [isLoggedIn]="isLoggedIn" [navList]="navList" *ngIf="!hideHeader"></app-header>
+  <app-header [isLoggedIn]="isLoggedIn" [navList]="navList" *ngIf="!hideHeader" [isTesting]="isTesting"></app-header>
   <ng-container *ngIf="!isAndroidApp">
 
     <app-login *ngIf="loginObject.show" [loginObject]="loginObject"></app-login>

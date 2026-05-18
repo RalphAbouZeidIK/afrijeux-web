@@ -5,10 +5,13 @@
 /**
  * Environment file that changes based on the build type
  */
+const baseUrl: string = 'http://10.1.3.70:5000/';
+
 export const environment = {
   production: false,
+  isTesting: baseUrl !== 'https://services.winbig.win/',
   //BaseUrl: 'http://192.168.1.9:5000/',
-  BaseUrl: 'http://10.1.3.70:5000/',
+  BaseUrl: baseUrl,
   //BaseUrl: 'http://test.gamecooks.com:5000/',
   //BaseUrl: 'http://localhost:5000/',
   gcSrv: 'GameCooksService/',

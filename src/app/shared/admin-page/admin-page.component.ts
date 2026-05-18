@@ -135,23 +135,24 @@ export class AdminPageComponent {
 
 
   triggerAppUpdate() {
-    try {
-      if ((window as any).OfflineCache?.postMessage) {
-        this.gnrcSrv.toggleLoader(true);
-        const message = JSON.stringify({ action: 'force_update' });
-        (window as any).OfflineCache.postMessage(message);
-        setTimeout(() => {
-          this.gnrcSrv.toggleLoader(false);
-          window.location.reload();
-        }, 5000);
-        //console.log('🚀 Requested Flutter to update Angular app');
-      } else {
-        console.warn('⚠️ OfflineCache bridge not found');
-        alert('OfflineCache bridge not available.');
-      }
-    } catch (err) {
-      console.error('❌ Error sending update request:', err);
-    }
+    window.location.reload();
+    // try {
+    //   if ((window as any).OfflineCache?.postMessage) {
+    //     this.gnrcSrv.toggleLoader(true);
+    //     const message = JSON.stringify({ action: 'force_update' });
+    //     (window as any).OfflineCache.postMessage(message);
+    //     setTimeout(() => {
+    //       this.gnrcSrv.toggleLoader(false);
+    //       window.location.reload();
+    //     }, 5000);
+    //     //console.log('🚀 Requested Flutter to update Angular app');
+    //   } else {
+    //     console.warn('⚠️ OfflineCache bridge not found');
+    //     alert('OfflineCache bridge not available.');
+    //   }
+    // } catch (err) {
+    //   console.error('❌ Error sending update request:', err);
+    // }
   }
 
 

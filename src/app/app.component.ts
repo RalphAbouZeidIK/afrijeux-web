@@ -6,9 +6,8 @@ import { LoaderService } from './services/loader-service.service';
 import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PageTitleService } from './services/page-title.service';
-import { CacheService } from './services/cache.service';
-import { machineMenuRoutes } from './machine/machine-route';
 import { MachineService } from './services/machine.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +50,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   scannedResult: any = '';
 
   isAndroidApp = false
+
+  isTesting = environment.isTesting
 
   hideHeader = false
 

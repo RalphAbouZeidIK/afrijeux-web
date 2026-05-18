@@ -1,4 +1,4 @@
-<header [ngClass]="{'is-mobile':!isDesktop, 'android-app': isAndroidApp}" class="header-main container-fluid ">
+<header [ngClass]="{'is-mobile':!isDesktop, 'android-app': isAndroidApp, 'testing-app': isTesting}" class="header-main container-fluid ">
 
   <div class="overlay" (click)="hideMenus()"></div>
   <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()" *ngIf="!isAndroidApp"></a>
