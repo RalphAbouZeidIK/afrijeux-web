@@ -40,11 +40,11 @@ const cleanedContent = envContent
     .filter(line => !line.trim().startsWith('//'))
     .join('\n');
 
-// Extract active BaseUrl
-const match = cleanedContent.match(/BaseUrl:\s*['"`](.*?)['"`]/);
+// Extract active FrontURL
+const match = cleanedContent.match(/FrontURL:\s*['"`](.*?)['"`]/);
 
 if (!match) {
-    console.error('❌ Active BaseUrl not found');
+    console.error('❌ Active FrontURL not found');
     process.exit(1);
 }
 
