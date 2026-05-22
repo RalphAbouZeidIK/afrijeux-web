@@ -131,8 +131,8 @@
                         </div>
                         <div class="btns-holder d-flex">
                             <a class="btn qp-button" (click)="quickPick()" *ngIf="!isMobile">Quick Pick</a>
-                            <a class="btn btn-primary" (click)="addToBet()">Confirm Selections</a>
-                            <a class="btn btn-primary confirm-button" (click)="openMobileCart()"
+                            <!-- <a class="btn btn-primary" (click)="addToBet()">Confirm Selections</a> -->
+                            <a class="btn btn-primary" (click)="openMobileCart()"
                                 *ngIf="isMobile">Confirm &
                                 Print</a>
                             <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"

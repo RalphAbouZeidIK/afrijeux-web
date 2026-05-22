@@ -309,7 +309,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     // if we have bet types available and none chosen yet, pick the first one
     if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length > 0) {
       if (!keepSameType || this.selectedTypes.length === 0) {
-        this.selectedTypes = [this.fixedConfig[0]];
+        //this.selectedTypes = [this.fixedConfig[0]];
         this.selectedResultFilters = [this.fixedConfig.TicketTypeId];
         this.Stake = this.fixedConfig[0].MinStake;
         this.clampStakeToTypeLimits();
@@ -376,6 +376,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.selectedResultFilters = this.selectedTypes.map(t => t.TicketTypeId);
     this.selectedType = this.selectedTypes.length > 0 ? this.selectedTypes[0] : null; // for backward compatibility
     //console.log('filters', this.selectedResultFilters);
+
+    if (this.selectedTypes.length > 0 && this.selectedBalls.every((b: any) => b.isSelected)) {
+      setTimeout(() => this.addToBet(), 150);
+    }
   }
 
   onTypeChanged(event: any) {
@@ -525,6 +529,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     // move to next slot
     this.currentPickIndex++;
 
+    if (this.currentPickIndex >= this.slotSelections.length && this.selectedTypes.length > 0) {
+      setTimeout(() => this.addToBet(), 150);
+    }
+
     //console.log(this.selectedBalls);
   }
 
@@ -545,6 +553,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     this.updateLotoPrice()
     this.generateDisplayBalls();
+
+    if (this.selectedNumbers.length === this.numberOfBallChoice) {
+      setTimeout(() => this.addToBet(), 150);
+    }
   }
 
   deleteLastBall() {
