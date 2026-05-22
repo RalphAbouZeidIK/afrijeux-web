@@ -310,7 +310,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length > 0) {
       if (!keepSameType || this.selectedTypes.length === 0) {
         this.selectedTypes = [this.fixedConfig[0]];
-        this.selectedResultFilters = [this.fixedConfig[0].TicketTypeId];
+        this.selectedResultFilters = [this.fixedConfig.TicketTypeId];
         this.Stake = this.fixedConfig[0].MinStake;
         this.clampStakeToTypeLimits();
       }

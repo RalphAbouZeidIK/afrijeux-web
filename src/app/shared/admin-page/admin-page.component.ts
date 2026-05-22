@@ -155,6 +155,13 @@ export class AdminPageComponent {
     // }
   }
 
+  downloadSDKUpdate() {
+    const link = document.createElement('a');
+    link.href =
+      'http://test.gamecooks.com:1212/winbig-test.apk';
+    link.download = 'winbig-test.apk';
+    link.click();
+  }
 
   clearFlutterOfflineCache() {
     this.cacheSrv.clearFlutterOfflineCache()

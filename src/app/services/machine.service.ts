@@ -510,8 +510,14 @@ export class MachineService {
       UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
     console.log(params)
-    
+
     if (this.isAndroidApp) {
+      let shouldUseDefaultFont = false
+
+      if (this.getGameRoute() == 'WinBigRapid') {
+        shouldUseDefaultFont = true
+      }
+
       if (!this.isOnline) {
         const canPrint = await this.checksBeforePrinting(ticketObject);
 
@@ -522,7 +528,7 @@ export class MachineService {
         params.Ticket.FullTicketId = fullTicketId
         let issueTicketReponse = await this.issueTicketData(ticketBody)
         const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-        this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId);
+        this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId, shouldUseDefaultFont);
         let printResponse = {
           success: true
         }
@@ -539,9 +545,9 @@ export class MachineService {
           apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
 
         }
-        //console.log(apiResponse)
+        console.log(apiResponse)
         if (apiResponse.DataToPrint) {
-          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
+          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId, shouldUseDefaultFont);
 
         }
         else if (apiResponse.status == false) {

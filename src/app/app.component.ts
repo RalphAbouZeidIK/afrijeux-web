@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAndroidApp = false
 
-  isTesting = environment.isTesting
+  isTesting = true
 
   hideHeader = false
 
