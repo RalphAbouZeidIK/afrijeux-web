@@ -92,7 +92,7 @@ export class ApiService {
     let token = await this.userSrv.getUserToken()
 
     headers = headers.append('Authorization', `Bearer ${token}`);
-
+    headers = headers.append('X-API-KEY', 'L5nW1pP0iL4cT8Yd1sXd7BgR');
 
     const httpOptions = { headers, params: params.query || {} };
     let response: Observable<any>;

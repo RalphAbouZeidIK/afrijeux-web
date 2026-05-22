@@ -21,7 +21,7 @@ archive.on('error', (err) => {
 archive.pipe(output);
 
 // Add build contents
-archive.directory(buildFolder, false);
+archive.directory(buildFolder, '');
 
 // Add extra root files into zip
 archive.file(path.join(rootDistFolder, 'version.json'), {
