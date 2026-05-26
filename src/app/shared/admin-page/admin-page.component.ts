@@ -155,12 +155,19 @@ export class AdminPageComponent {
     // }
   }
 
-  downloadSDKUpdate() {
-    const link = document.createElement('a');
-    link.href =
-      'http://test.gamecooks.com:1212/winbig-test.apk';
-    link.download = 'winbig-test.apk';
-    link.click();
+  downloadAPKUpdate() {
+    const apkUrl = 'http://test.gamecooks.com:5000/apk/winbig-test.apk';
+    try {
+      if ((window as any).OfflineCache?.postMessage) {
+        const message = JSON.stringify({ action: 'download_apk', url: apkUrl });
+        (window as any).OfflineCache.postMessage(message);
+      } else {
+        window.open(apkUrl, '_blank');
+      }
+    } catch (err) {
+      console.error('Error sending APK download request:', err);
+      window.open(apkUrl, '_blank');
+    }
   }
 
   clearFlutterOfflineCache() {

@@ -8,8 +8,10 @@ export const environment = {
   isTesting: baseUrl !== 'https://services.winbig.win/',
   //BaseUrl: 'https://services.winbig.win/',
   //FrontURL: 'https://m1.winbig.win/',
-  BaseUrl: baseUrl,
+
+  //BaseUrl: 'http://test.gamecooks.com:5000/',
   FrontURL: 'http://test.gamecooks.com:1212/',
+  BaseUrl: baseUrl,
   gcSrv: 'GameCooksService/',
   subUrls: {
     auth: 'GameCooksAuth/',
