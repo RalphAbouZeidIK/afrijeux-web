@@ -142,10 +142,11 @@ export class ValidateTicketComponent implements OnInit, OnDestroy {
 
   async payTicket() {
     let payTicketReponse = await this.machineSrv.payTicket(this.fullTicketId)
-    //console.log(payTicketReponse)
-    if (payTicketReponse.DataToPrint) {
+    console.log(payTicketReponse)
+    if (payTicketReponse.status == true) {
       this.fullTicketId = ''
       this.isPaying = false
+      this.showWinningDetails = false
     }
     //console.log(payTicketReponse)
   }

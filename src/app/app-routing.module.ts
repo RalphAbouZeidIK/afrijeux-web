@@ -10,6 +10,7 @@ import { ResultsComponent } from './shared/results/results.component';
 import { PlayResponsiblyComponent } from './static-pages/play-responsibly/play-responsibly.component';
 import { EventBrandingComponent } from './static-pages/event-branding/event-branding.component';
 import { BrandedProductsComponent } from './static-pages/branded-products/branded-products.component';
+import { CarouselComponent } from './shared/carousel/carousel.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -159,6 +160,16 @@ const routes: Routes = [
       shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.PlayResponsibly',
+    },
+  },
+  {
+    path: 'Banners-Preview',
+    component: CarouselComponent,
+    data: {
+      breadcrumb: 'Banners',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'routerLinks.appTitle.Banners',
     },
   },
   // Machine-prefixed versions
