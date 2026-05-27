@@ -360,6 +360,9 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
       this.gnrcSrv.setModalData(true, false, 'Something went wrong.');
       this.isIssuing = false;
     }
+    finally {
+      this.isIssuing = false;
+    }
   }
 
   getTicketTypeInitials(ticketTypeName: string): string {

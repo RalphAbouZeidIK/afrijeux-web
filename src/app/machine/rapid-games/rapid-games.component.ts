@@ -52,6 +52,9 @@ export class RapidGamesComponent {
       //console.log('issue ticket', apiResponse);
     } catch (err) {
       console.error(err);
+     
+    }
+    finally {
       this.isIssuing = false;
     }
   }
