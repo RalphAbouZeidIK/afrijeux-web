@@ -141,6 +141,13 @@ export class NativeBridgeService {
 
   }
 
+  /** Send APK update URL to Flutter to trigger an in-app update */
+  triggerAppUpdate(updateUrl: string): void {
+    if ((window as any).FlutterChannel?.postMessage) {
+      (window as any).FlutterChannel.postMessage(JSON.stringify({ action: 'updateApp', url: updateUrl }));
+    }
+  }
+
   /** Trigger scan from Angular (calls Flutter) */
   requestScan(): void {
     if ((window as any).FlutterChannel?.postMessage) {

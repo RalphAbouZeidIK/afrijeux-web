@@ -251,7 +251,7 @@ export class MachineService {
         MachineId: (machineData) ? machineData.MachineId : null
       }
     }
-    //console.log(params)
+    console.log(params)
     //console.log(params)
     let paramsBeforeEncryption = params
     const cacheKey = this.cacheSrv.generateCacheKey(subRoute, apiRoute, method, params);
@@ -342,14 +342,14 @@ export class MachineService {
   }
 
   async registerMachine(params: any) {
-    let machineData = await this.getMachineData();
-    if (machineData) {
-      machineData.Games = machineData.Games.map((gameItem: any) => ({
-        ...gameItem,
-        RouteName: gameItem.GameApi.split('/')[1]
-      }));
-      return machineData;
-    }
+    // let machineData = await this.getMachineData();
+    // if (machineData) {
+    //   machineData.Games = machineData.Games.map((gameItem: any) => ({
+    //     ...gameItem,
+    //     RouteName: gameItem.GameApi.split('/')[1]
+    //   }));
+    //   return machineData;
+    // }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
     if (apiResponse.status == false) {

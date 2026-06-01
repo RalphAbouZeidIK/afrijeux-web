@@ -523,10 +523,6 @@
             max-height: unset;
             width: 100%;
             pointer-events: auto;
-            .list-of-bets{
-                height:86px;
-                overflow: auto;
-            }
         }
     }
 
@@ -551,7 +547,6 @@
 
 h4 {
     font-size: 18px;
-    margin-bottom: 0;
 }
 
 .cart-container.mobile-visible-cart {
@@ -566,7 +561,7 @@ h4 {
     max-height: unset;
     width: 100%;
     pointer-events: auto;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 5px;
 
     .bet-item {
@@ -578,7 +573,7 @@ h4 {
     }
 
     .bet-item {
-        margin-bottom: 6px;
+        margin-bottom: 12px;
     }
 
     .price-submit {

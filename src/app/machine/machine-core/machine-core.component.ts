@@ -48,6 +48,14 @@ export class MachineCoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMachineData();
+    const alreadyAvailable = (window as any).flutterBuildCode;
+    if (alreadyAvailable !== undefined) {
+      this.runUpdateCheck(alreadyAvailable);
+    } else {
+      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
+        this.runUpdateCheck((e as CustomEvent).detail as number);
+      }, { once: true });
+    }
   }
 
   async getMachineData() {
@@ -70,6 +78,7 @@ export class MachineCoreComponent implements OnInit {
     //console.log(apiResponse)
     if (apiResponse?.CommunicationKey) {
       this.isAppRegistered = true
+      //this.checkForUpdates();
     }
 
     const ip = await this.bridge.getDeviceIpFromFlutter();
@@ -78,6 +87,24 @@ export class MachineCoreComponent implements OnInit {
 
 
   }
+
+  private async runUpdateCheck(buildCode: number) {
+    let machineData = await this.machineSrv.getMachineData()
+    const updateParams = {
+      MachineId: machineData?.MachineId,
+      ApplicationId: 5,
+      Code: buildCode
+    };
+    let response = await this.machineSrv.handleApiResponse('GameCooksAuth', 'CheckForUpdates', 'POST', updateParams)
+    console.log("Update Check Response:", response)
+
+    if (response?.IsUptodate === false && response?.VersionHistory?.UpdateURL) {
+      const updateUrl = response.VersionHistory.UpdateURL;
+      this.bridge.triggerAppUpdate(updateUrl);
+    } else {
+    }
+  }
+
 
 
   onScan() {
