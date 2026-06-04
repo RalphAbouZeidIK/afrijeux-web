@@ -403,6 +403,7 @@ export class MachineService {
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', loginParams)
+    console.log(apiResponse)
     this.cacheSrv.saveToFlutterOfflineCache('user_data', apiResponse);
     this.localStorageSrv.setItem('user_data', apiResponse, true)
     return apiResponse;
@@ -514,7 +515,7 @@ export class MachineService {
     if (this.isAndroidApp) {
       let shouldUseDefaultFont = false
 
-      if (this.getGameRoute() == 'WinBigRapid') {
+      if (this.getGameRoute()?.startsWith('WinBigRapid')) {
         shouldUseDefaultFont = true
       }
 

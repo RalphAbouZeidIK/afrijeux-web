@@ -14,7 +14,10 @@ export class RapidGamesComponent {
 
   isKeno = window.location.href.includes('WinBigKeno')
 
-  isRapid = window.location.href.includes('WinBigRapid')
+  isRapid = /WinBigRapid(Emojis|Football|Fruits|Luxury)?($|[^a-zA-Z])/.test(window.location.href)
+
+  rapidGameType: 'Fruits' | 'Animals' | 'Football' | 'Luxury' | 'Emojis' =
+    (/WinBigRapid(Emojis|Football|Fruits|Luxury|Animals)/.exec(window.location.href)?.[1] as any) ?? 'Animals';
 
   constructor(
     private machineSrv: MachineService,
@@ -49,7 +52,7 @@ export class RapidGamesComponent {
       listOfBets.TicketPrice = 3;
 
       let apiResponse = await this.machineSrv.issueTicket(listOfBets);
-      //console.log('issue ticket', apiResponse);
+      console.log('issue ticket', apiResponse);
     } catch (err) {
       console.error(err);
      

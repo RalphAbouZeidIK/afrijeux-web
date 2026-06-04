@@ -96,6 +96,46 @@ export const machineMenuRoutes: Route[] = [
         canActivate: [SharedGuard]
     },
     {
+        path: 'WinBigRapidEmojis',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'WinBigRapidFootball',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'WinBigRapidFruits',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'WinBigRapidLuxury',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
         path: 'OnlineMaster/Deposit',
         component: AdminDepositComponent,
         data: {

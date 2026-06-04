@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { Router } from '@angular/router';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
+import { MachineService } from 'src/app/services/machine.service';
 
 interface GameCard {
   id: string;
@@ -32,7 +33,10 @@ export class GamesLinksComponent implements OnInit {
 
   pickXEvents: any;
   jackpotEvents: any;
-  allGames: GameCard[] = [];
+  listItems: GameCard[] = [];
+  normalGames: GameCard[] = [];
+  rapidGames: GameCard[] = [];
+  normalGamesShown = true;
 
   @Input() isListingPage = false;
   @Input() isGamePage = false;
@@ -40,7 +44,9 @@ export class GamesLinksComponent implements OnInit {
   @Input() isHeader = false
   @Input() selectedGameEventId: number | string | null = null;
   gameName = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
-  constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService) { }
+  allowedGameIds = new Set<number>();
+
+  constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService, private machineSrv: MachineService) { }
 
   async getGameEvents() {
     //await this.gamesSrv.getAllEvents()
@@ -62,15 +68,17 @@ export class GamesLinksComponent implements OnInit {
   }
 
   private buildGameCards(): void {
-    this.allGames = [];
-    console.log(this.allGames)
+    this.listItems = [];
+    this.normalGames = [];
+    this.rapidGames = [];
+    console.log(this.listItems)
     // Add PickX games
     this.pickXEvents.forEach((game: any) => {
 
-      this.allGames.push({
+      this.normalGames.push({
         id: `pickx-${game.GameEventId}`,
         name: `${game.EventName}`,
-        badgeText: `Pick ${game.pickTypePerGame} Balls`,
+        badgeText: `Pick ${game.pickTypePerGame} Numbers`,
         prize: game.Prize || 0,
         GameEventDate: game.GameEventDate,
         imageUrl: `assets/images/pick${game.pickTypePerGame}.svg`,
@@ -82,16 +90,16 @@ export class GamesLinksComponent implements OnInit {
         Stake: game.Stake || 5,
         IsSalesStopped: game.IsSalesStopped,
         GameRouteGenerated: game.GameRouteGenerated,
-        GameId: game.GameId
+        GameId: game.gameId
       });
     });
 
     // Add Jackpot games
     this.jackpotEvents.forEach((game: any) => {
-      this.allGames.push({
+      this.normalGames.push({
         id: `jackpot-${game.GameEventId}`,
         name: `${game.EventName}`,
-        badgeText: `Pick 6 Balls`,
+        badgeText: `Pick 6 Numbers`,
         prize: game.Prize || 0,
         GameEventDate: game.GameEventDate,
         imageUrl: `assets/images/jackpot.svg`,
@@ -103,58 +111,66 @@ export class GamesLinksComponent implements OnInit {
         Stake: game.Stake || 5,
         IsSalesStopped: game.IsSalesStopped,
         GameRouteGenerated: 'Jackpot',
-        GameId: game.GameId
+        GameId: game.gameId
       });
     });
 
     if (this.isAndroidApp) {
-      this.allGames.push({
-        id: `keno`,
-        name: `KENO`,
-        badgeText: `Instant`,
-        prize: 0,
-        GameEventDate: null,
-        imageUrl: `assets/images/keno.svg`,
-        route: '/Machine/WinBigKeno',
-        GameEventId: null,
-        playPrice: 3,
-        gameType: 'RAPID',
-        Prize: 0,
-        Stake: 3,
-        IsSalesStopped: false
-      })
+      const rapidDefs = [
+        { id: 'keno', name: 'KENO', image: 'keno.svg', route: '/Machine/WinBigKeno', gameId: null },
+        { id: 'rapid-animals', name: 'RAPID Animals', image: 'rapid.svg', route: '/Machine/WinBigRapid', gameId: 60 },
+        { id: 'rapid-emojis', name: 'RAPID Emojis', image: 'rapid.svg', route: '/Machine/WinBigRapidEmojis', gameId: 74 },
+        { id: 'rapid-football', name: 'RAPID Football', image: 'rapid.svg', route: '/Machine/WinBigRapidFootball', gameId: 75 },
+        { id: 'rapid-fruits', name: 'RAPID Fruits', image: 'rapid.svg', route: '/Machine/WinBigRapidFruits', gameId: 76 },
+        { id: 'rapid-luxury', name: 'RAPID Luxury', image: 'rapid.svg', route: '/Machine/WinBigRapidLuxury', gameId: 77 },
+      ];
 
-      this.allGames.push({
-        id: `rapid`,
-        name: `RAPID`,
-        badgeText: `Instant`,
-        prize: 0,
-        GameEventDate: null,
-        imageUrl: `assets/images/rapid.svg`,
-        route: '/Machine/WinBigRapid',
-        GameEventId: null,
-        playPrice: 3,
-        gameType: 'RAPID',
-        Prize: 0,
-        Stake: 3,
-        IsSalesStopped: false
-      })
+      for (const def of rapidDefs) {
+        if (def.gameId !== null && !this.allowedGameIds.has(def.gameId)) continue;
+        this.rapidGames.push({
+          id: def.id,
+          name: def.name,
+          badgeText: 'Instant',
+          prize: 0,
+          GameEventDate: null,
+          imageUrl: `assets/images/${def.image}`,
+          route: def.route,
+          GameEventId: null,
+          playPrice: 3,
+          gameType: 'RAPID',
+          Prize: 0,
+          Stake: 3,
+          IsSalesStopped: false,
+          GameId: def.gameId ?? undefined
+        });
+      }
     }
     if (this.isHeader) {
-      this.allGames = this.uniqueGames()
-      console.log(this.allGames)
+      this.listItems = this.uniqueGames()
+      console.log(this.listItems)
+    }
+    this.listItems = [...this.normalGames];
+  }
+
+  switchGameTypes() {
+    this.normalGamesShown = !this.normalGamesShown;
+    if (this.normalGamesShown) {
+      this.listItems = [...this.normalGames];
+    }
+    else {
+      this.listItems = [...this.rapidGames];
     }
   }
 
   uniqueGames() {
     const seen = new Set();
 
-    return this.allGames.filter((game: any) => {
-      if (seen.has(game.GameId)) {
+    return this.listItems.filter((game: any) => {
+      if (seen.has(game.gameId)) {
         return false;
       }
 
-      seen.add(game.GameId);
+      seen.add(game.gameId);
       return true;
     });
   }
@@ -162,6 +178,11 @@ export class GamesLinksComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.gnrcSrv.toggleLoader(true);
     try {
+      if (this.isAndroidApp) {
+        const userData = await this.machineSrv.getUserData();
+        const games: any[] = userData?.Games ?? [];
+        this.allowedGameIds = new Set(games.map((g: any) => g.gameId));
+      }
       await this.getGameEvents();
     } catch (error) {
       console.error('Error fetching game events:', error);

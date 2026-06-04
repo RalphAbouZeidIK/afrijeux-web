@@ -1,20 +1,21 @@
 <h2 *ngIf="isListingPage">All Games</h2>
 <div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
-    <ng-container *ngFor="let game of allGames">
+    <ng-container *ngFor="let game of listItems">
         <div class="game-card" [class.selected]="isGameSelected(game)" *ngIf="!game.IsSalesStopped">
             <!-- Game Header with Image -->
             <div class="game-header" *ngIf="isListingPage">
                 <!---->
 
-                <div class="game-info" >
+                <div class="game-info">
                     <!-- Game Title and Badge -->
                     <div class="game-title-row">
                         <div class="game-image" *ngIf="game.imageUrl">
                             <img [src]="game.imageUrl" [alt]="game.name">
                         </div>
-                        <!-- <h3 class="game-title">{{ game.name }}</h3> -->
+                         <h3 class="game-title" *ngIf="game.gameType=='RAPID'">{{ game.name }}</h3>
                         <span class="game-badge" *ngIf="game.badgeText">{{ game.badgeText }}</span>
-                        <app-countdown [event]="game" [smallTimer]="true" *ngIf="game.gameType!='RAPID'"></app-countdown>
+                        <app-countdown [event]="game" [smallTimer]="true"
+                            *ngIf="game.gameType!='RAPID'"></app-countdown>
                     </div>
 
                     <!-- Prize Information -->
@@ -27,7 +28,9 @@
                     </div>
 
                     <!-- Draw Information -->
-                    <p class="draw-info" *ngIf="game.gameType!='RAPID'">Draw: {{ game.GameEventDate | date:'MMM d, y - hh:mm a' }}</p>
+                    <p class="draw-info" *ngIf="game.gameType!='RAPID'">
+                        Draw: {{ game.GameEventDate | date:'MMM d, y - hh:mm a' }}
+                    </p>
 
                     <p class="draw-info" *ngIf="game.gameType=='RAPID'">Prizes varies depending on ticket.</p>
                 </div>
@@ -48,5 +51,23 @@
 
         </div>
     </ng-container>
+    <div class="game-card">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="game-title-row">
+                    <h3 class="game-title"> {{(normalGamesShown) ? 'Rapid' : 'Normal'}} Games</h3>
+                    <span class="game-badge">{{(normalGamesShown) ? 'Instant' : 'Pick Numbers'}}</span>
+                </div>
+                <p class="draw-info">Prizes varies depending on ticket.</p>
+            </div>
 
+        </div>
+        <button class="play-button" (click)="switchGameTypes()">
+            <ng-container *ngIf="isListingPage">
+                <span>Pay /</span>
+                <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt="">
+                    {{(normalGamesShown) ? '3' : '5'}}</span>
+            </ng-container>
+        </button>
+    </div>
 </div>
