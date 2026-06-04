@@ -1,7 +1,7 @@
 <h2 *ngIf="isListingPage">All Games</h2>
 <div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
     <ng-container *ngFor="let game of listItems">
-        <div class="game-card" [class.selected]="isGameSelected(game)" *ngIf="!game.IsSalesStopped">
+        <div class="game-card" [class.selected]="isGameSelected(game)" *ngIf="!game.IsSalesStopped" [routerLink]="game.route" [queryParams]="{ gameEventId: game.GameEventId }">
             <!-- Game Header with Image -->
             <div class="game-header" *ngIf="isListingPage">
                 <!---->
@@ -38,7 +38,7 @@
 
             <!-- Play Button -->
             <button [ngClass]="{'play-button':isListingPage,'pick-button':isBanner,'btn btn-primary':isGamePage}"
-                [routerLink]="game.route" [queryParams]="{ gameEventId: game.GameEventId }">
+               >
                 <ng-container *ngIf="isListingPage">
                     <span>Pay /</span>
                     <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt=""> {{ game.Stake
@@ -51,18 +51,18 @@
 
         </div>
     </ng-container>
-    <div class="game-card">
+    <div class="game-card" (click)="switchGameTypes()" *ngIf="isAndroidApp">
         <div class="game-header">
             <div class="game-info">
                 <div class="game-title-row">
-                    <h3 class="game-title"> {{(normalGamesShown) ? 'Rapid' : 'Normal'}} Games</h3>
+                    <h3 class="game-title"> {{(normalGamesShown) ? 'Instant' : 'Normal'}} Games</h3>
                     <span class="game-badge">{{(normalGamesShown) ? 'Instant' : 'Pick Numbers'}}</span>
                 </div>
                 <p class="draw-info">Prizes varies depending on ticket.</p>
             </div>
 
         </div>
-        <button class="play-button" (click)="switchGameTypes()">
+        <button class="play-button">
             <ng-container *ngIf="isListingPage">
                 <span>Pay /</span>
                 <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt="">

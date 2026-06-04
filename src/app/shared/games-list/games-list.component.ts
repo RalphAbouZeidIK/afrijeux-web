@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GamesService } from 'src/app/services/games.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
@@ -46,7 +46,7 @@ export class GamesLinksComponent implements OnInit {
   gameName = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
   allowedGameIds = new Set<number>();
 
-  constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService, private machineSrv: MachineService) { }
+  constructor(private gnrcSrv: GenericService, private router: Router, private gamesSrv: GamesService, private machineSrv: MachineService, private activatedRoute: ActivatedRoute) { }
 
   async getGameEvents() {
     //await this.gamesSrv.getAllEvents()
@@ -73,47 +73,50 @@ export class GamesLinksComponent implements OnInit {
     this.rapidGames = [];
     console.log(this.listItems)
     // Add PickX games
-    this.pickXEvents.forEach((game: any) => {
+    if (this.normalGamesShown) {
+      this.pickXEvents.forEach((game: any) => {
 
-      this.normalGames.push({
-        id: `pickx-${game.GameEventId}`,
-        name: `${game.EventName}`,
-        badgeText: `Pick ${game.pickTypePerGame} Numbers`,
-        prize: game.Prize || 0,
-        GameEventDate: game.GameEventDate,
-        imageUrl: `assets/images/pick${game.pickTypePerGame}.svg`,
-        route: this.isAndroidApp ? `/Machine/WinBig${game.pickTypePerGame}` : `/WinBig${game.pickTypePerGame}`,
-        GameEventId: game.GameEventId,
-        playPrice: 3,
-        gameType: 'pickX',
-        Prize: game.Prize || 0,
-        Stake: game.Stake || 5,
-        IsSalesStopped: game.IsSalesStopped,
-        GameRouteGenerated: game.GameRouteGenerated,
-        GameId: game.gameId
+        this.normalGames.push({
+          id: `pickx-${game.GameEventId}`,
+          name: `${game.EventName}`,
+          badgeText: `Pick ${game.pickTypePerGame} Numbers`,
+          prize: game.Prize || 0,
+          GameEventDate: game.GameEventDate,
+          imageUrl: `assets/images/pick${game.pickTypePerGame}.svg`,
+          route: this.isAndroidApp ? `/Machine/WinBig${game.pickTypePerGame}` : `/WinBig${game.pickTypePerGame}`,
+          GameEventId: game.GameEventId,
+          playPrice: 3,
+          gameType: 'pickX',
+          Prize: game.Prize || 0,
+          Stake: game.Stake || 5,
+          IsSalesStopped: game.IsSalesStopped,
+          GameRouteGenerated: game.GameRouteGenerated,
+          GameId: game.gameId
+        });
       });
-    });
 
-    // Add Jackpot games
-    this.jackpotEvents.forEach((game: any) => {
-      this.normalGames.push({
-        id: `jackpot-${game.GameEventId}`,
-        name: `${game.EventName}`,
-        badgeText: `Pick 6 Numbers`,
-        prize: game.Prize || 0,
-        GameEventDate: game.GameEventDate,
-        imageUrl: `assets/images/jackpot.svg`,
-        route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
-        GameEventId: game.GameEventId,
-        playPrice: game.PlayPrice || 5,
-        gameType: 'jackpot',
-        Prize: game.Prize || 0,
-        Stake: game.Stake || 5,
-        IsSalesStopped: game.IsSalesStopped,
-        GameRouteGenerated: 'Jackpot',
-        GameId: game.gameId
+      // Add Jackpot games
+      this.jackpotEvents.forEach((game: any) => {
+        this.normalGames.push({
+          id: `jackpot-${game.GameEventId}`,
+          name: `${game.EventName}`,
+          badgeText: `Pick 6 Numbers`,
+          prize: game.Prize || 0,
+          GameEventDate: game.GameEventDate,
+          imageUrl: `assets/images/jackpot.svg`,
+          route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
+          GameEventId: game.GameEventId,
+          playPrice: game.PlayPrice || 5,
+          gameType: 'jackpot',
+          Prize: game.Prize || 0,
+          Stake: game.Stake || 5,
+          IsSalesStopped: game.IsSalesStopped,
+          GameRouteGenerated: 'Jackpot',
+          GameId: game.gameId
+        });
       });
-    });
+    }
+
 
     if (this.isAndroidApp) {
       const rapidDefs = [
@@ -149,12 +152,16 @@ export class GamesLinksComponent implements OnInit {
       this.listItems = this.uniqueGames()
       console.log(this.listItems)
     }
-    this.listItems = [...this.normalGames];
+    this.listItems = this.normalGamesShown ? [...this.normalGames] : [...this.rapidGames];
   }
 
   switchGameTypes() {
     this.normalGamesShown = !this.normalGamesShown;
     if (this.normalGamesShown) {
+      if (this.normalGames.length === 0) {
+        this.getGameEvents();
+        return;
+      }
       this.listItems = [...this.normalGames];
     }
     else {
@@ -178,12 +185,14 @@ export class GamesLinksComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.gnrcSrv.toggleLoader(true);
     try {
+      const param = this.activatedRoute.snapshot.queryParamMap.get('normalGamesShown');
+      this.normalGamesShown = param === null || param === 'true';
       if (this.isAndroidApp) {
         const userData = await this.machineSrv.getUserData();
         const games: any[] = userData?.Games ?? [];
         this.allowedGameIds = new Set(games.map((g: any) => g.gameId));
       }
-      await this.getGameEvents();
+      (this.normalGamesShown) ? await this.getGameEvents() : this.buildGameCards();;
     } catch (error) {
       console.error('Error fetching game events:', error);
     }

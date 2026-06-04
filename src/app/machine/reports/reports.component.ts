@@ -124,7 +124,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   onBackClick() {
-    this.router.navigate(['/Machine/Games'])
+     this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
   }
 
   ngOnDestroy() {

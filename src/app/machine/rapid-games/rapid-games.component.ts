@@ -37,7 +37,7 @@ export class RapidGamesComponent {
 
 
   onBackClick() {
-    this.router.navigate(['/Machine/Games'])
+    this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: false } });
   }
 
   isIssuing = false;

@@ -85,7 +85,7 @@ export class MachineService {
   ) {
     (window as any).handleNativeBack = () => {
       //console.log("🔙 Native back pressed");
-      this.router.navigate(['/Machine/Games']); // redirect to your chosen route
+       this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } }); // redirect to your chosen route
     };
 
     // this.bridge.printerStatusSource.subscribe((error) => {

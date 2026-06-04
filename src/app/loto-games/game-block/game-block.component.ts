@@ -264,7 +264,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       else {
         if (this.isAndroidApp) {
           this.gnrcSrv.setModalData(true, false, 'No active games available at the moment. Please check back later.');
-          this.router.navigate(['/Machine/Games'])
+          this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
         }
       }
     }
@@ -672,7 +672,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         return
       }
       this.updateLotoPrice()
-      pickItem = {  
+      pickItem = {
         IsQuickPick: this.isQuickPick,
         gameEventId: this.selectedEvent.GameEventId,
         eventName: this.selectedEvent.EventName,
@@ -695,7 +695,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   backButton() {
-    this.location.back();
+    if (this.isAndroidApp) {
+      this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
+    }
   }
 
   clearSelections() {
