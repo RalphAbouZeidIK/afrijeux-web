@@ -12,7 +12,7 @@
                         <div class="game-image" *ngIf="game.imageUrl">
                             <img [src]="game.imageUrl" [alt]="game.name">
                         </div>
-                         <h3 class="game-title" *ngIf="game.gameType=='RAPID'">{{ game.name }}</h3>
+                         <!-- <h3 class="game-title" *ngIf="game.gameType=='RAPID'">{{ game.name }}</h3> -->
                         <span class="game-badge" *ngIf="game.badgeText">{{ game.badgeText }}</span>
                         <app-countdown [event]="game" [smallTimer]="true"
                             *ngIf="game.gameType!='RAPID'"></app-countdown>

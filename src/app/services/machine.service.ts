@@ -558,6 +558,7 @@ export class MachineService {
         //console.log(apiResponse)
       } catch (error) {
         //console.log(error)
+        return { status: false, message: 'An error occurred while issuing the ticket. Please try again.' }
       }
     }
 

@@ -28,7 +28,9 @@ export class RapidGamesComponent {
 
     this.bridge.getPrintingStatus().subscribe((status) => {
       //console.log('Printing status updated:', status);
-      this.isIssuing = false;
+      setTimeout(() => {
+        this.isIssuing = false;
+      }, 200);
       if (!status) {
         this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
       }
@@ -53,12 +55,12 @@ export class RapidGamesComponent {
 
       let apiResponse = await this.machineSrv.issueTicket(listOfBets);
       console.log('issue ticket', apiResponse);
+      if (apiResponse.status == false) {
+        this.isIssuing = false;
+      }
     } catch (err) {
-      console.error(err);
-     
+    
     }
-    finally {
-      this.isIssuing = false;
-    }
+
   }
 }
