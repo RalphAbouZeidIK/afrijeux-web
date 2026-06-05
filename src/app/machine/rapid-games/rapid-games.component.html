@@ -4,7 +4,7 @@
             <img src="assets/images/back-arrow.svg" alt="Back">
         </a>
         <h2>
-            {{ ((isRapid) ? 'routerLinks.appTitle.rapidGames' : 'routerLinks.appTitle.kenoGames') | translate }} {{ rapidGameType}} Games
+            {{ ((isRapid) ? 'routerLinks.appTitle.rapidGames' : 'routerLinks.appTitle.kenoGames') | translate }} {{(isRapid) ? rapidGameType : ''}} Game
         </h2>
         <span class="game-badge">
             System Generated

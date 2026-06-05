@@ -14,10 +14,10 @@ export class RapidGamesComponent {
 
   isKeno = window.location.href.includes('WinBigKeno')
 
-  isRapid = /WinBigRapid(Emojis|Football|Fruits|Luxury)?($|[^a-zA-Z])/.test(window.location.href)
+  isRapid = /WinBigRapid(Emojis|Football|Fruits|Luxury|Numbers)?($|[^a-zA-Z])/.test(window.location.href)
 
-  rapidGameType: 'Fruits' | 'Animals' | 'Football' | 'Luxury' | 'Emojis' =
-    (/WinBigRapid(Emojis|Football|Fruits|Luxury|Animals)/.exec(window.location.href)?.[1] as any) ?? 'Animals';
+  rapidGameType: 'Fruits' | 'Animals' | 'Football' | 'Luxury' | 'Emojis' | 'Numbers' =
+    (/WinBigRapid(Emojis|Football|Fruits|Luxury|Numbers)/.exec(window.location.href)?.[1] as any) ?? 'Animals';
 
   constructor(
     private machineSrv: MachineService,

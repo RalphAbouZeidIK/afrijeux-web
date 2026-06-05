@@ -694,7 +694,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         gameName: gameName,
         Stake: this.Stake,
         id: Math.random().toString(36).substring(2, 9),
-        chosenBallsList: this.selectedBalls // generate a random id for the pick
+        chosenBallsList: this.selectedBalls, // generate a random id for the pick
+          IsPromotion: this.selectedPromotion ? true : false,
       }
       this.Stake = 0
       this.cartSrv.updateLotoList(pickItem, index)

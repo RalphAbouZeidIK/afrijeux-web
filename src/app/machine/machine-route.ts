@@ -135,6 +135,16 @@ export const machineMenuRoutes: Route[] = [
         },
         canActivate: [SharedGuard]
     },
+     {
+        path: 'WinBigRapidNumbers',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
     {
         path: 'OnlineMaster/Deposit',
         component: AdminDepositComponent,
