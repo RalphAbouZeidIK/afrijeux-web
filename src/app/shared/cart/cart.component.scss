@@ -201,13 +201,39 @@
     display: flex;
     justify-content: space-between;
     padding-top: 15px;
-
+    flex-wrap: wrap;
     .info-item {
         width: calc(100% - 150px);
         background-color: $darkBg;
         padding: 14px 15px;
         border-radius: 25px;
         margin-bottom: 0;
+    }
+}
+
+.promo-ticket-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 10px;
+    flex:100%;
+    span.met {
+        color: #a4f675;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    span.unmet {
+        color: #ffc832;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .promo-hint {
+        color: rgba(255, 200, 50, 0.7);
+        font-size: 0.75rem;
     }
 }
 

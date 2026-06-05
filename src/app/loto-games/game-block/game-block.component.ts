@@ -60,6 +60,10 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   isJackpotGame = false
 
+  showPromoSelection = false
+  availablePromotions: any[] = []
+  selectedPromotion: any = null
+
 
 
   /* height for sidebar cart; calculated from game block size */
@@ -298,6 +302,14 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     // Set gameEventId for both PickX and Jackpot games
     this.selectedGameEventId = Number(raceItem?.GameEventId);
+
+    const showPromotionsParam = this.route.snapshot.queryParamMap.get('showPromotions');
+    if (showPromotionsParam === 'true' && Array.isArray(raceItem?.PromotionConfiguration) && raceItem.PromotionConfiguration.length > 0) {
+      this.availablePromotions = raceItem.PromotionConfiguration;
+      if (!this.selectedPromotion) {
+        this.showPromoSelection = true;
+      }
+    }
 
     const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
     this.showCart = Array.isArray(lotoCartData) && lotoCartData.length > 0;
@@ -660,7 +672,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
           gameName: gameName,
           Stake: type.MinStake,
           id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
-          chosenBallsList: this.selectedBalls
+          chosenBallsList: this.selectedBalls,
+          IsPromotion: this.selectedPromotion ? true : false,
         }
         this.cartSrv.updateLotoList(pickItem, index)
       }
@@ -692,6 +705,12 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (refreshEventDetails) {
       this.composeEventDetails(this.selectedEvent, true)
     }
+  }
+
+  selectPromotion(promo: any) {
+    this.selectedPromotion = promo;
+    this.Stake = promo.Stake;
+    this.showPromoSelection = false;
   }
 
   backButton() {

@@ -23,6 +23,19 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() listOfBets: any = []
   @Input() selectedEvent: any = null
+  @Input() requiredTicketCount: number | null = null
+  @Input() promoStake: number | null = null
+  @Input() selectedPromotion: any = null
+
+  get promoTicketsNeeded(): number {
+    if (this.requiredTicketCount === null) return 0;
+    return this.requiredTicketCount - (this.listOfBets?.length ?? 0);
+  }
+
+  get isPromoRequirementMet(): boolean {
+    if (this.requiredTicketCount === null) return true;
+    return (this.listOfBets?.length ?? 0) === this.requiredTicketCount;
+  }
   @Output() editBallInCart = new EventEmitter<{ betItem: any, ballIndex: number, ball: any }>();
 
   @Input() editingCartItemId: any = null
@@ -170,6 +183,9 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     if (changes['openMobileCartFlag'] && changes['openMobileCartFlag'].currentValue === true) {
       this.showOnClickMobile = true;
     }
+    if (changes['promoStake'] && !this.isSportsBetting) {
+      this.loadLotoCartDataFromContext();
+    }
   }
 
   private loadLotoCartDataFromContext() {
@@ -195,10 +211,14 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
     if ((this.isPickXGame || this.isJackpotGame) && this.listOfBets.length > 0) {
       this.listOfBets.GameEventId = this.listOfBets[0].gameEventId
-      this.listOfBets.TicketPrice = 0
-      this.listOfBets.forEach((ticketItem: any) => {
-        this.listOfBets.TicketPrice += ticketItem.Stake
-      })
+      if (this.promoStake !== null) {
+        this.listOfBets.TicketPrice = this.promoStake;
+      } else {
+        this.listOfBets.TicketPrice = 0
+        this.listOfBets.forEach((ticketItem: any) => {
+          this.listOfBets.TicketPrice += ticketItem.Stake
+        })
+      }
     }
     this.totalPriceChange.emit(this.listOfBets.TicketPrice)
 
@@ -296,6 +316,15 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   async issueTicket() {
     if (this.isIssuing) return;
 
+    if (!this.isPromoRequirementMet) {
+      const needed = this.promoTicketsNeeded;
+      const msg = needed > 0
+        ? `Please add ${needed} more ticket${needed > 1 ? 's' : ''} to use this promotion.`
+        : `Please remove ${Math.abs(needed)} ticket${Math.abs(needed) > 1 ? 's' : ''} to use this promotion.`;
+      this.gnrcSrv.setModalData(true, false, msg);
+      return;
+    }
+
     if (!this.isLoggedIn) {
       this.usrSrv.setLoginPopupStatus({
         show: true,
@@ -305,7 +334,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.isIssuing = true;
-
+    console.log(this.listOfBets)
     try {
       let apiResponse: any
       if (this.isSportsBetting) {
@@ -332,7 +361,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
       }
       else {
-        apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
+        apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true, null, this.selectedPromotion)
       }
 
       //console.log(this.listOfBets)

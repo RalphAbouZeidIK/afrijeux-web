@@ -446,7 +446,7 @@ export class MachineService {
     return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
   }
 
-  async issueTicket(ticketObject: any, shouldHaveGameEventId = false, customRoute: any = null) {
+  async issueTicket(ticketObject: any, shouldHaveGameEventId = false, customRoute: any = null, promotion: any = null) {
 
     let isPrintedFlag = 1;
 
@@ -489,8 +489,9 @@ export class MachineService {
       GamePick: ticketObject,
       LoyalityReferenceId: 0,
       ReferenceId: '',
-      IsPromotion: false,
-      PromotionRuleId: 0,
+      IsPromotion: promotion != null,
+      PromotionRuleId: promotion?.Id ?? 0,
+      PromotionId: promotion?.Id ?? null,
       IsPrinted: isPrintedFlag,
       Printed: isPrintedFlag,
       GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null,
@@ -498,8 +499,7 @@ export class MachineService {
       Code: ticketObject.Code ? ticketObject.Code : null,
       UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
-    //console.log(ticketBody)
-
+    console.log(ticketBody)
 
     let params = {
       GameId: gameId,

@@ -18,6 +18,15 @@
                 </ng-container>
 
                 <ng-container *ngIf="showEventDetails">
+                    <div class="promo-selection" *ngIf="showPromoSelection && availablePromotions.length > 0">
+                        <h4>Choose a Promotion</h4>
+                        <div class="promo-list">
+                            <div class="promo-item" *ngFor="let promo of availablePromotions" (click)="selectPromotion(promo)">
+                                <span class="promo-name">{{ promo.Name }}</span>
+                                <span class="promo-stake">{{ promo.Stake }} AED</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="draw-header">
                         <a class="back-arrow">
                             <img src="assets/images/back-arrow.svg" alt="Back" (click)="backButton()">
@@ -36,11 +45,17 @@
                                 Choose any 6 numbers (numbers may not be repeated).
                             </ng-container>
                         </span>
+                        <span class="active-promo-badge" *ngIf="selectedPromotion" (click)="showPromoSelection = true">
+                            {{ selectedPromotion.Name }} &mdash; {{ selectedPromotion.Stake }} AED
+                        </span>
 
                     </div>
 
                     <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
                         [editingCartItemId]="editingCartItem?.id" [editingBallIndex]="editingBallIndex"
+                        [requiredTicketCount]="selectedPromotion ? (selectedPromotion.X + selectedPromotion.Y) : null"
+                        [promoStake]="selectedPromotion?.Stake ?? null"
+                        [selectedPromotion]="selectedPromotion"
                         (quickPickBetItem)="onQuickPickBetItem($event)" (totalPriceChange)="onTotalPriceChange($event)"
                         (editBallInCart)="onEditBallInCart($event)" cssClass="mobile-visible-cart"></app-shared-cart>
 
@@ -176,7 +191,11 @@
             [prizePoolAmount]="'3.65M'"></app-game-banner>
         <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"
             [openMobileCartFlag]="openCartOnMobileFlag" [editingCartItemId]="editingCartItem?.id"
-            [editingBallIndex]="editingBallIndex" (quickPickBetItem)="onQuickPickBetItem($event)"
+            [editingBallIndex]="editingBallIndex"
+            [requiredTicketCount]="selectedPromotion ? (selectedPromotion.X + selectedPromotion.Y) : null"
+            [promoStake]="selectedPromotion?.Stake ?? null"
+            [selectedPromotion]="selectedPromotion"
+            (quickPickBetItem)="onQuickPickBetItem($event)"
             (editBallInCart)="onEditBallInCart($event)">
         </app-shared-cart>
     </aside>

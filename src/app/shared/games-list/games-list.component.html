@@ -1,7 +1,7 @@
 <h2 *ngIf="isListingPage">All Games</h2>
 <div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
     <ng-container *ngFor="let game of listItems">
-        <div class="game-card" [class.selected]="isGameSelected(game)" *ngIf="!game.IsSalesStopped" [routerLink]="game.route" [queryParams]="{ gameEventId: game.GameEventId }">
+        <div class="game-card" [class.selected]="isGameSelected(game)" [class.promo-card]="game.isPromoCard" *ngIf="!game.IsSalesStopped" [routerLink]="game.route" [queryParams]="game.queryParams ?? { gameEventId: game.GameEventId }">
             <!-- Game Header with Image -->
             <div class="game-header" *ngIf="isListingPage">
                 <!---->

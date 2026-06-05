@@ -19,7 +19,10 @@ interface GameCard {
   Stake: number;
   IsSalesStopped?: boolean;
   GameRouteGenerated?: string,
-  GameId?: number
+  GameId?: number;
+  queryParams?: Record<string, any>;
+  isPromoCard?: boolean;
+  PromotionConfiguration?: any[];
 }
 
 @Component({
@@ -71,6 +74,7 @@ export class GamesLinksComponent implements OnInit {
     this.listItems = [];
     this.normalGames = [];
     this.rapidGames = [];
+    const promoCards: GameCard[] = [];
     console.log(this.listItems)
     // Add PickX games
     if (this.normalGamesShown) {
@@ -93,6 +97,29 @@ export class GamesLinksComponent implements OnInit {
           GameRouteGenerated: game.GameRouteGenerated,
           GameId: game.gameId
         });
+
+        if (Array.isArray(game.PromotionConfiguration) && game.PromotionConfiguration.length > 0) {
+          promoCards.push({
+            id: `promo-pickx-${game.GameEventId}`,
+            name: `${game.EventName}`,
+            badgeText: `Promotion`,
+            prize: game.Prize || 0,
+            GameEventDate: game.GameEventDate,
+            imageUrl: `assets/images/pick${game.pickTypePerGame}.svg`,
+            route: this.isAndroidApp ? `/Machine/WinBig${game.pickTypePerGame}` : `/WinBig${game.pickTypePerGame}`,
+            GameEventId: game.GameEventId,
+            playPrice: 3,
+            gameType: 'pickX',
+            Prize: game.Prize || 0,
+            Stake: game.Stake || 5,
+            IsSalesStopped: game.IsSalesStopped,
+            GameRouteGenerated: game.GameRouteGenerated,
+            GameId: game.gameId,
+            isPromoCard: true,
+            PromotionConfiguration: game.PromotionConfiguration,
+            queryParams: { gameEventId: game.GameEventId, showPromotions: true }
+          });
+        }
       });
 
       // Add Jackpot games
@@ -114,7 +141,31 @@ export class GamesLinksComponent implements OnInit {
           GameRouteGenerated: 'Jackpot',
           GameId: game.gameId
         });
+
+        if (Array.isArray(game.PromotionConfiguration) && game.PromotionConfiguration.length > 0) {
+          promoCards.push({
+            id: `promo-${game.GameEventId}`,
+            name: `${game.EventName}`,
+            badgeText: `Promotion`,
+            prize: game.Prize || 0,
+            GameEventDate: game.GameEventDate,
+            imageUrl: `assets/images/jackpot.svg`,
+            route: this.isAndroidApp ? '/Machine/Jackpot' : '/Jackpot',
+            GameEventId: game.GameEventId,
+            playPrice: game.PlayPrice || 5,
+            gameType: 'jackpot',
+            Prize: game.Prize || 0,
+            Stake: game.Stake || 5,
+            IsSalesStopped: game.IsSalesStopped,
+            GameRouteGenerated: 'Jackpot',
+            GameId: game.gameId,
+            isPromoCard: true,
+            PromotionConfiguration: game.PromotionConfiguration,
+            queryParams: { gameEventId: game.GameEventId, showPromotions: true }
+          });
+        }
       });
+      this.normalGames = [...promoCards, ...this.normalGames];
     }
 
 
