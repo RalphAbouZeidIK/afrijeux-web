@@ -51,7 +51,7 @@
 
         </div>
     </ng-container>
-    <div class="game-card" (click)="switchGameTypes()" *ngIf="isAndroidApp">
+    <div class="game-card" (click)="switchGameTypes()" *ngIf="isAndroidApp && rapidGames.length > 0">
         <div class="game-header">
             <div class="game-info">
                 <div class="game-title-row">
