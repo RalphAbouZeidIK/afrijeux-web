@@ -639,7 +639,13 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   addToBet(refreshEventDetails = true, index: number | null = null) {
-    if (this.cartData && this.cartData.length >= 10 && !this.isTestingUser) {
+    if (this.selectedPromotion) {
+      const promoMax = this.selectedPromotion.X + this.selectedPromotion.Y;
+      if (this.cartData && this.cartData.length >= promoMax) {
+        this.gnrcSrv.setModalData(true, false, `You have reached the maximum of ${promoMax} tickets for this promotion.`);
+        return;
+      }
+    } else if (this.cartData && this.cartData.length >= 10 && !this.isTestingUser) {
       this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
       return
     }
@@ -655,8 +661,9 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
       }
 
       for (let type of this.selectedTypes) {
-        if (this.cartData.length >= 10) {
-          this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
+        const _maxTickets = this.selectedPromotion ? (this.selectedPromotion.X + this.selectedPromotion.Y) : 10;
+        if (this.cartData.length >= _maxTickets) {
+          this.gnrcSrv.setModalData(true, false, `You have reached the maximum of ${_maxTickets} tickets${this.selectedPromotion ? ' for this promotion' : ' in the cart'}.`);
           break;
         }
         let pickItem = {
@@ -697,7 +704,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         ActualStake: this.Stake,
         id: Math.random().toString(36).substring(2, 9),
         chosenBallsList: this.selectedBalls, // generate a random id for the pick
-          IsPromotion: this.selectedPromotion ? true : false,
+        IsPromotion: this.selectedPromotion ? true : false,
       }
       this.Stake = 0
       this.cartSrv.updateLotoList(pickItem, index)

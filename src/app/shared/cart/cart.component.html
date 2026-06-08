@@ -58,7 +58,7 @@
 
     <div class="cart-body-holder" *ngIf="listOfBets && listOfBets.length > 0 && (isPickXGame || isJackpotGame)">
         <div class="list-of-bets">
-            <h4 *ngIf="!isMainCart">Tickets List ({{listOfBets.length}})</h4>
+            <h4 *ngIf="!isMainCart">Tickets List ({{ requiredTicketCount !== null ? (listOfBets.length + '/' + requiredTicketCount) : listOfBets.length }})</h4>
             <ng-container *ngFor="let betItem of listOfBets, let i = index">
                 <div class="bet-item">
 
@@ -113,15 +113,7 @@
 
     </div>
     <div class="price-submit" *ngIf="isMainCart">
-        <div class="promo-ticket-counter" *ngIf="requiredTicketCount !== null">
-            <span [ngClass]="{'met': isPromoRequirementMet, 'unmet': !isPromoRequirementMet}">
-                {{ listOfBets?.length ?? 0 }} / {{ requiredTicketCount }} tickets
-            </span>
-            <span class="promo-hint" *ngIf="!isPromoRequirementMet">
-                {{ promoTicketsNeeded > 0 ? 'Add ' + promoTicketsNeeded + ' more' : 'Remove ' + (-promoTicketsNeeded) }}
-            </span>
-        </div>
-        <div class="info-item">
+<div class="info-item">
             <span>Total Price:</span>
             <span>{{listOfBets.TicketPrice | number:'1.0-3'}} AED</span>
         </div>
