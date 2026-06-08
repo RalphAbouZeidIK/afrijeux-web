@@ -670,6 +670,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
           displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
           Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
           gameName: gameName,
+          ActualStake: type.MinStake,
           Stake: type.MinStake,
           id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
           chosenBallsList: this.selectedBalls,
@@ -693,6 +694,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         SelectedNumber: this.selectedNumbers,
         gameName: gameName,
         Stake: this.Stake,
+        ActualStake: this.Stake,
         id: Math.random().toString(36).substring(2, 9),
         chosenBallsList: this.selectedBalls, // generate a random id for the pick
           IsPromotion: this.selectedPromotion ? true : false,

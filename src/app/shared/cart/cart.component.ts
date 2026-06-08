@@ -361,7 +361,16 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
       }
       else {
-        apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true, null, this.selectedPromotion)
+        let betsToIssue = this.listOfBets;
+        if (this.selectedPromotion && this.promoStake !== null) {
+          betsToIssue = this.listOfBets.map((item: any, index: number) => ({
+            ...item,
+            Stake: index === 0 ? this.promoStake : 0
+          }));
+          betsToIssue.GameEventId = this.listOfBets.GameEventId;
+          betsToIssue.TicketPrice = this.listOfBets.TicketPrice;
+        }
+        apiResponse = await this.machineSrv.issueTicket(betsToIssue, true, null, this.selectedPromotion)
       }
 
       //console.log(this.listOfBets)
