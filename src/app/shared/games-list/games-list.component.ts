@@ -235,7 +235,7 @@ export class GamesLinksComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.gnrcSrv.toggleLoader(true);
+    //this.gnrcSrv.toggleLoader(true);
     try {
       const param = this.activatedRoute.snapshot.queryParamMap.get('normalGamesShown');
       this.normalGamesShown = param === null || param === 'true';
@@ -249,8 +249,22 @@ export class GamesLinksComponent implements OnInit {
       console.error('Error fetching game events:', error);
     }
     finally {
-      this.gnrcSrv.toggleLoader(false);
+      //this.gnrcSrv.toggleLoader(false);
     }
+  }
+
+  navigateToGame(card: GameCard) {
+    if (card.gameType === 'RAPID' || card.GameEventId === null) {
+      this.router.navigate([card.route]);
+      return;
+    }
+    const events = card.gameType === 'jackpot' ? this.jackpotEvents : this.pickXEvents;
+    const fullEvent = events?.find((e: any) => Number(e.GameEventId) === Number(card.GameEventId));
+    const queryParams = card.queryParams ?? { gameEventId: card.GameEventId };
+    this.router.navigate([card.route], {
+      queryParams,
+      state: fullEvent ? { gameEvent: fullEvent } : undefined
+    });
   }
 
   isGameSelected(game: GameCard): boolean {

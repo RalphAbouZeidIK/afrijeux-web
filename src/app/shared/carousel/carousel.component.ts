@@ -16,6 +16,9 @@ export interface CarouselImage {
   styleUrl: './carousel.component.scss'
 })
 export class CarouselComponent implements OnInit, OnDestroy {
+  private static bannersCache: CarouselImage[] | null = null;
+  private static bannersFetch: Promise<CarouselImage[]> | null = null;
+
   images: CarouselImage[] = [];
   @Input() autoPlayInterval: number = 5000; // 5 seconds
   @Input() autoPlay: boolean = true;
@@ -40,14 +43,23 @@ export class CarouselComponent implements OnInit, OnDestroy {
 
 
   async getBanners() {
-    const response: string[] = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetBanners`, 'GET', {});
-    if (Array.isArray(response)) {
-      this.images = response.map((path, i) => ({
-        id: String(i + 1),
-        url: `${path}`,
-        alt: `Banner ${i + 1}`
-      }));
+    if (CarouselComponent.bannersCache) {
+      this.images = CarouselComponent.bannersCache;
+      return;
     }
+    if (!CarouselComponent.bannersFetch) {
+      CarouselComponent.bannersFetch = this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetBanners`, 'GET', {})
+        .then((response: string[]) => {
+          const images = Array.isArray(response) ? response.map((path, i) => ({
+            id: String(i + 1),
+            url: `${path}`,
+            alt: `Banner ${i + 1}`
+          })) : [];
+          CarouselComponent.bannersCache = images;
+          return images;
+        });
+    }
+    this.images = await CarouselComponent.bannersFetch;
   }
 
   ngOnDestroy(): void {

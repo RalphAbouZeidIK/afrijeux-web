@@ -5,23 +5,12 @@
     <main>
         <div class="loto-game-container" #gameBlock>
             <div class="inner-container">
-                <ng-container *ngIf="!showEventDetails">
-                    <h2 class="center">
-                        {{ 'pickx.title' | translate }}
-                    </h2>
-                    <div class="events-list" *ngIf="eventsList.length>0">
-                        <a *ngFor="let event of eventsList" class="event-item btn btn-primary"
-                            (click)="composeEventDetails(event)">
-                            {{ event.EventName }}
-                        </a>
-                    </div>
-                </ng-container>
-
                 <ng-container *ngIf="showEventDetails">
                     <div class="promo-selection" *ngIf="showPromoSelection && availablePromotions.length > 0">
                         <h4>Choose a Promotion</h4>
                         <div class="promo-list">
-                            <div class="promo-item" *ngFor="let promo of availablePromotions" (click)="selectPromotion(promo)">
+                            <div class="promo-item" *ngFor="let promo of availablePromotions"
+                                (click)="selectPromotion(promo)">
                                 <span class="promo-name">{{ promo.Name }}</span>
                                 <span class="promo-stake">{{ promo.Stake }} AED</span>
                             </div>
@@ -54,8 +43,7 @@
                     <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
                         [editingCartItemId]="editingCartItem?.id" [editingBallIndex]="editingBallIndex"
                         [requiredTicketCount]="selectedPromotion ? (selectedPromotion.X + selectedPromotion.Y) : null"
-                        [promoStake]="selectedPromotion?.Stake ?? null"
-                        [selectedPromotion]="selectedPromotion"
+                        [promoStake]="selectedPromotion?.Stake ?? null" [selectedPromotion]="selectedPromotion"
                         (quickPickBetItem)="onQuickPickBetItem($event)" (totalPriceChange)="onTotalPriceChange($event)"
                         (editBallInCart)="onEditBallInCart($event)" cssClass="mobile-visible-cart"></app-shared-cart>
 
@@ -147,9 +135,9 @@
                         <div class="btns-holder d-flex">
                             <a class="btn qp-button" (click)="quickPick()" *ngIf="!isMobile">Quick Pick</a>
                             <!-- <a class="btn btn-primary" (click)="addToBet()">Confirm Selections</a> -->
-                            <a class="btn btn-primary" (click)="openMobileCart()"
-                                *ngIf="isMobile"
-                                [class.disabled]="selectedPromotion && cartData.length < (selectedPromotion.X + selectedPromotion.Y)">Confirm &
+                            <a class="btn btn-primary" (click)="openMobileCart()" *ngIf="isMobile"
+                                [class.disabled]="selectedPromotion && cartData.length < (selectedPromotion.X + selectedPromotion.Y)">Confirm
+                                &
                                 Print</a>
                             <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
                                 *ngIf="isTestingUser" (click)="issue100TicketsSeparately()">
@@ -194,10 +182,8 @@
             [openMobileCartFlag]="openCartOnMobileFlag" [editingCartItemId]="editingCartItem?.id"
             [editingBallIndex]="editingBallIndex"
             [requiredTicketCount]="selectedPromotion ? (selectedPromotion.X + selectedPromotion.Y) : null"
-            [promoStake]="selectedPromotion?.Stake ?? null"
-            [selectedPromotion]="selectedPromotion"
-            (quickPickBetItem)="onQuickPickBetItem($event)"
-            (editBallInCart)="onEditBallInCart($event)">
+            [promoStake]="selectedPromotion?.Stake ?? null" [selectedPromotion]="selectedPromotion"
+            (quickPickBetItem)="onQuickPickBetItem($event)" (editBallInCart)="onEditBallInCart($event)">
         </app-shared-cart>
     </aside>
 </div>

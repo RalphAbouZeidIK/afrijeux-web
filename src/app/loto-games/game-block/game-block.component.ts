@@ -19,8 +19,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   selectedGameEventId: number | null = null
 
-  eventsList: any = []
-
   showEventDetails = false
 
   selectedEvent: any = null
@@ -90,7 +88,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   path = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
 
-  @Input() allEvents: any = []
+  @Input() gameEvent: any = null
 
   isMobile: any = this.gnrcSrv.getIsMobileView()
 
@@ -109,7 +107,6 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   selectedEditBall: any = null
   isEditingCartBall = false
 
-  private configCache = new Map<number, any>()
 
   constructor(
     private gnrcSrv: GenericService,
@@ -145,14 +142,23 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.generateDisplayBalls();
     this.isPickXGame = window.location.href.includes("PickX") || window.location.href.includes("WinBig3") || window.location.href.includes("WinBig4") || window.location.href.includes("WinBig5")
     this.isJackpotGame = window.location.href.includes("Jackpot")
-    this.getEvents()
+    if (this.gameEvent) {
+      this.setupEvent(this.gameEvent);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    //console.log('ngOnChanges triggered');
-    // Only re-process if allEvents reference has changed (avoids redundant API calls)
-    if (changes['allEvents'] && changes['allEvents'].currentValue !== changes['allEvents'].previousValue) {
-      this.getEvents();
+    if (changes['gameEvent'] && changes['gameEvent'].currentValue !== changes['gameEvent'].previousValue) {
+      const event = changes['gameEvent'].currentValue;
+      if (event) {
+        this.setupEvent(event);
+      } else if (this.isAndroidApp) {
+        this.gnrcSrv.setModalData(true, false, 'No active games available at the moment. Please check back later.');
+        this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
+      } else {
+        this.showEventDetails = false;
+        this.gnrcSrv.toggleLoader(false);
+      }
     }
   }
 
@@ -215,129 +221,62 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
-  async getEvents() {
-    //console.log(this.allEvents)
-    let gameEventsResponse = (this.isPickXGame) ? this.allEvents?.pickXGames : this.allEvents?.jackpotGames;
-    //console.log(gameEventsResponse)
-    if (gameEventsResponse != null && gameEventsResponse !== undefined) {
-      gameEventsResponse.forEach((eventItem: any) => {
-        if (!eventItem.IsSalesStopped) {
-          this.eventsList.push(eventItem)
-        }
-      });
-      //console.log(this.eventsList)
-      if (this.eventsList.length > 0) {
-        let selectedEvent = this.eventsList[0];
-        //console.log(selectedEvent)
-
-        // Handle gameEventId parameter for both PickX and Jackpot games
-        const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
-        const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
-
-        if (gameEventId) {
-          //console.log(this.path.toLowerCase())
-          this.selectedGameEventId = Number(gameEventId);
-          let matchedEvent;
-          if (this.isJackpotGame) {
-            matchedEvent = this.eventsList.find(
-              (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId)
-            );
-          }
-          else {
-            matchedEvent = this.eventsList.find(
-              (eventItem: any) => Number(eventItem?.GameEventId) === Number(gameEventId) && eventItem.GameRouteGenerated.toLowerCase() === this.path.toLowerCase()
-            );
-          }
-
-          if (matchedEvent) {
-            selectedEvent = matchedEvent;
-          }
-        } else if (legacyGameType && this.isPickXGame) {
-          // Backward compatibility for old links that still pass gametype (PickX only).
-          const matchedEvent = this.eventsList.find(
-            (eventItem: any) => Number(eventItem?.ConfigurationVersionId) === Number(legacyGameType)
-          );
-          if (matchedEvent) {
-            selectedEvent = matchedEvent;
-          }
-        }
-        //console.log(selectedEvent)
-        this.composeEventDetails(selectedEvent)
-
-      }
-      else {
-        if (this.isAndroidApp) {
-          this.gnrcSrv.setModalData(true, false, 'No active games available at the moment. Please check back later.');
-          this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
-        }
-      }
-    }
-    else {
-      this.showEventDetails = false
+  private async loadFixedConfig(configId: number): Promise<any> {
+    const key = `fixedConfig_${configId}`;
+    try {
+      const cached = sessionStorage.getItem(key);
+      if (cached) return JSON.parse(cached);
+    } catch { }
+    if (configId) {
+      const config = await this.gamesSrv.getFixedConfig(configId);
+      try { sessionStorage.setItem(key, JSON.stringify(config)); } catch { }
+      return config;
     }
 
-
-    //console.log(this.eventsList)
   }
 
-  async composeEventDetails(raceItem: any, keepSameType = false) {
-    //console.log(raceItem)
-    let configId = (this.isPickXGame) ? raceItem.ConfigurationVersionId : raceItem.FixedConfigurationVersion
-    //console.log(raceItem, configId)
-    if (this.configCache.has(configId)) {
-      this.fixedConfig = this.configCache.get(configId);
-    } else {
-      this.fixedConfig = await this.gamesSrv.getFixedConfig(configId)
-      //console.log(this.fixedConfig)
-      this.configCache.set(configId, this.fixedConfig);
-    }
-    let numberOfSelectedBalls = (this.isPickXGame) ? this.fixedConfig[0].NumberOfBalls : 6
-    this.numberOfBallChoice = numberOfSelectedBalls
-    let numberOfBalls = (this.isPickXGame) ? 10 : this.fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value
-    //console.log(raceItem)
-    //console.log(this.fixedConfig)
+  async setupEvent(event: any) {
+    const configId = this.isPickXGame ? event.ConfigurationVersionId : event.FixedConfigurationVersion;
+    this.fixedConfig = await this.loadFixedConfig(configId);
 
-    raceItem.fixedConfig = this.fixedConfig
-    this.selectedEvent = raceItem
+    const numberOfSelectedBalls = this.isPickXGame ? this.fixedConfig[0].NumberOfBalls : 6;
+    this.numberOfBallChoice = numberOfSelectedBalls;
+    const numberOfBalls = this.isPickXGame ? 10 : this.fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value;
 
-    // Set gameEventId for both PickX and Jackpot games
-    this.selectedGameEventId = Number(raceItem?.GameEventId);
+    event.fixedConfig = this.fixedConfig;
+    this.selectedEvent = event;
+    this.selectedGameEventId = Number(event.GameEventId);
 
     const showPromotionsParam = this.route.snapshot.queryParamMap.get('showPromotions');
-    if (showPromotionsParam === 'true' && Array.isArray(raceItem?.PromotionConfiguration) && raceItem.PromotionConfiguration.length > 0) {
-      this.availablePromotions = raceItem.PromotionConfiguration;
-      if (!this.selectedPromotion) {
-        this.showPromoSelection = true;
-      }
+    if (showPromotionsParam === 'true' && Array.isArray(event.PromotionConfiguration) && event.PromotionConfiguration.length > 0) {
+      this.availablePromotions = event.PromotionConfiguration;
+      if (!this.selectedPromotion) this.showPromoSelection = true;
     }
 
     const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
     this.showCart = Array.isArray(lotoCartData) && lotoCartData.length > 0;
-
-    this.showEventDetails = true
-    // content changed; recalc height in next tick
+    this.showEventDetails = true;
     setTimeout(() => this.updateCartHeight());
 
-    // if we have bet types available and none chosen yet, pick the first one
-    if (this.isPickXGame && this.fixedConfig && this.fixedConfig.length > 0) {
-      if (!keepSameType || this.selectedTypes.length === 0) {
-        //this.selectedTypes = [this.fixedConfig[0]];
-        this.selectedResultFilters = [this.fixedConfig.TicketTypeId];
-        this.Stake = this.fixedConfig[0].MinStake;
-        this.clampStakeToTypeLimits();
-      }
-      this.selectedType = this.selectedTypes[0]; // for backward compatibility
+    if (this.isPickXGame && this.fixedConfig?.length > 0) {
+      this.selectedResultFilters = [this.fixedConfig.TicketTypeId];
+      this.Stake = this.fixedConfig[0].MinStake;
+      this.clampStakeToTypeLimits();
+      this.selectedType = this.selectedTypes[0];
     }
 
-    this.selectedBalls = this.generateDrawBalls(numberOfSelectedBalls)
-    this.listOfBalls = this.generateBallObjects(numberOfBalls)
-    // reset the per-slot selection array
-    this.slotSelections = new Array(numberOfSelectedBalls).fill(null);
-    //console.log(this.listOfBalls)
-    //console.log(this.selectedBalls)
-
-    // Start countdown timer for this event
+    this.resetBallPicker(numberOfSelectedBalls, numberOfBalls);
     this.gnrcSrv.toggleLoader(false);
+  }
+
+  resetBallPicker(numberOfSelectedBalls?: number, numberOfBalls?: number) {
+    const numSelected = numberOfSelectedBalls ?? this.numberOfBallChoice;
+    const numBalls = numberOfBalls ?? (this.isPickXGame ? 10 : this.fixedConfig?.find((item: any) => item.Name === 'NumberOfBalls')?.Value);
+    this.selectedNumbers = [];
+    this.currentPickIndex = 0;
+    this.selectedBalls = this.generateDrawBalls(numSelected);
+    this.listOfBalls = this.generateBallObjects(numBalls);
+    this.slotSelections = new Array(numSelected).fill(null);
   }
 
 
@@ -711,9 +650,8 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     }
     //console.log(pickItem)
 
-    this.selectedNumbers = [];
     if (refreshEventDetails) {
-      this.composeEventDetails(this.selectedEvent, true)
+      this.resetBallPicker();
     }
   }
 
@@ -730,9 +668,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   clearSelections() {
-    this.currentPickIndex = 0;
-    this.selectedNumbers = [];
-    this.composeEventDetails(this.selectedEvent, true)
+    this.resetBallPicker();
   }
 
   onTotalPriceChange(totalPrice: any) {
@@ -768,7 +704,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.addToBet(false);
       }
 
-      this.composeEventDetails(this.selectedEvent);
+      this.resetBallPicker();
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       if (!this.sharedCart) {
@@ -816,7 +752,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         await this.sharedCart!.issueTicket();
       }
 
-      this.composeEventDetails(this.selectedEvent);
+      this.resetBallPicker();
     }
     finally {
       this.isBulkSeparateIssueInProgress = false;

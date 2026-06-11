@@ -435,7 +435,7 @@ export class MachineService {
   }
 
   async getFixedConfiguration(fixedConfigurationId: any) {
-
+    console.trace(`Getting fixed configuration for ID: ${fixedConfigurationId}`)
     let params: any = {
       GameId: await this.getGameId(),
       GameConfiguration: [],

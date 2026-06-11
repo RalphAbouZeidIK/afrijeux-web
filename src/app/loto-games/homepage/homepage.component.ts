@@ -18,6 +18,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   private queryParamsSubscription: Subscription | null = null;
   private hasInitializedQueryParams = false;
   allLotoEvents: any = null;
+  resolvedGameEvent: any = null;
 
   constructor(private route: ActivatedRoute, private gamesSrv: GamesService, private gnrcSrv: GenericService, private router: Router) { }
 
@@ -44,19 +45,32 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
 
   async ngOnInit(): Promise<void> {
-    this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
-    //console.log(this.allLotoEvents)
-    this.queryParamsSubscription = this.route.queryParamMap.subscribe(async () => {
-      await this.applySelectedContent();
+    const navGameEvent = history.state?.gameEvent;
+    if (navGameEvent) {
+      this.resolvedGameEvent = navGameEvent;
+    } else {
+      this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
+      this.resolvedGameEvent = this.resolveSelectedEvent();
+    }
 
-      // Skip the first emission to avoid an unnecessary initial remount.
-      if (!this.hasInitializedQueryParams) {
-        this.hasInitializedQueryParams = true;
-        return;
-      }
+    if (!this.isAndroidApp) {
+      this.queryParamsSubscription = this.route.queryParamMap.subscribe(async () => {
+        if (!this.allLotoEvents) {
+          this.allLotoEvents = await this.gamesSrv.getAllLotoGames();
+        }
+        this.resolvedGameEvent = this.resolveSelectedEvent();
+        await this.applySelectedContent();
 
-      this.reloadHomepageContent();
-    });
+        // Skip the first emission to avoid an unnecessary initial remount.
+        if (!this.hasInitializedQueryParams) {
+          this.hasInitializedQueryParams = true;
+          return;
+        }
+
+        this.reloadHomepageContent();
+      });
+    }
+
   }
 
   ngOnDestroy(): void {
@@ -160,6 +174,34 @@ export class HomepageComponent implements OnInit, OnDestroy {
       console.warn(error);
       return NaN;
     }
+  }
+
+  private resolveSelectedEvent(): any {
+    if (!this.allLotoEvents) return null;
+    const currentUrl = window.location.href;
+    const isJackpot = currentUrl.includes('/Jackpot');
+    const isPickX = currentUrl.includes('PickX') || currentUrl.includes('WinBig');
+    const events: any[] = isJackpot
+      ? (this.allLotoEvents?.jackpotGames ?? [])
+      : (this.allLotoEvents?.pickXGames ?? []);
+    const active = events.filter((e: any) => !e.IsSalesStopped);
+    if (active.length === 0) return null;
+
+    let selected = active[0];
+    const gameEventId = this.route.snapshot.queryParamMap.get('gameEventId');
+    const legacyGameType = this.route.snapshot.queryParamMap.get('gametype');
+
+    if (gameEventId) {
+      const matched = isJackpot
+        ? active.find((e: any) => Number(e.GameEventId) === Number(gameEventId))
+        : active.find((e: any) => Number(e.GameEventId) === Number(gameEventId) && e.GameRouteGenerated?.toLowerCase() === this.gameName.toLowerCase());
+      if (matched) selected = matched;
+    } else if (legacyGameType && isPickX) {
+      const matched = active.find((e: any) => Number(e.ConfigurationVersionId) === Number(legacyGameType));
+      if (matched) selected = matched;
+    }
+
+    return selected;
   }
 
   private setContent(content: LotoGameContent): void {
