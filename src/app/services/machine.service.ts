@@ -85,7 +85,7 @@ export class MachineService {
   ) {
     (window as any).handleNativeBack = () => {
       //console.log("🔙 Native back pressed");
-       this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } }); // redirect to your chosen route
+      this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } }); // redirect to your chosen route
     };
 
     // this.bridge.printerStatusSource.subscribe((error) => {
@@ -1194,4 +1194,23 @@ export class MachineService {
     const match = input.match(/^\[(MX\d+)\]/);
     return match ? match[1] : null;
   }
+
+  async runUpdateCheck(buildCode: number) {
+    let machineData = await this.getMachineData()
+    const updateParams = {
+      MachineId: machineData?.MachineId,
+      ApplicationId: 5,
+      Code: buildCode
+    };
+    let response = await this.handleApiResponse('GameCooksAuth', 'CheckForUpdates', 'POST', updateParams)
+    console.log("Update Check Response:", response)
+
+    if (response?.IsUptodate === false && response?.VersionHistory?.UpdateURL) {
+      const updateUrl = response.VersionHistory.UpdateURL;
+      this.bridge.triggerAppUpdate(updateUrl);
+    } else {
+    }
+  }
+
+
 }

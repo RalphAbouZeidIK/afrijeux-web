@@ -48,14 +48,7 @@ export class MachineCoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMachineData();
-    const alreadyAvailable = (window as any).flutterBuildCode;
-    if (alreadyAvailable !== undefined) {
-      this.runUpdateCheck(alreadyAvailable);
-    } else {
-      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
-        this.runUpdateCheck((e as CustomEvent).detail as number);
-      }, { once: true });
-    }
+    this.checkForApkUpdate()
   }
 
   async getMachineData() {
@@ -88,27 +81,20 @@ export class MachineCoreComponent implements OnInit {
 
   }
 
-  private async runUpdateCheck(buildCode: number) {
-    let machineData = await this.machineSrv.getMachineData()
-    const updateParams = {
-      MachineId: machineData?.MachineId,
-      ApplicationId: 5,
-      Code: buildCode
-    };
-    let response = await this.machineSrv.handleApiResponse('GameCooksAuth', 'CheckForUpdates', 'POST', updateParams)
-    console.log("Update Check Response:", response)
-
-    if (response?.IsUptodate === false && response?.VersionHistory?.UpdateURL) {
-      const updateUrl = response.VersionHistory.UpdateURL;
-      this.bridge.triggerAppUpdate(updateUrl);
-    } else {
-    }
+  onScan() {
+    this.bridge.requestScan();
   }
 
 
-
-  onScan() {
-    this.bridge.requestScan();
+  async checkForApkUpdate() {
+    const alreadyAvailable = (window as any).flutterBuildCode;
+    if (alreadyAvailable !== undefined) {
+      this.machineSrv.runUpdateCheck(alreadyAvailable);
+    } else {
+      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
+        this.machineSrv.runUpdateCheck((e as CustomEvent).detail as number);
+      }, { once: true });
+    }
   }
 
   // onPrint() {
