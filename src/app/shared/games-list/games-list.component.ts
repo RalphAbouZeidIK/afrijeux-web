@@ -178,6 +178,7 @@ export class GamesLinksComponent implements OnInit {
         { id: 'rapid-fruits', name: 'RAPID Fruits', image: 'rapid-fruits.svg', route: '/Machine/WinBigRapidFruits', gameId: 76 },
         { id: 'rapid-luxury', name: 'RAPID Luxury', image: 'rapid-luxury.svg', route: '/Machine/WinBigRapidLuxury', gameId: 77 },
         { id: 'rapid-numbers', name: 'RAPID Numbers', image: 'rapid-numbers.svg', route: '/Machine/WinBigRapidNumbers', gameId: 79 },
+        { id: 'rapid-numbers-lite', name: 'RAPID Numbers Lite', image: 'rapid-numbers.svg', route: '/Machine/WinBigRapidNumbersLite', gameId: 80 },
       ];
 
       for (const def of rapidDefs) {
