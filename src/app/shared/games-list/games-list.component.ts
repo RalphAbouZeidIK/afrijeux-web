@@ -171,7 +171,7 @@ export class GamesLinksComponent implements OnInit {
 
     if (this.isAndroidApp) {
       const rapidDefs = [
-        { id: 'keno', name: 'KENO', image: 'keno.svg', route: '/Machine/WinBigKeno', gameId: null },
+        { id: 'keno', name: 'KENO', image: 'keno.svg', route: '/Machine/WinBigKeno', gameId: 63 },
         { id: 'rapid-animals', name: 'RAPID Animals', image: 'rapid.svg', route: '/Machine/WinBigRapid', gameId: 60 },
         { id: 'rapid-emojis', name: 'RAPID Emojis', image: 'rapid-emojis.svg', route: '/Machine/WinBigRapidEmojis', gameId: 74 },
         { id: 'rapid-football', name: 'RAPID Football', image: 'rapid-football.svg', route: '/Machine/WinBigRapidFootball', gameId: 75 },
@@ -209,6 +209,7 @@ export class GamesLinksComponent implements OnInit {
   }
 
   switchGameTypes() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     this.normalGamesShown = !this.normalGamesShown;
     if (this.normalGamesShown) {
       if (this.normalGames.length === 0) {
