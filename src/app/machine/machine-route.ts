@@ -54,7 +54,7 @@ export const machineMenuRoutes: Route[] = [
         path: 'CheckResults',
         component: ReportsComponent,
         data: {
-            showLink: true,
+            showLink: false,
             title: 'machine.routerLinks.checkResults',
             description: 'View Results of previous draws.',
             PermissionName: 'TerminalCanViewResult',

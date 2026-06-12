@@ -20,6 +20,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
   EventId: any
   genericDate: any
 
+  yesterdayDate: Date = (() => { const d = new Date(); d.setDate(d.getDate() - 1); d.setHours(22, 30, 0, 0); return d; })()
+
   canPrintReport = false
 
   isAdminLoggedIn = false
@@ -88,7 +90,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       received.getDate() === today.getDate() &&
       field == 'FromDate'
     ) {
-      received.setHours(0, 0, 0, 0); // reset to 00:00
+      received.setHours(22, 30, 0, 0); // reset to 22:30
     }
 
     (this as any)[field] = this.datepipe.transform(received, 'yyyy-MM-ddTHH:mm:ss.SSS');
@@ -103,16 +105,27 @@ export class ReportsComponent implements OnInit, OnDestroy {
   async getReports(shouldPrint = false) {
     //console.log(this.selectedGames)
     let ids = (this.isCheckResults) ? this.selectedGames[0].GameId : this.selectedGames.map((item: any) => item.GameId);
+    const fromDate = (() => {
+      if (!this.isCheckResults && this.ToDate) {
+        const d = new Date(this.ToDate);
+        d.setDate(d.getDate() - 1);
+        d.setHours(22, 30, 0, 0);
+        return this.datepipe.transform(d, 'yyyy-MM-ddTHH:mm:ss.SSS');
+      }
+      return this.FromDate;
+    })();
+
     let reportParams = {
-      FromDate: this.FromDate,
+      Date: fromDate,
+      FromDate: fromDate,
       ToDate: (!this.isCheckResults) ? this.ToDate : this.genericDate,
-      GameId: ids,
+      GameId: null,
       GameEventId: this.isCheckResults ? this.EventId : null,
       EventCode: this.isCheckResults ? this.EventId : null,
       apiRoute: this.isCheckResults ? this.selectedGames[0].GameApi.split('/')[1] : null
     }
 
-    const apiReponse = await this.machineSrv.getReports(reportParams, shouldPrint)
+    const apiReponse = await this.machineSrv.getReports(reportParams, shouldPrint, this.isCheckResults)
     if (apiReponse.DataToPrint) {
       this.dataToPrint = apiReponse.DataToPrint
       if (!shouldPrint) {
@@ -124,7 +137,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   onBackClick() {
-     this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
+    this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
   }
 
   ngOnDestroy() {

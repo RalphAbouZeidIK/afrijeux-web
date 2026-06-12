@@ -585,15 +585,11 @@ export class MachineService {
     return validateTicketResponse
   }
 
-  async getReports(reportsParams: any, shouldPrint = false) {
-
+  async getReports(reportsParams: any, shouldPrint = false, isCheckResults = false) {
+    console.log(isCheckResults)
     let reportsResponse: any;
-    if (reportsParams.GameEventId) {
-      reportsResponse = await this.handleApiResponse(`${reportsParams.apiRoute}`, `${reportsParams.apiRoute}/EventResult`, 'POST', reportsParams)
-    }
-    else {
-      reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', reportsParams)
-    }
+    reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/${(isCheckResults) ? 'CheckResults' : 'MachineReport'}`, 'POST', reportsParams)
+
 
     if (reportsResponse.status == false) {
       this.gnrcSrv.setModalData(true, false, reportsResponse.message)

@@ -38,17 +38,25 @@ export class AppNavComponent implements OnInit, OnDestroy, OnChanges {
       active: false
     },
     {
+      id: 'check-results',
+      label: 'Check Results',
+      icon: 'check-results',
+      route: '/Machine/CheckResults',
+      active: false
+    },
+    {
       id: 'scan',
       label: 'Scan',
       icon: 'scan',
       route: '/Machine/ValidateTicket',
       active: false
     }
+
   ];
 
   private routerSubscription: Subscription | undefined;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.updateNavigationVisibility(this.router.url);
