@@ -19,6 +19,15 @@ export class RapidGamesComponent {
   rapidGameType: 'Fruits' | 'Animals' | 'Football' | 'Luxury' | 'Emojis' | 'Numbers' | 'NumbersLite' =
     (/WinBigRapid(Emojis|Football|Fruits|Luxury|NumbersLite|Numbers)/.exec(window.location.href)?.[1] as any) ?? 'Animals';
 
+  get gameTitle(): string {
+    if (this.isKeno) return 'Keno Games';
+    const titles: Partial<Record<typeof this.rapidGameType, string>> = {
+      NumbersLite: 'Quick Match',
+      Numbers: 'Mega Win',
+    };
+    return titles[this.rapidGameType] ?? `Rapid ${this.rapidGameType}`;
+  }
+
   constructor(
     private machineSrv: MachineService,
     private router: Router,

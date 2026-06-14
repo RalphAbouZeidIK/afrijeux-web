@@ -8,8 +8,8 @@
 export const environment = {
   production: false,
   //BaseUrl: 'http://192.168.1.6:5000/',
-  BaseUrl: 'http://192.168.1.7:5000/',
-  //BaseUrl: 'http://test.gamecooks.com:5000/',
+  //BaseUrl: 'http://192.168.1.7:5000/',
+  BaseUrl: 'http://test.gamecooks.com:5000/',
   //BaseUrl: 'http://localhost:5000/',
   gcSrv: 'GameCooksService/',
   subUrls: {

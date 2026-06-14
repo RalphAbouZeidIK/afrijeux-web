@@ -95,7 +95,7 @@ export class GamesLinksComponent implements OnInit {
           Stake: game.Stake || 5,
           IsSalesStopped: game.IsSalesStopped,
           GameRouteGenerated: game.GameRouteGenerated,
-          GameId: game.gameId
+          GameId: game.GameId
         });
 
         if (Array.isArray(game.PromotionConfiguration) && game.PromotionConfiguration.length > 0) {
@@ -114,7 +114,7 @@ export class GamesLinksComponent implements OnInit {
             Stake: game.Stake || 5,
             IsSalesStopped: game.IsSalesStopped,
             GameRouteGenerated: game.GameRouteGenerated,
-            GameId: game.gameId,
+            GameId: game.GameId,
             isPromoCard: true,
             PromotionConfiguration: game.PromotionConfiguration,
             queryParams: { gameEventId: game.GameEventId, showPromotions: true }
@@ -139,7 +139,7 @@ export class GamesLinksComponent implements OnInit {
           Stake: game.Stake || 5,
           IsSalesStopped: game.IsSalesStopped,
           GameRouteGenerated: 'Jackpot',
-          GameId: game.gameId
+          GameId: game.GameId
         });
 
         if (Array.isArray(game.PromotionConfiguration) && game.PromotionConfiguration.length > 0) {
@@ -177,8 +177,8 @@ export class GamesLinksComponent implements OnInit {
         { id: 'rapid-football', name: 'RAPID Football', image: 'rapid-football.svg', route: '/Machine/WinBigRapidFootball', gameId: 75 },
         { id: 'rapid-fruits', name: 'RAPID Fruits', image: 'rapid-fruits.svg', route: '/Machine/WinBigRapidFruits', gameId: 76 },
         { id: 'rapid-luxury', name: 'RAPID Luxury', image: 'rapid-luxury.svg', route: '/Machine/WinBigRapidLuxury', gameId: 77 },
-        { id: 'rapid-numbers', name: 'RAPID Numbers', image: 'rapid-numbers.svg', route: '/Machine/WinBigRapidNumbers', gameId: 79 },
-        { id: 'rapid-numbers-lite', name: 'RAPID Numbers Lite', image: 'rapid-numbers.svg', route: '/Machine/WinBigRapidNumbersLite', gameId: 80 },
+        { id: 'rapid-numbers', name: 'RAPID Numbers', image: 'mega-win.svg', route: '/Machine/WinBigRapidNumbers', gameId: 79 },
+        { id: 'rapid-numbers-lite', name: 'RAPID Numbers Lite', image: 'quick-match.svg', route: '/Machine/WinBigRapidNumbersLite', gameId: 80 },
       ];
 
       for (const def of rapidDefs) {
@@ -206,6 +206,7 @@ export class GamesLinksComponent implements OnInit {
       console.log(this.listItems)
     }
     this.listItems = this.normalGamesShown ? [...this.normalGames] : [...this.rapidGames];
+    console.log('List Items:', this.listItems);
   }
 
   switchGameTypes() {
@@ -260,9 +261,11 @@ export class GamesLinksComponent implements OnInit {
       this.router.navigate([card.route]);
       return;
     }
+    console.log(card)
     const events = card.gameType === 'jackpot' ? this.jackpotEvents : this.pickXEvents;
-    const fullEvent = events?.find((e: any) => Number(e.GameEventId) === Number(card.GameEventId));
-    const queryParams = card.queryParams ?? { gameEventId: card.GameEventId };
+    const fullEvent = events?.find((e: any) => e.GameId === card.GameId && (Number(e.GameEventId) === Number(card.GameEventId)));
+    const queryParams = card.queryParams ?? { gameEventId: card.GameEventId};
+    console.log(`Navigating to game: ${card.name}, Route: ${card.route}, QueryParams:`, queryParams, 'Full Event:', fullEvent);
     this.router.navigate([card.route], {
       queryParams,
       state: fullEvent ? { gameEvent: fullEvent } : undefined

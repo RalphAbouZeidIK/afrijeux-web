@@ -229,6 +229,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     } catch { }
     if (configId) {
       const config = await this.gamesSrv.getFixedConfig(configId);
+      console.log('Loaded fixed config:', config);
       try { sessionStorage.setItem(key, JSON.stringify(config)); } catch { }
       return config;
     }

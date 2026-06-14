@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api.service';
+import { environment } from 'src/environments/environment';
 
 export interface CarouselImage {
   id: string;
@@ -44,7 +45,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
     if (Array.isArray(response)) {
       this.images = response.map((path, i) => ({
         id: String(i + 1),
-        url: `${path}`,
+        url: `${environment.BaseUrl}${path}`,
         alt: `Banner ${i + 1}`
       }));
     }
