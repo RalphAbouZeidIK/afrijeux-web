@@ -365,7 +365,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
         if (this.selectedPromotion && this.promoStake !== null) {
           betsToIssue = this.listOfBets.map((item: any, index: number) => ({
             ...item,
-            Stake: index === 0 ? this.promoStake : 0
+            Stake: index === 0 ? this.promoStake : 0,
+            IsPromotion: true
           }));
           betsToIssue.GameEventId = this.listOfBets.GameEventId;
           betsToIssue.TicketPrice = this.listOfBets.TicketPrice;
