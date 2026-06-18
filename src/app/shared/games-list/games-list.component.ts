@@ -22,6 +22,7 @@ interface GameCard {
   GameId?: number;
   queryParams?: Record<string, any>;
   isPromoCard?: boolean;
+  isPromoHub?: boolean;
   PromotionConfiguration?: any[];
 }
 
@@ -39,12 +40,15 @@ export class GamesLinksComponent implements OnInit {
   listItems: GameCard[] = [];
   normalGames: GameCard[] = [];
   rapidGames: GameCard[] = [];
+  promoCards: GameCard[] = [];
   normalGamesShown = true;
 
   @Input() isListingPage = false;
   @Input() isGamePage = false;
   @Input() isBanner = false;
-  @Input() isHeader = false
+  @Input() isHeader = false;
+  @Input() isPromotionsPage = false;
+  @Input() isInstantGamesPage = false;
   @Input() selectedGameEventId: number | string | null = null;
   gameName = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
   allowedGameIds = new Set<number>();
@@ -74,7 +78,7 @@ export class GamesLinksComponent implements OnInit {
     this.listItems = [];
     this.normalGames = [];
     this.rapidGames = [];
-    const promoCards: GameCard[] = [];
+    this.promoCards = [];
     console.log(this.listItems)
     // Add PickX games
     if (this.normalGamesShown) {
@@ -99,7 +103,7 @@ export class GamesLinksComponent implements OnInit {
         });
 
         if (Array.isArray(game.PromotionConfiguration) && game.PromotionConfiguration.length > 0) {
-          promoCards.push({
+          this.promoCards.push({
             id: `promo-pickx-${game.GameEventId}`,
             name: `${game.EventName}`,
             badgeText: `Promotion`,
@@ -143,7 +147,7 @@ export class GamesLinksComponent implements OnInit {
         });
 
         if (Array.isArray(game.PromotionConfiguration) && game.PromotionConfiguration.length > 0) {
-          promoCards.push({
+          this.promoCards.push({
             id: `promo-${game.GameEventId}`,
             name: `${game.EventName}`,
             badgeText: `Promotion`,
@@ -165,7 +169,25 @@ export class GamesLinksComponent implements OnInit {
           });
         }
       });
-      this.normalGames = [...promoCards, ...this.normalGames];
+
+      if (this.promoCards.length > 0) {
+        this.normalGames.unshift({
+          id: 'promo-hub',
+          name: 'PROMOTIONS',
+          badgeText: 'Special Offers',
+          prize: 0,
+          GameEventDate: null,
+          route: this.isAndroidApp ? '/Machine/Promotions' : '/Promotions',
+          GameEventId: null,
+          playPrice: 0,
+          gameType: 'pickX',
+          Prize: 0,
+          Stake: 0,
+          IsSalesStopped: false,
+          isPromoCard: true,
+          isPromoHub: true,
+        });
+      }
     }
 
 
@@ -205,7 +227,13 @@ export class GamesLinksComponent implements OnInit {
       this.listItems = this.uniqueGames()
       console.log(this.listItems)
     }
-    this.listItems = this.normalGamesShown ? [...this.normalGames] : [...this.rapidGames];
+    if (this.isPromotionsPage) {
+      this.listItems = [...this.promoCards];
+    } else if (this.isInstantGamesPage) {
+      this.listItems = [...this.rapidGames];
+    } else {
+      this.listItems = this.normalGamesShown ? [...this.normalGames] : [...this.rapidGames];
+    }
     console.log('List Items:', this.listItems);
   }
 
@@ -254,6 +282,10 @@ export class GamesLinksComponent implements OnInit {
     finally {
       //this.gnrcSrv.toggleLoader(false);
     }
+  }
+
+  navigateToInstantGames() {
+    this.router.navigate(['/Machine/InstantGames']);
   }
 
   navigateToGame(card: GameCard) {

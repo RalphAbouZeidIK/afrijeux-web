@@ -136,7 +136,7 @@
                             <a class="btn qp-button" (click)="quickPick()" *ngIf="!isMobile">Quick Pick</a>
                             <!-- <a class="btn btn-primary" (click)="addToBet()">Confirm Selections</a> -->
                             <a class="btn btn-primary" (click)="openMobileCart()" *ngIf="isMobile"
-                                [class.disabled]="selectedPromotion && cartData.length < (selectedPromotion.X + selectedPromotion.Y)">Confirm
+                                [class.disabled]="availablePromotions.length > 0 && (!selectedPromotion || cartData.length < (selectedPromotion.X + selectedPromotion.Y))">Confirm
                                 &
                                 Print</a>
                             <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"

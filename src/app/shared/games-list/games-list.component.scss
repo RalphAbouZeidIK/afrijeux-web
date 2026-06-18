@@ -45,6 +45,15 @@
                 color: #ffc832;
                 border: 1px solid rgba(255, 200, 50, 0.4);
             }
+
+            .promo-hub-btn {
+                background: #ffc832;
+
+                &:hover {
+                    background: #e6b22d;
+                    box-shadow: 0 4px 12px rgba(255, 200, 50, 0.4);
+                }
+            }
         }
     }
 }

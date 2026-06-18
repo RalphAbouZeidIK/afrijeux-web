@@ -11,6 +11,7 @@ import { PlayResponsiblyComponent } from './static-pages/play-responsibly/play-r
 import { EventBrandingComponent } from './static-pages/event-branding/event-branding.component';
 import { BrandedProductsComponent } from './static-pages/branded-products/branded-products.component';
 import { CarouselComponent } from './shared/carousel/carousel.component';
+import { PromotionsPageComponent } from './shared/promotions-page/promotions-page.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -160,6 +161,16 @@ const routes: Routes = [
       shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.PlayResponsibly',
+    },
+  },
+  {
+    path: 'Promotions',
+    component: PromotionsPageComponent,
+    data: {
+      breadcrumb: 'Promotions',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'Promotions',
     },
   },
   {

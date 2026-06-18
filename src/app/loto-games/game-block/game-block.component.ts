@@ -251,7 +251,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
     const showPromotionsParam = this.route.snapshot.queryParamMap.get('showPromotions');
     if (showPromotionsParam === 'true' && Array.isArray(event.PromotionConfiguration) && event.PromotionConfiguration.length > 0) {
       this.availablePromotions = event.PromotionConfiguration;
-      if (!this.selectedPromotion) this.showPromoSelection = true;
+      if (event.PromotionConfiguration.length === 1) {
+        this.selectPromotion(event.PromotionConfiguration[0]);
+      } else if (!this.selectedPromotion) {
+        this.showPromoSelection = true;
+      }
     }
 
     const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);

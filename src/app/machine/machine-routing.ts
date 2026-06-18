@@ -6,6 +6,8 @@ import { LoginComponent } from "../shared/login/login.component";
 import { HomeComponent } from "./home/home.component";
 import { SharedGuard } from "../shared.guard";
 import { machineMenuRoutes } from "./machine-route";
+import { PromotionsPageComponent } from "../shared/promotions-page/promotions-page.component";
+import { InstantGamesPageComponent } from "../shared/instant-games-page/instant-games-page.component";
 
 
 const routes: Routes = [
@@ -87,6 +89,26 @@ const routes: Routes = [
                     shouldBeLoggedIn: true,
                     showLink: true,
                     title: 'routerLinks.appTitle.Pickx',
+                }
+            },
+            {
+                path: 'Promotions',
+                component: PromotionsPageComponent,
+                data: {
+                    breadcrumb: 'Promotions',
+                    shouldBeLoggedIn: false,
+                    showLink: false,
+                    title: 'Promotions',
+                }
+            },
+            {
+                path: 'InstantGames',
+                component: InstantGamesPageComponent,
+                data: {
+                    breadcrumb: 'Instant Games',
+                    shouldBeLoggedIn: false,
+                    showLink: false,
+                    title: 'Instant Games',
                 }
             }
 

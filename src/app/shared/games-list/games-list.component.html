@@ -1,7 +1,25 @@
-<h2 *ngIf="isListingPage">All Games</h2>
+<h2 *ngIf="isListingPage && !isPromotionsPage && !isInstantGamesPage">All Games</h2>
+<h2 *ngIf="isPromotionsPage">Promotions</h2>
+<h2 *ngIf="isInstantGamesPage">Instant Games</h2>
 <div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
     <ng-container *ngFor="let game of listItems">
-        <div class="game-card" [class.selected]="isGameSelected(game)" [class.promo-card]="game.isPromoCard" *ngIf="!game.IsSalesStopped" (click)="navigateToGame(game)">
+
+        <!-- Promotions hub card -->
+        <div class="game-card promo-card" *ngIf="game.isPromoHub && isListingPage" (click)="navigateToGame(game)">
+            <div class="game-header">
+                <div class="game-info">
+                    <div class="game-title-row">
+                        <span class="game-badge">{{ game.badgeText }}</span>
+                    </div>
+                    <h3 class="game-title">{{ game.name }}</h3>
+                    <p class="draw-info">View exclusive deals on selected games</p>
+                </div>
+            </div>
+            <button class="play-button">View All Promotions</button>
+        </div>
+
+        <!-- Regular game card -->
+        <div class="game-card" [class.selected]="isGameSelected(game)" [class.promo-card]="game.isPromoCard" *ngIf="!game.IsSalesStopped && !game.isPromoHub" (click)="navigateToGame(game)">
             <!-- Game Header with Image -->
             <div class="game-header" *ngIf="isListingPage">
                 <!---->
@@ -51,23 +69,18 @@
 
         </div>
     </ng-container>
-    <div class="game-card" (click)="switchGameTypes()" *ngIf="isAndroidApp && rapidGames.length > 0">
+    <!-- Instant Games navigation card -->
+    <div class="game-card" (click)="navigateToInstantGames()" *ngIf="isAndroidApp && rapidGames.length > 0 && !isPromotionsPage && !isInstantGamesPage">
         <div class="game-header">
             <div class="game-info">
                 <div class="game-title-row">
-                    <h3 class="game-title"> {{(normalGamesShown) ? 'Instant' : 'Normal'}} Games</h3>
-                    <span class="game-badge">{{(normalGamesShown) ? 'Instant' : 'Pick Numbers'}}</span>
+                    <h3 class="game-title">Instant Games</h3>
+                    <span class="game-badge">Instant</span>
                 </div>
-                <p class="draw-info">Prizes varies depending on ticket.</p>
+                <p class="draw-info">Prizes vary depending on ticket.</p>
             </div>
-
         </div>
-        <button class="play-button">
-            <ng-container *ngIf="isListingPage">
-                <span>Pay /</span>
-                <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt="">
-                    {{(normalGamesShown) ? '3' : '5'}}</span>
-            </ng-container>
-        </button>
+        <button class="play-button">View Instant Games</button>
     </div>
 </div>
+

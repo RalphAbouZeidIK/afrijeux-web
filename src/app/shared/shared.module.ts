@@ -34,6 +34,8 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { CountdownComponent } from './countdown/countdown.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminWithdrawComponent } from './admin-withdraw/admin-withdraw.component';
+import { PromotionsPageComponent } from './promotions-page/promotions-page.component';
+import { InstantGamesPageComponent } from './instant-games-page/instant-games-page.component';
 import { AdminDepositComponent } from './admin-deposit/admin-deposit.component';
 
 
@@ -74,7 +76,9 @@ export const MY_FORMATS = {
     CountdownComponent,
     AdminLoginComponent,
     AdminDepositComponent,
-    AdminWithdrawComponent
+    AdminWithdrawComponent,
+    PromotionsPageComponent,
+    InstantGamesPageComponent
   ],
   exports: [
     HeaderComponent,
@@ -103,7 +107,9 @@ export const MY_FORMATS = {
     AppNavComponent,
     CountdownComponent,
     AdminLoginComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    PromotionsPageComponent,
+    InstantGamesPageComponent
   ],
   imports: [CommonModule,
     ReactiveFormsModule,
