@@ -12,6 +12,8 @@ export class DatepickerComponent implements OnInit {
 
   @Input() label = 'Choose Date'
 
+  @Input() initialDate: Date | null = null
+
   /**
   * Output to pass the sorting event
   */
@@ -26,6 +28,9 @@ export class DatepickerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.initialDate) {
+      this.dateChosen = this.initialDate;
+    }
     this.dateChangeEvent.emit(this.datepipe.transform(this.dateChosen, 'yyyy-MM-ddTHH:mm:ss.SSS'))
   }
 

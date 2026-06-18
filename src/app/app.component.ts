@@ -6,9 +6,8 @@ import { LoaderService } from './services/loader-service.service';
 import { GenericService } from './services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PageTitleService } from './services/page-title.service';
-import { CacheService } from './services/cache.service';
-import { machineMenuRoutes } from './machine/machine-route';
 import { MachineService } from './services/machine.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +50,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   scannedResult: any = '';
 
   isAndroidApp = false
+
+  isTesting = true
 
   hideHeader = false
 
@@ -136,6 +137,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   async ngOnInit(): Promise<void> {
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     this.gnrcSrv.setIsDesktopView(window.innerWidth > 992)
     this.getMenuItems()
@@ -147,7 +150,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateHeaderVisibility() {
-    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot")
+    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot") || window.location.href.includes("Machine/WinBig3") || window.location.href.includes("Machine/WinBig4") || window.location.href.includes("Machine/WinBig5")
 
   }
 
@@ -161,7 +164,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 1);
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
-        // Show loader during navigation
+        if (this.isAndroidApp) {
+          this.machineSrv.setAdminLoginStatus(false);
+        }
+
       }
 
       if (event instanceof NavigationEnd) {

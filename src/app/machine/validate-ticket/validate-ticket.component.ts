@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CacheService } from 'src/app/services/cache.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
@@ -10,7 +11,7 @@ import { NativeBridgeService } from 'src/app/services/native-bridge.service';
   styleUrl: './validate-ticket.component.scss',
   standalone: false
 })
-export class ValidateTicketComponent {
+export class ValidateTicketComponent implements OnInit, OnDestroy {
 
   fullTicketId: any = '';
 
@@ -36,31 +37,33 @@ export class ValidateTicketComponent {
 
   showWinningDetails = false
 
+  private scanSub: Subscription | null = null
+
   constructor(
     private machineSrv: MachineService,
     private nativeBridge: NativeBridgeService,
     private cacheService: CacheService,
     private gnrcSrv: GenericService
-  ) {
-    this.nativeBridge.scanResult$.subscribe(result => {
+  ) {}
+
+  async ngOnInit() {
+    this.scanSub = this.nativeBridge.scanResult$.subscribe(result => {
       if (result != 'Scan canceled or failed') {
         this.fullTicketId = result;
         this.validateTicket()
-      }
-      else {
+      } else {
         this.gnrcSrv.setModalData(true, false, `Scan canceled or failed`)
         this.showForm = true
       }
-
     });
-  }
 
-  async ngOnInit() {
     this.scanCode()
     this.fullTicketId = ''
     this.canPayTicket = await this.machineSrv.getMachinePermission('TerminalCanPayTicket');
+  }
 
-
+  ngOnDestroy() {
+    this.scanSub?.unsubscribe();
   }
 
   async getLatestTicket() {
@@ -94,7 +97,7 @@ export class ValidateTicketComponent {
     this.gnrcSrv.toggleLoader(true);
 
     let validateTicketReponse = await this.machineSrv.validateTicket(this.fullTicketId)
-    console.log(validateTicketReponse)
+    //console.log(validateTicketReponse)
 
     this.isPaying = true
     this.showForm = true
@@ -140,9 +143,10 @@ export class ValidateTicketComponent {
   async payTicket() {
     let payTicketReponse = await this.machineSrv.payTicket(this.fullTicketId)
     console.log(payTicketReponse)
-    if (payTicketReponse.DataToPrint) {
+    if (payTicketReponse.status == true) {
       this.fullTicketId = ''
       this.isPaying = false
+      this.showWinningDetails = false
     }
     //console.log(payTicketReponse)
   }

@@ -23,7 +23,38 @@ export class MachineService {
   }
 
   /** modal status subscriber */
-  private openModal$ = new Subject();
+  private adminLogin$ = new Subject();
+
+  private adminPopupStatus$ = new Subject();
+
+  getAdminLoginStatus(): Observable<any> {
+    return this.adminLogin$;
+  }
+
+  getAdminPopupStatus(): Observable<any> {
+    return this.adminPopupStatus$;
+  }
+
+  setAdminLoginStatus(status: any, shouldShowAdminPage = false) {
+    let value = {
+      showAdminPage: shouldShowAdminPage,
+      isLoggedIn: status
+    }
+    this.adminLogin$.next(value);
+  }
+
+  setAdminPopupStatus(showPopup: any, shouldShowAdminPage = false) {
+    let value = {
+      showPopup: showPopup,
+      showAdminPage: shouldShowAdminPage,
+    }
+    //console.log(value)
+    this.adminPopupStatus$.next(value);
+    if (!showPopup) {
+      this.setAdminLoginStatus(false);
+    }
+  }
+
 
   isOnline = navigator.onLine
 
@@ -54,20 +85,26 @@ export class MachineService {
   ) {
     (window as any).handleNativeBack = () => {
       //console.log("🔙 Native back pressed");
-      this.router.navigate(['/Machine/Games']); // redirect to your chosen route
+      this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } }); // redirect to your chosen route
     };
 
-    this.bridge.printerStatusSource.subscribe((error) => {
-      //console.log("⚠️ can print:", error);
-      //console.log(this.valuesToPrint)
-      this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
-      this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
-      if (!error && this.valuesToPrint.thirdValue.IsOffline == 0) {
+    // this.bridge.printerStatusSource.subscribe((error) => {
+    //   //console.log("⚠️ can print:", error);
+    //   //console.log(this.valuesToPrint)
+    //   this.valuesToPrint.thirdValue.Ticket.IsPrinted = error ? 1 : 0
+    //   this.valuesToPrint.thirdValue.Ticket.Printed = error ? 1 : 0
+    //   if (!error && this.valuesToPrint.thirdValue.IsOffline == 0) {
+    //     this.issueCorruptedTicket()
+    //   }
+    //   this.cacheSrv.saveTicketToDb(this.valuesToPrint.firstValue, this.valuesToPrint.secondValue, this.valuesToPrint.thirdValue);
+    //   // Example: save to DB or update UI
+    // });
+
+    this.bridge.getPrintingStatus().subscribe((status) => {
+      if (!status) {
         this.issueCorruptedTicket()
       }
-      this.cacheSrv.saveTicketToDb(this.valuesToPrint.firstValue, this.valuesToPrint.secondValue, this.valuesToPrint.thirdValue);
-      // Example: save to DB or update UI
-    });
+    })
   }
 
 
@@ -305,14 +342,14 @@ export class MachineService {
   }
 
   async registerMachine(params: any) {
-    let machineData = await this.getMachineData();
-    if (machineData) {
-      machineData.Games = machineData.Games.map((gameItem: any) => ({
-        ...gameItem,
-        RouteName: gameItem.GameApi.split('/')[1]
-      }));
-      return machineData;
-    }
+    // let machineData = await this.getMachineData();
+    // if (machineData) {
+    //   machineData.Games = machineData.Games.map((gameItem: any) => ({
+    //     ...gameItem,
+    //     RouteName: gameItem.GameApi.split('/')[1]
+    //   }));
+    //   return machineData;
+    // }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'RegisterMachine', 'POST', params)
     if (apiResponse.status == false) {
@@ -344,6 +381,8 @@ export class MachineService {
     let game: any = null
     if (this.isAndroidApp) {
       let machineData: any = await this.getMachineData()
+      //console.log(machineData)
+      //console.log(this.getGameRoute())
       game = machineData.Games?.find((gameItem: any) => gameItem.RouteName === this.getGameRoute())
     }
 
@@ -364,6 +403,7 @@ export class MachineService {
     }
 
     let apiResponse: any = await this.handleApiResponse('GameCooksAuth', 'LoginMachine', 'POST', loginParams)
+    console.log(apiResponse)
     this.cacheSrv.saveToFlutterOfflineCache('user_data', apiResponse);
     this.localStorageSrv.setItem('user_data', apiResponse, true)
     return apiResponse;
@@ -395,7 +435,7 @@ export class MachineService {
   }
 
   async getFixedConfiguration(fixedConfigurationId: any) {
-
+    //console.trace(`Getting fixed configuration for ID: ${fixedConfigurationId}`)
     let params: any = {
       GameId: await this.getGameId(),
       GameConfiguration: [],
@@ -406,7 +446,7 @@ export class MachineService {
     return gameEventsResponse1.FixedConfiguration.FixedEventConfiguration
   }
 
-  async issueTicket(ticketObject: any, shouldHaveGameEventId = false) {
+  async issueTicket(ticketObject: any, shouldHaveGameEventId = false, customRoute: any = null, promotion: any = null) {
 
     let isPrintedFlag = 1;
 
@@ -422,7 +462,7 @@ export class MachineService {
 
     let userId: any = (this.isAndroidApp) ? userData.PersonId : this.gnrcSrv.gettUserId()
     //console.log(userId)
-    console.log(machineData)
+    //console.log(machineData)
     gameId = await this.getGameId()
 
     ticketRequestId = machineData.MachineId.toString() + machineData.MachineId.toString() + userId.toString() + this.gnrcSrv.getFormattedToday() + gameId
@@ -449,25 +489,36 @@ export class MachineService {
       GamePick: ticketObject,
       LoyalityReferenceId: 0,
       ReferenceId: '',
-      IsPromotion: false,
-      PromotionRuleId: 0,
+      IsPromotion: promotion != null,
+      PromotionRuleId: promotion?.Id ?? 0,
+      PromotionId: promotion?.Id ?? null,
       IsPrinted: isPrintedFlag,
       Printed: isPrintedFlag,
-      GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null
+      GameEventId: (shouldHaveGameEventId) ? ticketObject.GameEventId : null,
+      User: ticketObject.User ? ticketObject.User : null,
+      Code: ticketObject.Code ? ticketObject.Code : null,
+      UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
     console.log(ticketBody)
-
 
     let params = {
       GameId: gameId,
       Ticket: ticketBody,
       TicketRequestId: ticketRequestId,
       LoyalityReferenceId: 0,
-      IsOffline: this.isOnline ? 0 : 1
+      IsOffline: this.isOnline ? 0 : 1,
+      Code: ticketObject.Code ? ticketObject.Code : null,
+      UserId: ticketObject.UserId ? ticketObject.UserId : null
     }
     console.log(params)
 
     if (this.isAndroidApp) {
+      let shouldUseDefaultFont = false
+
+      if (this.getGameRoute()?.startsWith('WinBigRapid')) {
+        shouldUseDefaultFont = true
+      }
+
       if (!this.isOnline) {
         const canPrint = await this.checksBeforePrinting(ticketObject);
 
@@ -478,7 +529,7 @@ export class MachineService {
         params.Ticket.FullTicketId = fullTicketId
         let issueTicketReponse = await this.issueTicketData(ticketBody)
         const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-        this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId);
+        this.bridge.sendPrintMessage('normalText', issueTicketReponse, 'IssueTicket', fullTicketId, shouldUseDefaultFont);
         let printResponse = {
           success: true
         }
@@ -487,10 +538,17 @@ export class MachineService {
 
 
       try {
-        const apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
-        //console.log(apiResponse)
+        let apiResponse: any
+        if (customRoute) {
+          apiResponse = await this.handleApiResponse(customRoute.subRoute, `${customRoute.apiRoute}`, 'POST', params)
+        }
+        else {
+          apiResponse = await this.handleApiResponse(this.getGameRoute(), `${this.getGameRoute()}/IssueTicket`, 'POST', params)
+
+        }
+        console.log(apiResponse)
         if (apiResponse.DataToPrint) {
-          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
+          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId, shouldUseDefaultFont);
 
         }
         else if (apiResponse.status == false) {
@@ -500,6 +558,7 @@ export class MachineService {
         //console.log(apiResponse)
       } catch (error) {
         //console.log(error)
+        return { status: false, message: 'An error occurred while issuing the ticket. Please try again.' }
       }
     }
 
@@ -526,15 +585,11 @@ export class MachineService {
     return validateTicketResponse
   }
 
-  async getReports(reportsParams: any, shouldPrint = false) {
-
+  async getReports(reportsParams: any, shouldPrint = false, isCheckResults = false) {
+    console.log(isCheckResults)
     let reportsResponse: any;
-    if (reportsParams.GameEventId) {
-      reportsResponse = await this.handleApiResponse(`${reportsParams.apiRoute}`, `${reportsParams.apiRoute}/EventResult`, 'POST', reportsParams)
-    }
-    else {
-      reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/MachineReport`, 'POST', reportsParams)
-    }
+    reportsResponse = await this.handleApiResponse(`Master`, `MachineReport/${(isCheckResults) ? 'CheckResults' : 'MachineReport'}`, 'POST', reportsParams)
+
 
     if (reportsResponse.status == false) {
       this.gnrcSrv.setModalData(true, false, reportsResponse.message)
@@ -1091,14 +1146,22 @@ export class MachineService {
   }
 
   async getAllEvents() {
-    let params: any = {
-      GameId: 31,
-      GameConfiguration: [],
-      UserOnlineStatus: true,
-    }
     let apiResponse: any
-    apiResponse = await this.handleApiResponse(`Master`, `Configuration/GetAllEventConfiguration`, 'POST', params);
-    return apiResponse
+    if (this.isAndroidApp) {
+      let params: any = {
+        GameId: 31,
+        GameConfiguration: [],
+        UserOnlineStatus: true,
+      }
+
+      apiResponse = await this.handleApiResponse(`Master`, `Configuration/GetAllEventConfiguration`, 'POST', params);
+      return apiResponse.data
+    }
+    else {
+      apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetAllEventConfiguration`, 'GET', {});
+      return apiResponse
+    }
+
 
   }
 
@@ -1112,14 +1175,14 @@ export class MachineService {
   async getDateOfOperation(gameName: any) {
     let dateOfOp: any
     if (this.isAndroidApp) {
-      dateOfOp = await this.apiSrv.makeApi('master', `MasterBackend/GetOperationDate/2`, "GET", {})
+      dateOfOp = await this.apiSrv.makeApi('master', `MasterBackend/GetOperationDate/13`, "GET", {})
 
     }
     else {
       dateOfOp = await this.apiSrv.makeApi('OnlineMaster', `Corporate/GetOperationDate/13`, "GET", {})
 
     }
-    console.log(dateOfOp)
+    //console.log(dateOfOp)
     return dateOfOp.Date || dateOfOp.date
   }
 
@@ -1131,4 +1194,23 @@ export class MachineService {
     const match = input.match(/^\[(MX\d+)\]/);
     return match ? match[1] : null;
   }
+
+  async runUpdateCheck(buildCode: number) {
+    let machineData = await this.getMachineData()
+    const updateParams = {
+      MachineId: machineData?.MachineId,
+      ApplicationId: 5,
+      Code: buildCode
+    };
+    let response = await this.handleApiResponse('GameCooksAuth', 'CheckForUpdates', 'POST', updateParams)
+    console.log("Update Check Response:", response)
+
+    if (response?.IsUptodate === false && response?.VersionHistory?.UpdateURL) {
+      const updateUrl = response.VersionHistory.UpdateURL;
+      this.bridge.triggerAppUpdate(updateUrl);
+    } else {
+    }
+  }
+
+
 }

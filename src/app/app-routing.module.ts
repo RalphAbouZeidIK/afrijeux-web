@@ -10,6 +10,8 @@ import { ResultsComponent } from './shared/results/results.component';
 import { PlayResponsiblyComponent } from './static-pages/play-responsibly/play-responsibly.component';
 import { EventBrandingComponent } from './static-pages/event-branding/event-branding.component';
 import { BrandedProductsComponent } from './static-pages/branded-products/branded-products.component';
+import { CarouselComponent } from './shared/carousel/carousel.component';
+import { PromotionsPageComponent } from './shared/promotions-page/promotions-page.component';
 
 const routes: Routes = [
   // Main entry routes
@@ -70,13 +72,33 @@ const routes: Routes = [
     }
   },
   {
-    path: 'PickX',
+    path: 'WinBig3',
     loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
     data: {
-      breadcrumb: 'PickX',
+      breadcrumb: 'WinBig3',
       shouldBeLoggedIn: false,
-      showLink: true,
-      title: 'routerLinks.appTitle.Pickx',
+      showLink: false,
+      title: 'routerLinks.appTitle.WinBig3',
+    }
+  },
+  {
+    path: 'WinBig4',
+    loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
+    data: {
+      breadcrumb: 'WinBig4',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'routerLinks.appTitle.WinBig4',
+    }
+  },
+  {
+    path: 'WinBig5',
+    loadChildren: () => import('./loto-games/loto-games.module').then(m => m.LotoGamesModule),
+    data: {
+      breadcrumb: 'WinBig5',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'routerLinks.appTitle.WinBig5',
     }
   },
   {
@@ -85,7 +107,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Jackpot',
       shouldBeLoggedIn: false,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.Jackpot',
     }
   },
@@ -96,7 +118,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'My profile',
       shouldBeLoggedIn: true,
-      showLink: true,
+      showLink: false,
       title: 'routerLinks.appTitle.User',
     },
   },
@@ -139,6 +161,26 @@ const routes: Routes = [
       shouldBeLoggedIn: false,
       showLink: true,
       title: 'routerLinks.appTitle.PlayResponsibly',
+    },
+  },
+  {
+    path: 'Promotions',
+    component: PromotionsPageComponent,
+    data: {
+      breadcrumb: 'Promotions',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'Promotions',
+    },
+  },
+  {
+    path: 'Banners-Preview',
+    component: CarouselComponent,
+    data: {
+      breadcrumb: 'Banners',
+      shouldBeLoggedIn: false,
+      showLink: false,
+      title: 'routerLinks.appTitle.Banners',
     },
   },
   // Machine-prefixed versions

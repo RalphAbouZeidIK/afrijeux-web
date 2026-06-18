@@ -6,6 +6,8 @@ import { LoginComponent } from "../shared/login/login.component";
 import { HomeComponent } from "./home/home.component";
 import { SharedGuard } from "../shared.guard";
 import { machineMenuRoutes } from "./machine-route";
+import { PromotionsPageComponent } from "../shared/promotions-page/promotions-page.component";
+import { InstantGamesPageComponent } from "../shared/instant-games-page/instant-games-page.component";
 
 
 const routes: Routes = [
@@ -49,15 +51,36 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'PickX',
+                path: 'WinBig5',
                 loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
                 data: {
-                    breadcrumb: 'PickX',
+                    breadcrumb: 'WinBig5',
                     shouldBeLoggedIn: false,
                     showLink: true,
-                    title: 'routerLinks.appTitle.Pickx',
+                    title: 'routerLinks.appTitle.WinBig5',
                 }
-            }, {
+            },
+            {
+                path: 'WinBig3',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig3',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig3',
+                }
+            },
+            {
+                path: 'WinBig4',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig4',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig4',
+                }
+            },
+            {
                 path: 'Jackpot',
                 loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
                 canActivate: [SharedGuard],
@@ -66,6 +89,26 @@ const routes: Routes = [
                     shouldBeLoggedIn: true,
                     showLink: true,
                     title: 'routerLinks.appTitle.Pickx',
+                }
+            },
+            {
+                path: 'Promotions',
+                component: PromotionsPageComponent,
+                data: {
+                    breadcrumb: 'Promotions',
+                    shouldBeLoggedIn: false,
+                    showLink: false,
+                    title: 'Promotions',
+                }
+            },
+            {
+                path: 'InstantGames',
+                component: InstantGamesPageComponent,
+                data: {
+                    breadcrumb: 'Instant Games',
+                    shouldBeLoggedIn: false,
+                    showLink: false,
+                    title: 'Instant Games',
                 }
             }
 

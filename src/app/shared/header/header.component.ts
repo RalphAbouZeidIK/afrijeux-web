@@ -7,6 +7,7 @@ import { MenuItem, MenuService } from 'src/app/services/menu.service';
 import { UserRouteConfig } from 'src/app/services/routing.service';
 import { UserService } from 'src/app/services/user.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { MachineService } from 'src/app/services/machine.service';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,8 @@ import { ChangeDetectorRef } from '@angular/core';
   standalone: false
 })
 export class HeaderComponent implements OnInit {
+  @Input()isTesting = false
+
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
   type: any = ''
@@ -49,7 +52,7 @@ export class HeaderComponent implements OnInit {
 
   hideHeader = false
 
-  showAdminMenu = false
+  showAdminPage = false
 
   languages = [
     { code: 'fr', name: 'Français' },
@@ -64,7 +67,8 @@ export class HeaderComponent implements OnInit {
     private gnrcSrv: GenericService,
     private translate: TranslateService,
     private menuSvc: MenuService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private machineSrv: MachineService
   ) {
 
     this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
@@ -89,13 +93,18 @@ export class HeaderComponent implements OnInit {
         this.getMenu();
       }, 0);
     });
+
+    this.machineSrv.getAdminLoginStatus().subscribe(status => {
+      this.showAdminPage = status.showAdminPage;
+      //console.log(status)
+    });
   }
 
   async ngOnInit() {
     this.route.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-      this.showAdminMenu = false
+        this.showAdminPage = false
       });
 
     await this.getMenu();
@@ -180,6 +189,10 @@ export class HeaderComponent implements OnInit {
 
   toggleUserMenu() {
     this.showUserMenu = !this.showUserMenu;
+  }
+
+  toggleAdminMenu(value: boolean) {
+    this.machineSrv.setAdminPopupStatus(value, true);
   }
 
   composeRoutes() {

@@ -18,6 +18,8 @@ export class AdminPageComponent {
   games: any = []
   isLoading = false
 
+  showDepositWithdrawButtons = false;
+
   constructor(
     private cacheSrv: CacheService,
     private router: Router,
@@ -28,15 +30,20 @@ export class AdminPageComponent {
   ) {
     this.getMenu()
 
+
   }
 
   async ngOnInit() {
     let machineData = await this.machineSrv.getMachineData()
     let games = machineData?.Games
+    //console.log('Machine Games:', games)
     games.forEach((gameItem: any) => {
       gameItem.ShowGame = false
-      if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
-        gameItem.ShowGame = true
+      // if ((this.isOnline) || (!this.isOnline && gameItem.AllowHybrid)) {
+      //   gameItem.ShowGame = true
+      // }
+      if (gameItem.GameId == 49) {
+        this.showDepositWithdrawButtons = true
       }
     });
     //console.log(games)
@@ -128,25 +135,40 @@ export class AdminPageComponent {
 
 
   triggerAppUpdate() {
-    try {
-      if ((window as any).OfflineCache?.postMessage) {
-        this.gnrcSrv.toggleLoader(true);
-        const message = JSON.stringify({ action: 'force_update' });
-        (window as any).OfflineCache.postMessage(message);
-        setTimeout(() => {
-          this.gnrcSrv.toggleLoader(false);
-          window.location.reload();
-        }, 5000);
-        //console.log('🚀 Requested Flutter to update Angular app');
-      } else {
-        console.warn('⚠️ OfflineCache bridge not found');
-        alert('OfflineCache bridge not available.');
-      }
-    } catch (err) {
-      console.error('❌ Error sending update request:', err);
-    }
+    window.location.reload();
+    // try {
+    //   if ((window as any).OfflineCache?.postMessage) {
+    //     this.gnrcSrv.toggleLoader(true);
+    //     const message = JSON.stringify({ action: 'force_update' });
+    //     (window as any).OfflineCache.postMessage(message);
+    //     setTimeout(() => {
+    //       this.gnrcSrv.toggleLoader(false);
+    //       window.location.reload();
+    //     }, 5000);
+    //     //console.log('🚀 Requested Flutter to update Angular app');
+    //   } else {
+    //     console.warn('⚠️ OfflineCache bridge not found');
+    //     alert('OfflineCache bridge not available.');
+    //   }
+    // } catch (err) {
+    //   console.error('❌ Error sending update request:', err);
+    // }
   }
 
+  downloadAPKUpdate() {
+    const apkUrl = 'http://test.gamecooks.com:5000/apk/winbig-test.apk';
+    try {
+      if ((window as any).OfflineCache?.postMessage) {
+        const message = JSON.stringify({ action: 'download_apk', url: apkUrl });
+        (window as any).OfflineCache.postMessage(message);
+      } else {
+        window.open(apkUrl, '_blank');
+      }
+    } catch (err) {
+      console.error('Error sending APK download request:', err);
+      window.open(apkUrl, '_blank');
+    }
+  }
 
   clearFlutterOfflineCache() {
     this.cacheSrv.clearFlutterOfflineCache()
@@ -155,6 +177,7 @@ export class AdminPageComponent {
 
 
   async logout() {
+    this.machineSrv.setAdminPopupStatus(false, false);
     this.usrSrv.signOut()
   }
 }

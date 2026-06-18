@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MachineService } from 'src/app/services/machine.service';
 
@@ -9,7 +9,7 @@ import { MachineService } from 'src/app/services/machine.service';
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss'
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
   gamesList: any = []
   selectedGames: any = []
   FromDate: any
@@ -20,17 +20,31 @@ export class ReportsComponent implements OnInit {
   EventId: any
   genericDate: any
 
+  yesterdayDate: Date = (() => { const d = new Date(); d.setDate(d.getDate() - 1); d.setHours(22, 30, 0, 0); return d; })()
+
   canPrintReport = false
+
+  isAdminLoggedIn = false
+
+  shouldPrint = false
+
+  //adminLoginStatusSubscription: any
 
   constructor(
     private machineSrv: MachineService,
     public datepipe: DatePipe,
     private router: Router
   ) {
-
+    // this.adminLoginStatusSubscription = this.machineSrv.getAdminLoginStatus().subscribe((status) => {
+    //   this.isAdminLoggedIn = status;
+    //   if (status.isLoggedIn && !status.shouldShowAdminPage) {
+    //     this.getReports()
+    //   }
+    // });
   }
 
   async ngOnInit() {
+
     this.canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', null)
     this.getGames()
     this.genericDate = this.datepipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss.SSS');
@@ -38,9 +52,10 @@ export class ReportsComponent implements OnInit {
 
   async getGames() {
     let machineData = await this.machineSrv.getMachineData()
+    //console.log(machineData)
     this.gamesList = machineData?.Games.filter((game: any) => game.GameId != 49)
     this.selectedGames = (this.isCheckResults) ? [this.gamesList[0]] : [...this.gamesList]
-    console.log(this.gamesList)
+    //console.log(this.gamesList)
   }
 
   selectedGamesChange(game: any, event: any) {
@@ -62,40 +77,35 @@ export class ReportsComponent implements OnInit {
         this.selectedGames.splice(index, 1);
       }
     }
-    console.log(this.selectedGames);
+    //console.log(this.selectedGames);
   }
 
   onDateChange(event: any, field: keyof ReportsComponent) {
     const received = new Date(event);
-    const today = new Date();
-
-    if (
-      received.getFullYear() === today.getFullYear() &&
-      received.getMonth() === today.getMonth() &&
-      received.getDate() === today.getDate() &&
-      field == 'FromDate'
-    ) {
-      received.setHours(0, 0, 0, 0); // reset to 00:00
-    }
-
+    received.setHours(22, 30, 0, 0);
     (this as any)[field] = this.datepipe.transform(received, 'yyyy-MM-ddTHH:mm:ss.SSS');
     //console.log((this as any)[field]);
   }
 
+  showAdminPopup(shouldPrint = false) {
+    this.shouldPrint = shouldPrint
+    this.machineSrv.setAdminPopupStatus(true, false);
+  }
 
   async getReports(shouldPrint = false) {
-    //console.log(this.selectedGames)
-    let ids = (this.isCheckResults) ? this.selectedGames[0].GameId : this.selectedGames.map((item: any) => item.GameId);
     let reportParams = {
+      Date: this.FromDate,
       FromDate: this.FromDate,
       ToDate: (!this.isCheckResults) ? this.ToDate : this.genericDate,
-      GameId: ids,
+      GameId: null,
       GameEventId: this.isCheckResults ? this.EventId : null,
       EventCode: this.isCheckResults ? this.EventId : null,
       apiRoute: this.isCheckResults ? this.selectedGames[0].GameApi.split('/')[1] : null
     }
 
-    const apiReponse = await this.machineSrv.getReports(reportParams, shouldPrint)
+    console.log(reportParams)
+
+    const apiReponse = await this.machineSrv.getReports(reportParams, shouldPrint, this.isCheckResults)
     if (apiReponse.DataToPrint) {
       this.dataToPrint = apiReponse.DataToPrint
       if (!shouldPrint) {
@@ -107,6 +117,10 @@ export class ReportsComponent implements OnInit {
   }
 
   onBackClick() {
-    this.router.navigate(['/Machine/Games'])
+    this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
+  }
+
+  ngOnDestroy() {
+    //this.adminLoginStatusSubscription.unsubscribe();
   }
 }

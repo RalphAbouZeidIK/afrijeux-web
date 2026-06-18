@@ -5,19 +5,17 @@
     <main>
         <div class="loto-game-container" #gameBlock>
             <div class="inner-container">
-                <ng-container *ngIf="!showEventDetails">
-                    <h2 class="center">
-                        {{ 'pickx.title' | translate }}
-                    </h2>
-                    <div class="events-list" *ngIf="eventsList.length>0">
-                        <a *ngFor="let event of eventsList" class="event-item btn btn-primary"
-                            (click)="composeEventDetails(event)">
-                            {{ event.EventName }}
-                        </a>
-                    </div>
-                </ng-container>
-
                 <ng-container *ngIf="showEventDetails">
+                    <div class="promo-selection" *ngIf="showPromoSelection && availablePromotions.length > 0">
+                        <h4>Choose a Promotion</h4>
+                        <div class="promo-list">
+                            <div class="promo-item" *ngFor="let promo of availablePromotions"
+                                (click)="selectPromotion(promo)">
+                                <span class="promo-name">{{ promo.Name }}</span>
+                                <span class="promo-stake">{{ promo.Stake }} AED</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="draw-header">
                         <a class="back-arrow">
                             <img src="assets/images/back-arrow.svg" alt="Back" (click)="backButton()">
@@ -30,17 +28,22 @@
                         </h5>
                         <span class="game-note">
                             <ng-container *ngIf="isPickXGame">
-                                Choose any {{numberOfBallChoice}} digits from 0 to 9 (digits may be repeated).
+                                Choose any {{numberOfBallChoice}} numbers from 0 to 9 (numbers may be repeated).
                             </ng-container>
                             <ng-container *ngIf="isJackpotGame">
-                                Choose from 6 to 9 digits.
+                                Choose any 6 numbers (numbers may not be repeated).
                             </ng-container>
+                        </span>
+                        <span class="active-promo-badge" *ngIf="selectedPromotion" (click)="showPromoSelection = true">
+                            {{ selectedPromotion.Name }} &mdash; {{ selectedPromotion.Stake }} AED
                         </span>
 
                     </div>
 
                     <app-shared-cart #sharedCart *ngIf="showCart && isMobile" [selectedEvent]="selectedEvent"
                         [editingCartItemId]="editingCartItem?.id" [editingBallIndex]="editingBallIndex"
+                        [requiredTicketCount]="selectedPromotion ? (selectedPromotion.X + selectedPromotion.Y) : null"
+                        [promoStake]="selectedPromotion?.Stake ?? null" [selectedPromotion]="selectedPromotion"
                         (quickPickBetItem)="onQuickPickBetItem($event)" (totalPriceChange)="onTotalPriceChange($event)"
                         (editBallInCart)="onEditBallInCart($event)" cssClass="mobile-visible-cart"></app-shared-cart>
 
@@ -94,7 +97,7 @@
                             <app-ball-list [chosenBallsArray]="listOfBalls" [selectedBall]="selectedEditBall"
                                 [shouldHighlight]="true"
                                 [disabledBallNumbers]="isEditingCartBall ? getEditingDisabledBallNumbers() : []"
-                                (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectPickXBall($event)"
+                                (ballClicked)="isEditingCartBall ? onEditSelectedBall($event) : selectBall($event)"
                                 (ballDeleted)="deleteLastBall()" cssClass="drawBalls pickx" [showDeleteButton]="true">
                             </app-ball-list>
                         </ng-container>
@@ -131,9 +134,10 @@
                         </div>
                         <div class="btns-holder d-flex">
                             <a class="btn qp-button" (click)="quickPick()" *ngIf="!isMobile">Quick Pick</a>
-                            <a class="btn btn-primary" (click)="addToBet()">Confirm Selections</a>
-                            <a class="btn btn-primary confirm-button" (click)="openMobileCart()"
-                                *ngIf="isMobile">Confirm &
+                            <!-- <a class="btn btn-primary" (click)="addToBet()">Confirm Selections</a> -->
+                            <a class="btn btn-primary" (click)="openMobileCart()" *ngIf="isMobile"
+                                [class.disabled]="availablePromotions.length > 0 && (!selectedPromotion || cartData.length < (selectedPromotion.X + selectedPromotion.Y))">Confirm
+                                &
                                 Print</a>
                             <a class="btn btn-danger" [class.disabled]="isBulkSeparateIssueInProgress"
                                 *ngIf="isTestingUser" (click)="issue100TicketsSeparately()">
@@ -176,8 +180,10 @@
             [prizePoolAmount]="'3.65M'"></app-game-banner>
         <app-shared-cart #sharedCart *ngIf="showCart" [selectedEvent]="selectedEvent"
             [openMobileCartFlag]="openCartOnMobileFlag" [editingCartItemId]="editingCartItem?.id"
-            [editingBallIndex]="editingBallIndex" (quickPickBetItem)="onQuickPickBetItem($event)"
-            (editBallInCart)="onEditBallInCart($event)">
+            [editingBallIndex]="editingBallIndex"
+            [requiredTicketCount]="selectedPromotion ? (selectedPromotion.X + selectedPromotion.Y) : null"
+            [promoStake]="selectedPromotion?.Stake ?? null" [selectedPromotion]="selectedPromotion"
+            (quickPickBetItem)="onQuickPickBetItem($event)" (editBallInCart)="onEditBallInCart($event)">
         </app-shared-cart>
     </aside>
 </div>

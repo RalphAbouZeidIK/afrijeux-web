@@ -59,8 +59,17 @@ export class NativeBridgeService {
   private ticketUpdatedSource = new Subject<any>();
   ticketUpdated$ = this.ticketUpdatedSource.asObservable();
 
+  private printingStatus$ = new Subject();
+  getPrintingStatus() {
+    return this.printingStatus$;
+  }
 
-  constructor(private ngZone: NgZone, private router: Router,private location: Location) {
+  setPrintingStatus(value: boolean) {
+    this.printingStatus$.next(value);
+  }
+
+
+  constructor(private ngZone: NgZone, private router: Router, private location: Location) {
     //console.log("🧩 BridgeService initialized:", this);
     // Expose global handler to receive scanned QR from Flutter
     window['handleScanResult'] = (result: string) => {
@@ -87,14 +96,14 @@ export class NativeBridgeService {
     (window as any).handlePrinterError = (error: string) => {
       this.ngZone.run(() => {
         console.error('🔥 Printer Error from Flutter:', error);
-        this.printerStatusSource.next(false);
+        this.setPrintingStatus(false);
       });
     };
 
     (window as any).handlePrinterSuccess = () => {
       this.ngZone.run(() => {
         //console.log('✅ Printer completed successfully');
-        this.printerStatusSource.next(true);
+        this.setPrintingStatus(true);
       });
     };
 
@@ -130,6 +139,13 @@ export class NativeBridgeService {
       });
     };
 
+  }
+
+  /** Send APK update URL to Flutter to trigger an in-app update */
+  triggerAppUpdate(updateUrl: string): void {
+    if ((window as any).FlutterChannel?.postMessage) {
+      (window as any).FlutterChannel.postMessage(JSON.stringify({ action: 'updateApp', url: updateUrl }));
+    }
   }
 
   /** Trigger scan from Angular (calls Flutter) */
@@ -199,8 +215,8 @@ export class NativeBridgeService {
 
 
   /** Send structured print command to Flutter */
-  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[], sender = 'IssueTicket', fullTicketId = ''): void {
-    const message = JSON.stringify({ type, value, sender, fullTicketId });
+  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[], sender = 'IssueTicket', fullTicketId = '', shouldUseDefaultFont = true): void {
+    const message = JSON.stringify({ type, value, sender, fullTicketId, shouldUseDefaultFont });
 
     if (window.PrintChannel?.postMessage) {
       //console.log(message)

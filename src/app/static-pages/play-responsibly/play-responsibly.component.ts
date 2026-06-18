@@ -17,7 +17,7 @@ interface WarningSignItem {
   styleUrl: './play-responsibly.component.scss'
 })
 export class PlayResponsiblyComponent {
-  heroIllustration = 'assets/images/p-r-hero.svg';
+  heroIllustration = 'assets/images/p-r-hero.png';
 
   guidelines: GuidelineItem[] = [
     {

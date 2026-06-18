@@ -18,8 +18,11 @@
             "Tickets": "My Tickets",
             "Results": "Results",
             "PlayResponsibly": "Play Responsibly",
-            "rapidGames": "Rapid Games",
-            "kenoGames": "Keno Games"
+            "rapidGames": "Rapid",
+            "kenoGames": "Keno",
+            "WinBig3": "Win3",
+            "WinBig4": "Win4",
+            "WinBig5": "Win5"
         },
         "HPBTitles": {
             "mesParies": "My Bets",
@@ -280,7 +283,9 @@
             "allBets": "All Bets",
             "eventCode": "Event Code",
             "close": "Close",
-            "won": "Won"
+            "won": "Won",
+            "Withdraw": "Withdraw",
+            "Deposit": "Deposit"
         },
         "fullTicketId": "Full Ticket Id",
         "chooseGames": "Choose Games",
@@ -292,6 +297,18 @@
         "errorMessages": {
             "noOutcomesAvailable": "No Outcomes Available",
             "noMatchesAvailable": "No matches available"
+        },
+        "adminLogin": {
+            "title": "Admin Login",
+            "adminLoginMessage": "Please enter the admin credentials"
+        },
+        "adminDeposit": {
+            "title": "Online User Deposit",
+            "message": "Enter the username and amount to deposit for the online user"
+        },
+        "adminWithdraw": {
+            "title": "Online User Withdrawal",
+            "message": "Enter the username and ticket code to withdraw for the online user"
         }
     },
     "khamsa": {

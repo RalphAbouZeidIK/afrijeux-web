@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ApiService } from 'src/app/services/api.service';
+import { environment } from 'src/environments/environment';
 
 export interface CarouselImage {
   id: string;
@@ -15,11 +17,12 @@ export interface CarouselImage {
   styleUrl: './carousel.component.scss'
 })
 export class CarouselComponent implements OnInit, OnDestroy {
-  @Input() images: CarouselImage[] = [];
+  images: CarouselImage[] = [];
   @Input() autoPlayInterval: number = 5000; // 5 seconds
   @Input() autoPlay: boolean = true;
   @Input() showIndicators: boolean = true;
-  @Input() showArrows: boolean = true;
+  @Input() showArrows: boolean = false;
+
 
   currentIndex: number = 0;
   touchStartX: number | null = null;
@@ -27,9 +30,24 @@ export class CarouselComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private autoPlaySubscription: any;
 
-  ngOnInit(): void {
+  constructor(private apiSrv: ApiService) { }
+
+  async ngOnInit(): Promise<void> {
+    await this.getBanners();
     if (this.autoPlay && this.images.length > 0) {
       this.startAutoPlay();
+    }
+  }
+
+
+  async getBanners() {
+    const response: string[] = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetBanners`, 'GET', {});
+    if (Array.isArray(response)) {
+      this.images = response.map((path, i) => ({
+        id: String(i + 1),
+        url: `${environment.BaseUrl}${path}`,
+        alt: `Banner ${i + 1}`
+      }));
     }
   }
 

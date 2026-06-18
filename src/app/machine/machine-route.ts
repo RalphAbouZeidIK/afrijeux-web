@@ -6,6 +6,8 @@ import { LoginComponent } from '../shared/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { PrizeDetailsPageComponent } from '../static-pages/prize-details-page/prize-details-page.component';
 import { RapidGamesComponent } from './rapid-games/rapid-games.component';
+import { AdminDepositComponent } from '../shared/admin-deposit/admin-deposit.component';
+import { AdminWithdrawComponent } from '../shared/admin-withdraw/admin-withdraw.component';
 
 export const machineMenuRoutes: Route[] = [
     {
@@ -52,7 +54,7 @@ export const machineMenuRoutes: Route[] = [
         path: 'CheckResults',
         component: ReportsComponent,
         data: {
-            showLink: true,
+            showLink: false,
             title: 'machine.routerLinks.checkResults',
             description: 'View Results of previous draws.',
             PermissionName: 'TerminalCanViewResult',
@@ -74,7 +76,7 @@ export const machineMenuRoutes: Route[] = [
         canActivate: [SharedGuard]
     },
     {
-        path: 'AfrijeuxKeno',
+        path: 'WinBigKeno',
         component: RapidGamesComponent,
         data: {
             showLink: false,
@@ -84,7 +86,7 @@ export const machineMenuRoutes: Route[] = [
         canActivate: [SharedGuard]
     },
     {
-        path: 'AfrijeuxRapid',
+        path: 'WinBigRapid',
         component: RapidGamesComponent,
         data: {
             showLink: false,
@@ -92,6 +94,86 @@ export const machineMenuRoutes: Route[] = [
             AllowHybrid: false,
         },
         canActivate: [SharedGuard]
-    }
+    },
+    {
+        path: 'WinBigRapidEmojis',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'WinBigRapidFootball',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'WinBigRapidFruits',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'WinBigRapidLuxury',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+     {
+        path: 'WinBigRapidNumbers',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+     {
+        path: 'WinBigRapidNumbersLite',
+        component: RapidGamesComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.rapid',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'OnlineMaster/Deposit',
+        component: AdminDepositComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.deposit',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
+    {
+        path: 'OnlineMaster/Withdraw',
+        component: AdminWithdrawComponent,
+        data: {
+            showLink: false,
+            title: 'machine.routerLinks.withdraw',
+            AllowHybrid: false,
+        },
+        canActivate: [SharedGuard]
+    },
 
 ];

@@ -20,10 +20,27 @@ export class MachineCoreComponent implements OnInit {
   scannedResult: any = '';
   isAppRegistered = false
 
+  showAdminPopup = false;
+
+  showAdminPage = false;
+
+  showAdminPageFlag = false
+
   constructor(
     private bridge: NativeBridgeService,
     private machineSrv: MachineService
-  ) { }
+  ) {
+    this.machineSrv.getAdminPopupStatus().subscribe(status => {
+      this.showAdminPopup = status.showPopup;
+      this.showAdminPageFlag = status.showAdminPage;
+    });
+
+    this.machineSrv.getAdminLoginStatus().subscribe(status => {
+      this.showAdminPage = status.showAdminPage;
+      this.showAdminPopup = false
+
+    })
+  }
 
   closePopup() {
     this.popup.close();
@@ -31,6 +48,7 @@ export class MachineCoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMachineData();
+    this.checkForApkUpdate()
   }
 
   async getMachineData() {
@@ -47,12 +65,13 @@ export class MachineCoreComponent implements OnInit {
       VersionCode: '1.0.0'
     }
 
-    console.log("Params:", params)
+    //console.log("Params:", params)
     const apiResponse = await this.machineSrv.registerMachine(params);
-    //console.log("API Response:", apiResponse);
+    console.log("API Response:", apiResponse);
     //console.log(apiResponse)
     if (apiResponse?.CommunicationKey) {
       this.isAppRegistered = true
+      //this.checkForUpdates();
     }
 
     const ip = await this.bridge.getDeviceIpFromFlutter();
@@ -62,9 +81,20 @@ export class MachineCoreComponent implements OnInit {
 
   }
 
-
   onScan() {
     this.bridge.requestScan();
+  }
+
+
+  async checkForApkUpdate() {
+    const alreadyAvailable = (window as any).flutterBuildCode;
+    if (alreadyAvailable !== undefined) {
+      this.machineSrv.runUpdateCheck(alreadyAvailable);
+    } else {
+      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
+        this.machineSrv.runUpdateCheck((e as CustomEvent).detail as number);
+      }, { once: true });
+    }
   }
 
   // onPrint() {

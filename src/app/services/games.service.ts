@@ -182,36 +182,51 @@ export class GamesService {
     let apiResponse: any = []
     if (this.isAndroidApp) {
       let gameEventsResponse = await this.machineSrv.getAllEvents()
-      //console.log(gameEventsResponse)
+      console.log(gameEventsResponse)
       if (gameEventsResponse?.GameConfiguration?.EventConfiguration && gameEventsResponse?.GameConfiguration?.EventConfiguration.length > 0) {
         apiResponse = gameEventsResponse.GameConfiguration.EventConfiguration
       }
     }
     else {
+      let apiResponse1 = await this.apiSrv.makeApi(`OnlineMaster`, `Corporate/GetAllEventConfiguration`, 'GET', {});
+      console.log(apiResponse1)
       let path = (gameName) ? `${gameName}/GetEventConfiguration` : `${this.gnrcSrv.getGameRoute()}/GetEventConfiguration`
+
       apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, `${path}`, 'GET', {});
     }
     return apiResponse
   }
 
   async getAllLotoGames() {
-    let pickXGames: any
-    let jackpotGames: any
-    if (this.isAndroidApp) {
-      let gameEventsResponse = await this.machineSrv.getAllEvents()
-      //console.log(gameEventsResponse)
-      pickXGames = gameEventsResponse.data.find((event: any) => event.GameId == 35).EventConfiguration
-       //console.log('Fetched machine PickX games:', pickXGames);
-      jackpotGames = gameEventsResponse.data.find((event: any) => event.GameId == 38).EventConfiguration
-       //console.log('Fetched machine jackpot games:', jackpotGames);
-   
-    }
-    else {
-      pickXGames = await this.getGamesEvents('PickX');
-      //console.log('Fetched PickX games:', pickXGames);
-      jackpotGames = await this.getGamesEvents('Jackpot');
-      //console.log('Fetched Jackpot games:', jackpotGames);
-    }
+    let pickXGames: any = []
+    let jackpotGames: any = []
+    let pickXData: any
+    let gameEventsResponse = await this.machineSrv.getAllEvents()
+
+
+    console.log(gameEventsResponse)
+    pickXData = gameEventsResponse.filter((event: any) => event.GameId == 66 || event.GameId == 67 || event.GameId == 68)
+    pickXData.forEach((event: any) => {
+      let pickType = event.GameId === 66 ? '3' : event.GameId === 67 ? '4' : event.GameId === 68 ? '5' : ''
+      if (event.EventConfiguration && event.EventConfiguration.length > 0) {
+        pickXGames.push(
+          ...event.EventConfiguration.map((config: any) => ({
+            ...config,
+            GameId: event.GameId,
+            pickTypePerGame: pickType,
+            GameRouteGenerated: `Winbig${pickType}`
+          }))
+        );
+      }
+    });
+    //console.log('Fetched machine PickX games:', pickXGames);
+    jackpotGames = gameEventsResponse.find((event: any) => event.GameId == 38)?.EventConfiguration
+    //console.log('Fetched machine jackpot games:', jackpotGames);
+
+
+
+    console.log(gameEventsResponse)
+
 
     return { pickXGames, jackpotGames };
   }

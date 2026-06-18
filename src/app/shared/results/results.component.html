@@ -7,34 +7,20 @@
 
     <div class="results-view__controls results-shared-controls">
       <div class="results-shared-filter-pills">
-        <button
-          *ngFor="let filter of filters"
-          type="button"
-          class="btn btn-primary results-shared-pill"
-          [class.active]="activeFilter === filter"
-          (click)="setFilter(filter)"
-        >
-          {{ filter }}
+        <button *ngFor="let filter of filters" type="button" class="btn btn-primary results-shared-pill"
+          [class.active]="activeFilter === filter" (click)="setFilter(filter)">
+          {{ filter.gameName }}
         </button>
       </div>
 
       <div class="results-view__dropdown option-list-holder" *ngIf="eventOptions.length > 0">
-        <button
-          type="button"
-          class="results-view__dropdown-trigger"
-          (click)="toggleEventOptions()"
-          [attr.aria-expanded]="showEventOptions"
-          aria-label="Select jackpot event"
-        >
+        <button type="button" class="results-view__dropdown-trigger" (click)="toggleEventOptions()"
+          [attr.aria-expanded]="showEventOptions" aria-label="Select jackpot event">
           <span class="selected-option">{{ selectedEventOption.TicketTypeName }}</span>
         </button>
 
-        <app-option-list
-          *ngIf="showEventOptions"
-          [options]="eventOptions"
-          [selectedValue]="selectedEventOption.TicketTypeId"
-          (optionChange)="onEventChange($event)"
-        ></app-option-list>
+        <app-option-list *ngIf="showEventOptions" [options]="eventOptions"
+          [selectedValue]="selectedEventOption.TicketTypeId" (optionChange)="onEventChange($event)"></app-option-list>
       </div>
     </div>
 
@@ -42,15 +28,11 @@
       <div class="results-view__header">
         <h3>{{ draw.eventName }}</h3>
 
-        <app-ball-list
-          cssClass="resultBalls resultsPage"
-          [chosenBallsArray]="draw.balls"
-          [shouldHighlight]="false"
-          [shouldEmit]="false"
-        ></app-ball-list>
+        <app-ball-list cssClass="resultBalls resultsPage" [chosenBallsArray]="draw.balls" [shouldHighlight]="false"
+          [shouldEmit]="false"></app-ball-list>
       </div>
 
-      <div class="results-table" *ngIf="activeFilter === 'Jackpot'">
+      <div class="results-table" *ngIf="activeFilter.gameId === 38">
         <div class="results-table__head">
           <span>Distribution</span>
           <span>Winners</span>

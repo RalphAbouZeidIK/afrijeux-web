@@ -212,10 +212,10 @@ export class UserService {
 
   isTestingUser() {
     const userData = this.localStorageSrv.getItem('user_data', true);
-    if(!userData || !userData.userInfo || !userData.userInfo.Email){
+    if (!userData || !userData.userInfo || !userData.userInfo.Email) {
       return false
     }
-    return userData?.userInfo.Email == 'cn@hotmail.com' || false;
+    return userData?.userInfo.Email == 'cn@hotmail.com' || userData?.userInfo.Email == 'ghattasadib14@gmail.com' || false;
   }
 
 
@@ -237,6 +237,9 @@ export class UserService {
     if (this.isAndroidApp) {
       await this.cacheSrv.removeFromFlutterOfflineCache("user_data");
     }
+    Object.keys(sessionStorage)
+      .filter(key => key.startsWith('fixedConfig_'))
+      .forEach(key => sessionStorage.removeItem(key));
     this.localStorageSrv.setItem('isLoggedIn', 'false')
     this.localStorageSrv.removeItem('user_data');
     this.localStorageSrv.removeItem('expiryDate');

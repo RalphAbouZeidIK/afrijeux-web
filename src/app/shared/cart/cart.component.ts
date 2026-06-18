@@ -2,12 +2,11 @@ import { DecimalPipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { Subscription } from 'rxjs';
-import { ApiService } from 'src/app/services/api.service';
 import { CartService } from 'src/app/services/cart.service';
 import { GenericService } from 'src/app/services/generic.service';
-import { LoaderService } from 'src/app/services/loader-service.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MachineService } from 'src/app/services/machine.service';
+import { NativeBridgeService } from 'src/app/services/native-bridge.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -24,6 +23,19 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() listOfBets: any = []
   @Input() selectedEvent: any = null
+  @Input() requiredTicketCount: number | null = null
+  @Input() promoStake: number | null = null
+  @Input() selectedPromotion: any = null
+
+  get promoTicketsNeeded(): number {
+    if (this.requiredTicketCount === null) return 0;
+    return this.requiredTicketCount - (this.listOfBets?.length ?? 0);
+  }
+
+  get isPromoRequirementMet(): boolean {
+    if (this.requiredTicketCount === null) return true;
+    return (this.listOfBets?.length ?? 0) === this.requiredTicketCount;
+  }
   @Output() editBallInCart = new EventEmitter<{ betItem: any, ballIndex: number, ball: any }>();
 
   @Input() editingCartItemId: any = null
@@ -85,7 +97,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
   isJackpotGame = this.currentUrl.includes("Jackpot")
 
-  isPickXGame = this.currentUrl.includes("PickX")
+  isPickXGame = this.currentUrl.includes("PickX") || this.currentUrl.includes("WinBig3") || this.currentUrl.includes("WinBig4") || this.currentUrl.includes("WinBig5")
 
   lotoTotalPrice: any = 0
 
@@ -100,7 +112,8 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     private storageSrv: LocalStorageService,
     private usrSrv: UserService,
     private gnrcSrv: GenericService,
-    private machineSrv: MachineService
+    private machineSrv: MachineService,
+    private bridge: NativeBridgeService,
   ) {
 
 
@@ -117,7 +130,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
     else {
       this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
-
+        //console.log(data)
         this.cartInitialize(data)
       });
     }
@@ -130,6 +143,15 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.showOnClickMobileSubscription = this.cartSrv.getShowOnClickMobileListener().subscribe((showOnClickMobile) => {
       this.showOnClickMobile = showOnClickMobile;
     });
+
+    this.bridge.getPrintingStatus().subscribe((status) => {
+      //console.log('Printing status updated:', status);
+      this.isIssuing = false;
+      if(!status) {
+        this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
+      }
+    })
+
   }
 
   async ngOnInit() {
@@ -161,6 +183,9 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     if (changes['openMobileCartFlag'] && changes['openMobileCartFlag'].currentValue === true) {
       this.showOnClickMobile = true;
     }
+    if (changes['promoStake'] && !this.isSportsBetting) {
+      this.loadLotoCartDataFromContext();
+    }
   }
 
   private loadLotoCartDataFromContext() {
@@ -186,10 +211,14 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
 
     if ((this.isPickXGame || this.isJackpotGame) && this.listOfBets.length > 0) {
       this.listOfBets.GameEventId = this.listOfBets[0].gameEventId
-      this.listOfBets.TicketPrice = 0
-      this.listOfBets.forEach((ticketItem: any) => {
-        this.listOfBets.TicketPrice += ticketItem.stake
-      })
+      if (this.promoStake !== null) {
+        this.listOfBets.TicketPrice = this.promoStake;
+      } else {
+        this.listOfBets.TicketPrice = 0
+        this.listOfBets.forEach((ticketItem: any) => {
+          this.listOfBets.TicketPrice += ticketItem.Stake
+        })
+      }
     }
     this.totalPriceChange.emit(this.listOfBets.TicketPrice)
 
@@ -282,7 +311,20 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSrv.setShowOnClickMobile(false)
   }
 
+  isIssuing = false;
+
   async issueTicket() {
+    if (this.isIssuing) return;
+
+    if (!this.isPromoRequirementMet) {
+      const needed = this.promoTicketsNeeded;
+      const msg = needed > 0
+        ? `Please add ${needed} more ticket${needed > 1 ? 's' : ''} to use this promotion.`
+        : `Please remove ${Math.abs(needed)} ticket${Math.abs(needed) > 1 ? 's' : ''} to use this promotion.`;
+      this.gnrcSrv.setModalData(true, false, msg);
+      return;
+    }
+
     if (!this.isLoggedIn) {
       this.usrSrv.setLoginPopupStatus({
         show: true,
@@ -291,53 +333,75 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
       return
     }
 
-    let apiResponse: any
-    if (this.isSportsBetting) {
-      this.listOfPicks = []
-      this.listOfBets.forEach((betItem: any) => {
-        this.listOfPicks.push({
-          Outcome: betItem,
-          Stake: this.stake / this.totalBets,
-          GameEventId: betItem.MatchId
-        })
-      });
-
-      let ticketBody = {
-        IsVoucher: 0,
-        Stake: this.stake,
-        GamePick: this.listOfPicks,
-        TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
-        IsBouquet: false,
-        BonusId: this.BonusId,
-        WinAmount: this.WinAmount,
-        BonusAmount: this.bonus,
-        LoyalityReferenceId: 0
-      }
-      apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
-    }
-    else {
-      apiResponse = await this.machineSrv.issueTicket(this.listOfBets, true)
-    }
-    
+    this.isIssuing = true;
     console.log(this.listOfBets)
-    if (this.isAndroidApp && apiResponse.DataToPrint) {
-      this.clearBets()
-      this.gnrcSrv.setModalData(true, true, apiResponse.message)
-    }
+    try {
+      let apiResponse: any
+      if (this.isSportsBetting) {
+        this.listOfPicks = []
+        this.listOfBets.forEach((betItem: any) => {
+          this.listOfPicks.push({
+            Outcome: betItem,
+            Stake: this.stake / this.totalBets,
+            GameEventId: betItem.MatchId
+          })
+        });
 
-    else {
-      //console.log(apiResponse)
-      if (apiResponse.Status == true || apiResponse == true) {
-        this.clearBets()
-        this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
-        this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
+        let ticketBody = {
+          IsVoucher: 0,
+          Stake: this.stake,
+          GamePick: this.listOfPicks,
+          TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
+          IsBouquet: false,
+          BonusId: this.BonusId,
+          WinAmount: this.WinAmount,
+          BonusAmount: this.bonus,
+          LoyalityReferenceId: 0
+        }
+        apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
       }
       else {
-        this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
+        let betsToIssue = this.listOfBets;
+        if (this.selectedPromotion && this.promoStake !== null) {
+          betsToIssue = this.listOfBets.map((item: any, index: number) => ({
+            ...item,
+            Stake: index === 0 ? this.promoStake : 0,
+            IsPromotion: true
+          }));
+          betsToIssue.GameEventId = this.listOfBets.GameEventId;
+          betsToIssue.TicketPrice = this.listOfBets.TicketPrice;
+        }
+        apiResponse = await this.machineSrv.issueTicket(betsToIssue, true, null, this.selectedPromotion)
       }
-    }
-    console.log(apiResponse);
 
+      //console.log(this.listOfBets)
+      if (this.isAndroidApp && apiResponse.DataToPrint) {
+        this.clearBets()
+        this.gnrcSrv.setModalData(true, true, apiResponse.message)
+      }
+
+      else {
+        //console.log(apiResponse)
+        if (apiResponse.Status == true || apiResponse == true) {
+          this.clearBets()
+          this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
+          this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
+          this.isIssuing = false;
+        }
+        else {
+          this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
+          this.isIssuing = false;
+        }
+      }
+      //console.log(apiResponse);
+    } catch (err) {
+      console.error(err);
+      this.gnrcSrv.setModalData(true, false, 'Something went wrong.');
+      this.isIssuing = false;
+    }
+    finally {
+      this.isIssuing = false;
+    }
   }
 
   getTicketTypeInitials(ticketTypeName: string): string {
@@ -352,7 +416,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onBallClick(betItem: any, ballIndex: number, ball: any) {
-    console.log('Ball clicked:', { betItem, ballIndex, ball });
+    //console.log('Ball clicked:', { betItem, ballIndex, ball });
     this.editBallInCart.emit({ betItem, ballIndex, ball });
   }
 

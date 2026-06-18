@@ -209,7 +209,7 @@ export class GenericService {
       // Hide loader - calculate duration
       if (this.loaderStartTime) {
         const duration = Date.now() - this.loaderStartTime;
-        console.log(`Loader was shown for ${duration}ms`);
+        //console.log(`Loader was shown for ${duration}ms`);
         this.loaderStartTime = null;
       }
       this.loaderService.setHttpProgressStatus(value);

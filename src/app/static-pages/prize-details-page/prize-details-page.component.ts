@@ -20,35 +20,64 @@ export class PrizeDetailsPageComponent implements OnInit {
     this.getPrizeDetails()
   }
 
+  groupData(data: any[]) {
+    const games: any = {};
+
+    data.forEach(item => {
+      const gameId = item.GameId;
+
+      // Create game group
+      if (!games[gameId]) {
+        games[gameId] = {
+          gameId: gameId,
+          gameName: item.GameName,
+          ticketTypes: []
+        };
+      }
+
+      const game = games[gameId];
+
+      // Case 1: No TicketTypeId → always index 0
+      if (!item.TicketTypeId) {
+        if (!game.ticketTypes[0]) {
+          game.ticketTypes[0] = {
+            ticketTypeId: null,
+            items: []
+          };
+        }
+        game.ticketTypes[0].items.push(item);
+        return;
+      }
+
+      // Case 2: Has TicketTypeId
+      let group = game.ticketTypes.find(
+        (t: any) => t && t.ticketTypeId === item.TicketTypeId
+      );
+
+      if (!group) {
+        group = {
+          ticketTypeId: item.TicketTypeId,
+          items: []
+        };
+        game.ticketTypes.push(group);
+      }
+
+      group.items.push(item);
+    });
+
+    return Object.values(games);
+  }
   async getPrizeDetails() {
     const apiResponse = await this.apiSrv.makeApi(`OnlineMaster`, 'Corporate/GetPrizeDetails', 'GET', {});
-
-    this.games = apiResponse.PickX
-    this.games.forEach((game: any) => {
-      game.iconName = `pick${game.NumberOfBalls}.svg`
-    });
-    
-    let jackpotGame = apiResponse.Jackpot
-    let counter = 6
-    console.log(jackpotGame)
-    jackpotGame.forEach((element: any) => {
-      element.Hits = counter
-      counter--
-    });
-    this.games.push({
-      PickTypeId: jackpotGame.PickTypeId,
-      PickTypeName: 'Jackpot',
-      NumberOfBalls: 6,
-      iconName: 'jackpot.svg',
-      TicketTypes: [
-        {
-          "TicketTypeId": 1,
-          "TicketTypeName": "Jackpot",
-          "Details": jackpotGame
-        }
-      ]
-    })
+    this.games = this.groupData(apiResponse);
     console.log(this.games)
+    this.games.forEach((game: any) => {
+      game.iconName = game.gameId === 66 ? 'pick3' : game.gameId === 67 ? 'pick4' : game.gameId === 68 ? 'pick5' : 'jackpot';
+      game.iconName = `${game.iconName}.svg`
+    });
+
+    this.toggleGame(this.games[0].gameId)
+    //console.log(this.games)
   }
 
   toggleGame(game: string) {

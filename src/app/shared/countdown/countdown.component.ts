@@ -19,7 +19,7 @@ export class CountdownComponent implements OnDestroy {
   @Input() event: any
 
   ngOnInit(): void {
-    console.log(this.event)
+    //console.log(this.event)
     if (this.event) {
       this.startCountdown(this.event);
     }
