@@ -82,17 +82,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   onDateChange(event: any, field: keyof ReportsComponent) {
     const received = new Date(event);
-    const today = new Date();
-
-    if (
-      received.getFullYear() === today.getFullYear() &&
-      received.getMonth() === today.getMonth() &&
-      received.getDate() === today.getDate() &&
-      field == 'FromDate'
-    ) {
-      received.setHours(22, 30, 0, 0); // reset to 22:30
-    }
-
+    received.setHours(22, 30, 0, 0);
     (this as any)[field] = this.datepipe.transform(received, 'yyyy-MM-ddTHH:mm:ss.SSS');
     //console.log((this as any)[field]);
   }
@@ -103,27 +93,17 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   async getReports(shouldPrint = false) {
-    //console.log(this.selectedGames)
-    let ids = (this.isCheckResults) ? this.selectedGames[0].GameId : this.selectedGames.map((item: any) => item.GameId);
-    const fromDate = (() => {
-      if (!this.isCheckResults && this.ToDate) {
-        const d = new Date(this.ToDate);
-        d.setDate(d.getDate() - 1);
-        d.setHours(22, 30, 0, 0);
-        return this.datepipe.transform(d, 'yyyy-MM-ddTHH:mm:ss.SSS');
-      }
-      return this.FromDate;
-    })();
-
     let reportParams = {
-      Date: fromDate,
-      FromDate: fromDate,
+      Date: this.FromDate,
+      FromDate: this.FromDate,
       ToDate: (!this.isCheckResults) ? this.ToDate : this.genericDate,
       GameId: null,
       GameEventId: this.isCheckResults ? this.EventId : null,
       EventCode: this.isCheckResults ? this.EventId : null,
       apiRoute: this.isCheckResults ? this.selectedGames[0].GameApi.split('/')[1] : null
     }
+
+    console.log(reportParams)
 
     const apiReponse = await this.machineSrv.getReports(reportParams, shouldPrint, this.isCheckResults)
     if (apiReponse.DataToPrint) {
