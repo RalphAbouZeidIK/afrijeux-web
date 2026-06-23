@@ -1,0 +1,76 @@
+<section class="ticket-history">
+	<div class="container-fluid">
+		<div class="section-header results-shared-header">
+			<h2>Ticket History</h2>
+			<p>Track your lottery tickets and winnings</p>
+		</div>
+
+		<div class="ticket-history__controls results-shared-controls">
+			<div class="filter-pills results-shared-filter-pills">
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'all'"
+					(click)="setFilter('all')">All</button>
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'won'"
+					(click)="setFilter('won')">Won</button>
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'lost'"
+					(click)="setFilter('lost')">Lost</button>
+				<button type="button" class="btn btn-primary pill results-shared-pill" [class.active]="activeFilter === 'pending'"
+					(click)="setFilter('pending')">Pending</button>
+			</div>
+
+			<div class="search-box">
+				<input type="text" placeholder="Check your ticket" [ngModel]="searchTerm"
+					(ngModelChange)="onSearchChange($event)" />
+			</div>
+		</div>
+
+		<div class="ticket-list">
+			<div class="no-results" *ngIf="filteredTickets.length === 0">
+				No tickets found.
+			</div>
+			<div class="ticket-card" *ngFor="let ticket of filteredTickets; trackBy: trackByTicket">
+				<button type="button" class="ticket-card__head" (click)="toggleTicket(ticket)">
+					<span class="ticket-title" [innerHTML]="getTicketLabel(ticket)"></span>
+					<button type="button" class="ticket-copy-btn" title="Copy ticket ID" (click)="copyTicketId(ticket?.FullTicketId, $event)" aria-label="Copy ticket ID">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
+							<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+							<rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+						</svg>
+					</button>
+					<span class="chevron" [class.open]="isExpanded(ticket)">&#8250;</span>
+				</button>
+
+				<div class="ticket-card__body" *ngIf="isExpanded(ticket)">
+					<div class="sub-ticket" *ngFor="let subTicket of ticket._subTickets; trackBy: trackBySubTicket">
+						<div class="sub-ticket__left">
+							<p class="event-name">Event: {{ticket?.Name}}</p>
+							<p class="sub-ticket__date">Purchase Date: {{ticket.MachineDateIssued | date:'MMM d, y'}}
+							</p>
+						</div>
+
+						<div class="sub-ticket__numbers">
+							<p>Your Numbers:</p>
+							<div class="balls">
+								<app-ball-list cssClass="ticketsBalls"
+									[chosenBallsArray]="getSubTicketNumbers(subTicket)"
+									[shouldEmit]="false"></app-ball-list>
+							</div>
+						</div>
+
+						<div class="sub-ticket__status">
+							<span class="status-pill" [ngClass]="'status-pill--' + getSubTicketStatus(subTicket)">
+								{{ getSubTicketStatusLabel(subTicket) }}
+							</span>
+							<span class="winning" *ngIf="getSubTicketWinningAmount(subTicket) > 0">+${{
+								getSubTicketWinningAmount(subTicket) }}</span>
+						</div>
+					</div>
+
+					<div class="sub-ticket sub-ticket--empty" *ngIf="ticket._subTickets.length === 0">
+						No sub tickets found.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>

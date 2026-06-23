@@ -1,0 +1,94 @@
+<section class="play-responsibly-page" data-node-id="744:9515">
+    <div class="play-responsibly-page__inner">
+        <div class="container-fluid">
+            <div class="hero-banner" data-node-id="744:9971">
+                <div class="hero-banner__designs" aria-hidden="true">
+                    <div class="stripes">
+                        <img src="assets/images/vector-1.svg" alt="" class="stripe stripe-1">
+                        <img src="assets/images/vector-2.svg" alt="" class="stripe stripe-2">
+                        <img src="assets/images/vector-3.svg" alt="" class="stripe stripe-3">
+                    </div>
+                    <div class="aurora-bg">
+                        <div class="glow-container">
+                            <img src="assets/images/glow-1.svg" alt="" class="glow-element">
+                            <img src="assets/images/glow-2.svg" alt="" class="glow-overlay">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-banner__content">
+                    <div class="hero-banner__text">
+                        <h1>Play Responsibly</h1>
+                        <p>Gaming should be enjoyable and entertaining. We're committed to helping our players maintain
+                            healthy gaming habits and providing support when needed.</p>
+                    </div>
+                    <img [src]="heroIllustration" alt="Play responsibly illustration" class="hero-banner__image">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="guidelines" data-node-id="744:9516">
+            <div class="section-header">
+                <h2>Guidelines for Responsible Play</h2>
+                <p>Play for entertainment, set personal limits, and seek help if it stops being enjoyable.</p>
+            </div>
+
+            <div class="guidelines__grid">
+                <article class="guideline-card" *ngFor="let item of guidelines">
+                    <div class="guideline-card__title">
+                        <span class="diamond-icon" aria-hidden="true"></span>
+                        <h3>{{ item.title }}</h3>
+                    </div>
+                    <p>{{ item.description }}</p>
+                </article>
+            </div>
+        </div>
+
+        <div class="warning-signs" data-node-id="946:7913">
+            <div class="section-header">
+                <h2>Waring Signs</h2>
+                <p>If you or someone you know exhibits any of these behaviors, it may be time to seek help:</p>
+            </div>
+
+            <div class="warning-signs__columns">
+                <div class="warning-item" *ngFor="let sign of warningSigns">
+                    <span class="warning-item__number">{{ sign.number }}</span>
+                    <p>{{ sign.text }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="self-exclusion" data-node-id="946:8039">
+        <div class="self-exclusion__inner">
+            <div class="section-header">
+                <h2>Self-Exclusion Program</h2>
+                <p>Take control with our self-exclusion options designed to help you manage your gaming habits.</p>
+            </div>
+
+            <div class="self-exclusion__cards">
+                <article class="self-exclusion-card">
+                    <div class="self-exclusion-card__title">
+                        <img src="assets/images/how-it-works.svg" alt="" aria-hidden="true">
+                        <h3>How It Works</h3>
+                    </div>
+                    <p>Self-exclusion allows you to voluntarily restrict your access to lottery services for a set
+                        period of time. During this period, you will not be able to purchase tickets, access your
+                        account, or participate in any lottery games.</p>
+                    <p>You can choose exclusion periods ranging from 30 days to permanent exclusion.</p>
+                </article>
+
+                <article class="self-exclusion-card">
+                    <div class="self-exclusion-card__title">
+                        <img src="assets/images/self-exclusion.svg" alt="" aria-hidden="true">
+                        <h3>Request Self-Exclusion</h3>
+                    </div>
+                    <p>To enroll in our self-exclusion program, please contact our support team or visit your account
+                        settings. You'll need to verify your identity and select your desired exclusion period.</p>
+                    <a href="mailto:info@winbig.win" class="contact-support">Contact Support</a>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>

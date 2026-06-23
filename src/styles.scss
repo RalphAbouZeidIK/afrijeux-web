@@ -1,0 +1,1512 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'variables' as *;
+
+@font-face {
+    font-family: 'Switzer Bold';
+    src: url('assets/fonts/Switzer-Bold.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Switzer Regular';
+    src: url('assets/fonts/Switzer-Regular.woff') format('woff');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+
+
+@font-face {
+    font-family: 'SF UI';
+    font-style: normal;
+    font-weight: 300;
+    src: local('SF UI Display Light'), url('assets/fonts/sf-ui-display-light-58646b33e0551.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'SF UI';
+    font-style: normal;
+    font-weight: 500;
+    src: local('SF UI Display Medium'), url('assets/fonts/sf-ui-display-medium-58646be638f96.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'SF UI';
+    font-style: normal;
+    font-weight: 700;
+    src: local('SF UI Display Bold'), url('assets/fonts/sf-ui-display-bold-58646a511e3d9.woff') format('woff');
+}
+
+
+.container-fluid {
+    --bs-gutter-x: 6.5rem;
+}
+
+html,
+body {
+    -webkit-overflow-scrolling: touch;
+    /* momentum scrolling */
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: $darkBg;
+    color: $white;
+    font-family: "SF UI", sans-serif !important;
+    font-size: 16px;
+    line-height: normal;
+    font-weight: 400;
+    padding: 0;
+
+    * {
+        font-family: "SF UI", sans-serif
+    }
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: $white;
+    padding-bottom: 20px;
+    font-family: $font-bold;
+    margin-bottom: 0;
+}
+
+.btn-check:checked+.btn,
+:not(.btn-check)+.btn:active,
+.btn:first-child:active,
+.btn.active,
+.btn.show {
+    background-color: $lightGreen;
+    color: $darkBg;
+}
+
+
+.text-danger {
+    color: #FF3B30;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.btn {
+    font-weight: 500;
+    border-radius: 30px;
+    padding: 10px 20px;
+    line-height: normal;
+    border: none;
+
+    &.btn-primary {
+        background-color: $lightGreen;
+        color: $black;
+        border: 2px solid $lightGreen;
+
+
+        &:hover {
+            background-color: $darkBg;
+            color: $white;
+        }
+    }
+
+    &.btn-secondary {
+        background-color: $darkBg;
+        color: $white;
+        border: 2px solid $darkBg;
+
+        &:hover {
+            background-color: $lightGreen;
+            color: $black;
+        }
+    }
+
+}
+
+
+.error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+section {
+    padding: 40px 52px;
+}
+
+.option-list-holder {
+    position: relative;
+    z-index: 4;
+    padding-left: 15px;
+
+    .selected-option {
+        color: #B7B7B7;
+        display: inline-flex;
+        font-size: 14px;
+        padding-right: 14px;
+        position: relative;
+
+        cursor: pointer;
+
+        &::after {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid #B7B7B7;
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-35%);
+        }
+    }
+}
+
+app-option-list {
+    width: 260px;
+    display: block;
+    flex: 0 0 260px;
+    position: absolute;
+    right: -20px;
+    top: 40px;
+}
+
+
+.bp-page {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    margin-bottom: 100px;
+}
+
+// ═══════════════════════════════════════════════════════
+//  Showcase sections container
+// ═══════════════════════════════════════════════════════
+.bp-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 136px;
+}
+
+// ═══════════════════════════════════════════════════════
+//  Benefits row  (Figma: 3 cards, gap 66px)
+// ═══════════════════════════════════════════════════════
+.bp-benefits {
+    display: flex;
+    gap: 66px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.contact-us-btn {
+    width: 200px;
+    margin: 0 auto;
+    display: block;
+}
+
+
+
+@media all and (min-width:1400px) {
+    .container {
+        max-width: 1440px;
+        padding: 0 25px;
+    }
+
+}
+
+@media all and (min-width:992px) {
+
+    .menu-with-sub-nav {
+        .body-holder {
+            margin-top: 132px;
+        }
+
+        header {
+            min-height: 122px;
+        }
+    }
+
+    .cart {
+        width: 29%;
+    }
+
+    .menu-with-sub-nav {
+
+        main,
+        aside {
+            max-height: calc(100vh - 143px);
+        }
+    }
+
+    main,
+    aside {
+        display: block;
+        width: calc(71% - 30px);
+
+        >* {
+            display: block;
+        }
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 7px $lightGrey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: $lightGreen;
+        border-radius: 10px;
+    }
+}
+
+.main {
+    width: 80%;
+
+    &.fullWidth {
+        width: 100%;
+    }
+}
+
+// ===== SECTION HEADERS =====
+.section-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 52px;
+
+    h2 {
+        font-family: $font-bold;
+        font-size: 36px;
+        font-weight: 700;
+        color: $white;
+        margin: 0;
+        line-height: 60px;
+        padding-bottom: 0;
+    }
+
+    p {
+        font-family: $font-regular;
+        font-size: 18px;
+        font-weight: 500;
+        color: $white;
+        margin: 0;
+        line-height: 25px;
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(25% - 59px), max-content));
+    justify-content: center;
+    gap: 78px;
+    margin: 0 auto;
+
+}
+
+.container-fluid .container-fluid {
+    padding: 0;
+}
+
+.form-holder {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    background: rgba(94, 94, 94, 0.40);
+    backdrop-filter: blur(15px);
+
+    &.full-page-form {
+        position: static;
+        height: auto;
+        width: auto;
+        background: transparent;
+
+        .form-bg {
+            margin-top: 25px;
+            width: 500px;
+        }
+    }
+
+    .close-icon {
+        position: absolute;
+        top: 28px;
+        right: 40px;
+        cursor: pointer;
+    }
+
+    .form-bg {
+        background-color: $darkBg;
+        padding: 25px 40px;
+        width: 390px;
+        max-width: calc(100% - 30px);
+        max-height: calc(100vh - 30px);
+        position: relative;
+        border-radius: 40px;
+        overflow: auto;
+    }
+
+    &.machine-layout {
+        z-index: 3;
+        background: transparent;
+
+        .form-bg {
+            border-radius: 0;
+            padding: 0;
+
+
+        }
+
+        &:not(.login-form) {
+            background: #000;
+
+            .form-header {
+                margin-bottom: 15px;
+            }
+
+            .form-btns {
+                margin-top: 30px;
+                margin-bottom: 0;
+            }
+
+            .form-bg {
+                background-color: $darkBg;
+                padding: 20px 16px;
+                border-radius: 15px;
+                border: 1px solid rgba(159, 159, 159, 0.50);
+            }
+
+
+            h2 {
+                font-size: 20px;
+                line-height: 35px;
+            }
+        }
+
+        .login-form {
+            .form-bg {
+                padding-bottom: 30%;
+            }
+
+        }
+
+        h2 {
+            font-size: 24px;
+            padding-bottom: 0;
+            line-height: 42px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-btns {
+            margin-top: 40px;
+        }
+
+        .close-icon {
+            top: 15px;
+            right: 16px;
+        }
+    }
+
+    .form-header {
+        p {
+            font-size: 12px;
+            opacity: 0.7;
+            margin: 0
+        }
+    }
+}
+
+.money-form-overlay .form-bg {
+    width: 470px;
+}
+
+.mat-mdc-form-field-infix {
+    width: auto !important;
+    font-size: 14px;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #2B2B2B !important
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+}
+
+mat-form-field {
+    display: block !important;
+}
+
+.header-text {
+    color: $white;
+    font-weight: 700;
+
+    .header-balance {
+
+        color: $lightGrey;
+        font-size: 14px;
+    }
+}
+
+.mobileOnly,
+.mobile-toggle {
+    display: none !important;
+}
+
+.horses-list-container {
+    .table-row {
+        padding: 10px 20px;
+
+        &.header {
+            font-size: 14px;
+            color: $lightGrey;
+            display: flex;
+            flex-wrap: wrap;
+            //padding: 0 20px;
+        }
+    }
+
+    .table-item {
+        &:first-of-type {
+            width: 40%;
+        }
+
+        &:nth-of-type(2) {
+            width: 20%;
+        }
+
+        &:nth-of-type(3) {
+            width: 70px;
+        }
+
+        &:nth-of-type(4) {
+            width: 70px;
+        }
+
+        &:not(:last-of-type) {
+            margin-right: 30px;
+        }
+
+        &:last-of-type {
+            width: 78px
+        }
+    }
+
+    .first-checkbox {
+        margin-left: auto;
+    }
+
+
+}
+
+.form-holder {
+    p {
+        margin-top: 10px;
+        display: block;
+    }
+
+    .title-label {
+        font-size: 12px;
+        color: $white;
+        padding-bottom: 10px;
+        display: none;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+}
+
+.form-control,
+.form-control:focus,
+.form-control:disabled {
+    background-color: $lightBg;
+    border-color: $lightBg;
+    padding: 10px 20px;
+    color: $white;
+    box-shadow: none;
+    border-radius: 20px;
+    background: #2B2B2B;
+    font-size: 14px;
+
+    &::placeholder {
+        color: $lightGrey
+    }
+}
+
+select.form-controlو select.form-control:focus {
+    padding: 10px 5px;
+}
+
+
+.form-btns {
+    margin-bottom: 10px;
+    margin-top: 20px;
+
+
+    .btn {
+        width: 100%;
+        padding: 10px 0;
+
+        &.btn-close {
+            border: 1px solid #4F584B;
+            background: #232E1E;
+            padding: 12px 0 14px;
+            opacity: 1;
+            color: $white;
+        }
+    }
+
+
+}
+
+.d-flex {
+    justify-content: space-between;
+    gap: 10px;
+
+    .date-holder {
+        flex: 1;
+    }
+}
+
+.tel-phone {
+    display: flex;
+
+    .code-country {
+        width: 25%;
+        margin-right: 10px;
+    }
+}
+
+.geekmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.text {
+    font-size: 12px;
+    padding-top: 10px;
+    color: $white;
+    margin-bottom: 0;
+
+    a {
+        cursor: pointer;
+    }
+}
+
+.forgot-password {
+    color: #5F5F5F;
+}
+
+.checkbox-container {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    font-size: 12px;
+    font-weight: 300;
+    padding-left: 35px;
+    margin-top: 20px;
+
+    /* Hide the default checkbox */
+    input[type=checkbox] {
+        visibility: hidden;
+        width: 0;
+    }
+
+    /* Creating a custom checkbox based on demand */
+    .geekmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        border-radius: 3px;
+        background-color: $darkBg;
+
+        &:after {
+            left: 9px;
+            bottom: 7px;
+            width: 6px;
+            height: 12px;
+            border: solid $lightBg;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    }
+
+    /* Specify the background color to be shown when checkbox is checked */
+    input:checked~.geekmark {
+        background-color: $lightGreen;
+    }
+
+    /* Display checkmark when checked */
+    input:checked~.geekmark:after {
+        display: block;
+    }
+}
+
+.underline-word {
+    text-decoration: underline;
+    color: $white;
+}
+
+.resulats-page {
+    .mdc-text-field--filled.mdc-text-field--disabled {
+        background-color: transparent;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+
+    .mat-mdc-form-field-infix {
+        display: flex;
+        align-items: center;
+    }
+
+    .mdc-floating-label {
+        position: static;
+        width: auto;
+        max-width: 100%;
+        transform: none !important;
+        overflow: visible;
+        margin-right: 5px;
+    }
+
+    .mat-mdc-form-field {
+        border: none !important;
+    }
+
+    .mdc-text-field--filled {
+        --mdc-filled-text-field-active-indicator-height: 0;
+    }
+
+    .mdc-text-field__input {
+        line-height: 19px !important;
+    }
+
+    .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+        padding-top: 11px;
+    }
+
+    .mdc-floating-label,
+    .mat-mdc-input-element {
+        color: $white!important
+    }
+
+    .mat-mdc-form-field-infix {
+        width: 140px;
+    }
+}
+
+
+
+
+
+aside {
+
+    a {
+        cursor: pointer;
+
+        &.active {
+            color: $lightGreen
+        }
+    }
+
+    h2 {
+        padding-bottom: 10px;
+    }
+
+    ul {
+        padding-left: 15px;
+
+        li {
+            margin-bottom: 10px;
+
+            >a {
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 16px;
+                color: $white;
+
+                display: flex;
+                align-items: center;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+}
+
+
+
+
+.page-holder {
+    display: flex;
+    justify-content: space-between;
+    /* allow sidebar to size itself rather than stretching to match main */
+    align-items: flex-start;
+    max-width: 100%;
+    /* always at least full viewport so sidebar can be constrained */
+}
+
+/* sidebar layout helpers */
+.page-holder>aside.cart {
+    display: flex;
+    flex-direction: column;
+    /* height will be set dynamically via component binding */
+}
+
+.page-holder>aside.cart app-shared-cart {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    /* also fill the parent height */
+    height: 100%;
+}
+
+
+
+.overflow-hidden .main-holder {
+    overflow: hidden;
+}
+
+label {
+    margin-top: 0;
+}
+
+.body-holder {
+    margin-top: 115px;
+
+    .body-holder {
+        margin-top: 0;
+    }
+}
+
+header {
+
+    min-height: 73px;
+}
+
+.modal-dialog {
+    width: 300px;
+}
+
+.modal-content {
+    background-color: transparent;
+    border: none;
+    width: auto;
+}
+
+
+.report-holder {
+    background: #2B2B2B;
+    padding: 15px 30px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    max-height: 185px;
+    overflow: auto;
+    text-align: center;
+    font-size: 14px;
+}
+
+.pagination {
+    a.page-link {
+        background-color: $darkBg;
+        color: $lightGreen;
+        border-color: $white;
+        padding-bottom: 9px;
+    }
+
+    .page-link.active,
+    .active>.page-link {
+        background-color: $lightGreen;
+        color: $darkBg;
+        font-weight: bold;
+        box-shadow: none;
+    }
+}
+
+
+app-odd-item {
+    flex: 0 0 calc(33.3333% - 4px);
+    margin-right: 6px;
+    max-width: calc(33.3333% - 4px);
+}
+
+app-odd-item:nth-of-type(3n) {
+    margin-right: 0;
+}
+
+
+/* From Uiverse.io by guilhermeyohan */
+.checkbox-apple {
+    position: relative;
+    width: 25px;
+    height: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-right: 7px;
+
+    label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25px;
+        height: 13px;
+        border-radius: 50px;
+        background: linear-gradient(to bottom, #b3b3b3, #e6e6e6);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    label:after {
+        content: '';
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background-color: $white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    input[type="checkbox"]:checked+label {
+        background: $lightGreen
+    }
+
+    input[type="checkbox"]:checked+label:after {
+        transform: translateX(12px);
+    }
+
+    label:hover {
+        background: linear-gradient(to bottom, #b3b3b3, #e6e6e6);
+    }
+
+    label:hover:after {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+
+    .yep {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25px;
+        height: 12px;
+    }
+
+}
+
+.radio-holder {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.input-bg {
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px 15px;
+}
+
+.sign-button {
+    height: 17px;
+    width: 17px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loto-game-container {
+    max-width: 100%;
+    margin: 0 auto;
+    border: 2px solid $lightGreen;
+    border-radius: 35px;
+    padding: 30px;
+    margin-bottom: 40px;
+
+    .inner-container {
+        width: 690px;
+        max-width: 100%;
+        margin: 0 auto
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 18px;
+        padding-bottom: 0;
+        font-family: $font-bold;
+    }
+
+    .event-item {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    h5 {
+        text-align: center;
+        font-size: 14px;
+        font-weight: normal;
+        margin-bottom: 1rem
+    }
+
+    .form-control,
+    .form-control:focus {
+        background-color: $lightBg;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .input-bg {
+        border-radius: 25px;
+        border: 1px solid #C2D4E1;
+        background: $lightBg;
+        display: flex;
+        align-items: center;
+        padding: 15px;
+
+        select.form-control,
+        select.form-control:focus {
+            width: auto;
+            border-radius: 35px;
+            padding: 0 8px;
+            text-align: right;
+        }
+
+        input {
+            text-align: center;
+            padding: 0
+        }
+
+        &.selected-balls-type {
+            margin-bottom: 20px;
+            display: block;
+            min-width: 320px;
+        }
+    }
+
+
+    .btn {
+        flex: 1;
+        padding: 13px 10px;
+    }
+
+    .ball-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        overflow: auto;
+        margin-bottom: 20px;
+    }
+
+    .selected-balls {
+        justify-content: space-between;
+
+
+    }
+
+    .ball {
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
+        background-color: $lightBg;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid $lightBg;
+        color: $white;
+        font-weight: bold;
+    }
+
+    .ball.selected {
+        background: $lightGreen;
+        color: $darkBg;
+    }
+
+    .balls-list-holder {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+    }
+
+    .title-label {
+        font-size: 14px;
+        color: $white;
+        padding-bottom: 10px;
+        text-align: center;
+        display: block;
+        font-weight: bold;
+        margin-top: 20px
+    }
+
+    .stake-block {
+        width: 270px;
+        max-width: 100%;
+        margin-bottom: 0;
+        justify-content: space-between;
+
+        span {
+            font-size: 14px
+        }
+
+        input {
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            line-height: 19px;
+            width: auto;
+            background: transparent
+        }
+
+        .btn {
+            min-width: 55px;
+            font-size: 30px;
+            line-height: 17px;
+        }
+    }
+
+    .game-note {
+        color: #8A8A8A;
+        text-align: center;
+        font-size: 14px;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+}
+
+.results-shared-header {
+    text-align: left;
+    padding: 0;
+
+}
+
+.results-shared-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.results-shared-controls {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-top: 1.1rem;
+}
+
+.results-shared-pill {
+    font-size: 12px;
+    padding: 8px 20px;
+    opacity: 0.6;
+
+    &.active {
+        opacity: 1;
+    }
+}
+
+.selected-balls-type .options-container {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(159, 159, 159, 0.50);
+}
+
+.options-container {
+    color: #B7B7B7;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .option-item {
+        display: block;
+        cursor: pointer;
+        position: relative;
+        padding-left: 20px;
+
+        input {
+            display: none;
+        }
+
+        &.selected {
+            color: $lightGreen;
+
+            &:before {
+                border-radius: 4px;
+                border: 1px solid $lightGreen;
+                background-color: #639247;
+                background-image: url(/assets/images/check.svg);
+                background-position: center;
+            }
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid #D0D5DD;
+            background-color: #1D1C1C;
+        }
+
+        input {
+            margin-right: 5px;
+            border-radius: 25px;
+        }
+    }
+}
+
+.selected-balls-type {
+    .top-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.mobile-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+
+    .quickpick-mobile,
+    .clear-mobile {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        text-decoration: none;
+        color: $white;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            display: block;
+            width: 14px
+        }
+    }
+}
+
+.btn.scan-button,
+.btn.scan-button:hover {
+    color: $lightGreen !important;
+    border: 1px solid $lightGreen !important;
+    background: #232E1E !important;
+}
+
+
+
+app-admin-page {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    background-color: #0b1705;
+    height: calc(100% - 70px);
+    width: 100%;
+    background-color: $darkBg;
+    z-index: 4;
+}
+
+// Game badge
+.game-badge {
+    background: rgba(99, 146, 71, 0.5);
+    border: 0.5px solid #639247;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    padding: 2px 8px;
+    border-radius: 30px;
+    white-space: nowrap;
+    font-family: 'SF UI Display', sans-serif;
+}
+
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+
+    h2 {
+        font-size: 18px;
+        line-height: 35px;
+        padding-bottom: 0;
+    }
+
+    .back-arrow {
+        width: 10px;
+    }
+}
+
+.nav-holder {
+    display: flex;
+    align-items: center;
+
+    .games-container {
+        margin-right: 14px;
+        gap: 30px !important;
+    }
+
+    .game-card.selected button {
+        font-weight: 700;
+        color: $lightGreen
+    }
+
+    button {
+        border: none;
+        padding: 0;
+        box-shadow: none;
+        background: transparent;
+        font-weight: 400;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+
+@media all and (max-width:992px) {
+    .balls-list-holder {
+        margin-top: 20px;
+    }
+
+    .grid {
+        gap: 15px;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .bp-page {
+        gap: 40px;
+    }
+
+    .bp-sections {
+        gap: 40px;
+    }
+
+    app-game-banner {
+        display: none !important;
+    }
+
+    .page-holder {
+        flex-direction: column;
+    }
+
+    .container,
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .sports-betting {
+
+        main,
+        aside,
+        .cart {
+            flex: 1 0 100%;
+            max-width: 100%;
+        }
+    }
+
+
+
+    app-mes-paries-popup {
+        margin-bottom: 68px;
+    }
+
+    aside {
+        ul {
+            display: flex;
+
+            li {
+                margin-right: 15px;
+            }
+        }
+    }
+
+    .body-holder {
+        margin-top: 82px;
+    }
+
+    .body-holder.android-app {
+        margin-top: 70px;
+        padding-bottom: 90px;
+    }
+
+    .no-header {
+        margin-top: 0 !important;
+    }
+
+    .hidden-mobile {
+        display: none !important;
+    }
+
+    .mobileOnly,
+    .mobile-toggle {
+        display: block !important;
+    }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    app-header {
+        overflow: hidden;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .horses-list-container {
+        .table-item:last-of-type {
+            display: none;
+        }
+
+        .table-item:not(:last-of-type) {
+            margin-right: 10px;
+        }
+
+        .table-row {
+            padding: 10px;
+        }
+
+        .first-checkbox {
+            margin-left: 0;
+        }
+
+        .table-item:first-of-type {
+            width: 52%
+        }
+
+        .table-item.first-checkbox {
+            width: 40px
+        }
+    }
+
+    .cart-active .courses-main {
+        padding-bottom: 230px !important;
+    }
+
+    section {
+        padding: 20px 15px;
+    }
+
+    .section-header {
+        margin-bottom: 20px;
+        padding: 0;
+
+        h2 {
+            font-size: 24px;
+            line-height: 30px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+
+    .loto-game-container {
+        padding: 15px;
+
+        .btns-holder {
+            width: 100%;
+        }
+
+        .inner-container {
+            width: 100%;
+        }
+
+        .stake-block {
+            width: 100%;
+        }
+    }
+
+    .page-holder>aside.cart {
+        height: auto !important
+    }
+
+    .bp-benefits {
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+    }
+
+    .loto-game-container {
+        padding: 0;
+        border: none;
+
+    }
+
+    .loto-game-container .input-bg {
+        width: 100%;
+        padding: 10px;
+        background: transparent
+    }
+
+    .btn.btn-primary:hover {
+        background-color: $lightGreen;
+        color: #000
+    }
+
+    .modal-dialog {
+        width: calc(100% - 15px);
+    }
+}

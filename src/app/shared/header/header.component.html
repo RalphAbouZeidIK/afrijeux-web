@@ -1,0 +1,76 @@
+<header [ngClass]="{'is-mobile':!isDesktop, 'android-app': isAndroidApp}" class="header-main container-fluid ">
+
+  <div class="overlay" (click)="hideMenus()"></div>
+  <a href="javascript:;" class="mobile-toggle" (click)="mobileToggleClick()" *ngIf="!isAndroidApp"></a>
+
+
+
+  <img class="logo mobileOnly" src="assets/images/logo.svg" [routerLink]="[(isAndroidApp)?'/Machine/Login':'/']" />
+  <a *ngIf="isAndroidApp && isLoggedIn">
+    <img src="assets/images/menu-dots.svg" alt="Show Admin Menu" class="admin-menu-toggle" *ngIf="!showAdminPage"
+      (click)="toggleAdminMenu(true)" />
+
+    <img src="assets/images/close-icon-white.svg" alt="Close Admin Menu" class="admin-menu-toggle" *ngIf="showAdminPage"
+      (click)="toggleAdminMenu(false)" />
+  </a>
+
+
+
+
+
+  <div class="header-container">
+
+    <img class="logo" src="assets/images/logo.svg" [routerLink]="['/']" />
+
+    <app-nav parentClass="header-nav" [fullMenu]="menu" *ngIf="!isAndroidApp"></app-nav>
+
+    <div class="right-section d-flex" *ngIf="!isAndroidApp">
+
+
+      <div class="header-btns isloggedIn" *ngIf="isLoggedIn">
+        <span class="header-text" *ngIf="userBalance?.Total > 0">
+          <span class="icon"><img src="assets/images/wallet.svg" alt=""></span>
+          {{userBalance?.Total | number}} {{userBalance?.CurrencyCode}}
+        </span>
+      </div>
+
+      <!-- <div class="dropdown-header" ngbDropdown #langDrop="ngbDropdown">
+        <a type="button" class="language-selector-toggle" id="dropdownManual" ngbDropdownToggle>
+          {{selectedLanguage.code}}
+        </a>
+
+        <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-list language-selector">
+          <div class="dropdown-item" *ngFor="let lang of languages" (click)="changeLanguage(lang)">
+            {{lang.name}}
+          </div>
+        </div>
+      </div> -->
+
+      <div class="user-menu-holder" *ngIf="isLoggedIn">
+        <button type="button" class="user-icon-toggle" aria-label="User menu" (click)="toggleUserMenu()">
+          <img src="assets/images/User.svg" alt="">
+        </button>
+
+        <div class="option-list-holder user-menu-dropdown" [class.is-open]="showUserMenu"
+          *ngIf="personNavList.length > 0">
+          <div class="option-list">
+            <a *ngFor="let item of personNavList" class="option-list__item"
+              [routerLink]="item.key !== 'logout' ? ['/' + item.path] : null"
+              (click)="item.key === 'logout' ? logout() : hideMenus()">
+              {{ item.title }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-btns d-flex" *ngIf="!isLoggedIn">
+        <button class="btn btn-secondary" (click)="togglePopupFn('signup')">{{ 'generic.register' | translate}}</button>
+
+        <button class="btn btn-primary" (click)="togglePopupFn('login')">{{ 'generic.login' | translate }}</button>
+      </div>
+    </div>
+
+
+
+  </div>
+</header>

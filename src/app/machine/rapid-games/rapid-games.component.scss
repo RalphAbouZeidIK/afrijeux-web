@@ -1,0 +1,37 @@
+@use '/src/variables' as *;
+
+.rapid-games {
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+}
+
+.page-body {
+    padding: 20px 16px;
+    border-radius: 15px;
+    border: 1px solid rgba(159, 159, 159, 0.50);
+}
+
+p {
+    line-height: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size:15px;
+}
+
+.input-bg {
+    border-radius: 25px;
+    border: 1px solid #C2D4E1;
+    background: $lightBg;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    justify-content: space-between;
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+.btn {
+    margin-top: auto;
+}

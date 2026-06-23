@@ -1,0 +1,127 @@
+import { DatePipe } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { MachineCoreComponent } from "./machine-core/machine-core.component";
+import { LoginComponent } from "../shared/login/login.component";
+import { HomeComponent } from "./home/home.component";
+import { SharedGuard } from "../shared.guard";
+import { machineMenuRoutes } from "./machine-route";
+import { PromotionsPageComponent } from "../shared/promotions-page/promotions-page.component";
+import { InstantGamesPageComponent } from "../shared/instant-games-page/instant-games-page.component";
+
+
+const routes: Routes = [
+    {
+        path: '',
+        redirectTo: 'Login',  // Redirect to 'courses' by default
+        pathMatch: 'full'  // Ensure this redirect happens for the root of the submodule
+    },
+    {
+        path: '',
+        component: MachineCoreComponent,
+        children: [
+
+            ...machineMenuRoutes,
+            {
+                path: 'HPBPMU',
+                loadChildren: () => import('../pmu/pmu.module').then(m => m.PmuModule),
+                data: { breadcrumb: 'HPB PMU (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
+            },
+            {
+                path: 'AfrijeuxSportsBetting',
+                canActivate: [SharedGuard],
+                loadChildren: () => import('../sports/sports.module').then(m => m.SportsModule),
+                data: { breadcrumb: 'Sports (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
+            },
+
+            {
+                path: 'PMUHybrid',
+                canActivate: [SharedGuard],
+                loadChildren: () => import('../pmu/pmu.module').then(m => m.PmuModule),
+                data: { breadcrumb: 'HPB PMU (Machine)', showLink: false, title: 'routerLinks.MachineTitle.Home' }
+            },
+            {
+                path: 'AfrijeuxFiveNinetyV2',
+                loadChildren: () => import('../khamsa/khamsa.module').then(m => m.KhamsaModule),
+                data: {
+                    breadcrumb: 'Five Ninety',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.Khamsa',
+                }
+            },
+            {
+                path: 'WinBig5',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig5',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig5',
+                }
+            },
+            {
+                path: 'WinBig3',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig3',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig3',
+                }
+            },
+            {
+                path: 'WinBig4',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                data: {
+                    breadcrumb: 'WinBig4',
+                    shouldBeLoggedIn: false,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.WinBig4',
+                }
+            },
+            {
+                path: 'Jackpot',
+                loadChildren: () => import('../loto-games/loto-games.module').then(m => m.LotoGamesModule),
+                canActivate: [SharedGuard],
+                data: {
+                    breadcrumb: 'PickX',
+                    shouldBeLoggedIn: true,
+                    showLink: true,
+                    title: 'routerLinks.appTitle.Pickx',
+                }
+            },
+            {
+                path: 'Promotions',
+                component: PromotionsPageComponent,
+                data: {
+                    breadcrumb: 'Promotions',
+                    shouldBeLoggedIn: false,
+                    showLink: false,
+                    title: 'Promotions',
+                }
+            },
+            {
+                path: 'InstantGames',
+                component: InstantGamesPageComponent,
+                data: {
+                    breadcrumb: 'Instant Games',
+                    shouldBeLoggedIn: false,
+                    showLink: false,
+                    title: 'Instant Games',
+                }
+            }
+
+        ]
+    }
+];
+
+
+
+@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
+    providers: [DatePipe],
+})
+export class routing {
+}

@@ -1,0 +1,842 @@
+import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, interval, Subject, race } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { CartService } from 'src/app/services/cart.service';
+import { GamesService } from 'src/app/services/games.service';
+import { GenericService } from 'src/app/services/generic.service';
+import { CartComponent } from 'src/app/shared/cart/cart.component';
+import { Location } from '@angular/common';
+import { UserService } from 'src/app/services/user.service';
+@Component({
+  selector: 'app-game-block',
+  standalone: false,
+  templateUrl: './game-block.component.html',
+  styleUrl: './game-block.component.scss'
+})
+export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
+  isTestingUser = false
+
+  selectedGameEventId: number | null = null
+
+  showEventDetails = false
+
+  selectedEvent: any = null
+
+  selectedType: any = null
+
+  selectedTypes: any[] = []
+
+  maxBalls = 6;              // absolute maximum allowed
+  initialBallCount = 6;      // comes from configVersionId
+
+  selectedNumbers: number[] = [];
+
+  selectedBalls: any[] = [];
+
+  listOfBalls: any[] = [];   // your available numbers
+
+  // store the currently chosen ball for each pickX slot so we can tell the
+  // corresponding `app-ball-list` which ball should be highlighted
+  slotSelections: any[] = [];
+
+  showBallPicker: boolean = false;
+
+  Stake = 0
+
+  multiplier = 1
+
+  ballToChangeId = null
+
+
+  isQuickPick = false
+
+  isQuickPickDisabled = false
+
+
+  isPickXGame = false
+
+  isJackpotGame = false
+
+  showPromoSelection = false
+  availablePromotions: any[] = []
+  selectedPromotion: any = null
+
+
+
+  /* height for sidebar cart; calculated from game block size */
+  cartHeight = 0;
+
+  @ViewChild('gameBlock') gameBlock!: ElementRef<HTMLElement>;
+  @ViewChild('sharedCart') sharedCart?: CartComponent;
+
+  fixedConfig: any
+
+  showCart = false
+
+  cartSubscription: Subscription
+
+  selectedResultFilters: number[] = [];
+
+  showOptionsList = false
+
+  isBulkIssueInProgress = false
+
+  isBulkSeparateIssueInProgress = false
+
+  isAndroidApp = this.gnrcSrv.isMachineApp()
+
+  path = (this.isAndroidApp) ? this.router.url.split('/')[2]?.split('?')[0] : this.router.url.split('/')[1]?.split('?')[0]
+
+  @Input() gameEvent: any = null
+
+  isMobile: any = this.gnrcSrv.getIsMobileView()
+
+
+  numberOfBallChoice: any
+
+  openCartOnMobileFlag = false
+
+  totalPrice: any = 0
+
+  cartData: any = []
+
+  editingCartItem: any = null
+  editingBallIndex: number | null = null
+  editingBall: any = null
+  selectedEditBall: any = null
+  isEditingCartBall = false
+
+
+  constructor(
+    private gnrcSrv: GenericService,
+    private cartSrv: CartService,
+    private gamesSrv: GamesService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
+    private usrSrv: UserService
+  ) {
+
+    this.cartSubscription = this.cartSrv.getCartData().subscribe((data: any) => {
+      this.cartData = data;
+
+      if (data && data.length > 0) {
+        this.showCart = true
+      }
+      else {
+        this.showCart = false
+      }
+    })
+
+    this.gnrcSrv.getIsMobileViewListener().subscribe((isMobile) => {
+      this.isMobile = isMobile;
+    });
+  }
+
+  ngOnInit(): void {
+    if (!this.isAndroidApp) {
+      this.isTestingUser = this.usrSrv.isTestingUser()
+    }
+    this.gnrcSrv.toggleLoader(true);
+    this.generateDisplayBalls();
+    this.isPickXGame = window.location.href.includes("PickX") || window.location.href.includes("WinBig3") || window.location.href.includes("WinBig4") || window.location.href.includes("WinBig5")
+    this.isJackpotGame = window.location.href.includes("Jackpot")
+    if (this.gameEvent) {
+      this.setupEvent(this.gameEvent);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['gameEvent'] && changes['gameEvent'].currentValue !== changes['gameEvent'].previousValue) {
+      const event = changes['gameEvent'].currentValue;
+      if (event) {
+        this.setupEvent(event);
+      } else if (this.isAndroidApp) {
+        this.gnrcSrv.setModalData(true, false, 'No active games available at the moment. Please check back later.');
+        this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
+      } else {
+        this.showEventDetails = false;
+        this.gnrcSrv.toggleLoader(false);
+      }
+    }
+  }
+
+  private resizeObserver: ResizeObserver | null = null;
+
+  ngAfterViewInit(): void {
+    // measure after view has been rendered
+    this.updateCartHeight();
+
+    // observe any size changes of the game block container
+    if (typeof ResizeObserver !== 'undefined' && this.gameBlock?.nativeElement) {
+      this.resizeObserver = new ResizeObserver(() => this.updateCartHeight());
+      this.resizeObserver.observe(this.gameBlock.nativeElement);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.updateCartHeight();
+  }
+
+  private updateCartHeight() {
+    // use the height of the gameBlock container as reference
+    if (this.gameBlock && this.gameBlock.nativeElement) {
+      const rect = this.gameBlock.nativeElement.getBoundingClientRect();
+      this.cartHeight = rect.height;
+    }
+  }
+
+  generateDisplayBalls() {
+
+    this.selectedBalls = [];
+
+
+    // Add selected numbers
+    for (let i = 0; i < this.selectedNumbers.length; i++) {
+      this.selectedBalls.push({
+        number: this.selectedNumbers[i],
+        isSelected: true
+      });
+    }
+
+    // Fill remaining slots up to current visible size
+    const visibleSlots = Math.max(
+      this.initialBallCount,
+      this.selectedNumbers.length
+    );
+
+    for (let i = this.selectedBalls.length; i < visibleSlots; i++) {
+      this.selectedBalls.push({
+        number: 'X',
+        isSelected: false
+      });
+    }
+  }
+
+  private async loadFixedConfig(configId: number): Promise<any> {
+    const key = `fixedConfig_${configId}`;
+    try {
+      const cached = sessionStorage.getItem(key);
+      if (cached) return JSON.parse(cached);
+    } catch { }
+    if (configId) {
+      const config = await this.gamesSrv.getFixedConfig(configId);
+      console.log('Loaded fixed config:', config);
+      try { sessionStorage.setItem(key, JSON.stringify(config)); } catch { }
+      return config;
+    }
+
+  }
+
+  async setupEvent(event: any) {
+    const configId = this.isPickXGame ? event.ConfigurationVersionId : event.FixedConfigurationVersion;
+    this.fixedConfig = await this.loadFixedConfig(configId);
+
+    const numberOfSelectedBalls = this.isPickXGame ? this.fixedConfig[0].NumberOfBalls : 6;
+    this.numberOfBallChoice = numberOfSelectedBalls;
+    const numberOfBalls = this.isPickXGame ? 10 : this.fixedConfig.find((item: any) => item.Name === 'NumberOfBalls').Value;
+
+    event.fixedConfig = this.fixedConfig;
+    this.selectedEvent = event;
+    this.selectedGameEventId = Number(event.GameEventId);
+
+    const showPromotionsParam = this.route.snapshot.queryParamMap.get('showPromotions');
+    if (showPromotionsParam === 'true' && Array.isArray(event.PromotionConfiguration) && event.PromotionConfiguration.length > 0) {
+      this.availablePromotions = event.PromotionConfiguration;
+      if (event.PromotionConfiguration.length === 1) {
+        this.selectPromotion(event.PromotionConfiguration[0]);
+      } else if (!this.selectedPromotion) {
+        this.showPromoSelection = true;
+      }
+    }
+
+    const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
+    this.showCart = Array.isArray(lotoCartData) && lotoCartData.length > 0;
+    this.showEventDetails = true;
+    setTimeout(() => this.updateCartHeight());
+
+    if (this.isPickXGame && this.fixedConfig?.length > 0) {
+      this.selectedResultFilters = [this.fixedConfig.TicketTypeId];
+      this.Stake = this.fixedConfig[0].MinStake;
+      this.clampStakeToTypeLimits();
+      this.selectedType = this.selectedTypes[0];
+    }
+
+    this.resetBallPicker(numberOfSelectedBalls, numberOfBalls);
+    this.gnrcSrv.toggleLoader(false);
+  }
+
+  resetBallPicker(numberOfSelectedBalls?: number, numberOfBalls?: number) {
+    const numSelected = numberOfSelectedBalls ?? this.numberOfBallChoice;
+    const numBalls = numberOfBalls ?? (this.isPickXGame ? 10 : this.fixedConfig?.find((item: any) => item.Name === 'NumberOfBalls')?.Value);
+    this.selectedNumbers = [];
+    this.currentPickIndex = 0;
+    this.selectedBalls = this.generateDrawBalls(numSelected);
+    this.listOfBalls = this.generateBallObjects(numBalls);
+    this.slotSelections = new Array(numSelected).fill(null);
+  }
+
+
+  generateBallObjects(x: number) {
+    return Array.from({ length: x }, (_, i) => ({
+      number: (this.isPickXGame) ? i : i + 1,
+      selected: false,
+      id: (this.isPickXGame) ? i : i + 1
+    }));
+  }
+
+  generateDrawBalls(configVersionId: any) {
+    let drawBalls: any = []
+    for (let i = 0; i < configVersionId; i++) {
+      drawBalls.push({
+        number: 'X',
+        id: i,
+        isSelected: false
+      })
+    }
+    return drawBalls;
+  }
+
+  /**
+   * Helper to convert a numeric count into an iterable array suitable for
+   * `*ngFor`. Usage in template: `*ngFor="let _ of range(fixedConfig[0].NumberOfBalls)"`
+   */
+  range(count: number): any[] {
+    if (!count || count < 0) {
+      return [];
+    }
+    return Array.from({ length: count });
+  }
+
+
+  onFilterChange(option: any) {
+    //console.log(option)
+    const index = this.selectedTypes.findIndex(t => t.TicketTypeId === option.TicketTypeId);
+    if (index > -1) {
+      this.selectedTypes.splice(index, 1);
+    } else {
+      this.selectedTypes.push(option);
+      if (this.selectedTypes.length === 1) {
+        this.Stake = option.MinStake;
+        this.clampStakeToTypeLimits();
+      }
+    }
+    this.selectedResultFilters = this.selectedTypes.map(t => t.TicketTypeId);
+    this.selectedType = this.selectedTypes.length > 0 ? this.selectedTypes[0] : null; // for backward compatibility
+    //console.log('filters', this.selectedResultFilters);
+
+    if (this.selectedTypes.length > 0 && this.selectedBalls.every((b: any) => b.isSelected)) {
+      setTimeout(() => this.addToBet(), 150);
+    }
+  }
+
+  onTypeChanged(event: any) {
+    //console.log(event);
+    this.selectedType = event
+    this.Stake = event.MinStake
+    this.clampStakeToTypeLimits()
+
+  }
+
+  onStakeInputChange(value: any, inputEl?: HTMLInputElement) {
+    const parsedValue = Number(value);
+    this.Stake = Number.isFinite(parsedValue) ? parsedValue : 0;
+    this.clampStakeToTypeLimits();
+
+    // Keep the DOM input in sync with the clamped model value so extra typing
+    // does not append digits after the limit is reached.
+    if (inputEl) {
+      inputEl.value = String(this.Stake);
+    }
+  }
+
+  private clampStakeToTypeLimits() {
+    if (!this.selectedType) {
+      return;
+    }
+
+    const minStake = Number(this.selectedType.MinStake);
+    const maxStake = Number(this.selectedType.MaxStake);
+
+    if (!Number.isFinite(minStake) || !Number.isFinite(maxStake)) {
+      return;
+    }
+
+    if (this.Stake < minStake) {
+      this.gnrcSrv.setModalData(true, false, `Minimum stake for this bet type is ${minStake}.`)
+      this.Stake = minStake;
+      return;
+    }
+
+    if (this.Stake > maxStake) {
+      this.gnrcSrv.setModalData(true, false, `Maximum stake for this bet type is ${maxStake}.`)
+      this.Stake = maxStake;
+    }
+  }
+
+  quickPick(index: number | null = null) {
+    if (this.isQuickPickDisabled) {
+      return;
+    }
+    this.isQuickPickDisabled = true;
+
+    if (this.isJackpotGame) {
+      // Select 6 random numbers for Jackpot game
+      this.selectedNumbers = [];
+      const numToSelect = 6;
+      while (this.selectedNumbers.length < numToSelect) {
+        const randomIndex = Math.floor(Math.random() * this.listOfBalls.length);
+        const ball = this.listOfBalls[randomIndex];
+        if (!this.selectedNumbers.includes(ball.number)) {
+          this.selectedNumbers.push(ball.number);
+        }
+      }
+      // Update listOfBalls to mark selected balls
+      this.listOfBalls.forEach(b => b.isSelected = this.selectedNumbers.includes(b.number));
+      this.updateLotoPrice()
+      this.generateDisplayBalls();
+      this.isQuickPick = true;
+    }
+
+    else if (this.isPickXGame) {
+      // choose a random ball from the available list for each slot
+      this.selectedBalls = this.selectedBalls.map((ball: any, idx: number) => {
+        const randomIndex = Math.floor(Math.random() * this.listOfBalls.length);
+        const pick = this.listOfBalls[randomIndex];
+        // record in slotSelections so the correct component highlights it
+        this.slotSelections[idx] = pick;
+        return { ...pick, isSelected: true, id: ball.id };
+      });
+
+      // also mark the picked balls as selected in listOfBalls if desired
+      this.listOfBalls = this.listOfBalls.map(b => ({ ...b, selected: false }));
+      this.slotSelections.forEach((p: any) => {
+        const found = this.listOfBalls.find(b => b.id === p?.id);
+        if (found) {
+          found.selected = true;
+        }
+      });
+      this.currentPickIndex = this.selectedBalls.length
+
+      this.isQuickPick = true;
+
+      //console.log(this.selectedBalls);
+    }
+    setTimeout(() => {
+      this.isQuickPickDisabled = false;
+      this.addToBet(true, index)
+    }, 200);
+
+  }
+
+  isBallSelected(ball: any): boolean {
+    return this.selectedBalls.some((b: any) => b.number === ball.number);
+  }
+
+  getSelectedBallsText(): string {
+    if (!this.selectedBalls.length) return '';
+    return 'Selected numbers: ' + this.selectedBalls.map((b: any) => b.number).join(', ');
+  }
+
+  chooseNumber(ball: any) {
+    //console.log(ball)
+    this.ballToChangeId = ball.id
+    this.showBallPicker = true
+  }
+
+  selectBall(ball: any) {
+    this.isQuickPick = false
+
+    if (this.isPickXGame) {
+      // record the choice for that slot so the corresponding child component
+      // can highlight it
+      this.selectPickXBall(ball)
+    }
+    else {
+      this.selectLotoBall(ball)
+    }
+    //console.log(this.selectedBalls)
+  }
+
+  currentPickIndex = 0;
+  selectPickXBall(ball: any) {
+    // If all slots are filled → stop or reset (your choice)
+    if (this.currentPickIndex >= this.slotSelections.length) {
+      return;
+    }
+
+    // assign ball to current slot
+    this.slotSelections[this.currentPickIndex] = ball;
+
+    this.selectedBalls[this.currentPickIndex] = {
+      ...ball,
+      isSelected: true,
+      id: this.currentPickIndex
+    };
+
+    // move to next slot
+    this.currentPickIndex++;
+
+    if (this.currentPickIndex >= this.slotSelections.length && this.selectedTypes.length > 0) {
+      setTimeout(() => this.addToBet(), 150);
+    }
+
+    //console.log(this.selectedBalls);
+  }
+
+  selectLotoBall(ball: any) {
+    const index = this.selectedNumbers.indexOf(ball.number);
+
+    // ✅ REMOVE if already selected
+    if (index !== -1) {
+      this.selectedNumbers.splice(index, 1);
+      ball.isSelected = false;
+    }
+
+    // ❌ ADD if not selected
+    else if (this.selectedNumbers.length < this.maxBalls) {
+      this.selectedNumbers.push(ball.number);
+      ball.isSelected = true;
+    }
+
+    this.updateLotoPrice()
+    this.generateDisplayBalls();
+
+    if (this.selectedNumbers.length === this.numberOfBallChoice) {
+      setTimeout(() => this.addToBet(), 150);
+    }
+  }
+
+  deleteLastBall() {
+    // nothing to delete
+    if (this.currentPickIndex === 0) return;
+
+    // move back to previous slot
+    this.currentPickIndex--;
+
+    // clear that slot
+    this.slotSelections[this.currentPickIndex] = null;
+
+    this.selectedBalls[this.currentPickIndex] = {
+      number: 'X',
+      id: this.currentPickIndex,
+      isSelected: false
+    };
+
+    //console.log(this.selectedBalls);
+  }
+
+  deleteLastLotoBall() {
+    if (this.selectedNumbers.length === 0) return;
+
+    // get last selected number
+    const lastNumber = this.selectedNumbers[this.selectedNumbers.length - 1];
+
+    // remove it from array
+    this.selectedNumbers.pop();
+
+    // find the ball object and unselect it
+    const ball = this.listOfBalls.find(b => b.number === lastNumber);
+    if (ball) {
+      ball.isSelected = false;
+    }
+
+    this.updateLotoPrice();
+    this.generateDisplayBalls();
+  }
+
+  updateLotoPrice() {
+
+    let numBalls = this.selectedNumbers.length
+    if (numBalls >= 6) {
+      let priceKey = `Pick${numBalls}Price`;
+      let priceItem = this.fixedConfig.find((item: any) => item.Name === priceKey);
+      this.Stake = parseFloat(priceItem.Value);
+
+    }
+  }
+
+  updateMultiplier(isAdd: boolean) {
+    this.Stake += isAdd ? 1 : -1
+    this.clampStakeToTypeLimits()
+  }
+
+  private getGameNameForBet(): string {
+    if (this.isJackpotGame) {
+      return 'Jackpot';
+    }
+
+    const configId = Number(this.selectedEvent?.ConfigurationVersionId);
+    if (this.isPickXGame && !Number.isNaN(configId)) {
+      return `Win${configId}`;
+    }
+
+    return 'Jackpot';
+  }
+
+  addToBet(refreshEventDetails = true, index: number | null = null) {
+    if (this.selectedPromotion) {
+      const promoMax = this.selectedPromotion.X + this.selectedPromotion.Y;
+      if (this.cartData && this.cartData.length >= promoMax) {
+        this.gnrcSrv.setModalData(true, false, `You have reached the maximum of ${promoMax} tickets for this promotion.`);
+        return;
+      }
+    } else if (this.cartData && this.cartData.length >= 10 && !this.isTestingUser) {
+      this.gnrcSrv.setModalData(true, false, 'You have reached the maximum of 10 tickets in the cart. Please remove some tickets before adding new ones.')
+      return
+    }
+    this.currentPickIndex = 0; // reset for next time
+    let pickItem: any
+    const gameName = this.getGameNameForBet();
+
+    if (this.isPickXGame) {
+      //console.log(this.selectedTypes)
+      if ((!this.selectedBalls.every((b: any) => b.isSelected)) || this.selectedTypes.length === 0) {
+        this.gnrcSrv.setModalData(true, false, 'Please select all numbers and at least one type.');
+        return
+      }
+
+      for (let type of this.selectedTypes) {
+        const _maxTickets = this.selectedPromotion ? (this.selectedPromotion.X + this.selectedPromotion.Y) : 10;
+        if (this.cartData.length >= _maxTickets) {
+          this.gnrcSrv.setModalData(true, false, `You have reached the maximum of ${_maxTickets} tickets${this.selectedPromotion ? ' for this promotion' : ' in the cart'}.`);
+          break;
+        }
+        let pickItem = {
+          pickTypeId: type.PickTypeId,
+          pickTypeName: type.PickTypeName,
+          ticketTypeId: type.TicketTypeId,
+          ticketTypeName: type.TicketTypeName,
+          IsQuickPick: this.isQuickPick,
+          gameEventId: this.selectedEvent.GameEventId,
+          eventName: this.selectedEvent.EventName,
+          displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
+          Balls: this.selectedBalls.map((b: any) => b.number).join('+'),
+          gameName: gameName,
+          ActualStake: type.MinStake,
+          Stake: type.MinStake,
+          id: Math.random().toString(36).substring(2, 9), // generate a random id for the pick
+          chosenBallsList: this.selectedBalls,
+          IsPromotion: this.selectedPromotion ? true : false,
+        }
+        this.cartSrv.updateLotoList(pickItem, index)
+      }
+    }
+
+    else {
+      if (this.selectedNumbers.length < 6 || this.selectedNumbers.length > 9) {
+        this.gnrcSrv.setModalData(true, false, 'Please select between 6 numbers.');
+        return
+      }
+      this.updateLotoPrice()
+      pickItem = {
+        IsQuickPick: this.isQuickPick,
+        gameEventId: this.selectedEvent.GameEventId,
+        eventName: this.selectedEvent.EventName,
+        displayBalls: this.selectedBalls.map((b: any) => b.number).join(', '),
+        SelectedNumber: this.selectedNumbers,
+        gameName: gameName,
+        Stake: this.Stake,
+        ActualStake: this.Stake,
+        id: Math.random().toString(36).substring(2, 9),
+        chosenBallsList: this.selectedBalls, // generate a random id for the pick
+        IsPromotion: this.selectedPromotion ? true : false,
+      }
+      this.Stake = 0
+      this.cartSrv.updateLotoList(pickItem, index)
+    }
+    //console.log(pickItem)
+
+    if (refreshEventDetails) {
+      this.resetBallPicker();
+    }
+  }
+
+  selectPromotion(promo: any) {
+    this.selectedPromotion = promo;
+    this.Stake = promo.Stake;
+    this.showPromoSelection = false;
+  }
+
+  backButton() {
+    if (this.isAndroidApp) {
+      const fromPromotions = this.route.snapshot.queryParamMap.get('showPromotions') === 'true';
+      if (fromPromotions) {
+        this.router.navigate(['/Machine/Promotions']);
+      } else {
+        this.router.navigate(['/Machine/Games'], { queryParams: { normalGamesShown: true } });
+      }
+    }
+  }
+
+  clearSelections() {
+    this.resetBallPicker();
+  }
+
+  onTotalPriceChange(totalPrice: any) {
+    // Handle total price change if needed
+    this.totalPrice = totalPrice;
+  }
+
+  openMobileCart() {
+    this.openCartOnMobileFlag = true;
+    // Reset flag after a short delay so it can be triggered again on next click
+    setTimeout(() => {
+      this.openCartOnMobileFlag = false;
+    }, 100);
+  }
+
+  async issue100Tickets() {
+    if (this.isBulkIssueInProgress || !this.selectedEvent) {
+      return;
+    }
+
+    this.isBulkIssueInProgress = true;
+
+    try {
+      for (let i = 0; i < 100; i++) {
+        this.quickPick();
+
+        if (this.isPickXGame && this.selectedType) {
+          this.Stake = Number(this.selectedType.MinStake) || 0;
+        } else if (this.isJackpotGame) {
+          this.updateLotoPrice();
+        }
+
+        this.addToBet(false);
+      }
+
+      this.resetBallPicker();
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      if (!this.sharedCart) {
+        this.gnrcSrv.setModalData(true, false, 'Cart is not ready yet. Please try again.');
+        return;
+      }
+
+      await this.sharedCart.issueTicket();
+    }
+    finally {
+      this.isBulkIssueInProgress = false;
+    }
+  }
+
+  async issue100TicketsSeparately() {
+    if (this.isBulkSeparateIssueInProgress || !this.selectedEvent) {
+      return;
+    }
+
+    this.isBulkSeparateIssueInProgress = true;
+
+    try {
+      const initialCartReady = await this.waitForSharedCart();
+      if (initialCartReady && !this.sharedCart?.isLoggedIn) {
+        await this.sharedCart!.issueTicket();
+        return;
+      }
+
+      for (let i = 0; i < 1000; i++) {
+        this.quickPick();
+
+        if (this.isPickXGame && this.selectedType) {
+          this.Stake = Number(this.selectedType.MinStake) || 0;
+        } else if (this.isJackpotGame) {
+          this.updateLotoPrice();
+        }
+
+        this.addToBet(false);
+        const cartReady = await this.waitForSharedCart();
+        if (!cartReady) {
+          this.gnrcSrv.setModalData(true, false, 'Cart is not ready yet. Please try again.');
+          return;
+        }
+
+        await this.sharedCart!.issueTicket();
+      }
+
+      this.resetBallPicker();
+    }
+    finally {
+      this.isBulkSeparateIssueInProgress = false;
+    }
+  }
+
+  private async waitForSharedCart(maxRetries = 30, delayMs = 250): Promise<boolean> {
+    for (let retry = 0; retry < maxRetries; retry++) {
+      if (this.sharedCart) {
+        return true;
+      }
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+    return false;
+  }
+
+  onQuickPickBetItem(event: any) {
+    const { betItem, index } = event;
+    this.quickPick(event.index)
+    //console.log(event)
+
+    // Update the cart service with the modified bet item
+    //this.cartSrv.updateLotoList(betItem);
+  }
+
+  onEditBallInCart(event: any) {
+    const { betItem, ballIndex, ball } = event;
+    this.editingCartItem = betItem;
+    this.editingBallIndex = ballIndex;
+    this.editingBall = ball;
+    this.selectedEditBall = null;
+    this.isEditingCartBall = true;
+  }
+
+  onEditSelectedBall(ball: any) {
+    if (!this.isEditingCartBall || this.editingCartItem == null || this.editingBallIndex === null) {
+      return;
+    }
+
+    const newNumber = ball.number;
+    const currentNumbers = Array.isArray(this.editingCartItem.SelectedNumber) ? [...this.editingCartItem.SelectedNumber] : [];
+    const originalNumber = this.editingBall?.number;
+    const isDuplicate = currentNumbers.includes(newNumber) && newNumber !== originalNumber;
+    if (isDuplicate) {
+      this.gnrcSrv.setModalData(true, false, 'That number is already on this ticket. Choose another number.');
+      return;
+    }
+
+    this.selectedEditBall = ball;
+
+    this.editingCartItem.chosenBallsList[this.editingBallIndex].number = newNumber;
+    if (Array.isArray(this.editingCartItem.SelectedNumber) && this.editingCartItem.SelectedNumber.length > this.editingBallIndex) {
+      this.editingCartItem.SelectedNumber[this.editingBallIndex] = newNumber;
+    }
+    this.editingCartItem.displayBalls = this.editingCartItem.chosenBallsList.map((b: any) => b.number).join(', ');
+    this.editingCartItem.Balls = this.editingCartItem.chosenBallsList.map((b: any) => b.number).join('+');
+    this.cartSrv.updateLotoList(this.editingCartItem, this.editingCartItem.id);
+
+    this.cancelBallEdit();
+  }
+
+  cancelBallEdit() {
+    this.editingCartItem = null;
+    this.editingBallIndex = null;
+    this.editingBall = null;
+    this.selectedEditBall = null;
+    this.isEditingCartBall = false;
+  }
+
+  getEditingDisabledBallNumbers(): any[] {
+    if (!this.isEditingCartBall || !this.editingCartItem || !Array.isArray(this.editingCartItem.SelectedNumber)) {
+      return [];
+    }
+    const originalNumber = this.editingBall?.number;
+    return this.editingCartItem.SelectedNumber.filter((num: any) => num !== originalNumber);
+  }
+}

@@ -1,0 +1,665 @@
+@import '/src/variables.scss';
+
+.cart-container {
+    border-radius: 10px;
+    background: $lightBg;
+    overflow: hidden;
+    font-size: 14px;
+    border-radius: 40px 0 40px 40px;
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.08);
+    padding: 25px 30px;
+
+    /* allow container to grow/stretch inside aside */
+    flex: 1 1 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+
+    .cart-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .clear-btn {
+        color: $lightGreen;
+        font-size: 12px;
+        font-weight: 300;
+        text-decoration-line: underline;
+        cursor: pointer;
+
+        &.back-button {
+            display: none;
+        }
+    }
+
+    .cart-title {
+        margin: 0;
+        font-weight: 700;
+        font-size: 18px;
+        font-family: $font-bold;
+    }
+
+    .close-icon {
+        margin-right: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 17px;
+
+        img {
+            height: 11px;
+            width: 11px;
+        }
+    }
+
+    .type-container {
+        background-color: $darkBg;
+        padding-top: 15px;
+    }
+
+    .type-list {
+        font-weight: 700;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        flex-wrap: wrap;
+
+        &.type-multi {
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            .type {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .choose-quantity {
+        border-radius: 5px;
+        background-color: $countryBg;
+        padding: 4px 5px;
+        width: 80px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >span {
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+            color: $white;
+        }
+
+        .minus,
+        .plus {
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+
+    .bet-item {
+        padding: 15px;
+        background-color: $darkBg;
+        border-radius: 25px;
+        margin-bottom: 15px;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    .title-odd {
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .odd {
+        color: $lightGreen;
+        margin-left: auto;
+    }
+
+    .ticket-infos {
+        padding: 15px;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        align-items: center;
+
+        span:nth-of-type(2) {
+            font-weight: bold;
+        }
+    }
+
+    input {
+        background: transparent;
+        color: $white;
+        border: 1px solid;
+        text-align: center;
+        padding: 6px;
+        border-radius: 5px !important;
+        outline: none;
+        width: 100px;
+    }
+
+    &.loto-cart {
+        .title-odd {
+            margin-bottom: 0;
+            flex-direction: column;
+        }
+
+        .bet-item {
+            display: flex;
+        }
+
+        .title-odd span {
+            margin-bottom: 5px;
+            line-height: 18px;
+        }
+    }
+
+    .greyText {
+        font-weight: normal;
+        font-size: 12px;
+        color: #9F9F9F;
+        line-height: 16px;
+    }
+
+    /* body holder should expand between header and footer */
+    .cart-body-holder {
+        flex: 1 1 auto;
+        min-height: 0;
+        /* allow it to shrink inside flex container */
+        /* no scroll here, let the list itself scroll */
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.total-holder {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: $lightGreen;
+    color: $darkBg;
+    border-bottom: 1px solid $darkBg;
+    font-weight: bold;
+}
+
+.price-submit {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    flex-wrap: wrap;
+    .info-item {
+        width: calc(100% - 150px);
+        background-color: $darkBg;
+        padding: 14px 15px;
+        border-radius: 25px;
+        margin-bottom: 0;
+    }
+}
+
+.promo-ticket-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 10px;
+    flex:100%;
+    span.met {
+        color: #a4f675;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    span.unmet {
+        color: #ffc832;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .promo-hint {
+        color: rgba(255, 200, 50, 0.7);
+        font-size: 0.75rem;
+    }
+}
+
+.list-of-bets {
+    flex: 1 1 auto;
+    min-height: 0;
+    /* allow flex child to shrink and overflow properly */
+    overflow: auto;
+    /* max-height handled by flex container */
+}
+
+.mobile-cart-toggle {
+    display: none;
+}
+
+.mobile-close-btn {
+    display: none;
+}
+
+@media all and (max-width:1400px) {
+
+    .cart-container .cart-header,
+    .cart-container .type-list {
+        padding: 15px 10px;
+    }
+
+    .cart-container .race-title {
+        padding: 0 10px;
+    }
+
+    .total-holder {
+        padding: 10px;
+    }
+}
+
+@media all and (max-width:992px) {
+    .cart-container .clear-btn.back-button {
+        display: block;
+    }
+
+    .mobile-cart-toggle {
+        position: static;
+        height: 39px;
+        border: 0;
+        color: $lightGreen;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+        border-radius: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.20);
+        background: var(--Black-Green, #0B1705);
+        padding: 10px 14px;
+        width: 50%;
+
+    }
+
+    .mobile-cart-count {
+        min-width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background: $darkBg;
+        color: $white;
+        font-size: 12px;
+        line-height: 20px;
+        padding: 0 6px;
+    }
+
+    .cart-body-holder {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .show-cart {
+        .clear-btn {
+            width: 50px;
+
+        }
+
+        .yellow-circle {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+    }
+
+
+    .mobile-close-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        height: 28px;
+        border: 0;
+        border-radius: 14px;
+        background: $darkBg;
+        color: $white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 0 10px;
+        margin-left: 8px;
+    }
+
+    .showOnClickMobile {
+        display: none;
+    }
+
+
+
+    .cart-container {
+        border-radius: 10px 10px 0 0;
+
+        .cart-header {
+            cursor: pointer;
+            padding: 0;
+            border-color: $offWhite;
+
+            .rect-bar {
+                height: 4px;
+                border-radius: 4px;
+                width: 43px;
+                background-color: $lightBlue;
+                position: absolute;
+                top: 10px;
+                left: 46%;
+            }
+
+            .yellow-circle {
+                background-color: $lightGreen;
+                width: 17px;
+                height: 17px;
+                border-radius: 50%;
+                color: $darkBg;
+                text-align: center;
+                font-size: 12px;
+                font-weight: 600;
+                padding-top: 1px;
+                margin-left: auto;
+
+                &.mobileOnly {
+                    display: block !important;
+                }
+            }
+        }
+
+        .type-container {
+            background-color: $offWhite;
+        }
+
+        .type-list.type-multi {
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            .type {
+                font-size: 16px;
+            }
+        }
+
+        .choose-quantity {
+            width: 100px;
+            height: 40px;
+            background-color: $offWhite;
+
+            >span {
+                color: $darkBg;
+            }
+        }
+
+        .total-holder {
+            padding: 15px 20px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+        }
+
+        .clear-btn {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .race-title {
+            padding: 0 20px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+
+        .close-icon {
+            margin-right: 5px;
+            width: 10px;
+            display: flex;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .type-list {
+            padding: 10px 20px 15px;
+            color: $darkBg;
+        }
+
+        .bet-item {
+            padding: 8px 15px;
+            margin-bottom: 5px;
+        }
+
+        .title-odd {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .outcomeName {
+            font-size: 12px
+        }
+
+        .info-item {
+            font-size: 12px;
+        }
+
+        .ticket-infos {
+            padding: 8px 15px;
+        }
+    }
+
+
+    .overlay {
+        content: '';
+        height: 100vh;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        -webkit-transition: opacity 0.35s ease, visibility 0.35s ease;
+        -moz-transition: opacity 0.35s ease, visibility 0.35s ease;
+        -ms-transition: opacity 0.35s ease, visibility 0.35s ease;
+        -o-transition: opacity 0.35s ease, visibility 0.35s ease;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    .overlay.show-cart {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .cart-container {
+        margin-bottom: 0;
+        position: fixed;
+        z-index: 1001;
+        left: 12px;
+        width: calc(100% - 24px);
+        max-height: calc(100vh - 70px);
+        bottom: 0;
+        transform: translateY(calc(100% + 18px));
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        -webkit-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        -moz-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        -ms-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        -o-transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        transition: transform 0.38s ease, opacity 0.25s ease, visibility 0.38s ease;
+        padding: 20px 15px;
+
+        .bet-item,
+        .bet-item span,
+        .ticket-infos,
+        .ticket-infos span,
+        .price-submit .info-item,
+        .price-submit .info-item span {
+            color: $white;
+        }
+
+        .bet-item .odd {
+            color: $lightGreen;
+        }
+
+        .bet-item .greyText {
+            color: #9F9F9F;
+        }
+
+        &.has-bets {
+            z-index: 1001;
+        }
+
+        &.has-bets.show-cart {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        &.mobile-visible-cart {
+            position: static;
+            height: auto;
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            max-height: unset;
+            width: 100%;
+            pointer-events: auto;
+        }
+    }
+
+    .cart-container input {
+        border-color: $darkBg;
+        color: $darkBg;
+    }
+
+    .loto-cart .list-of-bets {
+        padding-top: 6px;
+    }
+
+    .cart-container.loto-cart .title-odd span {
+        margin-bottom: 0;
+        line-height: 16px;
+    }
+
+    .cart-container.loto-cart .bet-item {
+        align-items: center;
+    }
+}
+
+h4 {
+    font-size: 18px;
+}
+
+.cart-container.mobile-visible-cart {
+    position: static;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    max-height: unset;
+    width: 100%;
+    pointer-events: auto;
+    margin-top: 15px;
+    margin-bottom: 5px;
+
+    .bet-item {
+        padding: 0;
+    }
+
+    .close-icon {
+        margin-left: auto;
+    }
+
+    .bet-item {
+        margin-bottom: 12px;
+    }
+
+    .price-submit {
+        gap: 10px;
+        align-items: center;
+    }
+
+    .info-item {
+        width: 100%;
+        border-radius: 25px;
+        border: 1px solid #C2D4E1;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        font-size: 14px;
+        width: 50%;
+        margin-bottom: 0;
+    }
+}
+
+.visible-mobile-ball {
+    width: 34px;
+    height: 34px;
+    background-image: url(/assets/images/ball-icon.png) !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000 !important;
+    font-size: 18px;
+    font-weight: bold;
+    background-size: cover;
+}
+
+.editing-ball {
+    box-shadow: 0 0 0 2px $lightGreen inset;
+    transform: scale(1.08);
+}
+
+.balls-list {
+    row-gap: 8px;
+    column-gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 250px;
+}
+
+.arrow-holder {
+    margin-right: 8px;
+    font-size: 10px;
+    color: #000;
+    position: relative;
+
+    .letter {
+        color: #000 !important;
+        position: absolute;
+        top: 1px;
+        right: calc(50% - 5px);
+        width: 10px;
+        text-align: center;
+    }
+}

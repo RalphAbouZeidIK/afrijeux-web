@@ -1,0 +1,81 @@
+<div class="product-list-container">
+
+    <h2>Our Branded Products</h2>
+    <div class="product-grid">
+        <div *ngFor="let product of products" class="product-card">
+            <!-- Product Image -->
+            <div class="product-image">
+                <img [src]="product.image" [alt]="product.title" />
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <h3 class="product-title">{{ product.title }}</h3>
+                <p *ngIf="product.description" class="product-description">{{ product.description }}</p>
+                <div class="product-price">AED {{ product.price | number: '1.2-2' }}</div>
+            </div>
+
+            <!-- Quantity Controls & Add to Cart -->
+            <div class="product-footer">
+                <div class="quantity-controls">
+                    <button class="btn-quantity" (click)="decreaseQuantity(product.id)" title="Decrease quantity">
+                        −
+                    </button>
+                    <input type="number" class="quantity-input" [value]="productQuantities[product.id]" readonly />
+                    <button class="btn-quantity" (click)="increaseQuantity(product.id)" title="Increase quantity">
+                        +
+                    </button>
+                </div>
+                <button class="btn btn-primary add-to-cart-btn" (click)="addToCart(product)">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cart-overlay" *ngIf="cartOpen" (click)="toggleCart()"></div>
+
+<aside class="cart-drawer" [class.open]="cartOpen">
+    <div class="cart-header">
+        <div>
+            <h3>Your Cart</h3>
+            <p>{{ totalItems }} item{{ totalItems === 1 ? '' : 's' }} selected</p>
+        </div>
+        <button type="button" class="btn-close" (click)="toggleCart()">×</button>
+    </div>
+
+    <div class="cart-items">
+        <div *ngIf="cartItems.length === 0" class="empty-cart">
+            Your cart is empty. Add a product to see it here.
+        </div>
+
+        <div *ngFor="let item of cartItems" class="cart-item">
+            <div class="cart-item-info">
+                <div class="cart-item-title">{{ item.product.title }}</div>
+                <div class="cart-item-meta">{{ item.quantity }} × AED {{ item.product.price | number: '1.2-2' }}</div>
+            </div>
+            <div class="cart-item-actions">
+                <div class="cart-item-total">AED {{ (item.quantity * item.product.price) | number: '1.2-2' }}</div>
+                <button type="button" class="btn-remove" (click)="removeFromCart(item.product.id)">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-footer">
+        <div class="cart-summary">
+            <span>Total</span>
+            <strong>AED {{ cartTotal | number: '1.2-2' }}</strong>
+        </div>
+        <button type="button" class="btn btn-primary btn-checkout" (click)="toggleCart()"
+            [disabled]="cartItems.length === 0">
+            Continue
+        </button>
+    </div>
+</aside>
+
+<button type="button" class="floating-cart-btn" *ngIf="!cartOpen" (click)="toggleCart()">
+    <span class="floating-cart-icon">🛒</span>
+    <span>Cart</span>
+    <span class="cart-badge" *ngIf="totalItems">{{ totalItems }}</span>
+</button>

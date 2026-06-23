@@ -1,0 +1,86 @@
+<h2 *ngIf="isListingPage && !isPromotionsPage && !isInstantGamesPage">All Games</h2>
+<h2 *ngIf="isPromotionsPage">Promotions</h2>
+<h2 *ngIf="isInstantGamesPage">Instant Games</h2>
+<div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
+    <ng-container *ngFor="let game of listItems">
+
+        <!-- Promotions hub card -->
+        <div class="game-card promo-card" *ngIf="game.isPromoHub && isListingPage" (click)="navigateToGame(game)">
+            <div class="game-header">
+                <div class="game-info">
+                    <div class="game-title-row">
+                        <span class="game-badge">{{ game.badgeText }}</span>
+                    </div>
+                    <h3 class="game-title">{{ game.name }}</h3>
+                    <p class="draw-info">View exclusive deals on selected games</p>
+                </div>
+            </div>
+            <button class="play-button">View All Promotions</button>
+        </div>
+
+        <!-- Regular game card -->
+        <div class="game-card" [class.selected]="isGameSelected(game)" [class.promo-card]="game.isPromoCard" *ngIf="!game.IsSalesStopped && !game.isPromoHub" (click)="navigateToGame(game)">
+            <!-- Game Header with Image -->
+            <div class="game-header" *ngIf="isListingPage">
+                <!---->
+
+                <div class="game-info">
+                    <!-- Game Title and Badge -->
+                    <div class="game-title-row">
+                        <div class="game-image" *ngIf="game.imageUrl">
+                            <img [src]="game.imageUrl" [alt]="game.name">
+                        </div>
+                         <!-- <h3 class="game-title" *ngIf="game.gameType=='RAPID'">{{ game.name }}</h3> -->
+                        <span class="game-badge" *ngIf="game.badgeText">{{ game.badgeText }}</span>
+                        <app-countdown [event]="game" [smallTimer]="true"
+                            *ngIf="game.gameType!='RAPID'"></app-countdown>
+                    </div>
+
+                    <!-- Prize Information -->
+                    <div class="prize-row" *ngIf="game.gameType!='RAPID'">
+                        <p class="prize-text">
+                            <span>Prize: </span>
+                            <span class="prize-amount">{{ game.Prize | number:'1.0-0' }}</span>
+                        </p>
+                        <span class="currency-icon"><img src="assets/images/uae-symbol.png" alt=""></span>
+                    </div>
+
+                    <!-- Draw Information -->
+                    <p class="draw-info" *ngIf="game.gameType!='RAPID'">
+                        Draw: {{ game.GameEventDate | date:'MMM d, y - hh:mm a' }}
+                    </p>
+
+                    <p class="draw-info" *ngIf="game.gameType=='RAPID'">Prizes varies depending on ticket.</p>
+                </div>
+            </div>
+
+            <!-- Play Button -->
+            <button [ngClass]="{'play-button':isListingPage,'pick-button':isBanner,'btn btn-primary':isGamePage}"
+               >
+                <ng-container *ngIf="isListingPage">
+                    <span>Pay /</span>
+                    <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt=""> {{ game.Stake
+                        }}</span>
+                </ng-container>
+                <ng-container *ngIf="!isListingPage">
+                    <span>{{ game.GameRouteGenerated }}</span>
+                </ng-container>
+            </button>
+
+        </div>
+    </ng-container>
+    <!-- Instant Games navigation card -->
+    <div class="game-card" (click)="navigateToInstantGames()" *ngIf="isAndroidApp && rapidGames.length > 0 && !isPromotionsPage && !isInstantGamesPage">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="game-title-row">
+                    <h3 class="game-title">Instant Games</h3>
+                    <span class="game-badge">Instant</span>
+                </div>
+                <p class="draw-info">Prizes vary depending on ticket.</p>
+            </div>
+        </div>
+        <button class="play-button">View Instant Games</button>
+    </div>
+</div>
+

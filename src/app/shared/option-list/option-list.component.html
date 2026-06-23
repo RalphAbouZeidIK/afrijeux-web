@@ -1,0 +1,15 @@
+<div class="option-list" role="listbox" aria-label="Option list">
+  <button
+    *ngFor="let option of options"
+    type="button"
+    role="option"
+    class="option-list__item"
+    [class.option-list__item--active]="isSelected(option)"
+    [class.option-list__item--disabled]="option.disabled"
+    [attr.aria-selected]="isSelected(option)"
+    [disabled]="option.disabled"
+    (click)="onOptionClick(option)"
+  >
+    {{ option.TicketTypeName }}
+  </button>
+</div>

@@ -1,0 +1,432 @@
+import { DecimalPipe } from '@angular/common';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+
+import { Subscription } from 'rxjs';
+import { CartService } from 'src/app/services/cart.service';
+import { GenericService } from 'src/app/services/generic.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { MachineService } from 'src/app/services/machine.service';
+import { NativeBridgeService } from 'src/app/services/native-bridge.service';
+import { UserService } from 'src/app/services/user.service';
+
+
+
+@Component({
+  selector: 'app-shared-cart',
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.scss'],
+  standalone: false
+})
+export class CartComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() cssClass: any = ''
+  isMainCart: any = true
+
+  @Input() listOfBets: any = []
+  @Input() selectedEvent: any = null
+  @Input() requiredTicketCount: number | null = null
+  @Input() promoStake: number | null = null
+  @Input() selectedPromotion: any = null
+
+  get promoTicketsNeeded(): number {
+    if (this.requiredTicketCount === null) return 0;
+    return this.requiredTicketCount - (this.listOfBets?.length ?? 0);
+  }
+
+  get isPromoRequirementMet(): boolean {
+    if (this.requiredTicketCount === null) return true;
+    return (this.listOfBets?.length ?? 0) === this.requiredTicketCount;
+  }
+  @Output() editBallInCart = new EventEmitter<{ betItem: any, ballIndex: number, ball: any }>();
+
+  @Input() editingCartItemId: any = null
+  @Input() editingBallIndex: number | null = null
+
+  @Input() openMobileCartFlag: any = false
+  @Output() totalPriceChange = new EventEmitter<number>();
+  @Output() quickPickBetItem = new EventEmitter<any>();
+
+  cartSubscription: Subscription
+
+  showCartButtons = false
+
+  showContainer: any
+
+  totalBets: any
+
+  totalOdds: any
+
+  bonus: any = 0
+
+  listOfPicks: any = []
+
+  WinAmount: any
+
+  /**
+   * Subscribe to login status
+   */
+  loginStatusSubscription: Subscription;
+
+  /**
+   * Flag to check if user is logged in
+   */
+  isLoggedIn: any = false
+
+  showOnClickMobile: any = false
+
+  stake = 200
+
+  bonusRules: any = []
+
+  BonusId = 0
+
+  Math: any;
+
+
+
+  betItem: any
+
+  isDesktop: any = this.gnrcSrv.getIsDesktopView()
+
+  isDesktopSubscription: Subscription
+
+  canIssueTicket = false
+
+  currentUrl: any = window.location.href;
+
+  isSportsBetting = this.currentUrl.includes("Sports")
+
+  isJackpotGame = this.currentUrl.includes("Jackpot")
+
+  isPickXGame = this.currentUrl.includes("PickX") || this.currentUrl.includes("WinBig3") || this.currentUrl.includes("WinBig4") || this.currentUrl.includes("WinBig5")
+
+  lotoTotalPrice: any = 0
+
+  isAndroidApp = this.gnrcSrv.isMachineApp()
+
+  showOnClickMobileSubscription: Subscription;
+
+  //stakeSubscription: Subscription
+
+  constructor(
+    private cartSrv: CartService,
+    private storageSrv: LocalStorageService,
+    private usrSrv: UserService,
+    private gnrcSrv: GenericService,
+    private machineSrv: MachineService,
+    private bridge: NativeBridgeService,
+  ) {
+
+
+
+    this.isDesktopSubscription = this.gnrcSrv.getIsDesktopViewListener().subscribe((isDesktop) => {
+      this.isDesktop = isDesktop;
+    });
+
+    if (this.isSportsBetting) {
+      this.cartSubscription = this.cartSrv.getSBCartData().subscribe((data) => {
+        this.cartInitialize(data)
+      });
+    }
+
+    else {
+      this.cartSubscription = this.cartSrv.getCartData().subscribe((data) => {
+        //console.log(data)
+        this.cartInitialize(data)
+      });
+    }
+
+
+    this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+    });
+
+    this.showOnClickMobileSubscription = this.cartSrv.getShowOnClickMobileListener().subscribe((showOnClickMobile) => {
+      this.showOnClickMobile = showOnClickMobile;
+    });
+
+    this.bridge.getPrintingStatus().subscribe((status) => {
+      //console.log('Printing status updated:', status);
+      this.isIssuing = false;
+      if(!status) {
+        this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
+      }
+    })
+
+  }
+
+  async ngOnInit() {
+    if (this.cssClass == 'mobile-visible-cart') {
+      this.isMainCart = false
+    }
+    this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
+    if (this.isAndroidApp) {
+      this.canIssueTicket = await this.machineSrv.getMachinePermission('TerminalCanIssuTicket')
+    }
+    else {
+      this.canIssueTicket = true
+    }
+    //console.log(this.canIssueTicket)
+
+    let sbCartData = this.storageSrv.getItem('sbCartData')
+    if (sbCartData) {
+      this.cartInitialize(sbCartData)
+    }
+    else {
+      this.loadLotoCartDataFromContext();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedEvent'] && !this.isSportsBetting) {
+      this.loadLotoCartDataFromContext();
+    }
+    if (changes['openMobileCartFlag'] && changes['openMobileCartFlag'].currentValue === true) {
+      this.showOnClickMobile = true;
+    }
+    if (changes['promoStake'] && !this.isSportsBetting) {
+      this.loadLotoCartDataFromContext();
+    }
+  }
+
+  private loadLotoCartDataFromContext() {
+    const lotoCartData = this.cartSrv.getCurrentLotoCartData(this.selectedEvent);
+    if (lotoCartData) {
+      this.cartInitialize(lotoCartData)
+    }
+  }
+
+  cartInitialize(cartData: any) {
+    this.listOfBets = cartData
+    this.showCartButtons = this.listOfBets?.length > 0;
+    if (!this.showCartButtons) {
+      this.showOnClickMobile = false
+    }
+
+    if (this.isSportsBetting) {
+      this.totalBets = parseInt(this.storageSrv.getItem('totalBets'))
+      this.totalOdds = this.storageSrv.getItem('TotaldOdds')
+      this.stake = (cartData.length > 0) ? this.listOfBets[0].StakeFromSearch : 200
+      this.calculateBonus()
+    }
+
+    if ((this.isPickXGame || this.isJackpotGame) && this.listOfBets.length > 0) {
+      this.listOfBets.GameEventId = this.listOfBets[0].gameEventId
+      if (this.promoStake !== null) {
+        this.listOfBets.TicketPrice = this.promoStake;
+      } else {
+        this.listOfBets.TicketPrice = 0
+        this.listOfBets.forEach((ticketItem: any) => {
+          this.listOfBets.TicketPrice += ticketItem.Stake
+        })
+      }
+    }
+    this.totalPriceChange.emit(this.listOfBets.TicketPrice)
+
+    //console.log(this.listOfBets)
+  }
+
+  async calculateBonus() {
+
+    //console.log(this.stake)
+    let minimumPicks = 0
+    this.bonus = 0
+    this.BonusId = 0
+    let allowedCumulatedOdds = 1
+    if (this.bonusRules.length == 0) {
+      this.bonusRules = await this.cartSrv.getBonusRules()
+      //console.log(this.bonusRules)
+    }
+
+    if (this.listOfBets && this.listOfBets.length > 0) {
+      this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).forEach((oddItem: any) => {
+        allowedCumulatedOdds *= oddItem.Odd
+        //console.log(allowedCumulatedOdds)
+      });
+      let selectedBonus = this.bonusRules.find((selectedBonus: any) => (selectedBonus.FromPickRequiered == this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).length) && (selectedBonus.MinStackeRequiered <= this.stake))
+      //console.log(selectedBonus)
+      if (selectedBonus) {
+        this.BonusId = selectedBonus?.BonusRuleId
+        //console.log(this.listOfBets.length)
+        let unitStake = this.stake / selectedBonus?.FromPickRequiered
+        this.bonus = (selectedBonus?.Percentage / 100) * unitStake * this.listOfBets.filter((betItem: any) => betItem.HasMinimumOdd).length * allowedCumulatedOdds
+        this.bonus = Math.round(this.bonus * 100) / 100;
+      }
+      else {
+        this.bonus = 0
+      }
+
+    }
+    this.WinAmount = this.totalOdds * this.stake + this.bonus
+    this.WinAmount = Math.round(this.WinAmount * 100) / 100
+    //console.log(this.WinAmount)
+  }
+
+  addBetToTicket(betItem: any) {
+    //console.log(betItem)
+  }
+
+  onAmountChange() {
+    this.calculateBonus()
+  }
+
+  clearBets() {
+    if (this.isSportsBetting) {
+      this.storageSrv.removeItem('sbCartData')
+      this.cartSrv.clearBets()
+      return;
+    }
+
+    this.cartSrv.clearCurrentLotoBets(this.selectedEvent)
+  }
+
+  removeItemFormSlip(betItem: any) {
+    this.cartSrv.removeBetItem(betItem)
+  }
+
+  removeLotoItemFormSlip(betItem: any, index: any) {
+    this.cartSrv.removeLotoBetItem(betItem, index, this.selectedEvent)
+  }
+
+  isEditingBall(betItem: any, index: number): boolean {
+    return this.editingCartItemId != null && this.editingBallIndex === index && betItem?.id === this.editingCartItemId;
+  }
+
+  quickPickForBetItem(betItem: any, index: any) {
+    this.quickPickBetItem.emit({ betItem, index })
+  }
+
+  OnclickIsMobile() {
+    if (!this.isDesktop) {
+      this.showOnClickMobile = !this.showOnClickMobile
+    }
+  }
+
+  openCartOnMobile() {
+    if (!this.isDesktop && this.listOfBets?.length > 0) {
+      this.cartSrv.setShowOnClickMobile(true)
+    }
+  }
+
+  hideMenus() {
+    this.cartSrv.setShowOnClickMobile(false)
+  }
+
+  isIssuing = false;
+
+  async issueTicket() {
+    if (this.isIssuing) return;
+
+    if (!this.isPromoRequirementMet) {
+      const needed = this.promoTicketsNeeded;
+      const msg = needed > 0
+        ? `Please add ${needed} more ticket${needed > 1 ? 's' : ''} to use this promotion.`
+        : `Please remove ${Math.abs(needed)} ticket${Math.abs(needed) > 1 ? 's' : ''} to use this promotion.`;
+      this.gnrcSrv.setModalData(true, false, msg);
+      return;
+    }
+
+    if (!this.isLoggedIn) {
+      this.usrSrv.setLoginPopupStatus({
+        show: true,
+        type: 'login'
+      })
+      return
+    }
+
+    this.isIssuing = true;
+    console.log(this.listOfBets)
+    try {
+      let apiResponse: any
+      if (this.isSportsBetting) {
+        this.listOfPicks = []
+        this.listOfBets.forEach((betItem: any) => {
+          this.listOfPicks.push({
+            Outcome: betItem,
+            Stake: this.stake / this.totalBets,
+            GameEventId: betItem.MatchId
+          })
+        });
+
+        let ticketBody = {
+          IsVoucher: 0,
+          Stake: this.stake,
+          GamePick: this.listOfPicks,
+          TypeId: (this.listOfPicks.length > 1) ? 2 : 1,
+          IsBouquet: false,
+          BonusId: this.BonusId,
+          WinAmount: this.WinAmount,
+          BonusAmount: this.bonus,
+          LoyalityReferenceId: 0
+        }
+        apiResponse = await this.machineSrv.issueSBTicket(ticketBody)
+      }
+      else {
+        let betsToIssue = this.listOfBets;
+        if (this.selectedPromotion && this.promoStake !== null) {
+          betsToIssue = this.listOfBets.map((item: any, index: number) => ({
+            ...item,
+            Stake: index === 0 ? this.promoStake : 0,
+            IsPromotion: true
+          }));
+          betsToIssue.GameEventId = this.listOfBets.GameEventId;
+          betsToIssue.TicketPrice = this.listOfBets.TicketPrice;
+        }
+        apiResponse = await this.machineSrv.issueTicket(betsToIssue, true, null, this.selectedPromotion)
+      }
+
+      //console.log(this.listOfBets)
+      if (this.isAndroidApp && apiResponse.DataToPrint) {
+        this.clearBets()
+        this.gnrcSrv.setModalData(true, true, apiResponse.message)
+      }
+
+      else {
+        //console.log(apiResponse)
+        if (apiResponse.Status == true || apiResponse == true) {
+          this.clearBets()
+          this.usrSrv.setUserBalance(await this.gnrcSrv.getBalance())
+          this.gnrcSrv.setModalData(true, true, apiResponse.message || 'Betslip Confirmed successfully.')
+          this.isIssuing = false;
+        }
+        else {
+          this.gnrcSrv.setModalData(true, false, apiResponse.message || 'Failed to confirm betslip.')
+          this.isIssuing = false;
+        }
+      }
+      //console.log(apiResponse);
+    } catch (err) {
+      console.error(err);
+      this.gnrcSrv.setModalData(true, false, 'Something went wrong.');
+      this.isIssuing = false;
+    }
+    finally {
+      this.isIssuing = false;
+    }
+  }
+
+  getTicketTypeInitials(ticketTypeName: string): string {
+    if (!ticketTypeName || typeof ticketTypeName !== 'string') {
+      return '';
+    }
+    return ticketTypeName
+      .split(' ')
+      .filter(word => word.trim().length > 0)
+      .map(word => word.trim().charAt(0).toUpperCase())
+      .join('');
+  }
+
+  onBallClick(betItem: any, ballIndex: number, ball: any) {
+    //console.log('Ball clicked:', { betItem, ballIndex, ball });
+    this.editBallInCart.emit({ betItem, ballIndex, ball });
+  }
+
+  ngOnDestroy(): void {
+    if (this.isAndroidApp) {
+      this.cartSrv.clearAllLotoBets()
+    }
+
+    this.isDesktopSubscription.unsubscribe();
+    this.cartSubscription.unsubscribe();
+    this.loginStatusSubscription.unsubscribe();
+  }
+}

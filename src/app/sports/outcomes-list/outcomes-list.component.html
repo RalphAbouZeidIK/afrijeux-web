@@ -1,0 +1,9 @@
+<div class="outcome-item" *ngFor="let outcomeItem of OutcomesList">
+    <h4>{{outcomeItem.OddsOutcomes[0].Market}}</h4>
+    <div class="odds-list">
+        <ng-container *ngFor="let oddItem of outcomeItem.OddsOutcomes">
+            <app-odd-item [oddItem]="oddItem" [isSelected]="oddItem.isSelected"></app-odd-item>
+        </ng-container>
+    </div>
+
+</div>

@@ -1,0 +1,239 @@
+@use '/src/variables' as *;
+
+.promo-selection {
+    padding: 20px;
+    margin-bottom: 16px;
+    background: rgba(255, 200, 50, 0.06);
+    border: 1px solid rgba(255, 200, 50, 0.3);
+    border-radius: 12px;
+
+    h4 {
+        margin: 0 0 16px;
+        color: #ffc832;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .promo-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .promo-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #1d1c1c;
+        border: 1px solid rgba(255, 200, 50, 0.25);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            border-color: rgba(255, 200, 50, 0.6);
+            background: rgba(255, 200, 50, 0.08);
+        }
+
+        .promo-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .promo-stake {
+            color: #ffc832;
+            font-weight: 600;
+        }
+    }
+}
+
+.active-promo-badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 10px;
+    background: rgba(255, 200, 50, 0.15);
+    border: 1px solid rgba(255, 200, 50, 0.4);
+    border-radius: 6px;
+    color: #ffc832;
+    font-size: 0.8rem;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(255, 200, 50, 0.25);
+    }
+}
+
+.btns-holder {
+    display: flex;
+    /* already applied via d-flex but ensure context */
+
+    a {
+        /* let each button size to its text plus padding */
+        flex: 0 0 auto;
+        /* don’t stretch or shrink */
+        display: flex;
+        /* shrink-wrap content */
+        padding: 10px 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qp-button {
+        color: $lightGreen;
+        border: 2px solid $lightGreen;
+        background-color: rgba(164, 246, 117, 0.15)
+    }
+
+}
+
+
+/* Hide native browser spinner controls on number inputs. */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+
+.countdown-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 15px;
+    width: calc(100% + 30px);
+    margin-left: -15px;
+    justify-content: space-between;
+    align-items: center;
+    background: #2B3422;
+    color: $white;
+    margin-bottom: 7px;
+
+    .countdown-label {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .countdown-parts {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .countdown-part {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: #0B1705;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        height: 35px;
+        width: 35px;
+        justify-content: center;
+        letter-spacing: 1px;
+        color: $lightGreen;
+    }
+
+    .countdown-unit {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-left: 1px;
+    }
+}
+
+.back-arrow {
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 10px;
+    top: 7px;
+}
+
+.edit-instruction {
+    font-size: 12px;
+    line-height: 17px;
+
+    button {
+        background: transparent;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        color: $lightGreen;
+        margin-left: 10px
+    }
+}
+
+@media all and (max-width: 992px) {
+    main {
+        width: 100%
+    }
+
+    .btns-holder a {
+        flex: 1;
+        padding: 8px 10px
+    }
+
+    .buttons-bg {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        box-shadow:
+            0px 10px 30px 0px rgba(0, 0, 0, 0.08),
+            /* Drop shadow */
+            inset 0px 4px 4px 0px rgba(145, 145, 145, 0.25);
+        /* Inner shadow */
+        height: 75px;
+        z-index: 2;
+        background: #0a1705;
+
+        &.androidApp {
+            height: 145px;
+        }
+    }
+
+    .back-arrow {
+        display: block;
+    }
+
+    .draw-header {
+        position: relative;
+        padding-left: 15px;
+
+        * {
+            text-align: left;
+        }
+
+        .event-date {
+            display: none;
+        }
+    }
+
+    h5 {
+        font-size: 18px;
+        margin-bottom: 0;
+        line-height: 35px;
+        display: flex;
+        .ticket-price{
+            margin-left:auto;
+        }
+    }
+
+    .game-note {
+        font-size: 12px
+    }
+
+
+
+    .confirm-button {
+        background: #F85714 !important;
+        border-color: #F85714 !important;
+        color: $white;
+    }
+}

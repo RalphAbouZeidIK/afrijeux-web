@@ -1,0 +1,40 @@
+<div class="form-holder machine-layout">
+    <div class="form-bg ">
+        <div class="form-header">
+            <h2>{{ 'machine.adminWithdraw.title' | translate }}</h2>
+
+            <p>{{ 'machine.adminWithdraw.message' | translate }}</p>
+
+            <a class="close-icon" routerLink="/Machine/Games">
+                <img src="assets/images/close-icon.svg" alt="close">
+            </a>
+
+        </div>
+
+        <form class="form-content" [formGroup]="withdrawForm">
+
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'machine.shared.username' | translate }}
+                </label>
+
+                <input type="text" class="form-control" title="Username" formControlName="Username"
+                    placeholder="Username (Phone or Email)" />
+            </div>
+
+            <div class="form-group">
+                <label class="title-label">
+                    {{ 'machine.shared.Code' | translate }}
+                </label>
+
+                <input type="text" class="form-control" title="Ticket Code" formControlName="Code" placeholder="Ticket Code" />
+            </div>
+        </form>
+
+        <div class="form-btns">
+            <button class="btn btn-primary" (click)="issueTicket()" [disabled]="withdrawForm.invalid">
+                {{ 'machine.generic.Withdraw' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

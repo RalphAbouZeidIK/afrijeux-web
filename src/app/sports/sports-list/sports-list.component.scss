@@ -1,0 +1,67 @@
+@use '/src/variables' as *;
+
+.sports-list {
+    margin-bottom: 25px;
+}
+
+.sport-holder,
+.categories a {
+    cursor: unset;
+    display: flex;
+    justify-content: space-between;
+}
+
+.img-title,
+.arrow {
+    cursor: pointer;
+}
+
+.categories {
+    background: $lightBg;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+
+    a {
+        cursor: unset;
+        font-weight: normal;
+        font-size: 14px;
+
+    }
+
+
+}
+
+.tournaments {
+    margin-top: 10px;
+}
+
+.arrow.active {
+    transform: rotate(90deg);
+}
+
+.form-control {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+    text-align: center;
+    flex: 0 0 32%;
+    line-height: 1.2;
+    padding: 5px 5px 7px;
+    min-height: 48px;
+}
+
+.form-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+
+    &:not(:last-of-type) {
+        margin-right: 7px
+    }
+}

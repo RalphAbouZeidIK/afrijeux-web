@@ -1,0 +1,470 @@
+@use '/src/variables' as *;
+
+.cart-container {
+    overflow: hidden;
+    padding-left: 20px;
+
+    .btn {
+        width: 100%;
+        border-radius: 0;
+
+    }
+
+    .cart-header {
+        background: $lightBg;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid $darkBg;
+    }
+
+    .clear-btn {
+        color: $lightGreen;
+        font-size: 12px;
+        font-weight: 300;
+        text-decoration-line: underline;
+        cursor: pointer;
+    }
+
+    .cart-title {
+        margin: 0;
+    }
+
+    .race-title {
+        color: $lightGrey;
+        font-size: 12px;
+        display: block;
+        padding: 0 20px;
+    }
+
+    .close-icon {
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .type-container {
+        // background-color: $darkBg;
+        padding-top: 15px;
+
+    }
+
+    .type-list {
+        font-weight: 700;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 20px;
+        flex-wrap: wrap;
+
+        .type {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        &.ticket-type {
+            margin-bottom: 20px;
+            justify-content: unset;
+            padding: 0 20px;
+        }
+
+        &.price-holder {
+            padding-top: 15px;
+        }
+
+        &.type-multi {
+            padding-top: 10px;
+            padding-bottom: 15px;
+
+            .type {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .choose-quantity {
+        background-color: $darkBg;
+        padding: 0;
+        width: 80px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >span {
+            font-size: 14px;
+            width: 33%;
+            text-align: center;
+            color: $white;
+        }
+
+        .minus,
+        .plus {
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+            color: $white;
+            padding: 0 0 4px;
+        }
+    }
+}
+
+.bet-item {
+    background: $lightBg;
+    border-bottom: 1px solid $lightGreen;
+    padding-bottom: 15px;
+
+}
+
+.total-holder {
+
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    padding-top: 10px;
+    background-color: $lightBg;
+    font-weight: bold;
+}
+
+input {
+    max-width: 100%;
+    border: none;
+    background: transparent;
+    color: $white;
+    text-align: center;
+    padding: 4px 5px 7px;
+    font-weight: bold;
+}
+
+/* Hide arrows in number input in Webkit browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+.list-of-horses span {
+    display: inline-block;
+    border: 1px solid $white;
+    margin-right: 0;
+    border-radius: 5px;
+    padding-bottom: 8px;
+    cursor: pointer;
+    min-width: 35px;
+    text-align: center;
+}
+
+.list-of-horses {
+    display: flex;
+    /* horizontal */
+    gap: 8px;
+    /* spacing */
+}
+
+.horse-item {
+    border: 1px solid $white;
+    margin-right: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 35px;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.cart-body-holder.ticket-body {
+    border: 1px solid $lightGreen;
+    margin-bottom: 0px;
+}
+
+.cart-body-holder {
+    margin-bottom: 20px;
+    border: 1px solid $lightGreen;
+}
+
+
+.bet-options {
+    display: flex;
+    align-items: center;
+}
+
+.title-order {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $lightGrey;
+    font-size: 12px;
+    padding: 0 20px;
+    margin-bottom: 10px;
+
+    .race-title {
+        padding: 0;
+    }
+}
+
+/* The floating clone while dragging */
+.cdk-drag-preview {
+    background: #fffbe7;
+    border: 2px solid #f4c542;
+    color: #333;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* The placeholder that stays in the list */
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+/* The actual item becomes semi-transparent when dragging */
+.cdk-drag-dragging {
+    opacity: 0.4;
+    border: 2px dashed #f4c542;
+}
+
+.cdk-drop-list-dragging .horse-item:not(.cdk-drag-placeholder) {
+  transition: transform 200ms ease;
+}
+
+
+
+@media all and (max-width:1400px) {
+
+    .cart-container .cart-header,
+    .cart-container .type-list {
+        padding: 15px 10px;
+    }
+
+    .cart-container .race-title {
+        padding: 0 10px;
+    }
+
+    .total-holder {
+        padding: 10px;
+    }
+}
+
+@media all and (max-width:992px) {
+    .cart-body-holder {
+        max-height: 0;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        margin-bottom: 0;
+    }
+
+    .bet-item {
+        background: transparent;
+        padding-bottom: 0;
+    }
+
+    input {
+        background: $darkBg
+    }
+
+    .show-cart {
+        .cart-body-holder {
+            max-height: 100vh;
+        }
+
+        .clear-btn {
+            width: auto;
+
+        }
+
+        .yellow-circle {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+    }
+
+    .clear-btn {
+        overflow: hidden;
+        width: 0;
+        -webkit-transition: width 0.5s ease-in-out;
+        -moz-transition: width 0.5s ease-in-out;
+        -ms-transition: width 0.5s ease-in-out;
+        -o-transition: width 0.5s ease-in-out;
+        transition: width 0.5s ease-in-out;
+        white-space: nowrap;
+    }
+
+    .showOnClickMobile {
+        display: none;
+    }
+
+    .list-of-bets {
+        overflow: auto;
+        max-height: 200px;
+    }
+
+    .cart-container {
+        background-color: $white;
+        border-radius: 7px 7px 0 0;
+        padding-left: 0;
+        z-index: 3;
+        position: relative;
+        // bottom: -100px;
+        // transition: all 0.3s ease;
+
+        // &.show-full {
+        //     bottom: 0;
+        // }
+
+        .cart-header {
+            cursor: pointer;
+            padding: 7px 20px 6px 20px;
+            border-color: $offWhite;
+            background: transparent;
+
+
+            .rect-bar {
+                height: 4px;
+                border-radius: 4px;
+                width: 43px;
+                background-color: $lightBlue;
+                position: absolute;
+                top: 10px;
+                left: 46%;
+            }
+
+            .yellow-circle {
+                background-color: $lightGreen;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                color: $darkBg;
+                text-align: center;
+                font-size: 14px;
+                font-weight: 600;
+                padding-top: 3px;
+                margin-left: auto;
+
+                &.mobileOnly {
+                    display: block !important;
+                }
+            }
+        }
+
+        .type-container {
+            background-color: $offWhite;
+            padding: 5px 20px;
+        }
+
+        .type-list.type-multi:first-of-type {
+            margin-top: 0;
+        }
+
+        .type-list.type-multi {
+            margin-top: 5px;
+            padding: 0;
+        }
+
+        .choose-quantity {
+            width: 100px;
+            height: auto;
+
+        }
+
+        .total-holder {
+            padding: 15px 20px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+        }
+
+        .clear-btn {
+            font-weight: 400;
+        }
+
+        .race-title {
+            padding: 0;
+        }
+
+        .close-icon {
+            margin-right: 10px;
+            width: 12px;
+            display: flex;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .type-list {
+            padding: 0;
+            color: $darkBg;
+            padding-top: 5px;
+
+            &.price-holder {
+                padding: 0px 20px 10px;
+                background: $offWhite;
+            }
+
+            .horse-item {
+                border-color: $darkBg;
+            }
+        }
+
+
+
+        .type-list.ticket-type {
+            margin-bottom: 5px;
+            padding: 0
+        }
+
+        .title-order {
+            padding: 0
+        }
+
+        .inputs-block {
+            padding: 10px 20px;
+        }
+
+    }
+
+    .cart-title {
+        color: $darkBg;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .cart-container .btn,
+    .clear-btn {
+        font-size: 14px
+    }
+
+    .cart-body-holder,
+    .race-title,
+    .cart-container .type-list.type-multi .type {
+        font-size: 12px;
+    }
+
+
+    .overlay {
+        content: '';
+        height: 100vh;
+        width: 100%;
+        top: 0;
+        left: 0;
+        position: fixed;
+        display: none;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 2;
+    }
+
+    .overlay.show-cart {
+        display: block;
+    }
+
+}

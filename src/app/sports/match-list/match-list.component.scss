@@ -1,0 +1,69 @@
+@use '/src/variables' as *;
+
+.match-item {
+    border-radius: 10px;
+    background: $lightBg;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+h3 {
+    font-size: 16px;
+    margin-bottom: 0;
+    padding-left: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.odds-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 0 0 49%;
+}
+
+.date-title {
+    display: flex;
+    align-items: center;
+    flex: 0 0 49%;
+}
+
+.date {
+    text-align: center;
+    font-size: 12px;
+}
+
+.tournament-name {
+    display: block;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.market-name {
+    margin-bottom: 10px;
+    font-size: 20px;
+    width: 49%;
+    display: block;
+    margin-left: auto;
+}
+
+
+@media all and (max-width:992px) {
+    .market-name {
+        display: none;
+    }
+
+    .match-item {
+        display: block;
+    }
+
+    .date-title {
+        margin-bottom: 10px;
+    }
+
+    h3 {
+        font-size: 14px
+    }
+}

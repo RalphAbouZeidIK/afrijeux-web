@@ -1,0 +1,59 @@
+<div class="report-page">
+
+
+    <div class="page-header">
+        <a class="back-arrow" (click)="onBackClick()">
+            <img src="assets/images/back-arrow.svg" alt="Back">
+        </a>
+        <h2>{{ isCheckResults ?
+            ('machine.routerLinks.checkResults' | translate) :
+            ('machine.routerLinks.reports' | translate) }}
+        </h2>
+    </div>
+    <div class=" form-content">
+        <!-- <div class="form-group game-choice" *ngIf="!isCheckResults">
+            <label class="title-label">{{'machine.chooseGames' | translate}}</label>
+
+            <div class="options-container single-checkbox">
+                <label *ngFor="let game of gamesList" class="option-item"
+                    [ngClass]="{ 'selected': selectedGames && selectedGames.indexOf(game) > -1 }">
+                    <input [type]="'checkbox'" [value]="game"
+                        [checked]="selectedGames && selectedGames.indexOf(game) > -1"
+                        (change)="selectedGamesChange(game, $event)" />
+                    {{ game.Name }}
+                </label>
+            </div>
+
+        </div> -->
+
+
+
+        <div class="form-group d-flex input-holder">
+
+            <div class="date-holder">
+                <app-datepicker label="Date From" [initialDate]="yesterdayDate"
+                    (dateChangeEvent)="onDateChange($event,'FromDate')"></app-datepicker>
+            </div>
+            <div class="date-holder" *ngIf="!isCheckResults">
+                <app-datepicker label="Date To" [initialDate]="yesterdayDate"
+                    (dateChangeEvent)="onDateChange($event,'ToDate')"></app-datepicker>
+            </div>
+        </div>
+
+        <div [innerText]="dataToPrint" class="report-holder" *ngIf="dataToPrint && showReport"></div>
+
+        <div class="form-btns d-flex">
+            <button class="btn btn-primary" (click)="getReports()">
+                {{'machine.generic.submit' | translate}}
+            </button>
+            <button class="btn btn-primary" (click)="getReports(true)" *ngIf="canPrintReport">
+                {{'machine.generic.print' | translate}}
+            </button>
+            <!-- <button class="btn btn-primary" routerLink="/Machine/Games">
+                    {{'machine.generic.back' | translate}}
+                </button> -->
+        </div>
+
+    </div>
+
+</div>

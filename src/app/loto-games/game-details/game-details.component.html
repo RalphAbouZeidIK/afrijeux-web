@@ -1,0 +1,25 @@
+<div class="details-container">
+  <div class="details-inner">
+    <div class="text-blocks">
+      <div class="block draw-info">
+        <h3>{{ drawInfoTitle }}</h3>
+        <p>{{ drawInfoText }}</p>
+      </div>
+      <div class="block highlights" *ngIf="highlights.length">
+        <h3>{{ highlightsTitle }}</h3>
+        <ul>
+          <li *ngFor="let h of highlights">{{ h }}</li>
+        </ul>
+      </div>
+      <div class="block examples" *ngIf="examples.length">
+        <h3>{{ exampleTitle }}</h3>
+        <ul>
+          <li *ngFor="let e of examples">{{ e }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="image-block" *ngIf="imageUrl">
+      <img [src]="imageUrl" alt="" />
+    </div>
+  </div>
+</div>

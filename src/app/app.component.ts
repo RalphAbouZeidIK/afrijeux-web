@@ -1,0 +1,260 @@
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { UserService } from './services/user.service';
+import { NavigationEnd, NavigationError, NavigationStart, Router, Event } from '@angular/router';
+import { LoaderService } from './services/loader-service.service';
+import { GenericService } from './services/generic.service';
+import { TranslateService } from '@ngx-translate/core';
+import { PageTitleService } from './services/page-title.service';
+import { MachineService } from './services/machine.service';
+import { environment } from '../environments/environment';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
+})
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  title = 'WinBig';
+  isFullwidth = false
+  /**
+   * Subscribe to login status
+   */
+  loginStatusSubscription: Subscription | any;
+
+
+  loginPopupStatusSubscription: Subscription | any;
+
+  /**
+   * Flag to check if user is logged in
+   */
+  isLoggedIn: any = false
+
+  loginObject = {
+    show: false,
+    type: 'login'
+  }
+
+  /**
+    * Flag to toggle loader
+    */
+  isLoading = false
+  routes: any;
+  navList: any = [];
+
+  /**
+   * Array to store notifications list 
+   */
+  notificationsList: any = []
+  scannedResult: any = '';
+
+  isAndroidApp = false
+
+  isTesting = true
+
+  hideHeader = false
+
+
+  private resizeTimeout: any;
+
+  @HostListener('window:resize')
+  onResize() {
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(() => {
+      //console.log('resize')
+
+      this.gnrcSrv.setIsDesktopView(window.innerWidth > 992);
+      this.gnrcSrv.setIsMobileView(window.innerWidth <= 992)
+    }, 300);
+  }
+
+  constructor(
+    private translate: TranslateService,
+    private usrSrv: UserService,
+    private router: Router,
+    private loaderService: LoaderService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private gnrcSrv: GenericService,
+    private pageTitleService: PageTitleService,
+    private machineSrv: MachineService
+  ) {
+
+
+    translate.setDefaultLang('en');
+    translate.use('en');
+
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    this.loginStatusSubscription = this.usrSrv.getLoginStatus().subscribe((loggedIn) => {
+      //console.log('Login status changed:', loggedIn);
+      this.isLoggedIn = loggedIn;
+      this.getMenuItems()
+    });
+    if (!this.isAndroidApp) {
+      // this.isLoggedIn will be set in ngOnInit asynchronously
+
+
+      this.loginPopupStatusSubscription = this.usrSrv.getLoginPopupStatus().subscribe((data) => {
+        //console.log(data)
+        this.loginObject = data
+      });
+      //console.log(this.isLoggedIn)
+
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          document.querySelector('.header-main')?.classList.remove("active-mobile-menu");
+          if ((event.url == '/resultat') || (event.url == '/comment-parier')) {
+            this.isFullwidth = true
+          } else {
+            this.isFullwidth = false
+          }
+        }
+      });
+
+      this.usrSrv.$notifyUsers().subscribe((event: any) => {
+        this.notificationsList.push({
+          msg: event.message,
+          isLatest: false,
+          id: Date.now(),
+          type: event.type
+        })
+        setTimeout(() => {
+          this.notificationsList[this.notificationsList.length - 1].isLatest = true
+        }, 100);
+
+        setTimeout(() => {
+          if (this.notificationsList.length > 0) {
+            this.notificationsList[0].isLatest = false
+            setTimeout(() => {
+              this.notificationsList.splice(0, 1)
+            }, 500);
+
+          }
+        }, 10000);
+      });
+    }
+  }
+
+
+  async ngOnInit(): Promise<void> {
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    this.isAndroidApp = this.gnrcSrv.isMachineApp()
+    this.gnrcSrv.setIsDesktopView(window.innerWidth > 992)
+    this.getMenuItems()
+    this.isLoggedIn = await this.usrSrv.isUserLoggedIn();
+    if (!this.isAndroidApp) {
+      this.pageTitleService.init();
+    }
+    this.updateHeaderVisibility()
+  }
+
+  updateHeaderVisibility() {
+    this.hideHeader = window.location.href.includes("Machine/PickX") || window.location.href.includes("Machine/Jackpot") || window.location.href.includes("Machine/WinBig3") || window.location.href.includes("Machine/WinBig4") || window.location.href.includes("Machine/WinBig5")
+
+  }
+
+  /**
+   * Set loading flag after the view init
+   */
+  ngAfterViewInit() {
+    //window.//console.log = () => { }
+    setTimeout(() => {
+      this.setLoader()
+    }, 1);
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+        if (this.isAndroidApp) {
+          this.machineSrv.setAdminLoginStatus(false);
+        }
+
+      }
+
+      if (event instanceof NavigationEnd) {
+        // Hide loader after navigation completes
+
+        if (this.usrSrv.sessionExpired()) {
+          this.usrSrv.signOut()
+          this.router.navigate((this.isAndroidApp) ? ['/Machine/Login'] : [''])
+        }
+        document.body.classList.remove("show-mobile-menu")
+        this.updateHeaderVisibility()
+      }
+
+      if (event instanceof NavigationError) {
+        // Hide loader on navigation error
+        //console.log(event.error);
+      }
+    });
+  }
+
+  /**
+   * Loader subscriber
+   */
+  setLoader() {
+    this.loaderService.httpProgress().subscribe((status: boolean) => {
+      if (status) {
+        this.isLoading = true
+      } else {
+        this.isLoading = false
+      }
+      this.changeDetectorRef.detectChanges()
+    });
+
+  }
+
+  async getMenuItems() {
+
+    if (this.isAndroidApp) {
+      let machineData = await this.machineSrv.getMachineData()
+      //console.log(machineData)
+      let games = machineData?.Games
+      //console.log(games)
+      if (games) {
+        games.forEach((gameItem: any) => {
+          this.navList.push(gameItem)
+
+        });
+      }
+    }
+
+    // desktop clients no longer build navList here; header obtains the
+    // menu from MenuService which already applies showLink/shouldBeLoggedIn
+    // rules.
+
+
+
+  }
+
+  async refreshToken() {
+    return
+    const apiResponse = await this.gnrcSrv.refreshToken()
+  }
+
+
+  /**
+   * Hide notification
+   * @param notification 
+   */
+  removeNotificaiton(notification: any) {
+    const notificationFromList = this.notificationsList.find((item: any) => item.id == notification.id)
+    notificationFromList.isLatest = false
+    setTimeout(() => {
+      let notificationIndex = this.notificationsList.findIndex((item: any) => item.id == notification.id)
+      this.notificationsList.splice(notificationIndex, 1)
+    }, 400);
+  }
+
+  changeLanguage() {
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+  }
+
+
+
+  ngOnDestroy(): void {
+    this.loginStatusSubscription.unsubscribe();
+    this.usrSrv.$notifyUsers().unsubscribe();
+  }
+
+}

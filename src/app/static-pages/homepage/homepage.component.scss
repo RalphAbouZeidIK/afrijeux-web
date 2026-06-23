@@ -1,0 +1,99 @@
+@use '/src/variables' as *;
+
+
+
+
+.homepage-container {
+    background-color: $darkBg;
+    color: $white;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+
+}
+
+// ===== SEARCH & NAVIGATION BUTTONS =====
+.results-nav {
+    .search-btn {
+        background: linear-gradient(135deg, rgba(164, 246, 117, 0.1) 0%, rgba(164, 246, 117, 0.05) 100%);
+        border: 1px solid $lightBg;
+        color: $white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-family: $font-regular;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        span:first-child {
+            font-size: 18px;
+        }
+
+        &:hover {
+            background: linear-gradient(135deg, rgba(164, 246, 117, 0.2) 0%, rgba(164, 246, 117, 0.1) 100%);
+        }
+    }
+
+    .view-results-link {
+        color: $lightGreen;
+        text-decoration: none;
+        font-family: $font-regular;
+        font-weight: 500;
+        transition: all 0.3s ease;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+    .hero-banner {
+        padding: 30px;
+        margin: 30px;
+    }
+
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-banner {
+        .hero-content {
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .hero-title {
+            font-size: 36px;
+            line-height: 50px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+        }
+    }
+
+    .section-header {
+        h2 {
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    .games-grid,
+    .results-grid,
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}

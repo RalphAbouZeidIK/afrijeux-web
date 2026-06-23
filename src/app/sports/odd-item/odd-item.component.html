@@ -1,0 +1,4 @@
+<div class="odd-item" (click)="addOdd(oddItem)" [ngClass]="{'isSelected':isSelected}">
+    {{oddItem.Outcome}}
+    <span class="odd">{{oddItem.Odd | number:'1.0-3'}}</span>
+</div>

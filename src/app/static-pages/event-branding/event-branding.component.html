@@ -1,0 +1,15 @@
+<div class="bp-page">
+
+  <app-bp-hero [imageUrl]="heroContent.imageUrl" [imageAlt]="heroContent.imageAlt" [title]="heroContent.title"
+    [description]="heroContent.description">
+  </app-bp-hero>
+
+  <div class="bp-sections">
+    <app-branding-showcase-block *ngFor="let s of sections" [title]="s.title" [items]="s.items" [reverse]="s.reverse"
+      [imageUrl]="s.imageUrl">
+    </app-branding-showcase-block>
+  </div>
+
+  <a class="btn btn-primary contact-us-btn" (click)="showContactUs = true">Contact Us</a>
+  <app-contact-us *ngIf="showContactUs" (close)="showContactUs = false"></app-contact-us>
+</div>

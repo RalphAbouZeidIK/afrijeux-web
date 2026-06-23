@@ -1,0 +1,47 @@
+<div class="reunions-list">
+    <div class="page-header">
+        <h2>{{ 'hpb.results.title' | translate }}</h2>
+        <app-datepicker (dateChangeEvent)="onDateChange($event)" parentClass="resulats-page"></app-datepicker>
+    </div>
+
+    <div class="country-level" *ngIf="fullDataInfo.length > 0">
+
+        <div class="reunion-item" *ngFor="let reunion of fullDataInfo;" [ngClass]="{'active': reunion.isOpen}">
+            <div class="reunion-infos" (click)="toggleSub(reunion)">
+                <span class="greenSquare">
+                    {{reunion.name}}
+                </span>
+                <h3>{{reunion.name}}</h3>
+            </div>
+
+            <div class="courses-list" *ngIf="reunion.isOpen">
+                <div class="course-item" *ngFor="let race of reunion.events ">
+
+                    <div class="item">
+                        <span class="title"> {{race.gameEventName}} </span>
+                        <span class="time"> {{race.gameEventDate | date:'dd-MM-YYYY HH:mm' }}</span>
+                    </div>
+                    <div class="item non-partant">
+                        Non partants
+                        <span class="value">{{race.nonPartant || '--'}}</span>
+                    </div>
+                    <div class="label-values">
+                        <div class="result-item" *ngFor="let resultItem of race.horsesArray">
+                            <ng-container *ngFor="let horse of resultItem">
+                                <span class="horse-number" *ngIf="horse != null">
+                                    {{horse}}
+                                </span>
+                            </ng-container>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="no-data" *ngIf="fullDataInfo.length ==  0">
+        <h5>{{ 'hpb.results.noRacesAvailable' | translate }}</h5>
+    </div>
+
+</div>

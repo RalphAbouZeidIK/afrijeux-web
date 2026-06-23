@@ -1,0 +1,63 @@
+<div class="form-holder">
+    <div class="form-bg">
+        <div class="money-form">
+            <!-- Header -->
+            <div class="money-form__header">
+                <div class="money-form__title-group">
+                    <h2 class="money-form__title">{{ title }}</h2>
+                    <p class="money-form__description">{{ description }}</p>
+                </div>
+                <button class="money-form__close" (click)="close()" aria-label="Close">
+                    <img src="assets/images/close-icon.svg" alt="close">
+                </button>
+            </div>
+
+            <!-- Preset Amounts -->
+            <div class="money-form__presets">
+                <div class="money-form__presets-row">
+                    <button *ngFor="let preset of presetAmounts.slice(0, 3)" class="money-form__preset-btn"
+                        [class.money-form__preset-btn--active]="amount === preset" (click)="selectPreset(preset)"
+                        type="button">
+                        <span class="money-form__currency-symbol">{{ currencyCode }}</span>
+                        {{ preset }}
+                    </button>
+                </div>
+                <div class="money-form__presets-row">
+                    <button *ngFor="let preset of presetAmounts.slice(3)" class="money-form__preset-btn"
+                        [class.money-form__preset-btn--active]="amount === preset" (click)="selectPreset(preset)"
+                        type="button">
+                        <span class="money-form__currency-symbol">{{ currencyCode }}</span>
+                        {{ preset }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Custom Amount Input -->
+            <div class="money-form__input-wrapper">
+                <div class="money-form__input-inner">
+                    <input type="number" class="money-form__input" [(ngModel)]="amount" [placeholder]="'Custom Amount'"
+                        (ngModelChange)="showError = false" min="0" placeholder="0.00" />
+                    <span class="money-form__input-currency">{{ currencyCode }}</span>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <p class="money-form__error" *ngIf="showError">
+                <ng-container *ngIf="mode === 'deposit'">Please enter a valid amount.</ng-container>
+                <ng-container *ngIf="mode === 'withdraw'">
+                    Please enter a valid amount (max: {{ userBalance?.WinningAmount }} {{ currencyCode }}).
+                </ng-container>
+            </p>
+
+            <!-- Actions -->
+            <div class="money-form__actions">
+                <button class="money-form__cancel-btn" type="button" (click)="close()"
+                    [disabled]="isLoading">Cancel</button>
+                <button class="money-form__submit-btn" type="button" (click)="submit()" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">{{ submitLabel }}</span>
+                    <span *ngIf="isLoading">...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
