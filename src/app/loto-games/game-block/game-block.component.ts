@@ -604,6 +604,7 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         return
       }
 
+      const hadMultipleTypes = this.selectedTypes.length > 1;
       for (let type of this.selectedTypes) {
         const _maxTickets = this.selectedPromotion ? (this.selectedPromotion.X + this.selectedPromotion.Y) : 10;
         if (this.cartData.length >= _maxTickets) {
@@ -628,6 +629,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
           IsPromotion: this.selectedPromotion ? true : false,
         }
         this.cartSrv.updateLotoList(pickItem, index)
+      }
+      if (hadMultipleTypes) {
+        this.selectedTypes = [];
+        this.selectedResultFilters = [];
+        this.selectedType = null;
       }
     }
 

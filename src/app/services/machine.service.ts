@@ -100,10 +100,8 @@ export class MachineService {
     //   // Example: save to DB or update UI
     // });
 
-    this.bridge.getPrintingStatus().subscribe((status) => {
-      if (!status) {
-        this.issueCorruptedTicket()
-      }
+    this.bridge.printerError$.subscribe((error) => {
+      this.issueCorruptedTicket(error)
     })
   }
 
@@ -1109,13 +1107,14 @@ export class MachineService {
     });
   }
 
-  async issueCorruptedTicket() {
+  async issueCorruptedTicket(printerError?: string) {
 
     //console.log(this.valuesToPrint)
     let params = {
       TicketRequestId: this.valuesToPrint.thirdValue.TicketRequestId,
       EncryptedIssueTicketRequest: this.valuesToPrint.secondValue.EncryptedRequestDTO,
       GameId: this.valuesToPrint.thirdValue.GameId,
+      PrinterError: printerError ?? null,
     }
     const apiResponse = await this.handleApiResponse('CommonApi', `CommonApi/CorruptedTicket`, 'POST', params)
     //console.log(apiResponse)

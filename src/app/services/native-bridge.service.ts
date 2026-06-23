@@ -96,6 +96,7 @@ export class NativeBridgeService {
     (window as any).handlePrinterError = (error: string) => {
       this.ngZone.run(() => {
         console.error('🔥 Printer Error from Flutter:', error);
+        this.printerError$.next(error);
         this.setPrintingStatus(false);
       });
     };

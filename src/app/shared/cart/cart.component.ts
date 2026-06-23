@@ -145,7 +145,7 @@ export class CartComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.bridge.getPrintingStatus().subscribe((status) => {
-      //console.log('Printing status updated:', status);
+      console.log('Printing status updated:', status);
       this.isIssuing = false;
       if(!status) {
         this.gnrcSrv.setModalData(true, false, 'Failed to print ticket.');
