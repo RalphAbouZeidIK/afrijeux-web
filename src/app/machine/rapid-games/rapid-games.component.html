@@ -9,6 +9,8 @@
         </span>
     </div>
 
+    <img #gameImg class="game-img" [src]="currentGame?.imageUrl" [alt]="gameTitle" (error)="gameImg.style.display='none'">
+
     <div class="page-body">
         <p *ngIf="isRapid">
             Match a {{ (rapidGameType === 'Numbers' || rapidGameType === 'NumbersLite') ? 'number' : 'symbol' }} from the top row to one in the grid, find the prize waiting for you below it, and win instantly!

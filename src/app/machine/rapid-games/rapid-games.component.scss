@@ -1,13 +1,23 @@
 @use '/src/variables' as *;
 
+.page-header{
+    margin-bottom: 10px;
+}
+
 .rapid-games {
     display: flex;
     flex-direction: column;
     height: 75vh;
 }
 
+.game-img {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .page-body {
-    padding: 20px 16px;
+    padding: 10px 16px;
     border-radius: 15px;
     border: 1px solid rgba(159, 159, 159, 0.50);
 }
@@ -15,7 +25,7 @@
 p {
     line-height: 25px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size:15px;
 }
 

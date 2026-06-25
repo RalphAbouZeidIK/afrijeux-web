@@ -19,13 +19,24 @@ export class RapidGamesComponent {
   rapidGameType: 'Fruits' | 'Animals' | 'Football' | 'Luxury' | 'Emojis' | 'Numbers' | 'NumbersLite' =
     (/WinBigRapid(Emojis|Football|Fruits|Luxury|NumbersLite|Numbers)/.exec(window.location.href)?.[1] as any) ?? 'Animals';
 
+  games = [
+    { rapidGameType: 'Fruits', isRapid: true, title: 'Rapid Fruits', imageUrl: 'assets/images/rapid-fruits-banner.jpg' },
+    { rapidGameType: 'Animals', isRapid: true, title: 'Rapid Animals', imageUrl: 'assets/images/rapid-animals-banner.jpg' },
+    { rapidGameType: 'Football', isRapid: true, title: 'Rapid Football', imageUrl: 'assets/images/rapid-football-banner-new.jpeg' },
+    { rapidGameType: 'Luxury', isRapid: true, title: 'Rapid Luxury', imageUrl: 'assets/images/rapid-luxury-banner.jpg' },
+    { rapidGameType: 'Emojis', isRapid: true, title: 'Rapid Emojis', imageUrl: 'assets/images/rapid-emojis-banner.jpg' },
+    { rapidGameType: 'Numbers', isRapid: true, title: 'Mega Win', imageUrl: 'assets/images/mega-win-banner-new.jpeg' },
+    { rapidGameType: 'NumbersLite', isRapid: true, title: 'Quick Match', imageUrl: 'assets/images/quick-match-banner-new.jpeg' },
+    { rapidGameType: 'Keno', isRapid: false, title: 'Keno Games', imageUrl: 'assets/images/keno-banner.jpg' },
+  ];
+
+  get currentGame() {
+    const key = this.isKeno ? 'Keno' : this.rapidGameType;
+    return this.games.find(g => g.rapidGameType === key);
+  }
+
   get gameTitle(): string {
-    if (this.isKeno) return 'Keno Games';
-    const titles: Partial<Record<typeof this.rapidGameType, string>> = {
-      NumbersLite: 'Quick Match',
-      Numbers: 'Mega Win',
-    };
-    return titles[this.rapidGameType] ?? `Rapid ${this.rapidGameType}`;
+    return this.currentGame?.title ?? '';
   }
 
   constructor(
@@ -68,7 +79,7 @@ export class RapidGamesComponent {
         this.isIssuing = false;
       }
     } catch (err) {
-    
+
     }
 
   }

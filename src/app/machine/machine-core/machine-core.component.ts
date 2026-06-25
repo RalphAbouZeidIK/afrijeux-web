@@ -48,7 +48,7 @@ export class MachineCoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMachineData();
-    this.checkForApkUpdate()
+    //this.checkForApkUpdate()
   }
 
   async getMachineData() {
