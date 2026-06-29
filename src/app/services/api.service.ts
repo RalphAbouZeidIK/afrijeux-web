@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 import { NativeBridgeService } from './native-bridge.service';
 import { CacheService } from './cache.service';
+import { VersionService } from './version.service';
 
 (window as any).Buffer = Buffer;
 declare var require: any;
@@ -32,9 +33,10 @@ export class ApiService {
     private userSrv: UserService,
     private translate: TranslateService,
     public datePipe: DatePipe,
-    private cacheSrv: CacheService
+    private cacheSrv: CacheService,
+    private versionSrv: VersionService
   ) {
-
+    this.versionSrv.init();
   }
 
   private async handleError(error: any) {
@@ -109,6 +111,7 @@ export class ApiService {
 
     try {
       let apiResponse = await firstValueFrom(response);
+      this.versionSrv.checkForUpdate();
       return apiResponse;
     } catch (error) {
       this.handleError(error);

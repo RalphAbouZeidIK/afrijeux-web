@@ -1,8 +1,8 @@
 <h2 *ngIf="isListingPage && !isPromotionsPage && !isInstantGamesPage">All Games</h2>
 <h2 *ngIf="isPromotionsPage">Promotions</h2>
 <h2 *ngIf="isInstantGamesPage">Instant Games</h2>
-<div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
-    <div class="game-card" (click)="navigateToInstantGames()"
+<div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage,'homepage-listing':isListingPage && !isPromotionsPage && !isInstantGamesPage}">
+    <div class="game-card instant-nav-card" (click)="navigateToInstantGames()"
         *ngIf="isAndroidApp && rapidGames.length > 0 && !isPromotionsPage && !isInstantGamesPage">
         <div class="game-header">
             <div class="game-info">
@@ -22,9 +22,9 @@
             <div class="game-header">
                 <div class="game-info">
                     <div class="game-title-row">
+                        <h3 class="game-title">{{ game.name }}</h3>
                         <span class="game-badge">{{ game.badgeText }}</span>
                     </div>
-                    <h3 class="game-title">{{ game.name }}</h3>
                     <p class="draw-info">View exclusive deals on selected games</p>
                 </div>
             </div>

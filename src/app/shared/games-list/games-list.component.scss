@@ -11,8 +11,8 @@
     flex-direction: column;
 
     .game-card {
-        background: #1d1c1c;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: $cardBg;
+        border: 1px solid rgba($white, 0.2);
         border-radius: 25px;
         padding: 25px 14px 20px 14px;
         display: flex;
@@ -22,36 +22,68 @@
         position: relative;
 
         &:hover {
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 20px rgba(164, 246, 117, 0.1);
+            border-color: rgba($white, 0.4);
+            box-shadow: 0 0 20px rgba($lightGreen, 0.1);
         }
 
         &.selected {
-            border-color: #a4f675;
-            box-shadow: 0 0 20px rgba(164, 246, 117, 0.2);
+            border-color: $lightGreen;
+            box-shadow: 0 0 20px rgba($lightGreen, 0.2);
         }
+    }
+}
 
-        &.promo-card {
-            border-color: rgba(255, 200, 50, 0.4);
-            background: linear-gradient(135deg, #1d1c1c 80%, rgba(255, 200, 50, 0.08));
+// Flipped card colors — homepage only (not promotions/instant-games listing)
+.homepage-listing {
+    .game-card {
+        &.promo-card,
+        &.instant-nav-card {
+            background: $lightGreen;
+            border-color: rgba($black, 0.15);
 
             &:hover {
-                border-color: rgba(255, 200, 50, 0.7);
-                box-shadow: 0 0 20px rgba(255, 200, 50, 0.15);
+                border-color: rgba($black, 0.3);
+                box-shadow: 0 0 20px rgba($black, 0.15);
+            }
+
+            .game-title {
+                color: $black;
+            }
+
+            .draw-info {
+                color: $cardBg;
             }
 
             .game-badge {
-                background-color: rgba(255, 200, 50, 0.2);
-                color: #ffc832;
-                border: 1px solid rgba(255, 200, 50, 0.4);
+                background-color: rgba($black, 0.12);
+                color: $cardBg;
+                border: 1px solid rgba($black, 0.2);
             }
 
-            .promo-hub-btn {
-                background: #ffc832;
+            .prize-text {
+                color: $black;
+
+                span:first-child {
+                    color: $black;
+                }
+            }
+
+            .prize-amount {
+                color: $cardBg;
+            }
+
+            .play-button {
+                background: $cardBg;
+                color: $lightGreen;
 
                 &:hover {
-                    background: #e6b22d;
-                    box-shadow: 0 4px 12px rgba(255, 200, 50, 0.4);
+                    background: lighten($cardBg, 8%);
+                    box-shadow: 0 4px 12px rgba($black, 0.3);
+                    transform: translateY(-2px);
+                }
+
+                &:active {
+                    box-shadow: 0 2px 8px rgba($black, 0.2);
                 }
             }
         }
@@ -96,7 +128,7 @@
 .game-title {
     font-size: 14px;
     font-weight: 600;
-    color: #ffffff;
+    color: $white;
     line-height: 18px;
     letter-spacing: -0.28px;
     margin: 0;
@@ -115,17 +147,17 @@
     .prize-text {
         font-size: 22px;
         font-weight: 700;
-        color: #ffffff;
+        color: $white;
         margin: 0;
         font-family: 'Inter', sans-serif;
 
         span:first-child {
-            color: #ffffff;
+            color: $white;
         }
     }
 
     .prize-amount {
-        color: #a4f675;
+        color: $lightGreen;
         font-weight: 800;
     }
 
@@ -145,7 +177,7 @@
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
-    color: #9f9f9f;
+    color: $lightGrey;
     letter-spacing: -0.24px;
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -154,7 +186,7 @@
 
 // Play button
 .play-button {
-    background: #a4f675;
+    background: $lightGreen;
     border: none;
     border-radius: 30px;
     padding: 8px 20px;
@@ -165,7 +197,7 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
-    color: #000000;
+    color: $black;
     text-align: center;
     font-family: 'SF UI Display', sans-serif;
     cursor: pointer;
@@ -173,14 +205,14 @@
     text-decoration: none;
 
     &:hover {
-        background: #92e055;
+        background: darken($lightGreen, 8%);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(164, 246, 117, 0.3);
+        box-shadow: 0 4px 12px rgba($lightGreen, 0.3);
     }
 
     &:active {
         transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(164, 246, 117, 0.2);
+        box-shadow: 0 2px 8px rgba($lightGreen, 0.2);
     }
 
     span:first-child {
