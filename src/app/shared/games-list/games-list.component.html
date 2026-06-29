@@ -2,6 +2,19 @@
 <h2 *ngIf="isPromotionsPage">Promotions</h2>
 <h2 *ngIf="isInstantGamesPage">Instant Games</h2>
 <div class="games-container" [ngClass]="{'listing-block':isListingPage,'game-page':isGamePage }">
+    <div class="game-card" (click)="navigateToInstantGames()"
+        *ngIf="isAndroidApp && rapidGames.length > 0 && !isPromotionsPage && !isInstantGamesPage">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="game-title-row">
+                    <h3 class="game-title">Instant Games</h3>
+                    <span class="game-badge">Instant</span>
+                </div>
+                <p class="draw-info">Prizes vary depending on ticket.</p>
+            </div>
+        </div>
+        <button class="play-button">View Instant Games</button>
+    </div>
     <ng-container *ngFor="let game of listItems">
 
         <!-- Promotions hub card -->
@@ -19,7 +32,8 @@
         </div>
 
         <!-- Regular game card -->
-        <div class="game-card" [class.selected]="isGameSelected(game)" [class.promo-card]="game.isPromoCard" *ngIf="!game.IsSalesStopped && !game.isPromoHub" (click)="navigateToGame(game)">
+        <div class="game-card" [class.selected]="isGameSelected(game)" [class.promo-card]="game.isPromoCard"
+            *ngIf="!game.IsSalesStopped && !game.isPromoHub" (click)="navigateToGame(game)">
             <!-- Game Header with Image -->
             <div class="game-header" *ngIf="isListingPage">
                 <!---->
@@ -30,7 +44,7 @@
                         <div class="game-image" *ngIf="game.imageUrl">
                             <img [src]="game.imageUrl" [alt]="game.name">
                         </div>
-                         <!-- <h3 class="game-title" *ngIf="game.gameType=='RAPID'">{{ game.name }}</h3> -->
+                        <!-- <h3 class="game-title" *ngIf="game.gameType=='RAPID'">{{ game.name }}</h3> -->
                         <span class="game-badge" *ngIf="game.badgeText">{{ game.badgeText }}</span>
                         <app-countdown [event]="game" [smallTimer]="true"
                             *ngIf="game.gameType!='RAPID'"></app-countdown>
@@ -55,8 +69,7 @@
             </div>
 
             <!-- Play Button -->
-            <button [ngClass]="{'play-button':isListingPage,'pick-button':isBanner,'btn btn-primary':isGamePage}"
-               >
+            <button [ngClass]="{'play-button':isListingPage,'pick-button':isBanner,'btn btn-primary':isGamePage}">
                 <ng-container *ngIf="isListingPage">
                     <span>Pay /</span>
                     <span class="price-tag"><img src="assets/images/uae-symbol-black.png" alt=""> {{ game.Stake
@@ -70,17 +83,5 @@
         </div>
     </ng-container>
     <!-- Instant Games navigation card -->
-    <div class="game-card" (click)="navigateToInstantGames()" *ngIf="isAndroidApp && rapidGames.length > 0 && !isPromotionsPage && !isInstantGamesPage">
-        <div class="game-header">
-            <div class="game-info">
-                <div class="game-title-row">
-                    <h3 class="game-title">Instant Games</h3>
-                    <span class="game-badge">Instant</span>
-                </div>
-                <p class="draw-info">Prizes vary depending on ticket.</p>
-            </div>
-        </div>
-        <button class="play-button">View Instant Games</button>
-    </div>
-</div>
 
+</div>
