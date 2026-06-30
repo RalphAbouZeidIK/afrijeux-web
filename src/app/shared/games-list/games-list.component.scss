@@ -55,9 +55,9 @@
             }
 
             .game-badge {
-                background-color: rgba($black, 0.12);
-                color: $cardBg;
-                border: 1px solid rgba($black, 0.2);
+                background-color: $cardBg;
+                color: $lightGreen;
+                border: 1px solid rgba($cardBg, 0.8);
             }
 
             .prize-text {
