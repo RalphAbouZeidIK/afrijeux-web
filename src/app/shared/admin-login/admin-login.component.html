@@ -28,8 +28,9 @@
                     {{ 'machine.shared.password' | translate }}
                 </label>
 
-                <input type="password" class="form-control" title="Admin Password" formControlName="Password"
-                    [attr.inputmode]="'numeric'" [attr.pattern]=" '[0-9]*'" placeholder="Admin Password" />
+                <input #passwordInput type="password" class="form-control" title="Admin Password"
+                    formControlName="Password" [attr.inputmode]="'numeric'" [attr.pattern]=" '[0-9]*'"
+                    placeholder="Admin Password" />
             </div>
         </form>
 

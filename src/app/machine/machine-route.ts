@@ -8,6 +8,7 @@ import { PrizeDetailsPageComponent } from '../static-pages/prize-details-page/pr
 import { RapidGamesComponent } from './rapid-games/rapid-games.component';
 import { AdminDepositComponent } from '../shared/admin-deposit/admin-deposit.component';
 import { AdminWithdrawComponent } from '../shared/admin-withdraw/admin-withdraw.component';
+import { TicketsHistoryComponent } from './tickets-history/tickets-history.component';
 
 export const machineMenuRoutes: Route[] = [
     {
@@ -76,6 +77,17 @@ export const machineMenuRoutes: Route[] = [
         canActivate: [SharedGuard]
     },
     {
+        path: 'History',
+        component: TicketsHistoryComponent,
+        data: {
+            breadcrumb: 'Tickets History',
+            shouldBeLoggedIn: true,
+            showLink: true,
+            title: 'Tickets History',
+            iconLink: 'assets/images/tickets-history.svg'
+        }
+    },
+    {
         path: 'WinBigKeno',
         component: RapidGamesComponent,
         data: {
@@ -135,7 +147,7 @@ export const machineMenuRoutes: Route[] = [
         },
         canActivate: [SharedGuard]
     },
-     {
+    {
         path: 'WinBigRapidNumbers',
         component: RapidGamesComponent,
         data: {
@@ -145,7 +157,7 @@ export const machineMenuRoutes: Route[] = [
         },
         canActivate: [SharedGuard]
     },
-     {
+    {
         path: 'WinBigRapidNumbersLite',
         component: RapidGamesComponent,
         data: {

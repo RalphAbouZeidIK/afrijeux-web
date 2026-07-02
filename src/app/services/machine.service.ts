@@ -1211,5 +1211,11 @@ export class MachineService {
     }
   }
 
+  async getTicketsHistory() {
+    let params = {}
+    let ticketsHistory = await this.handleApiResponse(`CommonAPI`, `CommonAPI/GetTicketsHistory`, 'POST', params)
+    return ticketsHistory
+  }
+
 
 }

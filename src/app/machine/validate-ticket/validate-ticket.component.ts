@@ -4,6 +4,7 @@ import { CacheService } from 'src/app/services/cache.service';
 import { GenericService } from 'src/app/services/generic.service';
 import { MachineService } from 'src/app/services/machine.service';
 import { NativeBridgeService } from 'src/app/services/native-bridge.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-validate-ticket',
@@ -43,8 +44,9 @@ export class ValidateTicketComponent implements OnInit, OnDestroy {
     private machineSrv: MachineService,
     private nativeBridge: NativeBridgeService,
     private cacheService: CacheService,
-    private gnrcSrv: GenericService
-  ) {}
+    private gnrcSrv: GenericService,
+    private location: Location
+  ) { }
 
   async ngOnInit() {
     this.scanSub = this.nativeBridge.scanResult$.subscribe(result => {
@@ -124,7 +126,7 @@ export class ValidateTicketComponent implements OnInit, OnDestroy {
     if (validateTicketReponse.status == false) {
       this.showError = true
       let code = this.machineSrv.extractCode(validateTicketReponse.message)
-      
+
       if (code == 'MX0000026') {
         this.formDescription = `You're one step close to your win `
       }
@@ -175,6 +177,10 @@ export class ValidateTicketComponent implements OnInit, OnDestroy {
     if (!this.payTicketResponse?.dataToPrint) return '';
     // Convert escaped newlines (\n) to actual newlines for proper display
     return this.payTicketResponse.dataToPrint.replace(/\\n/g, '\n');
+  }
+
+  backToPage() {
+    this.location.back()
   }
 
 }

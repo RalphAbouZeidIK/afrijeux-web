@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -41,6 +41,8 @@ export class LoginComponent implements OnChanges, OnInit {
   forgotPassword = false
   showPasswordReset: boolean = false;
 
+  @ViewChild('passwordInput') passwordInput!: ElementRef<HTMLInputElement>;
+
 
   constructor(
     private router: Router,
@@ -78,7 +80,7 @@ export class LoginComponent implements OnChanges, OnInit {
 
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
     this.isAndroidApp = this.gnrcSrv.isMachineApp()
     if (this.isAndroidApp) {
@@ -183,7 +185,11 @@ export class LoginComponent implements OnChanges, OnInit {
   async autoLogin() {
     let userData = await this.cacheSrv.getFromFlutterOfflineCache('user_data')
     if (userData?.status == false || !userData) {
+      let machineData = await this.machineSrv.getMachineData()
+      this.loginForm.controls['Username'].setValue(machineData?.MachineCode)
+
       this.showLoginPage = true
+      setTimeout(() => this.passwordInput?.nativeElement?.focus())
       return
     }
     this.loginForm.controls['Username'].setValue(userData?.UserName)

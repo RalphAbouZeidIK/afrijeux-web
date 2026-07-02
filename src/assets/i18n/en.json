@@ -285,7 +285,8 @@
             "close": "Close",
             "won": "Won",
             "Withdraw": "Withdraw",
-            "Deposit": "Deposit"
+            "Deposit": "Deposit",
+            "checkAgain": "Check Again"
         },
         "fullTicketId": "Full Ticket Id",
         "chooseGames": "Choose Games",

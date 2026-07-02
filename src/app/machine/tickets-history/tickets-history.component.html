@@ -1,0 +1,57 @@
+<section class="tickets-history">
+    <div class="section-header">
+        <h2>Tickets History</h2>
+        <p>Track your recently issued tickets</p>
+    </div>
+
+    <div class="tickets-summary" *ngIf="!isLoading && tickets.length > 0">
+        <div class="tickets-summary__item">
+            <span class="ticket-label">Total Tickets</span>
+            <span class="ticket-value">{{ totalTickets }}</span>
+        </div>
+        <div class="tickets-summary__item">
+            <span class="ticket-label">Total Stake</span>
+            <span class="ticket-value ticket-stake">
+                <span class="dirham-symbol"><img src="assets/images/UAE_Dirham_Symbol-white.svg" alt=""></span>{{
+                totalStake }}
+            </span>
+        </div>
+    </div>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <span class="spinner"></span>
+        Loading tickets...
+    </div>
+
+    <div class="no-results" *ngIf="!isLoading && tickets.length === 0">
+        No tickets found.
+    </div>
+
+    <div class="ticket-card" *ngFor="let ticket of tickets; trackBy: trackByTicket">
+        <div class="ticket-field ticket-field--id">
+            <span class="ticket-label">Ticket ID</span>
+            <span class="ticket-value ticket-id">{{ ticket.FullTicketId }}</span>
+        </div>
+        <div class="ticket-field">
+            <span class="ticket-label">Game</span>
+            <span class="ticket-value">{{ ticket.Game }}</span>
+        </div>
+        <div class="ticket-field">
+            <span class="ticket-label">Purchase Date</span>
+            <span class="ticket-value">{{ ticket.MachineDateIssued | date:'MMM d, y · h:mm a' }}</span>
+        </div>
+        <div class="ticket-field">
+            <span class="ticket-label">Stake</span>
+            <span class="ticket-value ticket-stake">
+                <span class="dirham-symbol"><img src="assets/images/UAE_Dirham_Symbol-white.svg" alt=""></span>{{
+                ticket.Stake }}
+            </span>
+        </div>
+        <div class="ticket-field">
+            <span class="ticket-label">Status</span>
+            <span class="status-pill" [ngClass]="'status-pill--' + getStatus(ticket)">
+                {{ getStatusLabel(ticket) }}
+            </span>
+        </div>
+    </div>
+</section>

@@ -36,8 +36,9 @@
                     {{ 'shared.login.password' | translate }}
                 </label>
 
-                <input type="password" class="form-control" title="password" formControlName="Password"
-                    placeholder="Password" [attr.inputmode]="isAndroidApp ? 'numeric' : null"
+                <input #passwordInput type="password" class="form-control" title="password"
+                    formControlName="Password" placeholder="Password"
+                    [attr.inputmode]="isAndroidApp ? 'numeric' : null"
                     [attr.pattern]="isAndroidApp ? '[0-9]*' : null" />
 
                 <p class="text text-end forgot-password" *ngIf="isLogin && !isAndroidApp"

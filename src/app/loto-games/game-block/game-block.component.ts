@@ -630,11 +630,11 @@ export class GameBlockComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
         this.cartSrv.updateLotoList(pickItem, index)
       }
-      if (hadMultipleTypes) {
-        this.selectedTypes = [];
-        this.selectedResultFilters = [];
-        this.selectedType = null;
-      }
+
+      this.selectedTypes = [];
+      this.selectedResultFilters = [];
+      this.selectedType = null;
+
     }
 
     else {

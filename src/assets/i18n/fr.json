@@ -282,7 +282,8 @@
             "close": "Fermer",
             "won": "Gagné",
             "Withdraw": "Retrait",
-            "Deposit": "Dépôt"
+            "Deposit": "Dépôt",
+            "checkAgain": "Vérifier à nouveau"
             
         },
         "fullTicketId": "Numéro complet du billet",

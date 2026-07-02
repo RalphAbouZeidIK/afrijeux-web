@@ -39,13 +39,15 @@
                     <p>{{ formDescription || '' }}</p>
                 </div>
 
+              
                 <div class="form-btns d-flex">
-
-                    <button class="btn btn-primary btn-close" (click)="isPaying = false">
+                    <button class="btn btn-primary" (click)="isPaying = false; fullTicketId = '';">
+                        {{'machine.generic.checkAgain' | translate}}
+                    </button>
+                    <button class="btn btn-primary btn-close" (click)="backToPage()">
                         {{'machine.generic.close' | translate}}
                     </button>
                 </div>
-
             </ng-container>
 
 

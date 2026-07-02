@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MachineService } from 'src/app/services/machine.service';
 
@@ -8,22 +8,20 @@ import { MachineService } from 'src/app/services/machine.service';
   templateUrl: './admin-login.component.html',
   styleUrl: './admin-login.component.scss'
 })
-export class AdminLoginComponent implements OnChanges {
+export class AdminLoginComponent implements OnInit, AfterViewInit {
   showErrorMessage: boolean = false;
   errorMsg: string = 'Incorrect Password';
 
   @Input() shouldShowAdminPage: any = true
+
+  @ViewChild('passwordInput') passwordInput!: ElementRef<HTMLInputElement>;
 
   loginForm = new FormGroup({
     Username: new FormControl('', [Validators.required]),
     Password: new FormControl('', [Validators.required])
   });
 
-  constructor(private machineSrv: MachineService) {
-    this.machineSrv.getAdminPopupStatus().subscribe(status => {
-      //console.log(status)
-    });
-  }
+  constructor(private machineSrv: MachineService) { }
 
   toggleAdminLogin(isLoggedIn: boolean) {
     this.machineSrv.setAdminLoginStatus(isLoggedIn, this.shouldShowAdminPage);
@@ -41,13 +39,13 @@ export class AdminLoginComponent implements OnChanges {
     }, 100)
   }
 
+  async ngOnInit() {
+    let machineData = await this.machineSrv.getMachineData()
+    this.loginForm.controls['Username'].setValue(machineData?.MachineCode)
+  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    //console.log('ngOnChanges triggered');
-    // Only re-process if allEvents reference has changed (avoids redundant API calls)
-    if (changes['shouldShowAdminPage'] && changes['shouldShowAdminPage'].currentValue !== changes['shouldShowAdminPage'].previousValue) {
-      //console.log(this.shouldShowAdminPage)
-    }
+  ngAfterViewInit() {
+    this.passwordInput?.nativeElement?.focus();
   }
 
   async submitLogin() {
