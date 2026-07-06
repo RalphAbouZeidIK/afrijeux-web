@@ -1,21 +1,14 @@
 <section class="tickets-history">
     <div class="section-header">
-        <h2>Tickets History</h2>
+        <h2>Tickets History <ng-container *ngIf="!isLoading && tickets.length > 0"> ({{totalTickets}})</ng-container>
+        </h2>
         <p>Track your recently issued tickets</p>
     </div>
 
-    <div class="tickets-summary" *ngIf="!isLoading && tickets.length > 0">
-        <div class="tickets-summary__item">
-            <span class="ticket-label">Total Tickets</span>
-            <span class="ticket-value">{{ totalTickets }}</span>
-        </div>
-        <div class="tickets-summary__item">
-            <span class="ticket-label">Total Stake</span>
-            <span class="ticket-value ticket-stake">
-                <span class="dirham-symbol"><img src="assets/images/UAE_Dirham_Symbol-white.svg" alt=""></span>{{
-                totalStake }}
-            </span>
-        </div>
+    <div class="tickets-search" *ngIf="!isLoading && tickets.length > 0">
+        <input type="text" inputmode="numeric" maxlength="24" class="tickets-search__input"
+            placeholder="Search by Ticket ID" [ngModel]="searchTicketId"
+            (ngModelChange)="onSearchTicketIdChange($event)" />
     </div>
 
     <div class="loading-state" *ngIf="isLoading">
@@ -27,7 +20,11 @@
         No tickets found.
     </div>
 
-    <div class="ticket-card" *ngFor="let ticket of tickets; trackBy: trackByTicket">
+    <div class="no-results" *ngIf="!isLoading && tickets.length > 0 && filteredTickets.length === 0">
+        No tickets match "{{ searchTicketId }}".
+    </div>
+
+    <div class="ticket-card" *ngFor="let ticket of filteredTickets; trackBy: trackByTicket">
         <div class="ticket-field ticket-field--id">
             <span class="ticket-label">Ticket ID</span>
             <span class="ticket-value ticket-id">{{ ticket.FullTicketId }}</span>
