@@ -140,6 +140,32 @@
     }
 }
 
+.ticket-field--actions {
+    justify-content: flex-end;
+}
+
+.ticket-cancel-btn {
+    align-items: center;
+    background: rgba(255, 78, 78, 0.1);
+    border: 1px solid rgba(255, 78, 78, 0.4);
+    border-radius: 999px;
+    color: #ff4e4e;
+    display: inline-flex;
+    font-family: $font-regular;
+    font-size: 0.8rem;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+
+    .flag-icon {
+        height: 14px;
+        width: 14px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
 .status-pill {
     border-radius: 999px;
     color: #061f00;
