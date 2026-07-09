@@ -59,7 +59,7 @@
     height: 44px;
     border-radius: 50%;
     cursor: pointer;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     color: #000;
@@ -159,4 +159,15 @@
         background: #a4f675;
     }
 
+}
+
+
+@media all and (min-width: 768px) {
+    .carousel-container {
+        width: 328px;
+    }
+
+    .carousel-arrow {
+        display: flex;
+    }
 }

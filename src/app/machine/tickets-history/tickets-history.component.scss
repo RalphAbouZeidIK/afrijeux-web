@@ -187,4 +187,14 @@
         background: #ff002b;
         color: $white;
     }
+
+    &.status-pill--flagged {
+        background: #ffb020;
+        color: #332000;
+    }
+
+    &.status-pill--paid {
+        background: #2fb0ff;
+        color: #002233;
+    }
 }

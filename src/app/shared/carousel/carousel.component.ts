@@ -21,7 +21,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
   @Input() autoPlayInterval: number = 5000; // 5 seconds
   @Input() autoPlay: boolean = true;
   @Input() showIndicators: boolean = true;
-  @Input() showArrows: boolean = false;
+  @Input() showArrows: boolean = true;
 
 
   currentIndex: number = 0;

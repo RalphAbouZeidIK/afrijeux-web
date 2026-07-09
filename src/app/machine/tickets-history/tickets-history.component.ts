@@ -8,6 +8,8 @@ interface TicketHistoryItem {
   FullTicketId: string;
   IsPrinted: number;
   IsCanceled: number;
+  IsFlaggedToCancel: number;
+  IsPaid: number;
   Stake: number;
   MachineDateIssued: string;
 }
@@ -37,6 +39,7 @@ export class TicketsHistoryComponent implements OnInit {
     this.isLoading = true;
     const ticketsHistory = await this.machineSrv.getTicketsHistory();
     this.tickets = ticketsHistory?.data ?? [];
+    console.log(this.tickets)
     this.isLoading = false;
     await this.loadCancelPermissions();
   }
@@ -50,7 +53,8 @@ export class TicketsHistoryComponent implements OnInit {
 
   canCancel(ticket: TicketHistoryItem): boolean {
     const gameId = ticket.FullTicketId?.substring(0, 3);
-    return this.getStatus(ticket) !== 'canceled' && !!this.cancelPermissions[gameId] && this.isWithinCancelWindow(ticket);
+    const status = this.getStatus(ticket);
+    return status !== 'canceled' && status !== 'flagged' && status !== 'paid' && !!this.cancelPermissions[gameId] && this.isWithinCancelWindow(ticket);
   }
 
   isWithinCancelWindow(ticket: TicketHistoryItem): boolean {
@@ -61,9 +65,15 @@ export class TicketsHistoryComponent implements OnInit {
     return elapsedMinutes <= this.flagToCancelTimer;
   }
 
-  getStatus(ticket: TicketHistoryItem): 'canceled' | 'printed' | 'not-printed' {
+  getStatus(ticket: TicketHistoryItem): 'canceled' | 'paid' | 'flagged' | 'printed' | 'not-printed' {
     if (ticket.IsCanceled === 1) {
       return 'canceled';
+    }
+    if (ticket.IsPaid === 1 && ticket.IsPrinted === 1) {
+      return 'paid';
+    }
+    if (ticket.IsFlaggedToCancel === 1) {
+      return 'flagged';
     }
     if (ticket.IsPrinted === 0) {
       return 'not-printed';
@@ -75,6 +85,9 @@ export class TicketsHistoryComponent implements OnInit {
     const status = this.getStatus(ticket);
     if (status === 'not-printed') {
       return 'Not Printed';
+    }
+    if (status === 'flagged') {
+      return 'Requested to Cancel';
     }
     return status.charAt(0).toUpperCase() + status.slice(1);
   }
@@ -92,11 +105,12 @@ export class TicketsHistoryComponent implements OnInit {
     this.cancelingTicketId = ticket.FullTicketId;
     let params = {
       fullTicketId: ticket.FullTicketId,
-      IsLatest: true
+      IsLatest: false
     }
     let cancelTicketResponse = await this.machineSrv.cancelTicket(params)
+    console.log('Cancel Ticket Response:', cancelTicketResponse);
     if (cancelTicketResponse?.status) {
-      ticket.IsCanceled = 1;
+      this.getTicketsHistory();
     }
     this.cancelingTicketId = null;
   }
