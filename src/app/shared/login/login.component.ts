@@ -217,7 +217,7 @@ export class LoginComponent implements OnChanges, OnInit {
       else {
         this.successfullLogin()
         this.router.navigate(['Machine/Games'])
-        this.checkForApkUpdate()
+        this.machineSrv.checkForApkUpdate()
       }
       //console.log(respoonse)
     }
@@ -518,17 +518,6 @@ export class LoginComponent implements OnChanges, OnInit {
     this.usrSrv.setAccountExpiry(currentDate)
 
     this.hidePopup()
-  }
-
-  async checkForApkUpdate() {
-    const alreadyAvailable = (window as any).flutterBuildCode;
-    if (alreadyAvailable !== undefined) {
-      this.machineSrv.runUpdateCheck(alreadyAvailable);
-    } else {
-      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
-        this.machineSrv.runUpdateCheck((e as CustomEvent).detail as number);
-      }, { once: true });
-    }
   }
 
 }

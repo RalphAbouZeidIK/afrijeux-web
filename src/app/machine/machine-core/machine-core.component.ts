@@ -55,7 +55,6 @@ export class MachineCoreComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getMachineData();
-    //this.checkForApkUpdate()
     this.scheduledReportCheckInterval = setInterval(() => this.checkScheduledReportPrint(), 30000);
   }
 
@@ -135,16 +134,6 @@ export class MachineCoreComponent implements OnInit, OnDestroy {
   }
 
 
-  async checkForApkUpdate() {
-    const alreadyAvailable = (window as any).flutterBuildCode;
-    if (alreadyAvailable !== undefined) {
-      this.machineSrv.runUpdateCheck(alreadyAvailable);
-    } else {
-      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
-        this.machineSrv.runUpdateCheck((e as CustomEvent).detail as number);
-      }, { once: true });
-    }
-  }
 
   // onPrint() {
   //   this.bridge.print();

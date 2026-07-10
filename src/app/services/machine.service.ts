@@ -1194,13 +1194,27 @@ export class MachineService {
     return match ? match[1] : null;
   }
 
-  async runUpdateCheck(buildCode: number) {
+  async checkForApkUpdate() {
+    const alreadyAvailable = (window as any).flutterBuildCode;
+    console.log((window as any).flutterDeviceTarget);
+    if (alreadyAvailable !== undefined) {
+      this.runUpdateCheck(alreadyAvailable, (window as any).flutterDeviceTarget);
+    } else {
+      window.addEventListener('flutterBuildCodeReady', (e: Event) => {
+        this.runUpdateCheck((e as CustomEvent).detail as number, (window as any).flutterDeviceTarget);
+      }, { once: true });
+    }
+  }
+
+  async runUpdateCheck(buildCode: number, deviceTarget?: string) {
     let machineData = await this.getMachineData()
+    const applicationId = deviceTarget === 'smartpos' ? 6 : 5; // 5 = Telpo M1, 6 = SmartPos
     const updateParams = {
       MachineId: machineData?.MachineId,
-      ApplicationId: 5,
+      ApplicationId: applicationId,
       Code: buildCode
     };
+    console.log(updateParams)
     let response = await this.handleApiResponse('GameCooksAuth', 'CheckForUpdates', 'POST', updateParams)
     console.log("Update Check Response:", response)
 
@@ -1210,6 +1224,7 @@ export class MachineService {
     } else {
     }
   }
+
 
   async getTicketsHistory() {
     let params = {}
