@@ -8,6 +8,7 @@ import { UserRouteConfig } from 'src/app/services/routing.service';
 import { UserService } from 'src/app/services/user.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { MachineService } from 'src/app/services/machine.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -192,6 +193,11 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleAdminMenu(value: boolean) {
+    if (value && environment.isTesting) {
+      // Skip the credentials popup in testing environments and go straight to the admin page.
+      this.machineSrv.setAdminLoginStatus(true, true);
+      return;
+    }
     this.machineSrv.setAdminPopupStatus(value, true);
   }
 

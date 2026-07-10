@@ -7,6 +7,7 @@
  */
 export const environment = {
   production: false,
+  isTesting: true,
   //BaseUrl: 'http://10.1.3.196:5000/',
   BaseUrl: 'http://test.gamecooks.com:5000/',
   //BaseUrl: 'http://test.gamecooks.com:5000/',
