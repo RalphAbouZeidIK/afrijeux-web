@@ -581,6 +581,28 @@ select.form-controlو select.form-control:focus {
 
 }
 
+.error-block {
+    text-align: center;
+
+    h3 {
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 0;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 20px;
+        color: #9F9F9F;
+        margin-top: 0;
+        margin-bottom: 30px;
+    }
+
+    .error-icon {
+        margin-bottom: 15px;
+    }
+}
+
 .d-flex {
     justify-content: space-between;
     gap: 10px;

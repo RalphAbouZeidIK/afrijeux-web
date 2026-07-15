@@ -1,27 +1,5 @@
 @use '/src/variables' as *;
 
-.error-block {
-    text-align: center;
-
-    h3 {
-        font-size: 16px;
-        line-height: 24px;
-        margin-bottom: 0;
-    }
-
-    p {
-        font-size: 14px;
-        line-height: 20px;
-        color: #9F9F9F;
-        margin-top: 0;
-        margin-bottom: 30px;
-    }
-
-    .error-icon {
-        margin-bottom: 15px;
-    }
-}
-
 .winning-ticket-block {
     .d-flex {
         margin-bottom: 20px;

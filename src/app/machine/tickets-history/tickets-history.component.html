@@ -52,7 +52,7 @@
         </div>
         <div class="ticket-field ticket-field--actions" *ngIf="canCancel(ticket)">
             <button type="button" class="ticket-cancel-btn" [disabled]="cancelingTicketId === ticket.FullTicketId"
-                (click)="cancelTicket(ticket)">
+                (click)="requestCancelTicket(ticket)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flag-icon">
                     <path d="M4 22V4a1 1 0 0 1 1-1h13.13a1 1 0 0 1 .87 1.5L16.5 9l2.5 4.5a1 1 0 0 1-.87 1.5H5"></path>
@@ -62,3 +62,36 @@
         </div>
     </div>
 </section>
+
+<div class="form-holder machine-layout" *ngIf="ticketPendingCancel || cancelErrorMessage">
+    <div class="form-bg">
+        <div class="form-content">
+            <div class="error-block">
+                <img src="assets/images/error-triangle.svg" alt="Error Icon" class="error-icon">
+                <ng-container *ngIf="cancelErrorMessage; else confirmCancelText">
+                    <h3>Unable to Cancel</h3>
+                    <p>{{ cancelErrorMessage }}</p>
+                </ng-container>
+                <ng-template #confirmCancelText>
+                    <h3>Flag Ticket to Cancel</h3>
+                    <p>Are you sure you want to flag ticket {{ ticketPendingCancel?.FullTicketId }} to cancel?</p>
+                </ng-template>
+            </div>
+
+            <div class="form-btns d-flex" *ngIf="cancelErrorMessage">
+                <button class="btn btn-primary btn-close" (click)="dismissCancelDialog()">
+                    {{'machine.generic.close' | translate}}
+                </button>
+            </div>
+
+            <div class="form-btns d-flex" *ngIf="ticketPendingCancel">
+                <button class="btn btn-primary" (click)="confirmCancelTicket()">
+                    {{'machine.generic.cancel' | translate}} {{'machine.generic.ticket' | translate}}
+                </button>
+                <button class="btn btn-primary btn-close" (click)="dismissCancelDialog()">
+                    {{'machine.generic.close' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

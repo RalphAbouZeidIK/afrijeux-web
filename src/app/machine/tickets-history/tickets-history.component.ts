@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { MachineService } from 'src/app/services/machine.service';
 
 interface TicketHistoryItem {
@@ -16,7 +17,7 @@ interface TicketHistoryItem {
 
 @Component({
   selector: 'app-tickets-history',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './tickets-history.component.html',
   styleUrl: './tickets-history.component.scss'
 })
@@ -27,6 +28,8 @@ export class TicketsHistoryComponent implements OnInit {
   cancelPermissions: { [gameId: string]: boolean } = {};
   cancelingTicketId: string | null = null;
   flagToCancelTimer = 0;
+  ticketPendingCancel: TicketHistoryItem | null = null;
+  cancelErrorMessage: string | null = null;
 
   constructor(private machineSrv: MachineService) { }
 
@@ -54,7 +57,7 @@ export class TicketsHistoryComponent implements OnInit {
   canCancel(ticket: TicketHistoryItem): boolean {
     const gameId = ticket.FullTicketId?.substring(0, 3);
     const status = this.getStatus(ticket);
-    return status !== 'canceled' && status !== 'flagged' && status !== 'paid' && !!this.cancelPermissions[gameId] && this.isWithinCancelWindow(ticket);
+    return status !== 'canceled' && status !== 'flagged' && status !== 'paid' && status !== 'not-printed' && !!this.cancelPermissions[gameId] && this.isWithinCancelWindow(ticket);
   }
 
   isWithinCancelWindow(ticket: TicketHistoryItem): boolean {
@@ -92,15 +95,20 @@ export class TicketsHistoryComponent implements OnInit {
     return status.charAt(0).toUpperCase() + status.slice(1);
   }
 
-  async cancelTicket(ticket: TicketHistoryItem) {
+  requestCancelTicket(ticket: TicketHistoryItem) {
     if (!this.isWithinCancelWindow(ticket)) {
-      alert('The time allowed to flag this ticket to cancel has expired.');
+      this.cancelErrorMessage = 'The time allowed to flag this ticket to cancel has expired.';
       return;
     }
+    this.ticketPendingCancel = ticket;
+  }
 
-    if (!confirm('Are you sure you want to flag this ticket to cancel?')) {
+  async confirmCancelTicket() {
+    const ticket = this.ticketPendingCancel;
+    if (!ticket) {
       return;
     }
+    this.ticketPendingCancel = null;
 
     this.cancelingTicketId = ticket.FullTicketId;
     let params = {
@@ -113,6 +121,11 @@ export class TicketsHistoryComponent implements OnInit {
       this.getTicketsHistory();
     }
     this.cancelingTicketId = null;
+  }
+
+  dismissCancelDialog() {
+    this.ticketPendingCancel = null;
+    this.cancelErrorMessage = null;
   }
 
   get totalTickets(): number {
