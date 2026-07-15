@@ -226,6 +226,12 @@ export class MachineService {
   }
 
   async handleApiResponse(subRoute: any, apiRoute: any, method: any, params: any) {
+    this.valuesToPrint = {
+      firstValue: '',
+      secondValue: '',
+      thirdValue: ''
+    }
+
     if (!apiRoute.includes('SendReports')) {
       let userData = await this.getUserData()
       let machineData = (this.isAndroidApp) ? await this.getMachineData() : this.webMachine
@@ -1109,14 +1115,18 @@ export class MachineService {
 
   async issueCorruptedTicket(printerError?: string) {
 
-    //console.log(this.valuesToPrint)
+    console.log(this.valuesToPrint)
     let params = {
       TicketRequestId: this.valuesToPrint.thirdValue.TicketRequestId,
       EncryptedIssueTicketRequest: this.valuesToPrint.secondValue.EncryptedRequestDTO,
       GameId: this.valuesToPrint.thirdValue.GameId,
       PrinterError: printerError ?? null,
     }
-    const apiResponse = await this.handleApiResponse('CommonApi', `CommonApi/CorruptedTicket`, 'POST', params)
+
+    if (this.valuesToPrint.firstValue.FullTicketId) {
+      const apiResponse = await this.handleApiResponse('CommonApi', `CommonApi/CorruptedTicket`, 'POST', params)
+    }
+
     //console.log(apiResponse)
   }
 
