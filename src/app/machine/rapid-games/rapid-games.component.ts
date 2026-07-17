@@ -47,8 +47,8 @@ export class RapidGamesComponent {
     Football: { folder: 'football_icons', min: 1, max: 50 },
     Luxury: { folder: 'luxury_icons', min: 1, max: 40 },
     Emojis: { folder: 'emoji_icons', min: 1, max: 40 },
-    Numbers: { folder: 'number_icons', min: 0, max: 100 },
-    NumbersLite: { folder: 'number_icons', min: 0, max: 100 },
+    Numbers: { folder: 'number_icons', min: 1, max: 90 },
+    NumbersLite: { folder: 'number_icons', min: 1, max: 40 },
   };
 
   get currentIconConfig() {
@@ -59,6 +59,8 @@ export class RapidGamesComponent {
     const { min, max } = this.currentIconConfig;
     return Array.from({ length: max - min + 1 }, (_, i) => min + i);
   }
+
+  showIconPicker = false;
 
   iconPath(n: number): string {
     return `assets/rapid-icons/${this.currentIconConfig.folder}/${n}.png`;

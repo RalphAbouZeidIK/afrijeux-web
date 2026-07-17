@@ -27,9 +27,15 @@ export class MachineCoreComponent implements OnInit, OnDestroy {
 
   showAdminPageFlag = false
 
+  // Blocks the screen while a scheduled report is being generated/printed, so nobody
+  // can interact with the machine mid-print (esp. relevant when catching up on
+  // several missed days' reports in a row).
+  isPrintingScheduledReport = false;
+
   // Time of day (24h) the machine report should be auto-printed, unattended.
-  private readonly scheduledReportPrintTime = { hour: 22, minute: 30 }
+  private readonly scheduledReportPrintTime = { hour: 0, minute: 0 }
   private readonly lastAutoPrintDateStorageKey = 'lastMachineReportAutoPrintDate'
+  private readonly lastAutoPrintTimestampStorageKey = 'lastMachineReportAutoPrintTimestamp'
   private scheduledReportCheckInterval: any
 
   constructor(
@@ -56,11 +62,21 @@ export class MachineCoreComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getMachineData();
     this.scheduledReportCheckInterval = setInterval(() => this.checkScheduledReportPrint(), 30000);
+    // The interval above can be suspended for as long as the screen stays locked, so also
+    // check right away whenever the WebView becomes visible again (i.e. right after unlock).
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
   }
 
   ngOnDestroy(): void {
     if (this.scheduledReportCheckInterval) {
       clearInterval(this.scheduledReportCheckInterval);
+    }
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
+  }
+
+  private onVisibilityChange = () => {
+    if (document.visibilityState === 'visible') {
+      this.checkScheduledReportPrint();
     }
   }
 
@@ -68,35 +84,67 @@ export class MachineCoreComponent implements OnInit, OnDestroy {
     const now = new Date();
     const todayKey = now.toISOString().slice(0, 10);
 
+    const scheduledTimeToday = new Date(now);
+    scheduledTimeToday.setHours(this.scheduledReportPrintTime.hour, this.scheduledReportPrintTime.minute, 0, 0);
+
+    // "Has the scheduled time already passed today" rather than an exact-minute match:
+    // while the Android screen is locked, the WebView's JS timers get suspended/throttled,
+    // so an exact-minute check can be skipped entirely and never fire again that day. This
+    // way, whenever the interval next gets to run (e.g. right after the device is unlocked),
+    // it still catches up and prints.
     if (
-      now.getHours() !== this.scheduledReportPrintTime.hour ||
-      now.getMinutes() !== this.scheduledReportPrintTime.minute ||
+      now < scheduledTimeToday ||
       localStorage.getItem(this.lastAutoPrintDateStorageKey) === todayKey
     ) {
       return;
     }
-
-    localStorage.setItem(this.lastAutoPrintDateStorageKey, todayKey);
 
     const canPrintReport = await this.machineSrv.getMachinePermission('TerminalCanPrintReport', null);
     if (!canPrintReport) {
       return;
     }
 
-    const fromDate = new Date(now);
-    fromDate.setDate(fromDate.getDate() - 1);
+    // One report PER missed scheduled day, not a single report spanning the whole gap:
+    // e.g. if 2 days were missed (machine locked through their scheduled time), this
+    // prints 2 separate reports, each covering just its own day.
+    let windowStart = localStorage.getItem(this.lastAutoPrintTimestampStorageKey) != null
+      ? new Date(localStorage.getItem(this.lastAutoPrintTimestampStorageKey)!)
+      : new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-    const reportParams = {
-      Date: this.datepipe.transform(fromDate, 'yyyy-MM-ddTHH:mm:ss.SSS'),
-      FromDate: this.datepipe.transform(fromDate, 'yyyy-MM-ddTHH:mm:ss.SSS'),
-      ToDate: this.datepipe.transform(now, 'yyyy-MM-ddTHH:mm:ss.SSS'),
-      GameId: null,
-      GameEventId: null,
-      EventCode: null,
-      apiRoute: null
-    };
+    const nextScheduledInstant = new Date(windowStart);
+    nextScheduledInstant.setHours(this.scheduledReportPrintTime.hour, this.scheduledReportPrintTime.minute, 0, 0);
+    if (nextScheduledInstant <= windowStart) {
+      nextScheduledInstant.setDate(nextScheduledInstant.getDate() + 1);
+    }
 
-    await this.machineSrv.getReports(reportParams, true, false);
+    const missedScheduledInstants: Date[] = [];
+    for (const cursor = nextScheduledInstant; cursor <= now; cursor.setDate(cursor.getDate() + 1)) {
+      missedScheduledInstants.push(new Date(cursor));
+    }
+
+    this.isPrintingScheduledReport = true;
+    try {
+      for (const scheduledInstant of missedScheduledInstants) {
+        const reportParams = {
+          Date: this.datepipe.transform(windowStart, 'yyyy-MM-ddTHH:mm:ss.SSS'),
+          FromDate: this.datepipe.transform(windowStart, 'yyyy-MM-ddTHH:mm:ss.SSS'),
+          ToDate: this.datepipe.transform(scheduledInstant, 'yyyy-MM-ddTHH:mm:ss.SSS'),
+          GameId: null,
+          GameEventId: null,
+          EventCode: null,
+          apiRoute: null
+        };
+
+        await this.machineSrv.getReports(reportParams, true, false);
+
+        windowStart = scheduledInstant;
+        localStorage.setItem(this.lastAutoPrintTimestampStorageKey, windowStart.toISOString());
+      }
+
+      localStorage.setItem(this.lastAutoPrintDateStorageKey, todayKey);
+    } finally {
+      this.isPrintingScheduledReport = false;
+    }
   }
 
   async getMachineData() {

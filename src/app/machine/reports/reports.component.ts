@@ -20,7 +20,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
   EventId: any
   genericDate: any
 
-  yesterdayDate: Date = (() => { const d = new Date(); d.setDate(d.getDate() - 1); d.setHours(22, 30, 0, 0); return d; })()
+  yesterdayDate: Date = (() => { const d = new Date(); d.setDate(d.getDate() - 1); d.setHours(0, 0, 0, 0); return d; })()
 
   canPrintReport = false
 
@@ -82,7 +82,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   onDateChange(event: any, field: keyof ReportsComponent) {
     const received = new Date(event);
-    received.setHours(22, 30, 0, 0);
+    received.setHours(0, 0, 0, 0);
     (this as any)[field] = this.datepipe.transform(received, 'yyyy-MM-ddTHH:mm:ss.SSS');
     //console.log((this as any)[field]);
   }

@@ -20,7 +20,7 @@
             Compare your rows to the 16 result numbers — Row 1 needs one match, Rows 2–5 need complete matches.<br>
             Find matching numbers; Row 1 pays for one match, rows 2–5 pay when fully matched.
         </p>
-        <div class="icon-picker" *ngIf="isRapid">
+        <div class="icon-picker" *ngIf="isRapid && showIconPicker">
             <p class="picker-label">Pick your own {{ maxPicks }} numbers (optional)</p>
             <div class="icon-grid">
                 <a class="icon-option" *ngFor="let n of availableNumbers" [class.selected]="isSelected(n)"
