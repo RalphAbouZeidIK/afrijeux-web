@@ -1,6 +1,6 @@
 @use '/src/variables' as *;
 
-.page-header{
+.page-header {
     margin-bottom: 10px;
 }
 
@@ -19,13 +19,14 @@
     padding: 10px 16px;
     border-radius: 15px;
     border: 1px solid rgba(159, 159, 159, 0.50);
+    margin-bottom: 10px;
 }
 
 p {
     line-height: 25px;
     text-align: center;
     margin-bottom: 10px;
-    font-size:15px;
+    font-size: 15px;
 }
 
 .input-bg {
@@ -81,7 +82,7 @@ p {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    max-width: 220px;
+    max-width: 75%;
     max-height: 200px;
     margin: 0 auto;
     overflow-y: auto;
