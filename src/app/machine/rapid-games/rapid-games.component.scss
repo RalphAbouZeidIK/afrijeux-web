@@ -7,7 +7,6 @@
 .rapid-games {
     display: flex;
     flex-direction: column;
-    height: 75vh;
 }
 
 .game-img {
@@ -44,4 +43,66 @@ p {
 
 .btn {
     margin-top: auto;
+}
+
+.icon-picker {
+    margin-bottom: 12px;
+}
+
+.picker-label {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: $lightGrey;
+}
+
+.picker-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.picker-count {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+.clear-selection {
+    font-size: 13px;
+    text-decoration: underline;
+    color: $lightGreen;
+    cursor: pointer;
+}
+
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 220px;
+    max-height: 200px;
+    margin: 0 auto;
+    overflow-y: auto;
+}
+
+.icon-option {
+    display: block;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    padding: 4px;
+    cursor: pointer;
+    background: $white;
+    @include transition(0.2s);
+
+    img {
+        width: 100%;
+        display: block;
+    }
+
+    &.selected {
+        border-color: $green;
+        background: $lightGreen;
+    }
 }

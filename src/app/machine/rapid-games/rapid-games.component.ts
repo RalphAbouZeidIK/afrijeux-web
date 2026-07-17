@@ -39,6 +39,54 @@ export class RapidGamesComponent {
     return this.currentGame?.title ?? '';
   }
 
+  // Same folder/range convention the Flutter print side uses (see _iconFolderFor
+  // in print_text_page.dart) so the web picker and the printed ticket stay in sync.
+  private iconConfigByGameType: Record<string, { folder: string; min: number; max: number }> = {
+    Fruits: { folder: 'fruit_icons', min: 1, max: 60 },
+    Animals: { folder: 'animal_icons', min: 1, max: 60 },
+    Football: { folder: 'football_icons', min: 1, max: 50 },
+    Luxury: { folder: 'luxury_icons', min: 1, max: 40 },
+    Emojis: { folder: 'emoji_icons', min: 1, max: 40 },
+    Numbers: { folder: 'number_icons', min: 0, max: 100 },
+    NumbersLite: { folder: 'number_icons', min: 0, max: 100 },
+  };
+
+  get currentIconConfig() {
+    return this.iconConfigByGameType[this.rapidGameType] ?? this.iconConfigByGameType['Animals'];
+  }
+
+  get availableNumbers(): number[] {
+    const { min, max } = this.currentIconConfig;
+    return Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  }
+
+  iconPath(n: number): string {
+    return `assets/rapid-icons/${this.currentIconConfig.folder}/${n}.png`;
+  }
+
+  readonly maxPicks = 5;
+
+  // Empty by default: "Generate & Print" issues the usual random Quick Pick ticket.
+  // Only picking exactly maxPicks numbers here switches it to a player-chosen ticket.
+  selectedNumbers: number[] = [];
+
+  isSelected(n: number): boolean {
+    return this.selectedNumbers.includes(n);
+  }
+
+  toggleNumber(n: number) {
+    const index = this.selectedNumbers.indexOf(n);
+    if (index > -1) {
+      this.selectedNumbers.splice(index, 1);
+    } else if (this.selectedNumbers.length < this.maxPicks) {
+      this.selectedNumbers.push(n);
+    }
+  }
+
+  clearSelection() {
+    this.selectedNumbers = [];
+  }
+
   constructor(
     private machineSrv: MachineService,
     private router: Router,
@@ -67,16 +115,25 @@ export class RapidGamesComponent {
   async issueTicket() {
     if (this.isIssuing) return; // 🚫 prevent multiple clicks
 
+    if (this.selectedNumbers.length > 0 && this.selectedNumbers.length !== this.maxPicks) {
+      this.gnrcSrv.setModalData(true, false, `Please pick ${this.maxPicks} numbers, or clear your selection for Quick Pick.`);
+      return;
+    }
+
     this.isIssuing = true;
 
     try {
       let listOfBets: any = [];
       listOfBets.TicketPrice = 3;
-
+      if (this.selectedNumbers.length === this.maxPicks) {
+        listOfBets.SelectedNumbers = this.selectedNumbers;
+      }
       let apiResponse = await this.machineSrv.issueTicket(listOfBets);
       console.log('issue ticket', apiResponse);
       if (apiResponse.status == false) {
         this.isIssuing = false;
+      } else {
+        this.selectedNumbers = [];
       }
     } catch (err) {
 

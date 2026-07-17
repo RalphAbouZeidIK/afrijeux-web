@@ -5,7 +5,7 @@
         </a>
         <h2>{{ gameTitle }}</h2>
         <span class="game-badge">
-            System Generated
+            {{ selectedNumbers.length === maxPicks ? 'Choose Your Numbers' : 'System Generated' }}
         </span>
     </div>
 
@@ -20,6 +20,20 @@
             Compare your rows to the 16 result numbers — Row 1 needs one match, Rows 2–5 need complete matches.<br>
             Find matching numbers; Row 1 pays for one match, rows 2–5 pay when fully matched.
         </p>
+        <div class="icon-picker" *ngIf="isRapid">
+            <p class="picker-label">Pick your own {{ maxPicks }} numbers (optional)</p>
+            <div class="icon-grid">
+                <a class="icon-option" *ngFor="let n of availableNumbers" [class.selected]="isSelected(n)"
+                    (click)="toggleNumber(n)">
+                    <img [src]="iconPath(n)" [alt]="n.toString()">
+                </a>
+            </div>
+            <div class="picker-footer">
+                <p class="picker-count">{{ selectedNumbers.length }} / {{ maxPicks }} selected</p>
+                <a class="clear-selection" *ngIf="selectedNumbers.length > 0" (click)="clearSelection()">Clear selection</a>
+            </div>
+        </div>
+
         <div class="input-bg stake-block">
             <span class="ticket-price"> Ticket Price </span><span>3 AED</span>
         </div>
