@@ -21,7 +21,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
   genericDate: any
 
   yesterdayDate: Date = (() => { const d = new Date(); d.setDate(d.getDate() - 1); d.setHours(0, 0, 0, 0); return d; })()
-
+  todayDate: Date = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })()
+  tommorrowDate: Date = (() => { const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); return d; })()
   canPrintReport = false
 
   isAdminLoggedIn = false
