@@ -1531,4 +1531,24 @@ app-admin-page {
     .modal-dialog {
         width: calc(100% - 15px);
     }
+
+    .nav-holder {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .games-container {
+            margin-right: 0;
+            gap: 0 !important;
+            flex-direction: column;
+
+        }
+
+        .game-card {
+            padding: 0 !important;
+        }
+
+        button {
+            margin-bottom: 5px !important;
+        }
+    }
 }

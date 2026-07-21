@@ -36,6 +36,7 @@
 // Flipped card colors — homepage only (not promotions/instant-games listing)
 .homepage-listing {
     .game-card {
+
         &.promo-card,
         &.instant-nav-card {
             background: $lightGreen;
@@ -203,6 +204,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
+    margin-top: auto;
 
     &:hover {
         background: darken($lightGreen, 8%);
@@ -336,5 +338,23 @@ app-countdown {
     .play-button {
         padding: 6px 16px;
         font-size: 16px;
+    }
+
+    .game-page {
+        flex-wrap: unset;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 0;
+    }
+}
+
+@media all and (min-width:992px) {
+    .listing-block {
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .game-card {
+            width: calc(25% - 12px);
+        }
     }
 }
