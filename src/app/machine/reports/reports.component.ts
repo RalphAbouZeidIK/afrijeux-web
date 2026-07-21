@@ -83,7 +83,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   onDateChange(event: any, field: keyof ReportsComponent) {
     const received = new Date(event);
-    received.setHours(0, 0, 0, 0);
     (this as any)[field] = this.datepipe.transform(received, 'yyyy-MM-ddTHH:mm:ss.SSS');
     //console.log((this as any)[field]);
   }

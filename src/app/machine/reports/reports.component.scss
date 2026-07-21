@@ -45,5 +45,13 @@ app-datepicker {
 }
 
 .input-holder {
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
 }
+
+// .date-holder {
+//     padding: 14px 12px;
+//     border: 1px solid rgba(255, 255, 255, 0.15);
+//     border-radius: 10px;
+// }

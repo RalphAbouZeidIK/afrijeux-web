@@ -31,11 +31,11 @@
         <div class="form-group d-flex input-holder">
 
             <div class="date-holder">
-                <app-datepicker label="Date From" [initialDate]="todayDate"
+                <app-datepicker label="Date From" timeLabel="Time From" [initialDate]="todayDate" [showTime]="true"
                     (dateChangeEvent)="onDateChange($event,'FromDate')"></app-datepicker>
             </div>
             <div class="date-holder" *ngIf="!isCheckResults">
-                <app-datepicker label="Date To" [initialDate]="tommorrowDate"
+                <app-datepicker label="Date To" timeLabel="Time To" [initialDate]="tommorrowDate" [showTime]="true"
                     (dateChangeEvent)="onDateChange($event,'ToDate')"></app-datepicker>
             </div>
         </div>

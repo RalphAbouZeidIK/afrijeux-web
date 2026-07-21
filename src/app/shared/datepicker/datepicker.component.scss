@@ -1,0 +1,15 @@
+.datepicker-holder {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 10px;
+
+    mat-form-field {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+}
+
+.time-field {
+    color-scheme: dark;
+}

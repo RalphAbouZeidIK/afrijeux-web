@@ -81,8 +81,8 @@ export const machineMenuRoutes: Route[] = [
         component: TicketsHistoryComponent,
         data: {
             breadcrumb: 'Tickets History',
-            shouldBeLoggedIn: true,
-            showLink: true,
+            shouldBeLoggedIn: false,
+            showLink: false,
             title: 'Tickets History',
             iconLink: 'assets/images/tickets-history.svg'
         }
