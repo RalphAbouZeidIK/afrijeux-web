@@ -5,8 +5,14 @@
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
-  <mat-form-field *ngIf="showTime" class="time-field">
-    <mat-label>{{timeLabel}}: </mat-label>
-    <input matInput type="time" [(ngModel)]="timeChosen" (ngModelChange)="timeChange()">
-  </mat-form-field>
+  <div class="time-field" *ngIf="showTime">
+    <label class="time-label">{{timeLabel}}: </label>
+    <div class="time-input-row">
+      <input type="text" inputmode="numeric" maxlength="2" class="time-input" [(ngModel)]="timeHours"
+        (change)="onHoursChange()" (focus)="selectAllText($event)" (click)="selectAllText($event)">
+      <span class="time-colon">:</span>
+      <input type="text" inputmode="numeric" maxlength="2" class="time-input" [(ngModel)]="timeMinutes"
+        (change)="onMinutesChange()" (focus)="selectAllText($event)" (click)="selectAllText($event)">
+    </div>
+  </div>
 </div>
