@@ -524,7 +524,7 @@ export class MachineService {
       let shouldUseDefaultFont = false;
 
       if (this.getGameRoute()?.startsWith('WinBigRapid')) {
-        shouldUseDefaultFont = true
+        shouldUseDefaultFont = false
       }
 
       if (!this.isOnline) {
