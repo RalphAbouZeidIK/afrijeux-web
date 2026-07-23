@@ -216,8 +216,8 @@ export class NativeBridgeService {
 
 
   /** Send structured print command to Flutter */
-  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[], sender = 'IssueTicket', fullTicketId = '', shouldUseDefaultFont = true): void {
-    const message = JSON.stringify({ type, value, sender, fullTicketId, shouldUseDefaultFont });
+  sendPrintMessage(type: 'normalText' | 'barcode' | 'qrcode', value: string | string[], sender = 'IssueTicket', fullTicketId = '', shouldUseDefaultFont = true, progressiveJackpot: string | null = null): void {
+    const message = JSON.stringify({ type, value, sender, fullTicketId, shouldUseDefaultFont, progressiveJackpot });
 
     if (window.PrintChannel?.postMessage) {
       //console.log(message)

@@ -70,6 +70,9 @@ export class MachineService {
 
   deviceIp: any = null
 
+  private successAudio: HTMLAudioElement | null = null;
+  private successVoicePrimed = false;
+
   isAndroidApp = this.gnrcSrv.isMachineApp()
 
   constructor(
@@ -517,7 +520,8 @@ export class MachineService {
     console.log(params)
 
     if (this.isAndroidApp) {
-      let shouldUseDefaultFont = false
+      this.primeSuccessVoice();
+      let shouldUseDefaultFont = false;
 
       if (this.getGameRoute()?.startsWith('WinBigRapid')) {
         shouldUseDefaultFont = true
@@ -552,8 +556,10 @@ export class MachineService {
         }
         console.log(apiResponse)
         if (apiResponse.DataToPrint) {
-          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId, shouldUseDefaultFont);
-
+          this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId, shouldUseDefaultFont, apiResponse.ProgressiveJackpot?.PrintData ?? null);
+          if (apiResponse.ProgressiveJackpot?.Won) {
+            this.playSuccessVoice();
+          }
         }
         else if (apiResponse.status == false) {
           this.gnrcSrv.setModalData(true, false, apiResponse.message)
@@ -573,6 +579,44 @@ export class MachineService {
 
   }
 
+  private primeSuccessVoice(): void {
+    if (this.successVoicePrimed || this.successAudio) {
+      return;
+    }
+
+    this.successAudio = new Audio('assets/sounds/success.mp3');
+    this.successAudio.preload = 'auto';
+    this.successAudio.muted = true;
+
+    this.successAudio.play()
+      .then(() => {
+        this.successVoicePrimed = true;
+        this.successAudio?.pause();
+        if (this.successAudio) {
+          this.successAudio.currentTime = 0;
+          this.successAudio.muted = false;
+        }
+      })
+      .catch(() => {
+        this.successAudio = null;
+        this.successVoicePrimed = false;
+      });
+  }
+
+  private playSuccessVoice(): void {
+    if (this.successAudio && this.successVoicePrimed) {
+      this.successAudio.currentTime = 0;
+      this.successAudio.play().catch((error) => {
+        console.warn('Unable to play success voice', error);
+      });
+      return;
+    }
+
+    const audio = new Audio('assets/sounds/success.mp3');
+    audio.play().catch((error) => {
+      console.warn('Unable to play success voice', error);
+    });
+  }
 
   async validateTicket(fullTicketId: any) {
 
@@ -721,7 +765,10 @@ export class MachineService {
       this.gnrcSrv.setModalData(true, false, apiResponse.message)
     }
     else if (apiResponse.DataToPrint) {
-      this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId);
+      this.bridge.sendPrintMessage('normalText', apiResponse.DataToPrint, apiResponse.Sender, apiResponse.FullTicketId, true, apiResponse.ProgressiveJackpot?.PrintData ?? null);
+      if (apiResponse.ProgressiveJackpot?.Won) {
+        this.playSuccessVoice();
+      }
     }
     return apiResponse
   }
